@@ -1,0 +1,31 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "editor.formatOnSave": false,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml"
+  ],
+  "eslint.useFlatConfig": true,
+  "cSpell.words": [
+    "ahooks",
+    "asar",
+    "hono",
+    "laynezh",
+    "nsis",
+    "Shadcn",
+    "Vinky",
+    "vite",
+    "vitejs"
+  ]
+}

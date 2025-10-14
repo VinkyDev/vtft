@@ -1,0 +1,29 @@
+{
+  "exclude": [
+    "build",
+    "tests"
+  ],
+  "extends": "config/tsconfig.options.json",
+  "include": [
+    "src/**/*"
+  ],
+  "references": [
+    {
+      "path": "../utils"
+    }
+  ],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "paths": {
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
+      ],
+      "ui/*": [
+        "./src/*"
+      ]
+    }
+  }
+}

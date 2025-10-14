@@ -1,0 +1,19 @@
+{
+  "extends": "config/tsconfig.options.json",
+  "compilerOptions": {
+    "paths": {
+      "@/electron/*": [
+        "./src/electron/*"
+      ]
+    },
+    "outDir": "./dist"
+  },
+  "include": [
+    "src/**/*",
+    "node_modules/types/electron.d.ts"
+  ],
+  "exclude": [
+    "dist",
+    "tests"
+  ]
+}

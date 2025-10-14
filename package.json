@@ -1,0 +1,59 @@
+{
+  "name": "v-monorepo",
+  "type": "module",
+  "version": "0.0.0",
+  "scripts": {
+    "postinstall": "node ./node_modules/electron/install.js",
+    "preinstall": "npx only-allow pnpm ",
+    "clean:all": "pnpm run clean:dist && pnpm run clean:modules",
+    "clean:modules": "pnpm -rc exec rm -rf node_modules && pnpm -c exec rm -rf ./node_modules",
+    "clean:dist": "pnpm -rc exec rm -rf *.tsbuildinfo .cache build dist .hash",
+    "setup": "pnpm run clean:modules && pnpm i",
+    "lint": "pnpm -r lint",
+    "dev:react": "pnpm --filter react run dev",
+    "dev:electron": "pnpm --filter electron --filter react run dev",
+    "dev:api": "pnpm --filter api dev",
+    "build:react": "pnpm --filter react run build",
+    "prebuild": "pnpm run clean:dist && pnpm run build:react && pnpm run copy:render",
+    "copy:render": "node scripts/copyRenderer.js",
+    "build:unpack": "pnpm run prebuild && pnpm --filter electron run build:unpack",
+    "build:win": "pnpm run prebuild && pnpm --filter electron run build:win",
+    "build:linux": "pnpm run prebuild && pnpm --filter electron run build:linux",
+    "build:mac": "pnpm run prebuild && pnpm --filter electron run build:mac",
+    "build:packages": "pnpm --filter utils run build && pnpm --filter bridge run build && pnpm --filter types run build",
+    "fix:tsconfig": "node ./scripts/typescript/fixPaths.mjs",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "dependencies": {
+    "utils": "workspace:*",
+    "bridge": "workspace:*",
+    "types": "workspace:*"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^5.4.1",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "eslint": "catalog:",
+    "eslint-plugin-format": "^1.0.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.23",
+    "husky": "^9.1.7",
+    "typescript": "catalog:",
+    "config": "workspace:*"
+  },
+  "lint-staged": {
+    "{packages,projects}/*/{src,types}/**/*.{ts,tsx,js,jsx}": [
+      "eslint"
+    ],
+    "{packages,projects}/**/*.d.ts": [
+      "eslint --ext .ts"
+    ]
+  },
+  "packageManager": "pnpm@10.12.4",
+  "engines": {
+    "npm": "only-allow-pnpm",
+    "yarn": "only-allow-pnpm",
+    "node": ">= 18"
+  }
+}

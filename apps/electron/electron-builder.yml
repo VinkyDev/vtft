@@ -1,0 +1,62 @@
+appId: com.electron.app
+productName: v-monorepo
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.js,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asar: false
+asarUnpack:
+  - resources/**
+
+icon: resources/icon.png
+win:
+  icon: resources/icon.png
+  executableName: v-monorepo
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+  target:
+    - target: nsis
+    - target: portable
+nsis:
+  installerIcon: resources/icon.png
+  uninstallerIcon: resources/icon.png
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  allowToChangeInstallationDirectory: true
+  oneClick: false
+portable:
+  artifactName: ${productName}-${version}-${arch}-portable.${ext}
+mac:
+  icon: resources/icon.png
+  notarize: false
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  target:
+    - target: dmg
+    - target: zip
+      arch:
+        - arm64
+        - x64
+linux:
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  target:
+    - target: AppImage
+      arch:
+        - arm64
+        - x64
+  maintainer: electronjs.org
+  category: Utility
+
+npmRebuild: false
+electronDownload:
+  mirror: https://npmmirror.com/mirrors/electron/

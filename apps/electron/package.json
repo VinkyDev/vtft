@@ -1,0 +1,39 @@
+{
+  "name": "electron",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck": "pnpm run typecheck:node",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "pnpm run typecheck && electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "pnpm run build && electron-builder --dir",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
+    "bridge": "workspace:*"
+  },
+  "devDependencies": {
+    "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/node": "catalog:",
+    "electron": "38.2.2",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^4.0.1",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild"
+    ]
+  }
+}

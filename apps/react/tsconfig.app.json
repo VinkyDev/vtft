@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "config/tsconfig.options.json",
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "outDir": "./dist"
+  },
+  "files": [],
+  "include": [
+    "src/**/*",
+    "electron.d.ts"
+  ],
+  "exclude": []
+}

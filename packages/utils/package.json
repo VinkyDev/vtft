@@ -1,0 +1,24 @@
+{
+  "name": "utils",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/*": "./src/*",
+    "./*": "./src/*"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "clean": "rm -rf ./{*.tsbuildinfo,build,dist,.hash}",
+    "build": "vite build",
+    "watch": "vite build --watch --mode development",
+    "lint": "eslint . --ext .ts,.tsx --fix"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "query-string": "catalog:",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

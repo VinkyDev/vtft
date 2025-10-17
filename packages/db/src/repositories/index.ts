@@ -1,0 +1,5 @@
+export { AugmentRepository } from './augmentRepository'
+export { ChampionRepository } from './championRepository'
+export { CompDetailRepository } from './compDetailRepository'
+export { CompRepository } from './compRepository'
+export { ItemRepository } from './itemRepository'

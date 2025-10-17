@@ -1,0 +1,32 @@
+{
+  "name": "crawler",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/*": "./src/*",
+    "./*": "./src/*"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "clean": "rm -rf ./{*.tsbuildinfo,build,dist,.hash}",
+    "build": "vite build",
+    "watch": "vite build --watch --mode development",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit",
+    "crawl:comps": "node --import tsx/esm src/cli/crawl-comps.ts --save",
+    "crawl:items": "node --import tsx/esm src/cli/crawl-items.ts --save",
+    "crawl:champions": "node --import tsx/esm src/cli/crawl-champions.ts --save",
+    "crawl:augments": "node --import tsx/esm src/cli/crawl-augments.ts --save"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "db": "workspace:*",
+    "playwright": "^1.49.0",
+    "types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "^4.19.2",
+    "typescript": "catalog:"
+  }
+}

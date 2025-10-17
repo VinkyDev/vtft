@@ -4,6 +4,12 @@ export default antfu(
   {
     typescript: true,
     formatters: true,
+    ignores: [
+      '**/node_modules/**',
+      '**/*.tsbuildinfo',
+      '**/dist/**',
+      '*.md',
+    ],
   },
   {
     rules: {

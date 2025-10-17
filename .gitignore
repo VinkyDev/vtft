@@ -15,6 +15,9 @@ out/
 .DS_Store
 Thumbs.db
 
+# Debug files
+debug/
+
 # Logs
 logs/
 *.log

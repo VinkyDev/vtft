@@ -11,12 +11,20 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "catalog:",
+    "ahooks": "catalog:",
+    "axios": "^1.12.2",
+    "lodash-es": "catalog:",
+    "lucide-react": "^0.545.0",
+    "motion": "^12.23.24",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "ui": "workspace:*"
+    "types": "workspace:*",
+    "ui": "workspace:*",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:",
+    "@types/lodash-es": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",

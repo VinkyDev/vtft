@@ -20,10 +20,13 @@ export function getMainWindow() {
  */
 export function createWindow(): void {
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 400,
+    height: 200,
     show: false,
     autoHideMenuBar: true,
+    frame: false,
+    alwaysOnTop: true,
+    transparent: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

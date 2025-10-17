@@ -16,6 +16,7 @@
     "lodash-es": "catalog:",
     "lucide-react": "^0.545.0",
     "motion": "^12.23.24",
+    "pinyin-pro": "^3.27.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "types": "workspace:*",

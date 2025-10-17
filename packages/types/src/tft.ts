@@ -3,6 +3,16 @@
  * 这些类型被 crawler、db、api 和前端共享使用
  */
 
+/** 爬虫配置选项 */
+export interface CrawlOptions {
+  /** 是否使用无头模式 */
+  headless?: boolean
+  /** 是否启用调试模式 */
+  debug?: boolean
+  /** 是否保存截图 */
+  screenshot?: boolean
+}
+
 /** 基础装备信息 */
 export interface Item {
   name: string
@@ -34,7 +44,7 @@ export interface ChampionMeta {
   /** 英雄图标 URL */
   icon: string
   /** 羁绊列表 */
-  traits?: string[]
+  traits?: Trait[]
   /** 费用（1-5） */
   cost?: number
   /** 平均排名 */
@@ -54,9 +64,9 @@ export interface Trait {
   /** 图标 URL */
   icon: string
   /** 羁绊等级/层级 */
-  level: number
+  level?: number
   /** 羁绊数量 */
-  count: number
+  count?: number
 }
 
 /** 强化符文级别 */
@@ -82,7 +92,7 @@ export interface AugmentMeta {
   icon: string
   /** 级别（银色/金色/棱彩） */
   level: AugmentLevel
-  /** 段位（S/A/B/C/D等） */
+  /** 段位（OP/S/A/B/C/D等） */
   tier?: string
   /** 类型（经济/战斗等） */
   type?: string
@@ -155,6 +165,34 @@ export interface ChampionEnhancement {
   enhancements: Enhancement[]
 }
 
+/** 站位上的英雄信息 */
+export interface PositionChampion {
+  /** 英雄名称 */
+  name: string
+  /** 英雄图标 */
+  icon: string
+  /** 星级 (1-5) */
+  stars: number
+  /** 装备列表 */
+  items: Item[]
+}
+
+/** 战场位置信息 */
+export interface Position {
+  /** 行索引 (0-3) */
+  row: number
+  /** 列索引 (0-6) */
+  col: number
+  /** 该位置上的英雄，null 表示空位 */
+  champion: PositionChampion | null
+}
+
+/** 站位信息（4行7列的战场布局） */
+export interface Formation {
+  /** 所有位置的信息 */
+  positions: Position[]
+}
+
 /** 阵容详细信息 */
 export interface CompDetails {
   /** 推荐强化符文列表 */
@@ -163,6 +201,8 @@ export interface CompDetails {
   items: RecommendedItem[]
   /** 英雄强化推荐列表 (每个核心英雄对应一个强化列表) */
   championEnhancements: ChampionEnhancement[]
+  /** 站位信息 */
+  formation?: Formation
 }
 
 /** 阵容数据 */

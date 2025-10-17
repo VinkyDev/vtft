@@ -1,5 +1,5 @@
 import type { Page } from 'playwright'
-import type { CompData } from '../types/index'
+import type { CompData } from 'types'
 import * as cheerio from 'cheerio'
 import { logger } from '../core/logger'
 

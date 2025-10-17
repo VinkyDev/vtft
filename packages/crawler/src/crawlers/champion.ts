@@ -1,4 +1,4 @@
-import type { ChampionMeta, CrawlOptions } from '../types/index'
+import type { ChampionMeta, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'

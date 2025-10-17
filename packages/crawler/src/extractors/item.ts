@@ -1,5 +1,5 @@
 import type { Locator, Page } from 'playwright'
-import type { ItemCategory, ItemMeta } from '../types/index'
+import type { ItemCategory, ItemMeta } from 'types'
 import { logger } from '../core/logger'
 
 /**

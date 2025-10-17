@@ -1,5 +1,0 @@
-export * from './augment'
-export * from './champion'
-export * from './common'
-export * from './comp'
-export * from './item'

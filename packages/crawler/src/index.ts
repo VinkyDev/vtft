@@ -18,4 +18,4 @@ export { extractChampionEnhancements } from './extractors/compEnhancement'
 export { extractRecommendedItems } from './extractors/compItem'
 export { extractItemsFromPage } from './extractors/item'
 // 导出类型
-export type * from './types/index'
+export type * from 'types'

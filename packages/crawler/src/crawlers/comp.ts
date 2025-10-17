@@ -1,5 +1,5 @@
 import type { Page } from 'playwright'
-import type { CompData, CrawlOptions } from '../types/index'
+import type { CompData, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'

@@ -1,4 +1,4 @@
-import type { CrawlOptions, ItemCategory, ItemMeta } from '../types/index'
+import type { CrawlOptions, ItemCategory, ItemMeta } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'

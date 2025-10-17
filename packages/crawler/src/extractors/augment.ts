@@ -1,5 +1,5 @@
 import type { Locator, Page } from 'playwright'
-import type { AugmentLevel, AugmentMeta } from '../types/index'
+import type { AugmentLevel, AugmentMeta } from 'types'
 import { logger } from '../core/logger'
 
 /**

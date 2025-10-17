@@ -120,4 +120,4 @@ pnpm run setup              # Fresh install
 ## Others (important!)
 
 - 注释规范: 仅写有必要写的注释, 不要写无意义的注释, 请使用中文写注释
-- 代码规范: 不要重复造轮子, 不要造劣质轮子, 对于 React hooks 推荐使用 ahooks, 对于 通用 utils 推荐使用 lodash-es, 如果无法实现, 请在 packages/utils 中实现
+- 代码规范: 不要重复造轮子, 不要造劣质轮子, 对于 React hooks 推荐使用 ahooks, 对于 通用 utils 推荐使用 lodash-es. 如果无法使用三方库满足需求, 请在 packages/utils 中实现

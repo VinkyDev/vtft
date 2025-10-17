@@ -1,5 +1,5 @@
 import type { Locator, Page } from 'playwright'
-import type { ChampionMeta } from '../types/index'
+import type { ChampionMeta, Trait } from 'types'
 import { logger } from '../core/logger'
 
 /**
@@ -32,11 +32,15 @@ async function extractChampionFromRow(row: Locator): Promise<ChampionMeta | null
     // 羁绊在名称下面的 div.flex.gap-1 中
     const traitContainer = championCell.locator('div.flex.gap-1').first()
     const traitImgs = await traitContainer.locator('img[alt]').all()
-    const traits: string[] = []
+    const traits: Trait[] = []
     for (const traitImg of traitImgs) {
       const traitName = await traitImg.getAttribute('alt').catch(() => '')
-      if (traitName) {
-        traits.push(traitName)
+      const traitIcon = await traitImg.getAttribute('src').catch(() => '')
+      if (traitName && traitIcon) {
+        traits.push({
+          name: traitName,
+          icon: traitIcon,
+        })
       }
     }
 
@@ -85,7 +89,6 @@ export async function extractChampionsFromPage(page: Page): Promise<ChampionMeta
   const champions: ChampionMeta[] = []
 
   try {
-    // 查找所有表格，遍历找到有数据的那个
     const tables = await page.locator('table').all()
     logger.info(`找到 ${tables.length} 个表格`)
 
@@ -111,7 +114,6 @@ export async function extractChampionsFromPage(page: Page): Promise<ChampionMeta
         }
       }
 
-      // 如果成功提取到数据，就不再处理其他表格
       if (champions.length > 0) {
         break
       }

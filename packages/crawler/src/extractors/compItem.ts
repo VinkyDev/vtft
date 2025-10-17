@@ -1,5 +1,5 @@
 import type { Locator } from 'playwright'
-import type { RecommendedItem } from '../types/index'
+import type { RecommendedItem } from 'types'
 import { logger } from '../core/logger'
 
 /**

@@ -1,10 +1,11 @@
-import type { AugmentLevel, AugmentMeta, CrawlOptions } from '../types/index'
+import type { AugmentLevel, AugmentMeta, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { BrowserManager, PageHelper } from '../core/browser'
 import { getCwd, logger } from '../core/logger'
 import { extractAugmentsByLevel } from '../extractors/augment'
+import { crawlOpggAugments } from './augmentOpgg'
 
 /** 目标URL */
 const TARGET_URL = 'https://www.metatft.com/augments'
@@ -33,9 +34,47 @@ export class AugmentCrawler {
   }
 
   /**
-   * 执行爬取
+   * 执行爬取 - 优先使用 OP.GG，数据不足时降级到 MetaTFT
    */
   async crawl(): Promise<AugmentMeta[]> {
+    try {
+      // 第一步：尝试使用 OP.GG 爬取数据
+      logger.info('优先尝试使用 OP.GG 爬取强化符文数据...')
+      try {
+        const opggData = await crawlOpggAugments(this.options)
+
+        if (opggData.length > 30) {
+          logger.info(`OP.GG 爬取成功，共获得 ${opggData.length} 个强化符文，数量充足，直接采用`)
+
+          // 保存结果（如果启用调试）
+          if (this.options.debug) {
+            await this.saveResults(opggData, 'opgg')
+          }
+
+          return opggData
+        }
+        else {
+          logger.warn(`OP.GG 爬取到 ${opggData.length} 个强化符文，数量不足（< 30），降级到 MetaTFT`)
+        }
+      }
+      catch (error) {
+        logger.error('OP.GG 爬取失败，降级到 MetaTFT:', error)
+      }
+
+      // 第二步：降级到 MetaTFT 爬取数据
+      logger.info('使用 MetaTFT 爬取强化符文数据...')
+      return await this.crawlFromMetaTFT()
+    }
+    catch (error) {
+      logger.error('强化符文爬取完全失败:', error)
+      throw error
+    }
+  }
+
+  /**
+   * 从 MetaTFT 爬取数据（原有逻辑）
+   */
+  private async crawlFromMetaTFT(): Promise<AugmentMeta[]> {
     try {
       // 启动浏览器
       await this.browserManager.launch(this.options.headless)
@@ -109,7 +148,7 @@ export class AugmentCrawler {
 
       // 保存结果
       if (this.options.debug) {
-        await this.saveResults(allAugments)
+        await this.saveResults(allAugments, 'metatft')
       }
 
       return allAugments
@@ -140,13 +179,13 @@ export class AugmentCrawler {
   /**
    * 保存结果
    */
-  private async saveResults(augments: AugmentMeta[]): Promise<void> {
+  private async saveResults(augments: AugmentMeta[], source: string = 'combined'): Promise<void> {
     const debugDir = resolve(getCwd(), 'debug')
     await mkdir(debugDir, { recursive: true })
 
-    const resultPath = resolve(debugDir, 'augments-result.json')
+    const resultPath = resolve(debugDir, `augments-${source}-result.json`)
     writeFileSync(resultPath, JSON.stringify(augments, null, 2), 'utf-8')
-    logger.info(`已保存结果到 ${resultPath}，共 ${augments.length} 个强化符文`)
+    logger.info(`已保存 ${source} 结果到 ${resultPath}，共 ${augments.length} 个强化符文`)
   }
 }
 

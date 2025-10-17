@@ -1,51 +1,52 @@
-import type { ItemCategory } from 'types'
 import { memo } from 'react'
 import { Tabs, TabsList, TabsTrigger } from 'ui'
 
-export type SortField = 'matches' | 'avgPlace'
+export type ChampionCostFilter = 'all' | 1 | 2 | 3 | 4 | 5
+export type ChampionSortField = 'matches' | 'avgPlace' | 'top4Rate' | 'firstPlaceRate'
 export type SortOrder = 'asc' | 'desc'
 
-interface ItemFilterProps {
-  category: ItemCategory
-  onCategoryChange: (category: ItemCategory) => void
-  sortField: SortField
-  onSortFieldChange: (field: SortField) => void
+interface ChampionFilterProps {
+  costFilter: ChampionCostFilter
+  onCostFilterChange: (cost: ChampionCostFilter) => void
+  sortField: ChampionSortField
+  onSortFieldChange: (field: ChampionSortField) => void
 }
 
-const categories: { value: ItemCategory, label: string }[] = [
-  { value: 'core', label: '核心' },
-  { value: 'radiant', label: '光明' },
-  { value: 'artifact', label: '神器' },
-  { value: 'emblem', label: '转职' },
+const costOptions: { value: ChampionCostFilter, label: string }[] = [
+  { value: 1, label: '1费' },
+  { value: 2, label: '2费' },
+  { value: 3, label: '3费' },
+  { value: 4, label: '4费' },
+  { value: 5, label: '5费' },
 ]
 
-const sortFields: { value: SortField, label: string }[] = [
+const sortFields: { value: ChampionSortField, label: string }[] = [
   { value: 'matches', label: '场次' },
   { value: 'avgPlace', label: '排名' },
 ]
 
 /**
- * 装备过滤器组件
- * 支持类型筛选和排序，排序方向固定（平均排名升序，场次降序）
+ * 英雄过滤器组件
+ * 支持费用筛选和排序，排序方向固定（平均排名升序，其他降序）
  */
-export const ItemFilter = memo(({
-  category,
-  onCategoryChange,
+export const ChampionFilter = memo(({
+  costFilter,
+  onCostFilterChange,
   sortField,
   onSortFieldChange,
-}: ItemFilterProps) => {
+}: ChampionFilterProps) => {
   return (
     <div className="py-2 px-2 mb-1 bg-white/5 rounded-lg border border-white/10">
       <div className="flex justify-between items-center">
         <Tabs
-          value={category}
-          onValueChange={value => onCategoryChange(value as ItemCategory)}
+          value={costFilter.toString()}
+          onValueChange={value => onCostFilterChange(value === 'all' ? 'all' : Number(value) as ChampionCostFilter)}
         >
           <TabsList className="h-6 bg-black/20 border-white/5 p-0.5">
-            {categories.map(({ value, label }) => (
+            {costOptions.map(({ value, label }) => (
               <TabsTrigger
                 key={value}
-                value={value}
+                value={value.toString()}
                 className="h-5 px-2 text-[10px] font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=inactive]:text-gray-500"
               >
                 {label}
@@ -56,7 +57,7 @@ export const ItemFilter = memo(({
 
         <Tabs
           value={sortField}
-          onValueChange={value => onSortFieldChange(value as SortField)}
+          onValueChange={value => onSortFieldChange(value as ChampionSortField)}
         >
           <TabsList className="h-6 bg-black/20 border-white/5 p-0.5">
             {sortFields.map(({ value, label }) => (
@@ -78,4 +79,4 @@ export const ItemFilter = memo(({
   )
 })
 
-ItemFilter.displayName = 'ItemFilter'
+ChampionFilter.displayName = 'ChampionFilter'

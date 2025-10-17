@@ -20,8 +20,10 @@ export function getMainWindow() {
  */
 export function createWindow(): void {
   mainWindow = new BrowserWindow({
-    width: 400,
-    height: 200,
+    width: 365,
+    height: 270,
+    x: 0,
+    y: 0,
     show: false,
     autoHideMenuBar: true,
     frame: false,
@@ -38,6 +40,8 @@ export function createWindow(): void {
 
   mainWindow?.on('ready-to-show', () => {
     mainWindow?.show()
+    // 设置为最高层级，确保能覆盖游戏窗口
+    mainWindow?.setAlwaysOnTop(true, 'screen-saver')
   })
 
   mainWindow?.webContents.setWindowOpenHandler((details) => {

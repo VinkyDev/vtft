@@ -1,1 +1,13 @@
 @import 'tailwindcss';
+
+body {
+    background: transparent;
+}
+
+.drag {
+    -webkit-app-region: drag;
+}
+
+.no-drag {
+    -webkit-app-region: no-drag;
+}

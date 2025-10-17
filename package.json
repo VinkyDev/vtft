@@ -22,25 +22,27 @@
     "build:mac": "pnpm run prebuild && pnpm --filter electron run build:mac",
     "build:packages": "pnpm --filter utils run build && pnpm --filter bridge run build && pnpm --filter types run build",
     "fix:tsconfig": "node ./scripts/typescript/fixPaths.mjs",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "prepare": "husky"
   },
   "dependencies": {
-    "utils": "workspace:*",
     "bridge": "workspace:*",
-    "types": "workspace:*"
+    "types": "workspace:*",
+    "utils": "workspace:*"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.4.1",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "config": "workspace:*",
     "eslint": "catalog:",
     "eslint-plugin-format": "^1.0.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.23",
     "husky": "^9.1.7",
-    "typescript": "catalog:",
-    "config": "workspace:*"
+    "lint-staged": "^16.2.4",
+    "typescript": "catalog:"
   },
   "lint-staged": {
     "{packages,projects}/*/{src,types}/**/*.{ts,tsx,js,jsx}": [

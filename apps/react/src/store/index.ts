@@ -1,8 +1,10 @@
 import type { AugmentMeta, ChampionMeta, ItemMeta } from 'types'
 import { create } from 'zustand'
-import { queryAugments } from '../api/augments'
-import { queryChampions } from '../api/champions'
-import { queryItems } from '../api/items'
+import { queryAugments } from '@/api/augments'
+import { queryChampions } from '@/api/champions'
+import { queryItems } from '@/api/items'
+
+export * from './configStore'
 
 interface GameDataState {
   // 英雄数据

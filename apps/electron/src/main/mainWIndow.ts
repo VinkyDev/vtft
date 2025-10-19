@@ -19,11 +19,11 @@ export function getMainWindow() {
  * 创建主窗口
  */
 export function createWindow(): void {
+  // 默认为标准模式：730x540
   mainWindow = new BrowserWindow({
-    width: 365,
-    height: 270,
-    x: 0,
-    y: 0,
+    width: 730,
+    height: 540,
+    center: true,
     show: false,
     autoHideMenuBar: true,
     frame: false,
@@ -31,7 +31,7 @@ export function createWindow(): void {
     transparent: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false,
       contextIsolation: true,
       nodeIntegration: false,

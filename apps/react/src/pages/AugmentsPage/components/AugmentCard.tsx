@@ -1,6 +1,6 @@
 import type { AugmentMeta } from 'types'
 import { memo } from 'react'
-import { Augment } from '../../../components'
+import { Augment } from '@/components'
 
 interface AugmentCardProps {
   augment: AugmentMeta
@@ -22,7 +22,7 @@ export const AugmentCard = memo(({ augment }: AugmentCardProps) => {
 
       {/* 符文名称 */}
       <div className="text-center">
-        <h3 className="text-xs font-medium text-white truncate" title={augment.name}>
+        <h3 className="text-xs font-medium text-white truncate">
           {augment.name}
         </h3>
       </div>

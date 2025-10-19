@@ -2,7 +2,7 @@
  * API 请求和响应类型定义
  * 复用 types 包中的类型，添加 API 特定的类型
  */
-import type { AugmentLevel, AugmentMeta, ChampionMeta, CompData, ItemMeta } from 'types'
+import type { AugmentLevel, AugmentMeta, ChampionMeta, CompData, CompDetails, ItemMeta } from 'types'
 
 /** 分页信息 */
 export interface Pagination {
@@ -108,3 +108,4 @@ export type ItemResponse = ApiResponse<ItemMeta[]>
 export type AugmentResponse = ApiResponse<AugmentMeta[]>
 export type CompResponse = ApiResponse<CompData[]>
 export type CompByIdResponse = ApiResponse<CompData>
+export type CompDetailsResponse = ApiResponse<CompDetails>

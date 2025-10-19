@@ -1,7 +1,7 @@
 import type { ChampionMeta } from 'types'
 import { memo, useMemo } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from 'ui'
-import { useGameDataStore } from '../store'
+import { useGameDataStore } from '@/store'
 
 interface ChampionProps {
   /** 英雄名称 */

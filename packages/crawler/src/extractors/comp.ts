@@ -42,6 +42,7 @@ export async function extractCompsFromPage(page: Page): Promise<CompData[]> {
       return
 
     const comp: CompData = {
+      compId: '',
       rank: index + 1,
       name: '',
       traits: [],

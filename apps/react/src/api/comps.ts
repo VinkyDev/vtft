@@ -1,4 +1,4 @@
-import type { CompQueryParams, CompResponse } from './types'
+import type { CompDetailsResponse, CompQueryParams, CompResponse } from './types'
 /**
  * 阵容数据 API 服务
  * 提供阵容相关的查询功能
@@ -38,5 +38,15 @@ export async function queryComps(params?: CompQueryParams): Promise<CompResponse
   }
 
   const response = await apiClient.get<CompResponse>('/comps', { params: queryParams })
+  return response.data
+}
+
+/**
+ * 获取阵容详情
+ * @param compId 阵容ID
+ * @returns 阵容详情
+ */
+export async function getCompDetails(compId: string): Promise<CompDetailsResponse> {
+  const response = await apiClient.get<CompDetailsResponse>(`/comps/${compId}?includeDetails=true`)
   return response.data
 }

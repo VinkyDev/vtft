@@ -2,7 +2,7 @@ import type { ItemCategory, ItemMeta } from 'types'
 import type { SortField, SortOrder } from './components'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
-import { useGameDataStore } from '../../store'
+import { useGameDataStore } from '@/store'
 import { ItemCard, ItemFilter } from './components'
 
 /**

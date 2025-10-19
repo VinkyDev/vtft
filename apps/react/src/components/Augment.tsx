@@ -1,7 +1,7 @@
 import type { AugmentMeta } from 'types'
 import { memo, useMemo } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from 'ui'
-import { useGameDataStore } from '../store'
+import { useGameDataStore } from '@/store'
 
 interface AugmentProps {
   /** 符文名称 */

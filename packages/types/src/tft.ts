@@ -207,6 +207,8 @@ export interface CompDetails {
 
 /** 阵容数据 */
 export interface CompData {
+  /** 阵容ID */
+  compId: string
   /** 排名 */
   rank: number
   /** 阵容名称 */

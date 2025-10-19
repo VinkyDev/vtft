@@ -2,7 +2,7 @@ import type { ItemMeta } from 'types'
 import { Plus } from 'lucide-react'
 import { memo } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from 'ui'
-import { Champion, Item } from '../../../components'
+import { Champion, Item } from '@/components'
 import { ItemStats } from './ItemStats'
 
 interface ItemDetailPopoverProps {

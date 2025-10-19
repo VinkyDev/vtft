@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 import { exit, getArgv, withTimer } from '../core/logger'
 import { saveComps } from '../core/storage'
 import { crawlComps } from '../crawlers/comp'
 
 // 如果直接运行此文件
-if (import.meta.url === `file://${getArgv()[1]}`) {
+const currentFile = fileURLToPath(import.meta.url)
+const runningFile = getArgv()[1]
+if (currentFile === runningFile) {
   // 解析命令行参数
   const args = process.argv.slice(2)
   const shouldSave = args.includes('--save')

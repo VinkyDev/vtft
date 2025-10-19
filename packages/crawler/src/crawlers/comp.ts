@@ -86,9 +86,7 @@ export class CompCrawler {
         const details = await extractCompDetails(page, i)
         comps[i].details = details
 
-        if (i < maxDetails - 1) {
-          await page.waitForTimeout(1000)
-        }
+        await page.waitForTimeout(1000)
       }
       catch (error) {
         logger.error(`获取阵容 ${i + 1} 详细信息失败:`, error)

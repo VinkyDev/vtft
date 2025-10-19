@@ -11,3 +11,7 @@ body {
 .no-drag {
   -webkit-app-region: no-drag;
 }
+
+* {
+  user-select: none;
+}

@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 import { pinyin } from 'pinyin-pro'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
-import { useGameDataStore } from '../../store'
+import { useGameDataStore } from '@/store'
 import { AugmentCard, AugmentFilter } from './components'
 
 /**

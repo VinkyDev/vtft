@@ -2,7 +2,7 @@ import type { ChampionMeta } from 'types'
 import type { ChampionCostFilter, ChampionSortField } from './components'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
-import { useGameDataStore } from '../../store'
+import { useGameDataStore } from '@/store'
 import { ChampionCard, ChampionFilter } from './components'
 
 /**

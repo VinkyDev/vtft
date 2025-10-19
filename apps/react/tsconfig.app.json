@@ -6,6 +6,10 @@
       "ESNext",
       "DOM"
     ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "outDir": "./dist"
   },
   "files": [],

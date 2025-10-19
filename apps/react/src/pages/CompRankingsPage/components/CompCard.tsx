@@ -1,4 +1,4 @@
-import type { EnhancedCompData } from '../../../utils/compRating'
+import type { EnhancedCompData } from '@/utils/compRating'
 import { memo } from 'react'
 import { Badge } from 'ui'
 import { ChampionIcon } from './ChampionIcon'
@@ -8,11 +8,21 @@ import { TraitIcon } from './TraitIcon'
 
 interface CompCardProps {
   comp: EnhancedCompData
+  onClick?: (comp: EnhancedCompData) => void
 }
 
-export const CompCard = memo(({ comp }: CompCardProps) => {
+export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
+  const handleClick = () => {
+    if (onClick) {
+      onClick(comp)
+    }
+  }
+
   return (
-    <div className="group relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2.5 transition-all hover:border-white/10 hover:from-white/[0.12] hover:to-white/[0.05] hover:shadow-lg hover:shadow-black/20">
+    <div
+      className="group relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2.5 transition-all hover:border-white/10 hover:from-white/[0.12] hover:to-white/[0.05] hover:shadow-lg hover:shadow-black/20 cursor-pointer"
+      onClick={handleClick}
+    >
       <div className="flex items-start gap-2.5">
         {/* 左侧: 评级徽章 */}
         <div className="flex flex-col items-center gap-1 pt-0.5">

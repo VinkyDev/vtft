@@ -59,7 +59,7 @@ async function expandComp(page: Page, compIndex: number): Promise<void> {
   // 点击展开按钮
   const expandButton = targetComp.locator('button').last()
   await expandButton.click()
-  await page.waitForTimeout(2000)
+  await page.waitForTimeout(4000)
 
   logger.info(`已展开第 ${compIndex + 1} 个阵容`)
 }

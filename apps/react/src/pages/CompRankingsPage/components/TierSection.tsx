@@ -1,4 +1,4 @@
-import type { GroupedComps } from '../../../utils/compRating'
+import type { EnhancedCompData, GroupedComps } from '@/utils/compRating'
 import { ChevronRightIcon } from 'lucide-react'
 import { memo } from 'react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge } from 'ui'
@@ -6,14 +6,15 @@ import { CompCard } from './CompCard'
 
 interface TierSectionProps {
   group: GroupedComps
+  onCompClick?: (comp: EnhancedCompData) => void
 }
 
-export const TierSection = memo(({ group }: TierSectionProps) => {
+export const TierSection = memo(({ group, onCompClick }: TierSectionProps) => {
   return (
     <div className="space-y-1.5">
       {/* 普通阵容 */}
       {group.normal.map(comp => (
-        <CompCard key={`${comp.rank}-${comp.name}`} comp={comp} />
+        <CompCard key={`${comp.rank}-${comp.name}`} comp={comp} onClick={onCompClick} />
       ))}
 
       {/* 低出场率阵容 */}
@@ -39,7 +40,7 @@ export const TierSection = memo(({ group }: TierSectionProps) => {
             </AccordionTrigger>
             <AccordionContent className="space-y-1.5 pt-1.5 pb-0">
               {group.lowPickrate.map(comp => (
-                <CompCard key={`${comp.rank}-${comp.name}`} comp={comp} />
+                <CompCard key={`${comp.rank}-${comp.name}`} comp={comp} onClick={onCompClick} />
               ))}
             </AccordionContent>
           </AccordionItem>

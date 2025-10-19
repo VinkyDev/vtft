@@ -1,7 +1,7 @@
 import type { ItemMeta } from 'types'
 import { memo, useMemo } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from 'ui'
-import { useGameDataStore } from '../store'
+import { useGameDataStore } from '@/store'
 
 interface ItemProps {
   /** 装备名称 */

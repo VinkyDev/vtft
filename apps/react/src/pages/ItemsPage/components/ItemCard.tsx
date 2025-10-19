@@ -28,7 +28,7 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
 
         {/* 装备名称 */}
         <div className="text-center">
-          <h3 className="text-xs font-medium text-white truncate" title={item.name}>
+          <h3 className="text-xs font-medium text-white truncate">
             {item.name}
           </h3>
         </div>

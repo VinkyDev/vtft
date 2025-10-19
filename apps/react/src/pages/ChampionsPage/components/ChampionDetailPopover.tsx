@@ -1,7 +1,7 @@
 import type { ChampionMeta } from 'types'
 import { memo } from 'react'
 import { Popover, PopoverContent, PopoverTrigger, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
-import { Champion } from '../../../components'
+import { Champion } from '@/components'
 import { ChampionStats } from './ChampionStats'
 
 interface ChampionDetailPopoverProps {

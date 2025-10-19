@@ -1,6 +1,6 @@
 import type { ChampionMeta } from 'types'
 import { memo } from 'react'
-import { Champion } from '../../../components'
+import { Champion } from '@/components'
 import { ChampionDetailPopover } from './ChampionDetailPopover'
 
 interface ChampionCardProps {
@@ -24,7 +24,7 @@ export const ChampionCard = memo(({ champion }: ChampionCardProps) => {
 
         {/* 英雄名称 */}
         <div className="text-center">
-          <h3 className="text-xs font-medium text-white truncate" title={champion.name}>
+          <h3 className="text-xs font-medium text-white truncate">
             {champion.name}
           </h3>
         </div>

@@ -1,6 +1,6 @@
 import type { Champion } from 'types'
 import { memo } from 'react'
-import { ChampionWithItems } from '../../../components'
+import { ChampionWithItems } from '@/components'
 
 interface ChampionIconProps {
   champion: Champion

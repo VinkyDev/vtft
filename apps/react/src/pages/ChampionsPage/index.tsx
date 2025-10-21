@@ -4,62 +4,27 @@ import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
 import { useGameDataStore } from '@/store'
 import { ChampionCard, ChampionFilter } from './components'
+import { sortChampions } from './helper'
 
 /**
  * 英雄页面
  */
 export function ChampionsPage() {
   const [costFilter, setCostFilter] = useState<ChampionCostFilter>('all')
-  const [sortField, setSortField] = useState<ChampionSortField>('matches')
+  const [sortField, setSortField] = useState<ChampionSortField>('composite')
 
-  // 从 store 获取英雄数据
   const { champions, championsLoading: loading } = useGameDataStore()
 
-  // 筛选和排序英雄
   const filteredChampions = useMemo<ChampionMeta[]>(() => {
     if (!champions.length)
       return []
 
-    let filteredChampionList = champions
-
-    // 按费用筛选
+    let filtered = champions
     if (costFilter !== 'all') {
-      filteredChampionList = filteredChampionList.filter(champion => champion.cost === costFilter)
+      filtered = filtered.filter(champion => champion.cost === Number(costFilter))
     }
 
-    // 排序
-    const sortedChampions = [...filteredChampionList].sort((a, b) => {
-      let aValue: number
-      let bValue: number
-
-      switch (sortField) {
-        case 'matches':
-          aValue = a.matches ?? 0
-          bValue = b.matches ?? 0
-          break
-        case 'avgPlace':
-          aValue = a.avgPlace ?? 999
-          bValue = b.avgPlace ?? 999
-          break
-        case 'top4Rate':
-          aValue = a.top4Rate ?? 0
-          bValue = b.top4Rate ?? 0
-          break
-        case 'firstPlaceRate':
-          aValue = a.firstPlaceRate ?? 0
-          bValue = b.firstPlaceRate ?? 0
-          break
-        default:
-          aValue = a.matches ?? 0
-          bValue = b.matches ?? 0
-      }
-
-      const comparison = aValue - bValue
-      // 平均排名升序，其他降序
-      return sortField === 'avgPlace' ? comparison : -comparison
-    })
-
-    return sortedChampions
+    return sortChampions(filtered, sortField)
   }, [champions, costFilter, sortField])
 
   return (
@@ -70,7 +35,7 @@ export function ChampionsPage() {
         sortField={sortField}
         onSortFieldChange={setSortField}
       />
-      <ScrollArea className="h-[calc(100vh-120px)]" type="scroll">
+      <ScrollArea className="h-[calc(100vh-110px)]" type="scroll">
         <div className="pb-2">
           {loading && (
             <div className="flex items-center justify-center py-20">

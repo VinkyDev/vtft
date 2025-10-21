@@ -29,14 +29,6 @@ export const ItemIcon = memo(({ item, className = '', onClick }: ItemIconProps) 
           loading="lazy"
         />
       </div>
-
-      {/* 排名显示 */}
-      <div className="flex items-center justify-center rounded bg-white/5 px-1.5 py-0.5">
-        <span className="text-[10px] font-bold text-white/80">
-          #
-          {item.rank}
-        </span>
-      </div>
     </div>
   )
 })

@@ -55,6 +55,11 @@ export async function extractRecommendedItems(
               const firstPlaceRateText = await cells[4].textContent()
               const firstPlaceRate = firstPlaceRateText ? Number.parseFloat(firstPlaceRateText.trim().replace('%', '')) : undefined
 
+              // 第6列：比赛次数
+              const matchesText = await cells[5].textContent()
+              const matches = matchesText ? Number.parseInt(matchesText.trim().replace(',', '')) : undefined
+              logger.info(`道具 ${itemName} 有 ${matches} 场比赛`)
+
               // 第7列：推荐英雄（获取所有）
               const recommendedForCell = cells[6]
               const championImgs = await recommendedForCell.locator('img[alt]').all()
@@ -68,6 +73,7 @@ export async function extractRecommendedItems(
                 avgRank,
                 top4Rate,
                 firstPlaceRate,
+                matches,
                 recommendedFor: recommendedFor.length > 0 ? recommendedFor : undefined,
               })
             }

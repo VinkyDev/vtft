@@ -1,5 +1,6 @@
 import type { ItemMeta } from 'types'
 import { memo } from 'react'
+import { Impact } from '@/components'
 import { ItemDetailPopover } from './ItemDetailPopover'
 
 interface ItemCardProps {
@@ -8,7 +9,7 @@ interface ItemCardProps {
 
 /**
  * 紧凑式装备卡片组件
- * 只显示装备图标、名称和平均名次，点击显示详情
+ * 只显示装备图标、名称和影响，点击显示详情
  */
 export const ItemCard = memo(({ item }: ItemCardProps) => {
   return (
@@ -33,13 +34,11 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
           </h3>
         </div>
 
-        {/* 平均名次 */}
-        {item.avgPlace && (
+        {/* 影响 */}
+        {item.avgPlace !== undefined && (
           <div className="text-center">
-            <span className="text-[10px] text-gray-400">平均名次: </span>
-            <span className="text-[10px] font-medium text-emerald-400">
-              {item.avgPlace.toFixed(2)}
-            </span>
+            <span className="text-[10px] text-gray-400">影响: </span>
+            <Impact avgRank={item.avgPlace} className="text-[10px]" />
           </div>
         )}
 

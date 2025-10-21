@@ -1,65 +1,69 @@
 import type { ItemCategory, ItemMeta } from 'types'
-import type { SortField, SortOrder } from './components'
+import type { SortField } from './helper'
+import type { FilterGroup } from '@/components'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
+import { FilterBar } from '@/components'
 import { useGameDataStore } from '@/store'
-import { ItemCard, ItemFilter } from './components'
+import { ItemCard } from './components'
+import { sortItems } from './helper'
 
 /**
  * 装备页面
  */
 export function ItemsPage() {
   const [category, setCategory] = useState<ItemCategory>('core')
-  const [sortField, setSortField] = useState<SortField>('matches')
+  const [sortField, setSortField] = useState<SortField>('composite')
 
   // 从 store 获取装备数据
   const { items, itemsLoading: loading } = useGameDataStore()
-
-  // 根据排序字段自动确定排序方向
-  const sortOrder: SortOrder = sortField === 'avgPlace' ? 'asc' : 'desc'
 
   // 筛选和排序装备
   const filteredItems = useMemo<ItemMeta[]>(() => {
     if (!items.length)
       return []
 
-    let filteredItemList = items
-
     // 按类型筛选
+    let filtered = items
     if (category !== 'all') {
-      filteredItemList = filteredItemList.filter(item => item.category === category)
+      filtered = filtered.filter(item => item.category === category)
     }
 
     // 排序
-    const sortedItems = [...filteredItemList].sort((a, b) => {
-      let aValue: number
-      let bValue: number
+    return sortItems(filtered, sortField)
+  }, [items, category, sortField])
 
-      if (sortField === 'matches') {
-        aValue = a.matches ?? 0
-        bValue = b.matches ?? 0
-      }
-      else { // avgPlace
-        aValue = a.avgPlace ?? 999
-        bValue = b.avgPlace ?? 999
-      }
-
-      const comparison = aValue - bValue
-      return sortOrder === 'asc' ? comparison : -comparison
-    })
-
-    return sortedItems
-  }, [items, category, sortField, sortOrder])
+  // FilterBar 配置
+  const filterGroups: FilterGroup[] = [
+    {
+      value: category,
+      options: [
+        { value: 'core', label: '核心' },
+        { value: 'radiant', label: '光明' },
+        { value: 'artifact', label: '神器' },
+        { value: 'emblem', label: '转职' },
+      ],
+      onChange: (value) => {
+        setCategory(value as ItemCategory)
+      },
+    },
+    {
+      value: sortField,
+      options: [
+        { value: 'composite', label: '综合' },
+        { value: 'matches', label: '场次' },
+        { value: 'avgPlace', label: '影响' },
+      ],
+      onChange: (value) => {
+        setSortField(value as SortField)
+      },
+    },
+  ]
 
   return (
     <div className="flex flex-col gap-1.5 px-2">
-      <ItemFilter
-        category={category}
-        onCategoryChange={setCategory}
-        sortField={sortField}
-        onSortFieldChange={setSortField}
-      />
-      <ScrollArea className="h-[calc(100vh-120px)]" type="scroll">
+      <FilterBar groups={filterGroups} />
+      <ScrollArea className="h-[calc(100vh-110px)]" type="scroll">
         <div className="pb-2">
           {loading && (
             <div className="flex items-center justify-center py-20">

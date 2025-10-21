@@ -1,6 +1,6 @@
 import type { ChampionMeta } from 'types'
 import { memo } from 'react'
-import { Champion } from '@/components'
+import { Champion, Impact } from '@/components'
 import { ChampionDetailPopover } from './ChampionDetailPopover'
 
 interface ChampionCardProps {
@@ -9,7 +9,7 @@ interface ChampionCardProps {
 
 /**
  * 紧凑式英雄卡片组件
- * 只显示英雄图标、名称和平均排名，点击显示详情
+ * 只显示英雄图标、名称和影响，点击显示详情
  */
 export const ChampionCard = memo(({ champion }: ChampionCardProps) => {
   return (
@@ -29,13 +29,11 @@ export const ChampionCard = memo(({ champion }: ChampionCardProps) => {
           </h3>
         </div>
 
-        {/* 平均排名 */}
-        {champion.avgPlace && (
+        {/* 影响 */}
+        {champion.avgPlace !== undefined && (
           <div className="text-center">
-            <span className="text-[10px] text-gray-400">平均排名: </span>
-            <span className="text-[10px] font-medium text-emerald-400">
-              {champion.avgPlace.toFixed(2)}
-            </span>
+            <span className="text-[10px] text-gray-400">影响: </span>
+            <Impact avgRank={champion.avgPlace} className="text-[10px]" />
           </div>
         )}
 

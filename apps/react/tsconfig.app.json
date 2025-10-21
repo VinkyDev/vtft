@@ -6,7 +6,6 @@
       "ESNext",
       "DOM"
     ],
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },

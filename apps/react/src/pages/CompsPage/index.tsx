@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
 import { queryComps } from '@/api'
-import { CompDetailPage } from '@/pages/CompDetailPage'
+import { CompDetailPage } from '@/pages/CompDetailsPage'
 import { processComps } from '@/utils/compRating'
 import { TierSection } from './components'
 

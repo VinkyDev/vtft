@@ -77,15 +77,7 @@ export const Champion = memo(({
 
   // 如果没有找到英雄数据，返回 null 或占位符
   if (!champion) {
-    const sizeClasses = getSizeClasses(size)
-    return (
-      <div className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 border-gray-500 bg-black/40 ${className}`}>
-        <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-[6px] text-white/50">?</span>
-        </div>
-      </div>
-    )
+    return null
   }
 
   const costColors = getCostColor(champion.cost || 1)

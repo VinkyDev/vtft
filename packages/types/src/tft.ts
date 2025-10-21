@@ -139,6 +139,8 @@ export interface RecommendedItem {
   top4Rate?: number
   /** 第一名率 (%) */
   firstPlaceRate?: number
+  /** 比赛场次 */
+  matches?: number
   /** 优先级 */
   priority?: number
 }

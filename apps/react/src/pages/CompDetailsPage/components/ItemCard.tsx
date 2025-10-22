@@ -22,18 +22,17 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
 
   const champions = item.recommendedFor || []
 
-  // 使用通用 hook 实现自适应英雄列表
+  // 自适应适配
   const { containerRef, visibleItems, remainingCount, showMore } = useAdaptiveList<string>({
     items: champions,
-    itemWidth: 16, // tiny size: w-4 (16px) + gap-1 (4px) = 20px，但现在改成正方形 w-4 h-4，所以是 16px + 4px
+    itemWidth: 16,
     moreButtonWidth: 16,
     minVisible: 1,
   })
 
   return (
     <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-md p-1.5 border border-white/10 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20">
-      {/* 使用 grid 布局实现对齐，小屏和大屏使用不同的列宽 */}
-      <div className="grid grid-cols-[25px_minmax(60px,10%)_minmax(60px,10%)_1fr] sm:grid-cols-[minmax(160px,25%)_minmax(80px,12%)_minmax(70px,10%)_1fr] gap-2 items-center">
+      <div className="grid grid-cols-[25px_minmax(60px,10%)_minmax(60px,10%)_1fr] sm:grid-cols-[minmax(160px,25%)_minmax(80px,25%)_minmax(70px,25%)_1fr] gap-2 items-center">
         <div className="flex items-center gap-2 min-w-0">
           <img
             src={item.icon}
@@ -46,42 +45,39 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
           </h3>
         </div>
 
-        {/* 合成组件 - 小屏10%（最小60px），大屏12%（最小80px） */}
         <div className="flex items-center gap-1 justify-center">
           {component1 && (
             <img
               src={component1.icon}
               alt={component1.name}
               title={component1.name}
-              className="w-4 h-4 rounded border border-white/20"
+              className="w-4 h-4 sm:w-5 sm:h-5 rounded border border-white/20"
               loading="lazy"
             />
           )}
           {component1 && component2 && (
-            <span className="text-gray-500 text-[10px]">+</span>
+            <span className="text-gray-500 text-xs">+</span>
           )}
           {component2 && (
             <img
               src={component2.icon}
               alt={component2.name}
               title={component2.name}
-              className="w-4 h-4 rounded border border-white/20"
+              className="w-4 h-4 sm:w-5 sm:h-5 rounded border border-white/20"
               loading="lazy"
             />
           )}
         </div>
 
-        {/* 影响 - 小屏10%（最小60px），大屏10%（最小70px） */}
         <div className="flex items-center gap-1 justify-center">
           {item.avgRank !== undefined && (
             <>
-              <span className="text-gray-400 text-[9px]">影响</span>
-              <Impact avgRank={item.avgRank} className="text-[10px]" />
+              <span className="text-gray-400 text-[10px] sm:text-xs">影响</span>
+              <Impact avgRank={item.avgRank} className="text-[10px] sm:text-xs" />
             </>
           )}
         </div>
 
-        {/* 推荐英雄 - 自适应剩余空间 */}
         <div ref={containerRef} className="flex items-center gap-1 min-w-0 justify-end">
           {visibleItems.map(champion => (
             <Champion
@@ -90,7 +86,7 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
               size="tiny"
               showPriority={false}
               showTooltip={true}
-              className="!w-4 !h-4"
+              className="!w-4 !h-4 sm:!w-5 sm:!h-5"
             />
           ))}
           {showMore && (

@@ -3,6 +3,7 @@ import type { CompData, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { withRetry } from 'utils'
 import { BrowserManager, PageHelper } from '../core/browser'
 import { getCwd, logger } from '../core/logger'
 import { extractCompsFromPage } from '../extractors/comp'
@@ -32,42 +33,48 @@ export class CompCrawler {
    * 执行爬取
    */
   async crawl(): Promise<CompData[]> {
-    try {
-      // 启动浏览器
-      await this.browserManager.launch(this.options.headless)
-      const page = await this.browserManager.newPage()
-      const helper = new PageHelper(page)
+    return withRetry(
+      async () => {
+        try {
+          // 启动浏览器
+          await this.browserManager.launch(this.options.headless)
+          const page = await this.browserManager.newPage()
+          const helper = new PageHelper(page)
 
-      // 导航到目标页面
-      await helper.navigate(TARGET_URL)
-      await helper.waitForLoad()
+          // 导航到目标页面
+          await helper.navigate(TARGET_URL)
+          await helper.waitForLoad()
 
-      // 滚动页面加载所有数据
-      await helper.scroll()
+          // 保存调试信息
+          if (this.options.debug || this.options.screenshot) {
+            await this.saveDebugInfo(helper)
+          }
 
-      // 保存调试信息
-      if (this.options.debug || this.options.screenshot) {
-        await this.saveDebugInfo(helper)
-      }
+          // 提取阵容数据
+          const comps = await extractCompsFromPage(page)
 
-      // 提取阵容数据
-      const comps = await extractCompsFromPage(page)
+          // 提取详细信息
+          if (this.options.fetchDetails) {
+            await this.fetchDetails(comps, page)
+          }
 
-      // 提取详细信息
-      if (this.options.fetchDetails) {
-        await this.fetchDetails(comps, page)
-      }
+          // 保存结果
+          if (this.options.debug) {
+            await this.saveResults(comps)
+          }
 
-      // 保存结果
-      if (this.options.debug) {
-        await this.saveResults(comps)
-      }
-
-      return comps
-    }
-    finally {
-      await this.browserManager.close()
-    }
+          return comps
+        }
+        finally {
+          await this.browserManager.close()
+        }
+      },
+      {
+        maxAttempts: 3,
+        delay: 2000,
+        backoffFactor: 2,
+      },
+    )
   }
 
   /**

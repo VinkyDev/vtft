@@ -54,7 +54,6 @@ export async function extractAugmentsByLevel(page: Page, level: AugmentLevel): P
   try {
     // 等待表格加载
     await page.waitForSelector('table tbody tr', { timeout: 30000 })
-    await page.waitForTimeout(2000)
 
     // 查找表格行
     const rows = await page.locator('table tbody tr').all()

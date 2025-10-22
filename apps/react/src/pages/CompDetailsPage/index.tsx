@@ -2,9 +2,9 @@ import type { EnhancedCompData } from '@/utils/compRating'
 import { useRequest } from 'ahooks'
 import { useMemo, useState } from 'react'
 import { Drawer, DrawerContent, DrawerDescription, DrawerOverlay, DrawerTitle, Spinner } from 'ui'
-import { getCompDetails } from '@/api'
+import { getCompDetails } from '@/api-client'
 import { AppTabs } from '@/components'
-import { FormationBoard, ItemsGrid } from './components'
+import { AugmentsGrid, ChampionEnhancementsGrid, FormationBoard, ItemsGrid } from './components'
 
 interface CompDetailPageProps {
   comp: EnhancedCompData | null
@@ -65,21 +65,29 @@ export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
       },
       {
         value: 'augments',
-        label: '符文',
-        content: (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-gray-400">符文信息开发中...</p>
-          </div>
-        ),
+        label: '推荐符文',
+        content: compDetails.data.augments && compDetails.data.augments.length > 0
+          ? (
+              <AugmentsGrid augments={compDetails.data.augments} />
+            )
+          : (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-400">暂无符文推荐</p>
+              </div>
+            ),
       },
       {
-        value: 'traits',
-        label: '羁绊',
-        content: (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-gray-400">羁绊信息开发中...</p>
-          </div>
-        ),
+        value: 'championEnhancements',
+        label: '推荐果实',
+        content: compDetails.data.championEnhancements && compDetails.data.championEnhancements.length > 0
+          ? (
+              <ChampionEnhancementsGrid championEnhancements={compDetails.data.championEnhancements} />
+            )
+          : (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-400">暂无果实推荐</p>
+              </div>
+            ),
       },
     ]
   }, [compDetails])

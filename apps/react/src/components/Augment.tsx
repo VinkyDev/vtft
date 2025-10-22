@@ -118,12 +118,12 @@ export const Augment = memo(({
         className="bg-black/90 text-white border-white/10"
       >
         <div className="space-y-1">
-          <div className="font-semibold">{augment.name}</div>
-          <div className="text-xs text-gray-300">
-            {augment.level}
-            {' '}
-            •
+          <div className="font-semibold">
             {augment.tier}
+            {' '}
+            ·
+            {' '}
+            {augment.name}
           </div>
         </div>
       </TooltipContent>

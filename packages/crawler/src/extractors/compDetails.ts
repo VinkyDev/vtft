@@ -1,6 +1,7 @@
 import type { Locator, Page } from 'playwright'
 import type { CompDetails, Formation, Item, Position, PositionChampion } from 'types'
 import { logger } from '../core/logger'
+import { extractRecommendedAugments } from './compAugment'
 import { extractChampionEnhancements } from './compEnhancement'
 import { extractRecommendedItems } from './compItem'
 
@@ -12,7 +13,6 @@ async function clickTab(page: Page, tabName: string): Promise<void> {
     const tab = page.locator(`div:text-is("${tabName}")`).first()
     if (await tab.count() > 0) {
       await tab.click()
-      // 等待内容加载（SPA 切换不触发 networkidle，直接等待固定时间）
       await page.waitForTimeout(2000)
       logger.info(`已点击 ${tabName} tab`)
     }
@@ -32,7 +32,7 @@ async function clickMoreButton(page: Page, compIndex: number): Promise<void> {
     const moreButton = targetComp.locator('button:has-text("更多")').first()
     if (await moreButton.count() > 0) {
       await moreButton.click()
-      await page.waitForTimeout(1000)
+      await page.waitForLoadState('networkidle', { timeout: 3000 }).catch(() => {})
       logger.info('已点击"更多"按钮')
     }
   }
@@ -54,12 +54,14 @@ async function expandComp(page: Page, compIndex: number): Promise<void> {
 
   // 滚动到目标阵容
   await targetComp.scrollIntoViewIfNeeded()
-  await page.waitForTimeout(500)
+  await page.waitForLoadState('domcontentloaded')
 
   // 点击展开按钮
   const expandButton = targetComp.locator('button').last()
   await expandButton.click()
-  await page.waitForTimeout(4000)
+
+  // 等待展开内容加载（等待站位区域出现）
+  await targetComp.locator('[class*="w-[326px]"], [class*="w-[578px]"]').first().waitFor({ timeout: 10000 })
 
   logger.info(`已展开第 ${compIndex + 1} 个阵容`)
 }
@@ -74,8 +76,10 @@ async function collapseComp(page: Page, compIndex: number): Promise<void> {
       const currentComp = comps[compIndex]
       const collapseButton = currentComp.locator('button').last()
       if (await collapseButton.count() > 0) {
+        await collapseButton.waitFor({ state: 'visible', timeout: 10000 })
         await collapseButton.click()
-        await page.waitForTimeout(500)
+        await page.waitForLoadState('domcontentloaded')
+        await page.waitForTimeout(1000)
         logger.info(`已折叠第 ${compIndex + 1} 个阵容`)
       }
     }
@@ -315,20 +319,26 @@ export async function extractCompDetails(page: Page, compIndex: number): Promise
     const compForFormation = await getCompLocator(page, compIndex)
     details.formation = await extractFormation(compForFormation)
 
-    // 3. 提取强化信息
+    // 3. 提取推荐强化符文信息
+    logger.info(`提取推荐强化符文 (阵容 ${compIndex + 1})`)
+    await clickTab(page, '推荐强化符文')
+    const compForAugments = await getCompLocator(page, compIndex)
+    details.augments = await extractRecommendedAugments(compForAugments)
+
+    // 4. 提取英雄强化（果实）信息
     logger.info(`提取强化 (阵容 ${compIndex + 1})`)
     await clickTab(page, '强化')
     const compForEnhancement = await getCompLocator(page, compIndex)
     details.championEnhancements = await extractChampionEnhancements(compForEnhancement)
 
-    // 4. 提取道具信息
+    // 5. 提取道具信息
     logger.info(`提取道具 (阵容 ${compIndex + 1})`)
     await clickTab(page, '道具')
     await clickMoreButton(page, compIndex)
     const compForItems = await getCompLocator(page, compIndex)
     details.items = await extractRecommendedItems(compForItems)
 
-    // 5. 折叠阵容
+    // 6. 折叠阵容
     await collapseComp(page, compIndex)
 
     logger.info(

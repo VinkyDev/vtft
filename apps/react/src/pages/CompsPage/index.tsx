@@ -2,7 +2,7 @@ import type { EnhancedCompData, GroupedComps } from '@/utils/compRating'
 import { useRequest } from 'ahooks'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
-import { queryComps } from '@/api'
+import { queryComps } from '@/api-client'
 import { CompDetailPage } from '@/pages/CompDetailsPage'
 import { processComps } from '@/utils/compRating'
 import { TierSection } from './components'
@@ -35,7 +35,7 @@ export function CompRankingsPage() {
 
   return (
     <>
-      <ScrollArea className="h-[calc(100vh-68px)]" type="scroll">
+      <ScrollArea className="h-[calc(100vh-58px)] sm:h-[calc(100vh-68px)]" type="scroll">
         <div className="flex flex-col gap-1.5 px-2">
           {groupedComps.map(group => (
             <TierSection key={group.tier} group={group} onCompClick={handleCompClick} />

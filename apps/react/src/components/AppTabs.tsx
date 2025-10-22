@@ -61,7 +61,7 @@ export const AppTabs = memo((props: AppTabsProps) => {
       <div className={`flex items-center ${layoutClass}`}>
         {beforeTabList}
 
-        <TabsList className={`bg-black/30 border border-white/20 h-7 sm:h-9 p-1 ${tabListClassName}`}>
+        <TabsList className={`bg-black/30 border border-white/20 h-7 sm:h-9 p-1 no-drag ${tabListClassName}`}>
           {tabs.map(tab => (
             <TabsTrigger
               key={tab.value}
@@ -94,7 +94,7 @@ export const AppTabs = memo((props: AppTabsProps) => {
                     forceMount
                   >
                     <div
-                      className="transition-opacity duration-300"
+                      className="transition-opacity duration-300 h-full"
                       style={{
                         opacity: value === tab.value ? 1 : 0,
                         pointerEvents: value === tab.value ? 'auto' : 'none',
@@ -110,7 +110,7 @@ export const AppTabs = memo((props: AppTabsProps) => {
         : (
             <>
               {tabs.map(tab => (
-                <TabsContent key={tab.value} value={tab.value} className="h-full m-0">
+                <TabsContent key={tab.value} value={tab.value} className="h-full m-0 no-drag">
                   {tab.content}
                 </TabsContent>
               ))}

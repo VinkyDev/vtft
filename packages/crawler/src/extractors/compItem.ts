@@ -19,8 +19,8 @@ export async function extractRecommendedItems(
       try {
         const caption = await table.locator('caption').textContent().catch(() => '')
         logger.info(`道具表格标题: ${caption}`)
-
         if (caption && caption.includes('道具')) {
+          await table.locator('tbody tr').first().waitFor({ timeout: 5000 }).catch(() => {})
           const rows = await table.locator('tbody tr').all()
           logger.info(`道具表格有 ${rows.length} 行数据`)
 
@@ -58,7 +58,6 @@ export async function extractRecommendedItems(
               // 第6列：比赛次数
               const matchesText = await cells[5].textContent()
               const matches = matchesText ? Number.parseInt(matchesText.trim().replace(',', '')) : undefined
-              logger.info(`道具 ${itemName} 有 ${matches} 场比赛`)
 
               // 第7列：推荐英雄（获取所有）
               const recommendedForCell = cells[6]

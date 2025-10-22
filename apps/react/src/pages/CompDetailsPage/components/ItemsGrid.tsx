@@ -137,7 +137,7 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
   return (
     <div className="flex flex-col h-full">
       <FilterBar groups={filterGroups} />
-      <ScrollArea className="h-[calc(100vh-100px)]">
+      <ScrollArea className="h-[calc(100vh-100px)] sm:h-[calc(100vh-110px)]">
         <div className="flex flex-col gap-1.5 p-1">
           {sortedItems.map((item, index) => (
             <ItemCard key={`${item.name}-${index}`} item={item} />

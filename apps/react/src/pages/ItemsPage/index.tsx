@@ -63,7 +63,7 @@ export function ItemsPage() {
   return (
     <div className="flex flex-col gap-1.5 px-2">
       <FilterBar groups={filterGroups} />
-      <ScrollArea className="h-[calc(100vh-110px)]" type="scroll">
+      <ScrollArea className="h-[calc(100vh-120px)]" type="scroll">
         <div className="pb-2">
           {loading && (
             <div className="flex items-center justify-center py-20">

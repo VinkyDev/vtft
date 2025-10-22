@@ -2,6 +2,7 @@ import type { AugmentLevel, AugmentMeta, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { withRetry } from 'utils'
 import { BrowserManager, PageHelper } from '../core/browser'
 import { getCwd, logger } from '../core/logger'
 import { extractOpggAugmentsByLevel } from '../extractors/augmentOpgg'
@@ -36,75 +37,85 @@ export class OpggAugmentCrawler {
    * 执行爬取
    */
   async crawl(): Promise<AugmentMeta[]> {
-    try {
-      // 启动浏览器
-      await this.browserManager.launch(this.options.headless)
-      const page = await this.browserManager.newPage()
-      const helper = new PageHelper(page)
-
-      // 设置用户代理以避免被识别为爬虫
-      await page.setExtraHTTPHeaders({
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      })
-
-      // 导航到目标页面
-      await page.goto(TARGET_URL, {
-        waitUntil: 'domcontentloaded',
-        timeout: 60000,
-      })
-      logger.info(`已导航到: ${TARGET_URL}`)
-
-      // 等待页面加载
-      await page.waitForTimeout(6000)
-      logger.info('页面加载完成')
-
-      // 分别爬取每个级别的强化符文
-      const allAugments: AugmentMeta[] = []
-
-      for (const { level, label } of OPGG_AUGMENT_LEVELS) {
-        logger.info(`准备爬取 ${label} 级别强化符文...`)
-
+    return withRetry(
+      async () => {
         try {
-          // 点击对应级别的标签
-          const tabContainer = page.locator('div.flex.flex-1.rounded-\\[4px\\]')
-          const tabButton = tabContainer.getByText(label, { exact: true })
-          if (!tabButton) {
-            logger.error(`未找到 ${label} 标签`)
-            continue
+          // 启动浏览器
+          await this.browserManager.launch(this.options.headless)
+          const page = await this.browserManager.newPage()
+          const helper = new PageHelper(page)
+
+          // 设置用户代理
+          await page.setExtraHTTPHeaders({
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          })
+
+          // 导航到目标页面
+          await page.goto(TARGET_URL, {
+            waitUntil: 'domcontentloaded',
+            timeout: 60000,
+          })
+          logger.info(`已导航到: ${TARGET_URL}`)
+
+          // 等待页面加载
+          await page.waitForSelector('div.flex.flex-1.rounded-\\[4px\\]', { timeout: 10000 })
+          logger.info('页面加载完成')
+
+          // 分别爬取每个级别的强化符文
+          const allAugments: AugmentMeta[] = []
+
+          for (const { level, label } of OPGG_AUGMENT_LEVELS) {
+            logger.info(`准备爬取 ${label} 级别强化符文...`)
+
+            try {
+              // 点击对应级别的标签
+              const tabContainer = page.locator('div.flex.flex-1.rounded-\\[4px\\]')
+              const tabButton = tabContainer.getByText(label, { exact: true })
+              if (!tabButton) {
+                logger.error(`未找到 ${label} 标签`)
+                continue
+              }
+
+              await tabButton.click()
+              // 等待表格更新
+              await page.waitForSelector('table tbody tr', { timeout: 5000 })
+              logger.info(`已点击 ${label} 标签`)
+
+              // 提取该级别的强化符文
+              const augments = await extractOpggAugmentsByLevel(page, level)
+              allAugments.push(...augments)
+
+              // 保存调试信息
+              if (this.options.debug || this.options.screenshot) {
+                await this.saveDebugInfo(helper, level)
+              }
+            }
+            catch (error) {
+              logger.error(`爬取 ${label} 级别失败:`, error)
+            }
           }
 
-          await tabButton.click()
-          await page.waitForTimeout(3000)
-          logger.info(`已点击 ${label} 标签`)
+          // 去重
+          const uniqueAugments = this.deduplicateAugments(allAugments)
 
-          // 提取该级别的强化符文
-          const augments = await extractOpggAugmentsByLevel(page, level)
-          allAugments.push(...augments)
-
-          // 保存调试信息
-          if (this.options.debug || this.options.screenshot) {
-            await this.saveDebugInfo(helper, level)
+          // 保存结果
+          if (this.options.debug) {
+            await this.saveResults(uniqueAugments)
           }
+
+          logger.info(`OP.GG 强化符文爬取完成，共 ${uniqueAugments.length} 个`)
+          return uniqueAugments
         }
-        catch (error) {
-          logger.error(`爬取 ${label} 级别失败:`, error)
+        finally {
+          await this.browserManager.close()
         }
-      }
-
-      // 去重（基于名称和级别）
-      const uniqueAugments = this.deduplicateAugments(allAugments)
-
-      // 保存结果
-      if (this.options.debug) {
-        await this.saveResults(uniqueAugments)
-      }
-
-      logger.info(`OP.GG 强化符文爬取完成，共 ${uniqueAugments.length} 个`)
-      return uniqueAugments
-    }
-    finally {
-      await this.browserManager.close()
-    }
+      },
+      {
+        maxAttempts: 3,
+        delay: 2000,
+        backoffFactor: 2,
+      },
+    )
   }
 
   /**

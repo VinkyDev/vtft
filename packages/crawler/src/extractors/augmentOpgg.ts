@@ -83,11 +83,10 @@ export async function extractOpggAugmentsByLevel(page: Page, level: AugmentLevel
   const augments: AugmentMeta[] = []
 
   try {
-    // 等待页面内容加载
-    await page.waitForTimeout(2000)
+    // 等待强化符文容器加载
+    await page.waitForSelector('div.flex.flex-col.md\\:min-h-\\[86px\\].md\\:flex-row', { timeout: 5000 })
 
     // 查找所有强化符文容器
-    // 根据HTML结构，每个等级分组都有一个包含强化符文的容器
     const containers = await page.locator('div.flex.flex-col.md\\:min-h-\\[86px\\].md\\:flex-row').all()
     logger.info(`找到 ${containers.length} 个强化符文容器`)
 

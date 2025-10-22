@@ -1,4 +1,5 @@
 export * from './useAdaptiveList'
 export * from './useChampionByName'
+export * from './useIsSmallWindow'
 export * from './useItemByName'
 export * from './useSortedData'

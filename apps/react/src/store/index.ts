@@ -1,8 +1,8 @@
 import type { AugmentMeta, ChampionMeta, ItemMeta } from 'types'
 import { create } from 'zustand'
-import { queryAugments } from '@/api/augments'
-import { queryChampions } from '@/api/champions'
-import { queryItems } from '@/api/items'
+import { queryAugments } from '@/api-client/augments'
+import { queryChampions } from '@/api-client/champions'
+import { queryItems } from '@/api-client/items'
 
 export * from './configStore'
 

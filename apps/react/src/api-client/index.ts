@@ -1,6 +1,6 @@
 export * from './augments'
 export * from './champions'
-export { apiClient } from './client'
+export * from './client'
 export * from './comps'
 export * from './items'
 export type * from './types'

@@ -12,7 +12,7 @@
     "lint": "pnpm -r lint",
     "dev:react": "pnpm --filter react run dev",
     "dev:electron": "pnpm --filter electron --filter react run dev",
-    "dev:api": "pnpm --filter api dev",
+    "dev:server": "pnpm --filter server dev",
     "build:react": "pnpm --filter react run build",
     "prebuild": "pnpm run clean:dist && pnpm run build:react && pnpm run copy:render",
     "copy:render": "node scripts/copyRenderer.js",
@@ -21,6 +21,7 @@
     "build:linux": "pnpm run prebuild && pnpm --filter electron run build:linux",
     "build:mac": "pnpm run prebuild && pnpm --filter electron run build:mac",
     "build:packages": "pnpm --filter utils run build && pnpm --filter bridge run build && pnpm --filter types run build",
+    "build:server": "node scripts/buildServer.mjs",
     "fix:tsconfig": "node ./scripts/typescript/fixPaths.mjs",
     "typecheck": "pnpm -r typecheck",
     "prepare": "husky"
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.4.1",
+    "@clack/prompts": "^0.11.0",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "config": "workspace:*",
@@ -42,6 +44,7 @@
     "eslint-plugin-react-refresh": "^0.4.23",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.4",
+    "picocolors": "^1.1.1",
     "typescript": "catalog:"
   },
   "lint-staged": {

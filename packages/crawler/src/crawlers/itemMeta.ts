@@ -67,7 +67,7 @@ export class ItemMetaCrawler {
             await this.clickCategoryTab(page, category.label)
 
             // 等待表格数据更新
-            await page.waitForSelector('table tbody tr', { timeout: 5000 })
+            await page.waitForSelector('table tbody tr', { timeout: 30000 })
 
             // 提取当前分类的装备数据
             const items = await extractItemsFromPage(page, category.value)

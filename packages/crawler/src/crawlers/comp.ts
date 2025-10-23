@@ -25,7 +25,7 @@ export class CompCrawler {
       headless: options.headless ?? true,
       debug: options.debug ?? false,
       screenshot: options.screenshot ?? false,
-      fetchDetails: options.fetchDetails ?? false,
+      fetchDetails: options.fetchDetails ?? true,
     }
   }
 

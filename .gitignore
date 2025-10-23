@@ -5,6 +5,7 @@ node_modules/
 dist/
 out/
 *.tsbuildinfo
+publish/
 
 # Environment variables
 .env

@@ -126,36 +126,6 @@ export class PageHelper {
   }
 
   /**
-   * 滚动页面触发懒加载
-   */
-  async scroll(): Promise<void> {
-    logger.info('滚动页面...')
-
-    // 分段滚动
-    for (let i = 0; i < 3; i++) {
-      const scrollPos = (i + 1) / 3
-      await this.page.evaluate((pos) => {
-        window.scrollTo(0, document.body.scrollHeight * pos)
-      }, scrollPos)
-      await this.page.waitForTimeout(2000)
-    }
-
-    // 滚动到底部
-    await this.page.evaluate(() => {
-      window.scrollTo(0, document.body.scrollHeight)
-    })
-    await this.page.waitForTimeout(3000)
-
-    // 滚回顶部
-    await this.page.evaluate(() => {
-      window.scrollTo(0, 0)
-    })
-    await this.page.waitForTimeout(2000)
-
-    logger.info('滚动完成')
-  }
-
-  /**
    * 保存截图
    */
   async screenshot(path: string): Promise<void> {

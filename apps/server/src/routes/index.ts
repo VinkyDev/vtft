@@ -3,6 +3,7 @@ import augmentRoutes from './augment'
 import championRoutes from './champion'
 import compRoutes from './comp'
 import itemRoutes from './item'
+import schedulerRoutes from './scheduler'
 
 const apiRoutes = new Hono()
 
@@ -11,5 +12,6 @@ apiRoutes.route('/champions', championRoutes)
 apiRoutes.route('/items', itemRoutes)
 apiRoutes.route('/augments', augmentRoutes)
 apiRoutes.route('/comps', compRoutes)
+apiRoutes.route('/scheduler', schedulerRoutes)
 
 export default apiRoutes

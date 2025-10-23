@@ -1,11 +1,21 @@
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
 import { swaggerUI } from '@hono/swagger-ui'
+import dotenv from 'dotenv'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { openapiConfig } from './config/openapi'
 import { errorHandler, requestLogger } from './middleware'
 import apiRoutes from './routes'
+import { taskScheduler } from './scheduler'
+import { createCrawlerTasks } from './scheduler/crawler-tasks'
 import { databaseService } from './services'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const projectRoot = join(__dirname, process.env.NODE_ENV === 'production' ? '../../..' : '../')
+dotenv.config({ path: join(projectRoot, '.env') })
 
 const app = new Hono()
 
@@ -14,59 +24,19 @@ app.use('*', requestLogger)
 app.use('*', cors())
 app.use('*', errorHandler)
 
-// 根路由
-app.get('/', (c) => {
-  return c.json({
-    success: true,
-    message: 'TFT API Server',
-    version: '1.0.0',
-    docs: '/docs',
-    openapi: '/openapi.json',
-    description: '云顶之弈数据 API - 统一查询接口',
-    features: [
-      '统一的查询端点',
-      '灵活的多条件筛选',
-      '可选的分页支持',
-      '自定义排序',
-    ],
-    endpoints: {
-      champions: {
-        url: '/api/champions',
-        description: '查询英雄数据',
-        params: 'page, pageSize, cost, name, sortBy, sortOrder',
-      },
-      items: {
-        url: '/api/items',
-        description: '查询装备数据',
-        params: 'page, pageSize, name, champion, sortBy, sortOrder',
-      },
-      augments: {
-        url: '/api/augments',
-        description: '查询强化符文数据',
-        params: 'page, pageSize, name, level, tier, sortBy, sortOrder',
-      },
-      comps: {
-        url: '/api/comps',
-        description: '查询阵容数据',
-        params: 'page, pageSize, name, tier, levelType, sortBy, sortOrder',
-      },
-      compById: {
-        url: '/api/comps/:compId',
-        description: '获取单个阵容',
-        params: 'includeDetails',
-      },
-    },
-  })
-})
-
 // 健康检查
 app.get('/health', (c) => {
   const dbConnected = databaseService.isConnected()
+  const schedulerStatus = taskScheduler.getStatus()
+
   return c.json({
     success: true,
     status: 'ok',
     timestamp: new Date().toISOString(),
     database: dbConnected ? 'connected' : 'disconnected',
+    scheduler: {
+      tasks: schedulerStatus,
+    },
   })
 })
 
@@ -103,6 +73,26 @@ async function start() {
     // 连接数据库
     await databaseService.connect()
 
+    // 注册爬虫定时任务
+    const crawlerTasks = createCrawlerTasks()
+    crawlerTasks.forEach(task => taskScheduler.register(task))
+    console.log(`✓ 已注册 ${crawlerTasks.length} 个爬虫任务`)
+
+    // 启动所有已启用的定时任务
+    taskScheduler.startAll()
+
+    // 如果配置了启动时运行爬虫，则执行一次
+    if (process.env.CRAWLER_RUN_ON_STARTUP === 'true') {
+      console.log('检测到 CRAWLER_RUN_ON_STARTUP=true，将在后台运行爬虫任务...')
+      Promise.all(
+        crawlerTasks
+          .filter(t => t.enabled)
+          .map(t => taskScheduler.trigger(t.name)),
+      ).catch((error) => {
+        console.error('启动时运行爬虫任务失败:', error)
+      })
+    }
+
     // 启动 HTTP 服务器
     serve({
       fetch: app.fetch,
@@ -112,6 +102,7 @@ async function start() {
     console.log(`✓ Server is running on http://localhost:${port}`)
     console.log(`✓ API base URL: http://localhost:${port}/api`)
     console.log(`✓ Swagger UI: http://localhost:${port}/docs`)
+    console.log(`✓ Scheduler status: http://localhost:${port}/api/scheduler/status`)
   }
   catch (error) {
     console.error('Failed to start server:', error)
@@ -119,15 +110,16 @@ async function start() {
   }
 }
 
-// 优雅关闭
 process.on('SIGINT', async () => {
   console.log('\nShutting down gracefully...')
+  taskScheduler.stopAll()
   await databaseService.disconnect()
   process.exit(0)
 })
 
 process.on('SIGTERM', async () => {
   console.log('\nShutting down gracefully...')
+  taskScheduler.stopAll()
   await databaseService.disconnect()
   process.exit(0)
 })

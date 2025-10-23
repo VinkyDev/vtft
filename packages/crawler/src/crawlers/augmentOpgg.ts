@@ -78,7 +78,7 @@ export class OpggAugmentCrawler {
 
               await tabButton.click()
               // 等待表格更新
-              await page.waitForSelector('table tbody tr', { timeout: 5000 })
+              await page.waitForTimeout(3000)
               logger.info(`已点击 ${label} 标签`)
 
               // 提取该级别的强化符文

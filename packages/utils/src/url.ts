@@ -49,11 +49,7 @@ export function safeParseUrl(url: string): URL | null {
  * @returns 如果参数存在且值不为空，则返回参数值；否则返回 null。
  */
 export function getUrlParams(param: string, url?: string): string | null {
-  if (typeof window === 'undefined') {
-    return null
-  }
-
-  const currentUrl = new URL(url || window.location.href)
+  const currentUrl = new URL(url || '')
 
   // 获取查询字符串
   const params = new URLSearchParams(currentUrl.search)

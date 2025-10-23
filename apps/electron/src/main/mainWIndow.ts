@@ -28,6 +28,9 @@ export function createWindow(): void {
     autoHideMenuBar: true,
     frame: false,
     alwaysOnTop: true,
+    minimizable: false,
+    maximizable: false,
+    resizable: false,
     transparent: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {

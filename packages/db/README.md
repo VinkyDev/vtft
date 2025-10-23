@@ -62,22 +62,7 @@ await mongo.connect()
 
 ### 环境变量配置
 
-创建 `.env` 文件：
-
-```env
-MONGODB_URI=mongodb://root:5fptlnt5@dbconn.sealosgzg.site:42829/?directConnection=true
-MONGODB_DB_NAME=vtft
-```
-
-代码中使用：
-
-```typescript
-import { getMongoClient } from 'db'
-
-// 自动读取环境变量
-const mongo = getMongoClient()
-await mongo.connect()
-```
+`.env` 文件：
 
 ## API
 
@@ -174,8 +159,6 @@ interface MongoDBConfig {
 
 ## 默认配置
 
-- **URI**: `mongodb://root:5fptlnt5@dbconn.sealosgzg.site:42829/?directConnection=true`
-- **数据库名**: `vtft`
 - **最大连接池大小**: 10
 - **最小连接池大小**: 2
 - **最大空闲时间**: 60000ms

@@ -126,7 +126,7 @@ export class AugmentCrawler {
               if (isSelected) {
                 await button.click()
                 // 等待状态变化
-                await page.waitForSelector('table tbody tr', { timeout: 5000 })
+                await page.waitForSelector('table tbody tr', { timeout: 30000 })
               }
             }
             logger.info(`已重置所有筛选状态`)
@@ -137,7 +137,7 @@ export class AugmentCrawler {
             logger.info(`已点击 ${level} 筛选按钮`)
 
             // 等待表格更新
-            await page.waitForSelector('table tbody tr', { timeout: 5000 })
+            await page.waitForSelector('table tbody tr', { timeout: 30000 })
 
             // 提取该级别的强化符文
             const augments = await extractAugmentsByLevel(page, level)

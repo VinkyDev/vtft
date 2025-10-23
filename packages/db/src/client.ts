@@ -3,25 +3,22 @@ import type { MongoDBClient, MongoDBConfig } from './types'
 import process from 'node:process'
 import { MongoClient } from 'mongodb'
 
-const DEFAULT_URI = 'mongodb://root:5fptlnt5@dbconn.sealosgzg.site:42829/?directConnection=true'
-const DEFAULT_DB_NAME = 'vtft'
-
 class MongoDBManager implements MongoDBClient {
   private client: MongoClient | null = null
   private config: Required<MongoDBConfig>
   private connected = false
 
-  constructor(config?: MongoDBConfig) {
+  constructor(private userConfig?: MongoDBConfig) {
     this.config = {
-      uri: config?.uri || process.env.MONGODB_URI || DEFAULT_URI,
-      dbName: config?.dbName || process.env.MONGODB_DB_NAME || DEFAULT_DB_NAME,
+      uri: '',
+      dbName: '',
       options: {
         maxPoolSize: 10,
         minPoolSize: 2,
         maxIdleTimeMS: 60000,
         connectTimeoutMS: 10000,
         socketTimeoutMS: 45000,
-        ...config?.options,
+        ...userConfig?.options,
       },
     }
   }
@@ -30,6 +27,9 @@ class MongoDBManager implements MongoDBClient {
     if (this.connected && this.client) {
       return
     }
+
+    this.config.uri = this.userConfig?.uri || process.env.MONGODB_URI || ''
+    this.config.dbName = this.userConfig?.dbName || process.env.MONGODB_DB_NAME || ''
 
     try {
       this.client = new MongoClient(this.config.uri, this.config.options)

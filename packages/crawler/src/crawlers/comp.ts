@@ -9,10 +9,8 @@ import { PageStateManager } from '../core/pageState'
 import { extractCompsFromPage } from '../extractors/comp'
 import { CompDetailsExtractor } from '../extractors/compDetails'
 import {
-  FAILURE_WAIT_MS,
   MAX_COMPS_LIMIT,
   MAX_CONSECUTIVE_FAILURES,
-  SUCCESS_WAIT_MS,
   TARGET_URL,
 } from './comp.constants'
 

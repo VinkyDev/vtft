@@ -1,6 +1,6 @@
 import type { Page } from 'playwright'
 import { logger } from './logger'
-import { TIMEOUT_PAGE_LOAD_MS, WAIT_PAGE_RELOAD_MS } from './timing'
+import { TIMEOUT_PAGE_LOAD_MS } from './timing'
 
 const DEFAULT_REFRESH_INTERVAL = 20
 

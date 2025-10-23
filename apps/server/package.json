@@ -17,6 +17,7 @@
     "db": "workspace:*",
     "dotenv": "^17.2.3",
     "hono": "catalog:",
+    "lru-cache": "^11.2.2",
     "node-cron": "^4.2.1",
     "types": "workspace:*",
     "zod": "^4.1.12"

@@ -4,9 +4,13 @@ import { serve } from '@hono/node-server'
 import { swaggerUI } from '@hono/swagger-ui'
 import dotenv from 'dotenv'
 import { Hono } from 'hono'
+import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
+import { etag } from 'hono/etag'
+import { logger } from 'hono/logger'
+import { timing } from 'hono/timing'
 import { openapiConfig } from './config/openapi'
-import { errorHandler, requestLogger } from './middleware'
+import { errorHandler } from './middleware'
 import apiRoutes from './routes'
 import { taskScheduler } from './scheduler'
 import { createCrawlerTasks } from './scheduler/crawler-tasks'
@@ -19,9 +23,22 @@ dotenv.config({ path: join(projectRoot, '.env') })
 
 const app = new Hono()
 
-// 全局中间件
-app.use('*', requestLogger)
+// 1. 请求日志和性能追踪
+app.use('*', timing())
+app.use('*', logger())
+
+// 2. CORS 配置
 app.use('*', cors())
+
+// 3. 响应压缩
+app.use('*', compress({
+  threshold: 1024,
+}))
+
+// 4. ETag 支持
+app.use('*', etag())
+
+// 5. 错误处理
 app.use('*', errorHandler)
 
 // 健康检查

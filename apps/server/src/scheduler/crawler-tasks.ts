@@ -1,4 +1,5 @@
 import type { ScheduledTask } from './index'
+import { clearCache } from '../middleware'
 
 /**
  * 爬虫任务配置
@@ -129,6 +130,8 @@ export function createCrawlerTasks(): ScheduledTask[] {
             screenshot: false,
           })
           await saveComps(data)
+          // 刷新缓存
+          clearCache()
         }
         else {
           throw new Error(`未知的爬虫任务: ${taskConfig.name}`)

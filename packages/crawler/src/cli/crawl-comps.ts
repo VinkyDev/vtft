@@ -16,7 +16,7 @@ if (currentFile === runningFile) {
   withTimer(
     async () => {
       const comps = await crawlComps({
-        headless: true,
+        headless: false,
         debug: true,
         screenshot: true,
         fetchDetails: true,

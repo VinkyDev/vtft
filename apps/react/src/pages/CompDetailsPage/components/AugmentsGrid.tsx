@@ -47,14 +47,6 @@ interface AugmentsGridProps {
  * 展示阵容推荐的符文
  */
 export const AugmentsGrid = memo(({ augments }: AugmentsGridProps) => {
-  if (!augments || augments.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-400">暂无符文推荐</p>
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="h-[calc(100vh-50px)] sm:h-[calc(100vh-60px)]" type="scroll">

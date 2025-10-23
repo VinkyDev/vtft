@@ -1,3 +1,4 @@
+import type { Page } from 'playwright'
 import type { AugmentLevel, AugmentMeta, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
@@ -5,18 +6,19 @@ import { resolve } from 'node:path'
 import { withRetry } from 'utils'
 import { BrowserManager, PageHelper } from '../core/browser'
 import { getCwd, logger } from '../core/logger'
+import { PageStateManager } from '../core/pageState'
+import { TIMEOUT_PAGE_LOAD_MS, TIMEOUT_STANDARD_MS, WAIT_SHORT_MS } from '../core/timing'
 import { extractAugmentsByLevel } from '../extractors/augment'
+import {
+  AUGMENT_LEVELS,
+  HOME_URL,
+  LEVEL_SELECTOR_CONTAINER,
+  MAX_RETRY_ATTEMPTS,
+  OPGG_MIN_DATA_THRESHOLD,
+  TABLE_ROW_SELECTOR,
+  TARGET_URL,
+} from './augment.constants'
 import { crawlOpggAugments } from './augmentOpgg'
-
-/** 目标URL */
-const TARGET_URL = 'https://www.metatft.com/augments'
-
-/** 强化符文级别配置 */
-const AUGMENT_LEVELS: Array<{ level: AugmentLevel, selector: string }> = [
-  { level: 'Silver', selector: 'img[alt*="Silver"]' },
-  { level: 'Gold', selector: 'img[alt*="Gold"]' },
-  { level: 'Prismatic', selector: 'img[alt*="Prismatic"]' },
-]
 
 /**
  * 强化符文爬虫
@@ -44,7 +46,7 @@ export class AugmentCrawler {
       try {
         const opggData = await crawlOpggAugments(this.options)
 
-        if (opggData.length > 30) {
+        if (opggData.length > OPGG_MIN_DATA_THRESHOLD) {
           logger.info(`OP.GG 爬取成功，共获得 ${opggData.length} 个强化符文，数量充足，直接采用`)
 
           // 保存结果（如果启用调试）
@@ -55,7 +57,7 @@ export class AugmentCrawler {
           return opggData
         }
         else {
-          logger.warn(`OP.GG 爬取到 ${opggData.length} 个强化符文，数量不足（< 30），降级到 MetaTFT`)
+          logger.warn(`OP.GG 爬取到 ${opggData.length} 个强化符文，数量不足（< ${OPGG_MIN_DATA_THRESHOLD}），降级到 MetaTFT`)
         }
       }
       catch (error) {
@@ -73,99 +75,237 @@ export class AugmentCrawler {
   }
 
   /**
-   * 从 MetaTFT 爬取数据（原有逻辑）
+   * 从 MetaTFT 爬取数据
    */
   private async crawlFromMetaTFT(): Promise<AugmentMeta[]> {
-    return withRetry(
-      async () => {
-        try {
-          // 启动浏览器
-          await this.browserManager.launch(this.options.headless)
-          const page = await this.browserManager.newPage()
-          const helper = new PageHelper(page)
+    try {
+      // 启动浏览器
+      await this.browserManager.launch(this.options.headless)
+      const page = await this.browserManager.newPage()
+      const helper = new PageHelper(page)
+      const _stateManager = new PageStateManager(page)
 
-          // 先导航到网站首页以设置 localStorage
-          await page.goto('https://www.metatft.com', {
-            waitUntil: 'domcontentloaded',
-            timeout: 60000,
-          })
-          logger.info('已导航到首页')
+      // 导航到首页并设置语言
+      await this.navigateToHomePage(page)
+      await this.setupLanguageSettings(page)
 
-          // 设置语言为中文
-          await page.evaluate(() => {
-            localStorage.setItem('language', 'zh_cn')
-            localStorage.setItem('i18nextLng', 'zh_cn')
-            localStorage.setItem('TierListTableView2', 'true')
-          })
-          logger.info('已设置语言为中文')
+      // 导航到目标页面
+      await this.navigateToTargetPage(page)
 
-          // 导航到目标页面
-          await page.goto(TARGET_URL, {
-            waitUntil: 'domcontentloaded',
-            timeout: 60000,
-          })
-          logger.info(`已导航到: ${TARGET_URL}`)
+      // 等待表格加载
+      await this.waitForTableLoad(page)
 
-          // 等待表格加载
-          await page.waitForSelector('table tbody tr', { timeout: 30000 })
-          logger.info('页面内容已加载')
+      // 分别爬取每个级别的强化符文
+      const allAugments: AugmentMeta[] = []
 
-          // 分别爬取每个级别的强化符文
-          const allAugments: AugmentMeta[] = []
+      for (const { level, selector } of AUGMENT_LEVELS) {
+        logger.info(`准备爬取 ${level} 级别强化符文...`)
 
-          for (const { level, selector } of AUGMENT_LEVELS) {
-            logger.info(`准备爬取 ${level} 级别强化符文...`)
+        // 重置筛选状态
+        await this.resetFilterState(page)
 
-            // 先取消所有级别的选中
-            for (const { selector: btnSelector } of AUGMENT_LEVELS) {
-              const button = page.locator(btnSelector).first()
-              const isSelected = await button.evaluate((el) => {
-                const parent = el.closest('.item-category-selector-item')
-                return parent?.classList.contains('selected') ?? false
-              })
-              if (isSelected) {
-                await button.click()
-                // 等待状态变化
-                await page.waitForSelector('table tbody tr', { timeout: 30000 })
-              }
-            }
-            logger.info(`已重置所有筛选状态`)
+        // 点击目标级别筛选按钮
+        await this.clickLevelFilter(page, selector, level)
 
-            // 点击目标级别的筛选按钮
-            const targetButton = page.locator(selector).first()
-            await targetButton.click()
-            logger.info(`已点击 ${level} 筛选按钮`)
+        // 等待表格更新
+        await this.waitForTableUpdate(page)
 
-            // 等待表格更新
-            await page.waitForSelector('table tbody tr', { timeout: 30000 })
+        // 提取该级别的强化符文
+        const augments = await this.extractAugmentsWithRetry(page, level)
+        allAugments.push(...augments)
 
-            // 提取该级别的强化符文
-            const augments = await extractAugmentsByLevel(page, level)
-            allAugments.push(...augments)
-
-            // 保存调试信息
-            if (this.options.debug || this.options.screenshot) {
-              await this.saveDebugInfo(helper, level)
-            }
-          }
-
-          // 保存结果
-          if (this.options.debug) {
-            await this.saveResults(allAugments, 'metatft')
-          }
-
-          return allAugments
+        // 保存调试信息
+        if (this.options.debug || this.options.screenshot) {
+          await this.saveDebugInfo(helper, level)
         }
-        finally {
-          await this.browserManager.close()
+      }
+
+      // 保存结果
+      if (this.options.debug) {
+        await this.saveResults(allAugments, 'metatft')
+      }
+
+      return allAugments
+    }
+    finally {
+      await this.browserManager.close()
+    }
+  }
+
+  /**
+   * 导航到首页
+   */
+  private async navigateToHomePage(page: Page): Promise<void> {
+    const navigateWithRetry = withRetry(
+      () => page.goto(HOME_URL, {
+        waitUntil: 'domcontentloaded',
+        timeout: TIMEOUT_PAGE_LOAD_MS,
+      }),
+      {
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`导航到首页失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
+      },
+    )
+
+    await navigateWithRetry()
+    logger.info('已导航到首页')
+  }
+
+  /**
+   * 设置语言配置
+   */
+  private async setupLanguageSettings(page: Page): Promise<void> {
+    const setupWithRetry = withRetry(
+      () => page.evaluate(() => {
+        localStorage.setItem('language', 'zh_cn')
+        localStorage.setItem('i18nextLng', 'zh_cn')
+        localStorage.setItem('TierListTableView2', 'true')
+      }),
+      {
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`设置语言配置失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
+      },
+    )
+
+    await setupWithRetry()
+    logger.info('已设置语言为中文')
+  }
+
+  /**
+   * 导航到目标页面
+   */
+  private async navigateToTargetPage(page: Page): Promise<void> {
+    const navigateWithRetry = withRetry(
+      () => page.goto(TARGET_URL, {
+        waitUntil: 'domcontentloaded',
+        timeout: TIMEOUT_PAGE_LOAD_MS,
+      }),
+      {
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`导航到目标页面失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
+      },
+    )
+
+    await navigateWithRetry()
+    logger.info(`已导航到: ${TARGET_URL}`)
+  }
+
+  /**
+   * 等待表格加载
+   */
+  private async waitForTableLoad(page: Page): Promise<void> {
+    const waitWithRetry = withRetry(
+      () => page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: TIMEOUT_STANDARD_MS }),
+      {
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`等待表格加载失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
+      },
+    )
+
+    await waitWithRetry()
+    logger.info('页面内容已加载')
+  }
+
+  /**
+   * 重置筛选状态
+   */
+  private async resetFilterState(page: Page): Promise<void> {
+    const resetWithRetry = withRetry(
+      async () => {
+        for (const { selector: btnSelector } of AUGMENT_LEVELS) {
+          const button = page.locator(btnSelector).first()
+          const isSelected = await button.evaluate((el) => {
+            const parent = el.closest(LEVEL_SELECTOR_CONTAINER)
+            return parent?.classList.contains('selected') ?? false
+          })
+          if (isSelected) {
+            await button.click()
+            await page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: TIMEOUT_STANDARD_MS })
+          }
         }
       },
       {
-        maxAttempts: 3,
-        delay: 2000,
-        backoffFactor: 2,
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`重置筛选状态失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
       },
     )
+
+    await resetWithRetry()
+    logger.info('已重置所有筛选状态')
+  }
+
+  /**
+   * 点击级别筛选按钮
+   */
+  private async clickLevelFilter(page: Page, selector: string, level: AugmentLevel): Promise<void> {
+    const clickWithRetry = withRetry(
+      async () => {
+        const targetButton = page.locator(selector).first()
+        await targetButton.click()
+      },
+      {
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`点击 ${level} 筛选按钮失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
+      },
+    )
+
+    await clickWithRetry()
+    logger.info(`已点击 ${level} 筛选按钮`)
+  }
+
+  /**
+   * 等待表格更新
+   */
+  private async waitForTableUpdate(page: Page): Promise<void> {
+    const waitWithRetry = withRetry(
+      () => page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: TIMEOUT_STANDARD_MS }),
+      {
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`等待表格更新失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
+      },
+    )
+
+    await waitWithRetry()
+    logger.info('表格已更新')
+  }
+
+  /**
+   * 提取强化符文数据（带重试）
+   */
+  private async extractAugmentsWithRetry(page: Page, level: AugmentLevel): Promise<AugmentMeta[]> {
+    const extractWithRetry = withRetry(
+      () => extractAugmentsByLevel(page, level),
+      {
+        maxRetries: MAX_RETRY_ATTEMPTS,
+        delayMs: WAIT_SHORT_MS,
+        onRetry: (error, attempt) => {
+          logger.warn(`提取 ${level} 强化符文失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+        },
+      },
+    )
+
+    return await extractWithRetry()
   }
 
   /**

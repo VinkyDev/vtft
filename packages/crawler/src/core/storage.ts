@@ -86,9 +86,6 @@ async function atomicUpdate<T>(
     logger.error(`保存${dataType}失败:`, error)
     throw error
   }
-  finally {
-    await mongo.disconnect()
-  }
 }
 
 /**

@@ -114,8 +114,6 @@ export class PageHelper {
    */
   async waitForLoad(): Promise<void> {
     logger.info('等待页面加载...')
-    await this.page.waitForTimeout(3000)
-
     try {
       await this.page.waitForSelector('img[alt]', { timeout: 10000 })
       logger.info('页面加载完成')

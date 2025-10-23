@@ -1,15 +1,11 @@
 import type { Locator, Page } from 'playwright'
 import type { AugmentLevel, AugmentMeta } from 'types'
+import { sleep } from 'utils'
 import { logger } from '../core/logger'
-
-/** OP.GG 等级图标映射 */
-const TIER_ICON_MAP: Record<string, string> = {
-  'icon-tier-OP.png': 'OP',
-  'icon-tier-S.png': 'S',
-  'icon-tier-A.png': 'A',
-  'icon-tier-B.png': 'B',
-  'icon-tier-C.png': 'C',
-}
+import {
+  EXTRACTOR_SELECTORS,
+  TIER_ICON_MAP,
+} from './augmentOpgg.constants'
 
 /**
  * 从强化符文容器提取数据
@@ -21,7 +17,7 @@ async function extractAugmentFromContainer(container: Locator, level: AugmentLev
     // 提取梯度等级
     let tier = 'Unknown'
 
-    const tierIcon = container.locator('img[src*="icon-tier-"]').first()
+    const tierIcon = container.locator(EXTRACTOR_SELECTORS.TIER_ICON).first()
     if (await tierIcon.count() > 0) {
       const src = await tierIcon.getAttribute('src')
       if (src) {
@@ -35,19 +31,19 @@ async function extractAugmentFromContainer(container: Locator, level: AugmentLev
     }
 
     // 提取强化符文列表
-    const augmentItems = await container.locator('div[class*="flex h-[64px] w-[60px] flex-col items-center gap-[4px]"]').all()
+    const augmentItems = await container.locator(EXTRACTOR_SELECTORS.AUGMENT_ITEM).all()
 
     for (const item of augmentItems) {
       try {
         // 提取强化符文图标
-        const iconImg = item.locator('img').first()
+        const iconImg = item.locator(EXTRACTOR_SELECTORS.AUGMENT_ICON).first()
         const icon = await iconImg.getAttribute('src').catch(() => '')
 
         if (!icon)
           continue
 
         // 提取强化符文名称
-        const nameSpan = item.locator('span').first()
+        const nameSpan = item.locator(EXTRACTOR_SELECTORS.AUGMENT_NAME).first()
         const name = await nameSpan.textContent()
 
         if (!name?.trim())
@@ -83,11 +79,10 @@ export async function extractOpggAugmentsByLevel(page: Page, level: AugmentLevel
   const augments: AugmentMeta[] = []
 
   try {
-    // 等待强化符文容器加载
-    await page.waitForSelector('div.flex.flex-col.md\\:min-h-\\[86px\\].md\\:flex-row', { timeout: 5000 })
+    await sleep(1000)
 
     // 查找所有强化符文容器
-    const containers = await page.locator('div.flex.flex-col.md\\:min-h-\\[86px\\].md\\:flex-row').all()
+    const containers = await page.locator(EXTRACTOR_SELECTORS.AUGMENT_CONTAINER).all()
     logger.info(`找到 ${containers.length} 个强化符文容器`)
 
     for (const container of containers) {
@@ -106,30 +101,5 @@ export async function extractOpggAugmentsByLevel(page: Page, level: AugmentLevel
   catch (error) {
     logger.error(`提取 ${level} 强化符文失败:`, error)
     return []
-  }
-}
-
-/**
- * 根据 OP.GG 页面状态推断当前的强化符文级别
- */
-export async function detectCurrentAugmentLevel(page: Page): Promise<AugmentLevel> {
-  try {
-    // 检查当前选中的标签
-    const selectedTab = page.locator('div.hidden.md\\:flex div[class*="bronze-500"]').first()
-    const tabText = await selectedTab.textContent()
-
-    if (tabText?.includes('白银'))
-      return 'Silver'
-    if (tabText?.includes('金币'))
-      return 'Gold'
-    if (tabText?.includes('稜鏡'))
-      return 'Prismatic'
-
-    // 默认返回 Silver
-    return 'Silver'
-  }
-  catch (error) {
-    logger.error('检测当前强化符文级别失败:', error)
-    return 'Silver'
   }
 }

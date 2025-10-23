@@ -57,7 +57,7 @@ export const AppTabs = memo((props: AppTabsProps) => {
   const layoutClass = tabListLayout === 'space-between' ? 'justify-between' : 'justify-center'
 
   return (
-    <Tabs value={value} onValueChange={onValueChange} className={className}>
+    <Tabs value={value} onValueChange={onValueChange} className={`h-full ${className}`}>
       <div className={`flex items-center ${layoutClass}`}>
         {beforeTabList}
 
@@ -76,12 +76,12 @@ export const AppTabs = memo((props: AppTabsProps) => {
         {afterTabList}
       </div>
 
-      {/* 内容区域 */}
+      {/* 内容区√域 */}
       {enableAnimation
         ? (
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden h-full">
               <div
-                className="flex transition-transform duration-300 ease-in-out"
+                className="flex transition-transform duration-300 ease-in-out h-full"
                 style={{
                   transform: `translateX(-${tabs.findIndex(t => t.value === value) * 100}%)`,
                 }}

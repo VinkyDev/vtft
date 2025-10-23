@@ -16,7 +16,7 @@ if (currentFile === runningFile) {
   withTimer(
     async () => {
       const augments = await crawlAugments({
-        headless: true,
+        headless: false,
         debug: true,
         screenshot: true,
       })

@@ -3,18 +3,19 @@ import type { CompData, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { withRetry } from 'utils'
 import { BrowserManager, PageHelper } from '../core/browser'
 import { getCwd, logger } from '../core/logger'
+import { PageStateManager } from '../core/pageState'
 import { extractCompsFromPage } from '../extractors/comp'
-import { extractCompDetails } from '../extractors/compDetails'
+import { CompDetailsExtractor } from '../extractors/compDetails'
+import {
+  FAILURE_WAIT_MS,
+  MAX_COMPS_LIMIT,
+  MAX_CONSECUTIVE_FAILURES,
+  SUCCESS_WAIT_MS,
+  TARGET_URL,
+} from './comp.constants'
 
-/** 目标URL */
-const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/comps'
-
-/**
- * 阵容爬虫
- */
 export class CompCrawler {
   private browserManager: BrowserManager
   private options: Required<CrawlOptions & { fetchDetails?: boolean }>
@@ -29,83 +30,82 @@ export class CompCrawler {
     }
   }
 
-  /**
-   * 执行爬取
-   */
   async crawl(): Promise<CompData[]> {
-    return withRetry(
-      async () => {
-        try {
-          // 启动浏览器
-          await this.browserManager.launch(this.options.headless)
-          const page = await this.browserManager.newPage()
-          const helper = new PageHelper(page)
+    try {
+      await this.browserManager.launch(this.options.headless)
+      const page = await this.browserManager.newPage()
+      const helper = new PageHelper(page)
 
-          // 导航到目标页面
-          await helper.navigate(TARGET_URL)
-          await helper.waitForLoad()
+      await helper.navigate(TARGET_URL)
+      await helper.waitForLoad()
 
-          // 保存调试信息
-          if (this.options.debug || this.options.screenshot) {
-            await this.saveDebugInfo(helper)
-          }
+      if (this.options.debug || this.options.screenshot) {
+        await this.saveDebugInfo(helper)
+      }
 
-          // 提取阵容数据
-          const comps = await extractCompsFromPage(page)
+      const comps = await extractCompsFromPage(page)
 
-          // 提取详细信息
-          if (this.options.fetchDetails) {
-            await this.fetchDetails(comps, page)
-          }
+      if (this.options.fetchDetails) {
+        await this.fetchDetails(comps, page)
+      }
 
-          // 保存结果
-          if (this.options.debug) {
-            await this.saveResults(comps)
-          }
+      if (this.options.debug) {
+        await this.saveResults(comps)
+      }
 
-          return comps
-        }
-        finally {
-          await this.browserManager.close()
-        }
-      },
-      {
-        maxAttempts: 3,
-        delay: 2000,
-        backoffFactor: 2,
-      },
-    )
+      return comps
+    }
+    finally {
+      await this.browserManager.close()
+    }
   }
 
-  /**
-   * 提取详细信息
-   */
   private async fetchDetails(comps: CompData[], page: Page): Promise<void> {
-    logger.info('开始获取阵容详细信息...')
+    logger.info('开始获取阵容详细信息')
 
-    // 限制数量避免过长时间
-    const maxDetails = Math.min(comps.length, 1000)
+    const maxDetails = Math.min(comps.length, MAX_COMPS_LIMIT)
     logger.info(`将获取前 ${maxDetails} 个阵容的详细信息`)
+
+    const extractor = new CompDetailsExtractor(page)
+    const stateManager = new PageStateManager(page)
+
+    let consecutiveFailures = 0
 
     for (let i = 0; i < maxDetails; i++) {
       try {
-        logger.info(`正在获取阵容 ${i + 1}/${maxDetails} 的详细信息...`)
-        const details = await extractCompDetails(page, i)
+        if (stateManager.shouldRefresh()) {
+          await stateManager.refresh()
+        }
+
+        logger.info(`正在获取阵容 ${i + 1}/${maxDetails} 的详细信息`)
+        const details = await extractor.extract(i)
         comps[i].details = details
 
-        await page.waitForTimeout(1000)
+        consecutiveFailures = 0
+        stateManager.recordOperation()
       }
       catch (error) {
-        logger.error(`获取阵容 ${i + 1} 详细信息失败:`, error)
+        logger.error(`获取阵容 ${i + 1} 详细信息失败: ${error}`)
+        consecutiveFailures++
+
+        if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+          logger.warn(`连续失败 ${consecutiveFailures} 次,尝试刷新页面恢复`)
+
+          try {
+            await stateManager.refresh()
+            consecutiveFailures = 0
+          }
+          catch (refreshError) {
+            logger.error(`刷新失败,停止爬取: ${refreshError}`)
+            break
+          }
+        }
       }
     }
 
     logger.info('阵容详细信息获取完成')
   }
 
-  /**
-   * 保存调试信息
-   */
   private async saveDebugInfo(helper: PageHelper): Promise<void> {
     const debugDir = resolve(getCwd(), 'debug')
     await mkdir(debugDir, { recursive: true })
@@ -121,9 +121,6 @@ export class CompCrawler {
     }
   }
 
-  /**
-   * 保存结果
-   */
   private async saveResults(comps: CompData[]): Promise<void> {
     const debugDir = resolve(getCwd(), 'debug')
     await mkdir(debugDir, { recursive: true })
@@ -134,9 +131,6 @@ export class CompCrawler {
   }
 }
 
-/**
- * 便捷函数：爬取阵容数据
- */
 export async function crawlComps(options?: CrawlOptions & { fetchDetails?: boolean }): Promise<CompData[]> {
   const crawler = new CompCrawler(options)
   return await crawler.crawl()

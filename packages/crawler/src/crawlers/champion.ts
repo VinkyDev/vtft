@@ -101,7 +101,7 @@ export class ChampionCrawler {
    */
   private async waitForPageLoad(page: Page): Promise<void> {
     const waitWithRetry = withRetry(
-      () => page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: ELEMENT_WAIT_TIMEOUT_MS }),
+      () => page.locator(TABLE_ROW_SELECTOR).waitFor({ timeout: ELEMENT_WAIT_TIMEOUT_MS }),
       {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,

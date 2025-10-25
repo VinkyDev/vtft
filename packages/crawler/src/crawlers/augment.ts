@@ -204,7 +204,7 @@ export class AugmentCrawler {
    */
   private async waitForTableLoad(page: Page): Promise<void> {
     const waitWithRetry = withRetry(
-      () => page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: TIMEOUT_STANDARD_MS }),
+      () => page.locator(TABLE_ROW_SELECTOR).waitFor({ timeout: TIMEOUT_STANDARD_MS }),
       {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
@@ -232,7 +232,7 @@ export class AugmentCrawler {
           })
           if (isSelected) {
             await button.click()
-            await page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: TIMEOUT_STANDARD_MS })
+            await page.locator(TABLE_ROW_SELECTOR).waitFor({ timeout: TIMEOUT_STANDARD_MS })
           }
         }
       },
@@ -276,7 +276,7 @@ export class AugmentCrawler {
    */
   private async waitForTableUpdate(page: Page): Promise<void> {
     const waitWithRetry = withRetry(
-      () => page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: TIMEOUT_STANDARD_MS }),
+      () => page.locator(TABLE_ROW_SELECTOR).waitFor({ timeout: TIMEOUT_STANDARD_MS }),
       {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,

@@ -1,5 +1,6 @@
 import type { Browser, BrowserContext, Page } from 'playwright'
 import { chromium } from 'playwright'
+import { sleep } from 'utils'
 import { logger } from './logger'
 
 /** 浏览器配置 */
@@ -101,7 +102,20 @@ export class PageHelper {
   /**
    * 导航到 URL
    */
-  async navigate(url: string): Promise<void> {
+  async navigate(url: string, useCache: boolean = false): Promise<void> {
+    // 禁用缓存
+    if (!useCache) {
+      await this.page.route('**/*', (route) => {
+        const headers = {
+          ...route.request().headers(),
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        }
+        route.continue({ headers })
+      })
+    }
+
     await this.page.goto(url, {
       waitUntil: 'domcontentloaded',
       timeout: 60000,
@@ -115,7 +129,8 @@ export class PageHelper {
   async waitForLoad(): Promise<void> {
     logger.info('等待页面加载...')
     try {
-      await this.page.waitForSelector('img[alt]', { timeout: 10000 })
+      await sleep(3000)
+      await this.page.locator('img[alt]').waitFor({ timeout: 10000 })
       logger.info('页面加载完成')
     }
     catch {

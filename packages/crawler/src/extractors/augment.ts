@@ -60,7 +60,7 @@ export class AugmentExtractor extends BaseExtractor<AugmentMeta[]> {
    * 等待表格加载
    */
   private async waitForTableLoad(): Promise<void> {
-    await this.page.waitForSelector(TABLE_ROW_SELECTOR, { timeout: TABLE_LOAD_TIMEOUT_MS })
+    await this.page.locator(TABLE_ROW_SELECTOR).waitFor({ timeout: TABLE_LOAD_TIMEOUT_MS })
   }
 
   /**

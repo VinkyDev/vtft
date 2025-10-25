@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: v-monorepo
+productName: vtft
 directories:
   buildResources: build
 files:
@@ -13,17 +13,17 @@ asar: false
 asarUnpack:
   - resources/**
 
-icon: resources/icon.png
+icon: resources/icons/png/1024x1024.png
 win:
-  icon: resources/icon.png
-  executableName: v-monorepo
+  icon: resources/icons/win/icon.ico
+  executableName: vtft
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
   target:
     - target: nsis
     - target: portable
 nsis:
-  installerIcon: resources/icon.png
-  uninstallerIcon: resources/icon.png
+  installerIcon: resources/icons/win/icon.ico
+  uninstallerIcon: resources/icons/win/icon.ico
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
@@ -33,14 +33,9 @@ nsis:
 portable:
   artifactName: ${productName}-${version}-${arch}-portable.${ext}
 mac:
-  icon: resources/icon.png
+  icon: resources/icons/mac/icon.icns
   notarize: false
   artifactName: ${productName}-${version}-${arch}.${ext}
-  extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   target:
     - target: dmg
     - target: zip

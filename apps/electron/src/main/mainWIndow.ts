@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { BrowserWindow, shell } from 'electron'
-import icon from '../../resources/icon.png?asset'
+import icon from '../../resources/icons/png/1024x1024.png?asset'
 import { isDev } from './constants'
 
 let mainWindow: BrowserWindow | null = null

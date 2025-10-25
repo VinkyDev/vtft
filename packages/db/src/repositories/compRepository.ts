@@ -25,9 +25,9 @@ export class CompRepository {
     await collection.createIndex({ updatedAt: -1 })
   }
 
-  /** 生成阵容 ID（根据名称和等级） */
+  /** 生成阵容 ID（根据名称、等级和排名） */
   private generateCompId(comp: CompData): string {
-    return `${comp.name}_${comp.champions.length}`
+    return `${comp.name}_${comp.champions.length}_${comp.rank}`
       .toLowerCase()
       .replace(/\s+/g, '_')
   }

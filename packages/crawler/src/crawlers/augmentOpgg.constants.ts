@@ -1,7 +1,7 @@
 import type { AugmentLevel } from 'types'
 
 /** 目标URL */
-export const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/augments'
+export const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/augments?tier=Diamond%2B'
 
 /** 强化符文级别配置 - 新网站的级别映射 */
 export const OPGG_AUGMENT_LEVELS: Array<{ level: AugmentLevel, value: string, label: string }> = [

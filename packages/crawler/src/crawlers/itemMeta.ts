@@ -8,7 +8,7 @@ import { getCwd, logger } from '../core/logger'
 import { extractItemsFromPage } from '../extractors/item'
 
 /** 目标URL */
-const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/item'
+const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/item?tier=Diamond%2B'
 
 /** 装备分类配置 */
 const ITEM_CATEGORIES: Array<{ value: ItemCategory, label: string }> = [

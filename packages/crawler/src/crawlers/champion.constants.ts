@@ -1,5 +1,5 @@
 /** 目标URL */
-export const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/champion'
+export const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/champion?tier=Diamond%2B'
 
 /** 超时配置 */
 export const NAVIGATION_TIMEOUT_MS = 60000

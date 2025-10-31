@@ -36,6 +36,7 @@ export const ItemDetailPopover = memo(({ item, children }: ItemDetailPopoverProp
                 alt={item.name}
                 className="size-full object-cover"
                 loading="lazy"
+                draggable={false}
               />
             </div>
             <h3 className="font-medium text-[10px] text-white truncate mb-0.5">

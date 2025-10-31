@@ -99,6 +99,7 @@ export const FormationCell = memo(({ position, rowIndex: _rowIndex, colIndex: _c
           alt={champion.name}
           className="w-full h-full object-cover"
           loading="lazy"
+          draggable={false}
         />
       </div>
 
@@ -145,6 +146,7 @@ export const FormationCell = memo(({ position, rowIndex: _rowIndex, colIndex: _c
                 alt={item.name}
                 className="w-full h-full object-cover"
                 loading="lazy"
+                draggable={false}
               />
             </div>
           ))}

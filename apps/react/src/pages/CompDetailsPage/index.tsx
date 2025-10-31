@@ -96,6 +96,7 @@ export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
     <Drawer
       open={!!comp}
       direction="right"
+      handleOnly={true}
       onOpenChange={(open) => {
         if (!open)
           onClose()

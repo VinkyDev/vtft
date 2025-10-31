@@ -94,6 +94,7 @@ export const Augment = memo(({
               src={augment.icon}
               alt={augment.name}
               className="h-full w-full object-cover"
+              draggable={false}
             />
           )
         : (

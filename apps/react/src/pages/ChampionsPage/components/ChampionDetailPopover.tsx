@@ -48,6 +48,7 @@ export const ChampionDetailPopover = memo(({ champion, children }: ChampionDetai
                           alt={trait.name}
                           className="size-full object-cover"
                           loading="lazy"
+                          draggable={false}
                         />
                       </div>
                     </TooltipTrigger>

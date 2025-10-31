@@ -10,12 +10,13 @@ export const TraitIcon = memo(({ trait }: TraitIconProps) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="relative h-5 w-5 overflow-hidden rounded border border-white/10 bg-black/30 p-0.5 transition-all hover:scale-110 hover:border-white/30 hover:shadow-lg">
+        <div className="relative h-5 w-5 overflow-hidden rounded border border-white/10 bg-black/30 p-0.5 transition-all hover:border-white/30 hover:shadow-lg">
           {trait.icon
             ? (
                 <img
                   src={trait.icon}
                   alt={trait.name}
+                  draggable={false}
                   className="h-full w-full object-contain"
                 />
               )

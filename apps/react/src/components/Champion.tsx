@@ -85,7 +85,7 @@ export const Champion = memo(({
 
   const championElement = (
     <div
-      className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 ${costColors.border} bg-black/40 transition-all hover:scale-110 hover:shadow-lg cursor-pointer ${className}`}
+      className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 ${costColors.border} bg-black/40 transition-all hover:shadow-lg cursor-pointer ${className}`}
       onClick={() => onClick?.(champion)}
     >
       {champion.icon
@@ -94,6 +94,7 @@ export const Champion = memo(({
               src={champion.icon}
               alt={champion.name}
               className="h-full w-full object-cover"
+              draggable={false}
             />
           )
         : (

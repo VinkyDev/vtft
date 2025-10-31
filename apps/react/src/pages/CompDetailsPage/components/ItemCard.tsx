@@ -39,6 +39,7 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
             alt={item.name}
             className="w-6 h-6 rounded border border-white/20 shrink-0"
             loading="lazy"
+            draggable={false}
           />
           <h3 className="hidden sm:block text-white font-medium text-xs line-clamp-1 min-w-0 flex-1">
             {item.name}
@@ -53,6 +54,7 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
               title={component1.name}
               className="w-4 h-4 sm:w-5 sm:h-5 rounded border border-white/20"
               loading="lazy"
+              draggable={false}
             />
           )}
           {component1 && component2 && (
@@ -65,6 +67,7 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
               title={component2.name}
               className="w-4 h-4 sm:w-5 sm:h-5 rounded border border-white/20"
               loading="lazy"
+              draggable={false}
             />
           )}
         </div>

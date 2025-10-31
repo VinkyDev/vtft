@@ -1,26 +1,35 @@
 import { useMount } from 'ahooks'
-import { GlobalShortcut, Window } from 'bridge'
-import { Maximize2, Minimize2, Settings } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTitle,
-} from 'ui'
-import { AppTabs } from '@/components'
+import { Overlay, Window } from 'bridge'
+import { useMemo, useState } from 'react'
+import { AppTabs, FloatingBallMode } from '@/components'
+import { useDraggable } from '@/hooks'
 import { AugmentsPage } from '@/pages/AugmentsPage'
 import { ChampionsPage } from '@/pages/ChampionsPage'
 import { CompRankingsPage } from '@/pages/CompsPage'
 import { ItemsPage } from '@/pages/ItemsPage'
-import { SettingsPage } from '@/pages/SettingsPage'
 import { useConfigStore, useGameDataStore } from '@/store'
 
 function App() {
   const [activeTab, setActiveTab] = useState('comps')
-  const [settingsOpen, setSettingsOpen] = useState(false)
   const { fetchChampions, fetchItems, fetchAugments } = useGameDataStore()
-  const { windowMode, setWindowMode, toggleWindowShortcut } = useConfigStore()
+  const { windowMode, setWindowMode } = useConfigStore()
+
+  // 窗口拖动处理（标准模式和小窗模式）
+  const { onMouseDown } = useDraggable({
+    onDrag: (dx, dy) => Window.drag(dx, dy),
+    onDragStart: async () => {
+      await Window.startDrag()
+      await Overlay.show()
+    },
+    onDragEnd: async (mouseX, mouseY) => {
+      const result = await Window.endDrag(mouseX, mouseY)
+      if (result.success && result.data) {
+        setWindowMode(result.data)
+      }
+      await Overlay.hide()
+    },
+    threshold: 3,
+  })
 
   useMount(() => {
     fetchChampions()
@@ -35,50 +44,6 @@ function App() {
     })
   })
 
-  // 注册全局快捷键
-  useEffect(() => {
-    if (!toggleWindowShortcut)
-      return
-
-    let isActive = true
-
-    // 异步注册快捷键
-    const registerShortcut = async () => {
-      // 先清理可能存在的旧快捷键
-      await GlobalShortcut.unregister(toggleWindowShortcut, 'toggle-window-visibility')
-
-      // 如果组件已卸载，不继续注册
-      if (!isActive)
-        return
-
-      // 注册新快捷键
-      await GlobalShortcut.register(
-        toggleWindowShortcut,
-        'toggle-window-visibility',
-        async () => {
-          await Window.toggleVisibility()
-        },
-      )
-    }
-
-    registerShortcut()
-
-    // 清理：组件卸载时取消注册
-    return () => {
-      isActive = false
-      GlobalShortcut.unregister(toggleWindowShortcut, 'toggle-window-visibility')
-    }
-  }, [toggleWindowShortcut])
-
-  // 切换窗口模式
-  const handleToggleWindowMode = async () => {
-    const newMode = windowMode === 'standard' ? 'compact' : 'standard'
-    const result = await Window.setMode(newMode)
-    if (result.success && result.data) {
-      setWindowMode(result.data)
-    }
-  }
-
   // Tabs 配置
   const tabs = useMemo(() => [
     { value: 'comps', label: '阵容', content: <CompRankingsPage /> },
@@ -87,54 +52,32 @@ function App() {
     { value: 'augments', label: '符文', content: <AugmentsPage /> },
   ], [])
 
-  // 窗口模式切换按钮
-  const toggleButton = (
-    <button
-      onClick={handleToggleWindowMode}
-      className={`no-drag bg-black/30 hover:bg-black/50 border border-white/20 hover:border-white/40 rounded-sm p-1.5 text-gray-400 hover:text-white transition-all duration-200 ${windowMode === 'compact' ? 'absolute left-2' : ''}`}
-    >
-      {windowMode === 'standard' ? <Minimize2 className="size-2 sm:size-3" /> : <Maximize2 className="size-2 sm:size-3" />}
-    </button>
-  )
-
-  // 设置按钮
-  const settingsButton = (
-    <button
-      onClick={() => setSettingsOpen(true)}
-      className="hidden sm:block no-drag bg-black/30 hover:bg-black/50 border border-white/20 hover:border-white/40 rounded-sm p-1.5 text-gray-400 hover:text-white transition-all duration-200"
-      title="设置"
-    >
-      <Settings className="size-2 sm:size-3" />
-    </button>
-  )
-
   return (
-    <div className="rounded-2xl overflow-hidden">
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-2">
-        <div className={`relative drag ${windowMode === 'standard' ? '' : ''}`}>
+    <div className={`overflow-hidden ${windowMode === 'floating' ? 'rounded-full' : 'rounded-2xl'}`}>
+      <div className={`min-h-screen ${windowMode === 'floating' ? '' : 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-2'}`}>
+        {/* 悬浮球模式 */}
+        <div
+          className="flex items-center justify-center h-screen"
+          style={{ display: windowMode === 'floating' ? 'flex' : 'none' }}
+        >
+          <FloatingBallMode />
+        </div>
+
+        {/* 标准模式和小窗模式 */}
+        <div
+          className="relative"
+          style={{ display: windowMode !== 'floating' ? 'block' : 'none' }}
+          onMouseDown={onMouseDown}
+        >
           <AppTabs
             value={activeTab}
             onValueChange={setActiveTab}
             tabs={tabs}
-            tabListClassName="no-drag"
-            tabListLayout={windowMode === 'standard' ? 'space-between' : 'center'}
-            beforeTabList={toggleButton}
-            afterTabList={windowMode === 'standard' ? settingsButton : null}
             enableAnimation
           />
         </div>
-
-        {/* 设置抽屉 */}
-        <Drawer open={settingsOpen} onOpenChange={setSettingsOpen}>
-          <DrawerContent className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-white/10">
-            <DrawerTitle className="sr-only">设置</DrawerTitle>
-            <SettingsPage />
-            <DrawerClose />
-          </DrawerContent>
-        </Drawer>
       </div>
     </div>
-
   )
 }
 

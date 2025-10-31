@@ -19,7 +19,7 @@ export const ItemIcon = memo(({ item, className = '', onClick }: ItemIconProps) 
     <div className={`flex flex-col items-center gap-1 ${className}`}>
       {/* 装备图标 */}
       <div
-        className="relative size-12 shrink-0 overflow-hidden rounded-md border border-white/10 bg-black/20 cursor-pointer transition-all hover:scale-105 hover:border-white/20"
+        className="relative size-12 shrink-0 overflow-hidden rounded-md border border-white/10 bg-black/20 cursor-pointer transition-all hover:border-white/20"
         onClick={() => onClick?.(item)}
       >
         <img
@@ -27,6 +27,7 @@ export const ItemIcon = memo(({ item, className = '', onClick }: ItemIconProps) 
           alt={item.name}
           className="size-full object-cover"
           loading="lazy"
+          draggable={false}
         />
       </div>
     </div>

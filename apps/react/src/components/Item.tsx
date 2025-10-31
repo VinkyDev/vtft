@@ -78,7 +78,7 @@ export const Item = memo(({
 
   const itemElement = (
     <div
-      className={`${sizeClasses} ${variantClasses} object-cover transition-all hover:scale-110 hover:shadow-lg cursor-pointer shrink-0 ${className}`}
+      className={`${sizeClasses} ${variantClasses} object-cover transition-all hover:shadow-lg cursor-pointer shrink-0 ${className}`}
       onClick={() => onClick?.(item)}
     >
       {item.icon
@@ -88,6 +88,7 @@ export const Item = memo(({
               alt={item.name}
               className="h-full w-full object-cover rounded"
               loading="lazy"
+              draggable={false}
             />
           )
         : (

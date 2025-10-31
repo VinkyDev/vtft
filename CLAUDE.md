@@ -1,3 +1,12 @@
+# 业务相关
+
+这是一个云顶之弈辅助工具的桌面应用
+
+有三种窗口模式：
+  标准模式，小窗模式，悬浮球模式
+
+# 技术相关
+
 ## Project Structure
 
 Monorepo with pnpm workspaces + TypeScript. Node.js >= 18 required.

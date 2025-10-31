@@ -23,6 +23,7 @@ export const ItemCard = memo(({ item }: ItemCardProps) => {
               alt={item.name}
               className="size-full object-cover"
               loading="lazy"
+              draggable={false}
             />
           </div>
         </div>

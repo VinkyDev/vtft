@@ -32,6 +32,7 @@ export function createWindow(): void {
     maximizable: false,
     resizable: false,
     transparent: true,
+    hasShadow: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.mjs'),

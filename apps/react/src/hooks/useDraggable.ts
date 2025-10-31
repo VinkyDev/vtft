@@ -64,7 +64,7 @@ export interface UseDraggableReturn {
  * ```
  */
 export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
-  const { onDrag, onDragStart, onDragEnd, threshold = 3, enabled = true } = options
+  const { onDrag, onDragStart, onDragEnd, threshold = 2, enabled = true } = options
 
   const dragStateRef = useRef({
     isDragging: false,
@@ -72,6 +72,9 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     startY: 0,
     hasMoved: false,
     dragStartCalled: false,
+    pendingDx: 0,
+    pendingDy: 0,
+    rafId: null as number | null,
   })
 
   useEffect(() => {
@@ -86,7 +89,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
       const dy = e.screenY - dragStateRef.current.startY
       const distance = Math.sqrt(dx * dx + dy * dy)
 
-      // 如果移动距离超过阈值，标记为已移动并执行拖动回调
+      // 如果移动距离超过阈值，标记为已移动
       if (distance > threshold) {
         // 第一次移动时调用 onDragStart
         if (!dragStateRef.current.dragStartCalled) {
@@ -95,13 +98,44 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
         }
 
         dragStateRef.current.hasMoved = true
-        onDrag(dx, dy)
+        // 累积待处理的偏移量
+        dragStateRef.current.pendingDx += dx
+        dragStateRef.current.pendingDy += dy
+
+        // 更新起始位置，下次计算相对于新位置
         dragStateRef.current.startX = e.screenX
         dragStateRef.current.startY = e.screenY
+
+        // 使用 requestAnimationFrame 节流，限制更新频率到约 60fps
+        // 这样可以减少 IPC 通信次数，提升性能
+        if (dragStateRef.current.rafId === null) {
+          dragStateRef.current.rafId = requestAnimationFrame(() => {
+            const { pendingDx, pendingDy } = dragStateRef.current
+            if (pendingDx !== 0 || pendingDy !== 0) {
+              onDrag(pendingDx, pendingDy)
+              dragStateRef.current.pendingDx = 0
+              dragStateRef.current.pendingDy = 0
+            }
+            dragStateRef.current.rafId = null
+          })
+        }
       }
     }
 
     const handleMouseUp = (e: MouseEvent) => {
+      // 取消待处理的动画帧
+      if (dragStateRef.current.rafId !== null) {
+        cancelAnimationFrame(dragStateRef.current.rafId)
+        dragStateRef.current.rafId = null
+      }
+
+      // 如果有待处理的更新，立即执行
+      if (dragStateRef.current.pendingDx !== 0 || dragStateRef.current.pendingDy !== 0) {
+        onDrag(dragStateRef.current.pendingDx, dragStateRef.current.pendingDy)
+        dragStateRef.current.pendingDx = 0
+        dragStateRef.current.pendingDy = 0
+      }
+
       if (dragStateRef.current.isDragging && dragStateRef.current.dragStartCalled) {
         onDragEnd?.(e.screenX, e.screenY)
       }
@@ -114,6 +148,10 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     window.addEventListener('mouseup', handleMouseUp)
 
     return () => {
+      // 清理动画帧
+      if (dragStateRef.current.rafId !== null) {
+        cancelAnimationFrame(dragStateRef.current.rafId)
+      }
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
@@ -123,12 +161,20 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     if (!enabled || e.button !== 0)
       return
 
+    // 清理之前的动画帧（如果存在）
+    if (dragStateRef.current.rafId !== null) {
+      cancelAnimationFrame(dragStateRef.current.rafId)
+    }
+
     dragStateRef.current = {
       isDragging: true,
       startX: e.screenX,
       startY: e.screenY,
       hasMoved: false,
       dragStartCalled: false,
+      pendingDx: 0,
+      pendingDy: 0,
+      rafId: null,
     }
   }, [enabled])
 

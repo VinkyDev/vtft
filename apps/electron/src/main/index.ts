@@ -1,7 +1,14 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, screen } from 'electron'
 import { ipcInit } from './ipc/index'
 import { createWindow } from './mainWIndow'
+
+// Windows 平台：强制禁用 DPI 缩放，避免拖动时窗口尺寸异常
+if (process.platform === 'win32') {
+  // app.commandLine.appendSwitch('high-dpi-support', 'true')
+
+  // app.commandLine.appendSwitch('force-device-scale-factor', '1')
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -20,6 +27,7 @@ app.whenReady().then(() => {
   ipcInit()
 
   createWindow()
+  console.log(screen.getPrimaryDisplay().scaleFactor)
 
   app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the

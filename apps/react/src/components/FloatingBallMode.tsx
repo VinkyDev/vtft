@@ -25,7 +25,6 @@ export function FloatingBallMode() {
       }
       await Overlay.hide()
     },
-    threshold: 3,
   })
 
   const handleClick = async (e: React.MouseEvent) => {

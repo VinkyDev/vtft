@@ -31,12 +31,6 @@ function getTaskConfig(
 
 /**
  * 创建爬虫任务配置
- *
- * 默认调度时间说明:
- * - champions: 每天凌晨 2:00 (数据更新较慢)
- * - items: 每天凌晨 2:30 (数据更新较慢)
- * - augments: 每天凌晨 3:00 (数据更新较慢)
- * - comps: 每 6 小时一次 (阵容数据变化较频繁)
  */
 export function createCrawlerTasks(): ScheduledTask[] {
   // 动态导入爬虫函数以避免循环依赖
@@ -50,7 +44,7 @@ export function createCrawlerTasks(): ScheduledTask[] {
   }> = [
     {
       name: 'champions',
-      defaultSchedule: '0 2 * * *', // 每天凌晨 2:00
+      defaultSchedule: '10 4,10,16,22 * * *', // 每天4:10, 10:10, 16:10, 22:10
       defaultEnabled: true,
       importPath: 'crawler',
       crawlFnName: 'crawlChampions',
@@ -58,7 +52,7 @@ export function createCrawlerTasks(): ScheduledTask[] {
     },
     {
       name: 'items',
-      defaultSchedule: '30 2 * * *', // 每天凌晨 2:30
+      defaultSchedule: '5 4,10,16,22 * * *', // 每天4:05, 10:05, 16:05, 22:05
       defaultEnabled: true,
       importPath: 'crawler',
       crawlFnName: 'crawlItemMeta',
@@ -66,7 +60,7 @@ export function createCrawlerTasks(): ScheduledTask[] {
     },
     {
       name: 'augments',
-      defaultSchedule: '0 3 * * *', // 每天凌晨 3:00
+      defaultSchedule: '0 4,10,16,22 * * *', // 每天4:00, 10:00, 16:00, 22:00
       defaultEnabled: true,
       importPath: 'crawler',
       crawlFnName: 'crawlAugments',
@@ -74,7 +68,7 @@ export function createCrawlerTasks(): ScheduledTask[] {
     },
     {
       name: 'comps',
-      defaultSchedule: '0 */6 * * *', // 每 6 小时
+      defaultSchedule: '30 4,10,16,22 * * *', // 每天4:30, 10:30, 16:30, 22:30
       defaultEnabled: true,
       importPath: 'crawler',
       crawlFnName: 'crawlComps',
@@ -140,23 +134,3 @@ export function createCrawlerTasks(): ScheduledTask[] {
     }
   })
 }
-
-/**
- * Cron 表达式说明:
- *
- * 格式: 分 时 日 月 周
- *
- * 字段说明:
- * - 分钟 (0-59)
- * - 小时 (0-23)
- * - 日期 (1-31)
- * - 月份 (1-12)
- * - 星期几 (0-7, 0 和 7 都代表周日)
- *
- * 常用示例:
- * - '0 2 * * *'    每天凌晨 2:00
- * - '30 2 * * *'   每天凌晨 2:30
- * - '0 *\/6 * * *' 每 6 小时
- * - '0 0 * * 0'    每周日凌晨 0:00
- * - '0 0 1 * *'    每月 1 号凌晨 0:00
- */

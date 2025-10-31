@@ -56,6 +56,8 @@ class TaskScheduler {
         catch (error) {
           console.error(`[定时任务] 执行失败: ${config.name}`, error)
         }
+      }, {
+        timezone: 'Asia/Shanghai',
       })
 
       this.tasks.set(taskName, task)

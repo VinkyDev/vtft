@@ -28,7 +28,6 @@ function App() {
       }
       await Overlay.hide()
     },
-    threshold: 3,
   })
 
   useMount(() => {

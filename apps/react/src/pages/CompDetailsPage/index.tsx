@@ -1,9 +1,10 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { useRequest } from 'ahooks'
 import { useMemo, useState } from 'react'
-import { Drawer, DrawerContent, DrawerDescription, DrawerOverlay, DrawerTitle, Spinner } from 'ui'
+import { Drawer, DrawerContent, DrawerDescription, DrawerTitle, Spinner } from 'ui'
 import { getCompDetails } from '@/api-client'
 import { AppTabs } from '@/components'
+import { useConfigStore } from '@/store'
 import { AugmentsGrid, ChampionEnhancementsGrid, FormationBoard, ItemsGrid } from './components'
 
 interface CompDetailPageProps {
@@ -17,6 +18,18 @@ interface CompDetailPageProps {
  */
 export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
   const [activeTab, setActiveTab] = useState('overview')
+  const { windowMode } = useConfigStore()
+
+  // 在悬浮球模式下，降低 Drawer 的 z-index，确保悬浮球在最上层
+  const drawerZIndex = windowMode === 'floating' ? '!z-10' : 'z-50'
+  // 在悬浮球模式下，隐藏遮罩层并禁用点击事件
+  const overlayClassName = windowMode === 'floating'
+    ? `rounded-2xl ${drawerZIndex} bg-transparent pointer-events-none`
+    : `rounded-2xl ${drawerZIndex}`
+  // 在悬浮球模式下，隐藏 DrawerContent
+  const drawerContentClassName = windowMode === 'floating'
+    ? `min-h-screen min-w-[90vw] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-none rounded-2xl ${drawerZIndex} opacity-0 pointer-events-none`
+    : `min-h-screen min-w-[90vw] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-none rounded-2xl ${drawerZIndex}`
 
   // 获取阵容详情数据
   const { data: compDetails, loading } = useRequest(
@@ -98,19 +111,25 @@ export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
       direction="right"
       handleOnly={true}
       onOpenChange={(open) => {
+        // 在悬浮球模式下，阻止通过点击遮罩关闭 Drawer
+        if (!open && windowMode === 'floating') {
+          return
+        }
         if (!open)
           onClose()
       }}
     >
-      <DrawerOverlay className="rounded-2xl" />
-      <DrawerContent className="min-h-screen min-w-[90vw] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-none rounded-2xl">
+      <DrawerContent
+        className={drawerContentClassName}
+        overlayClassName={overlayClassName}
+      >
         <DrawerTitle className="sr-only">阵容详情</DrawerTitle>
         <DrawerDescription className="sr-only">
           查看阵容站位和配置信息
         </DrawerDescription>
 
         {/* 内容区域 */}
-        <div className="flex-1 overflow-hidden">
+        <div className={`flex-1 overflow-hidden ${windowMode === 'floating' ? 'pointer-events-none' : ''}`}>
           {loading && (
             <div className="flex items-center justify-center h-full">
               <Spinner />

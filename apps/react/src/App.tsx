@@ -56,8 +56,9 @@ function App() {
       <div className={`min-h-screen ${windowMode === 'floating' ? '' : 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-2'}`}>
         {/* 悬浮球模式 */}
         <div
-          className="flex items-center justify-center h-screen"
+          className="flex items-center justify-center h-screen z-[60] pointer-events-auto"
           style={{ display: windowMode === 'floating' ? 'flex' : 'none' }}
+          onClick={e => e.stopPropagation()}
         >
           <FloatingBallMode />
         </div>

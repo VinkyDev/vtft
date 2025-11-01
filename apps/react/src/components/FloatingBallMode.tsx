@@ -28,10 +28,12 @@ export function FloatingBallMode() {
   })
 
   const handleClick = async (e: React.MouseEvent) => {
+    // 阻止事件冒泡，防止触发下层元素
+    e.stopPropagation()
+
     // 如果发生了拖动，阻止点击事件
     if (checkIfMoved()) {
       e.preventDefault()
-      e.stopPropagation()
       return
     }
 
@@ -44,11 +46,13 @@ export function FloatingBallMode() {
 
   return (
     <div
-      className="relative w-full h-full flex items-center justify-center cursor-move bg-transparent"
+      className="relative w-full h-full flex items-center justify-center cursor-move bg-transparent z-[60] pointer-events-auto"
       onMouseDown={onMouseDown}
+      onClick={e => e.stopPropagation()}
     >
       <button
         onClick={handleClick}
+        className="pointer-events-auto"
       >
         <div className="absolute inset-0 flex items-center justify-center">
           <img

@@ -3,9 +3,9 @@ import { Overlay, Window } from 'bridge'
 import { lazy, useMemo, useState } from 'react'
 import { AppTabs, FloatingBallMode, SuspenseFallback } from '@/components'
 import { useDraggable } from '@/hooks'
+import CompRankingsPage from '@/pages/CompsPage/index'
 import { useConfigStore, useGameDataStore } from '@/store'
 
-const CompRankingsPage = lazy(() => import('@/pages/CompsPage/index'))
 const ItemsPage = lazy(() => import('@/pages/ItemsPage/index'))
 const ChampionsPage = lazy(() => import('@/pages/ChampionsPage/index'))
 const AugmentsPage = lazy(() => import('@/pages/AugmentsPage/index'))
@@ -31,9 +31,11 @@ function App() {
   })
 
   useMount(() => {
-    fetchChampions()
-    fetchItems()
-    fetchAugments()
+    Promise.all([
+      fetchChampions(),
+      fetchItems(),
+      fetchAugments(),
+    ])
 
     Window.setMode(windowMode).then((result) => {
       if (result.success && result.data) {
@@ -47,9 +49,7 @@ function App() {
       value: 'comps',
       label: '阵容',
       content: (
-        <SuspenseFallback skeletonType="comp">
-          <CompRankingsPage />
-        </SuspenseFallback>
+        <CompRankingsPage />
       ),
     },
     {

@@ -12,9 +12,7 @@ function CompRankingsPage() {
   const [selectedComp, setSelectedComp] = useState<EnhancedCompData | null>(null)
 
   const { data, loading } = useRequest(
-    async () => {
-      return await queryComps()
-    },
+    queryComps,
   )
 
   const groupedComps = useMemo<GroupedComps[]>(() => {

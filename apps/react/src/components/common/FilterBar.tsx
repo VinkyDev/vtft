@@ -30,52 +30,6 @@ interface FilterBarProps {
   layout?: 'space-between' | 'start' | 'center' | 'end'
 }
 
-/**
- * 通用过滤器栏组件
- * 支持多组过滤器，每组可以有多个选项
- *
- * @example
- * ```tsx
- * // 带容器、两端对齐
- * <FilterBar
- *   groups={[
- *     {
- *       value: category,
- *       options: [
- *         { value: 'core', label: '核心' },
- *         { value: 'radiant', label: '光明' },
- *       ],
- *       onChange: setCategory,
- *     },
- *     {
- *       value: sortField,
- *       options: [
- *         { value: 'matches', label: '场次' },
- *         { value: 'avgPlace', label: '排名' },
- *       ],
- *       onChange: setSortField,
- *       renderSuffix: (value) => value === 'avgPlace' ? '↑' : '↓',
- *     },
- *   ]}
- * />
- *
- * // 不带容器、单组过滤器
- * <FilterBar
- *   showContainer={false}
- *   layout="start"
- *   groups={[
- *     {
- *       value: level,
- *       options: [
- *         { value: 'all', label: '全部' },
- *         { value: 'Silver', label: '银色' },
- *       ],
- *       onChange: setLevel,
- *     },
- *   ]}
- * />
- * ```
- */
 export const FilterBar = memo(({
   groups,
   className = '',

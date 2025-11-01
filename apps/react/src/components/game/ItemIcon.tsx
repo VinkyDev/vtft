@@ -10,14 +10,9 @@ interface ItemIconProps {
   onClick?: (item: ItemMeta) => void
 }
 
-/**
- * 装备图标组件
- * 用于 ItemCard 中的主装备显示，包含排名、图标和分类信息
- */
 export const ItemIcon = memo(({ item, className = '', onClick }: ItemIconProps) => {
   return (
     <div className={`flex flex-col items-center gap-1 ${className}`}>
-      {/* 装备图标 */}
       <div
         className="relative size-12 shrink-0 overflow-hidden rounded-md border border-white/10 bg-black/20 cursor-pointer transition-all hover:border-white/20"
         onClick={() => onClick?.(item)}

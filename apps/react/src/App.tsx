@@ -1,20 +1,20 @@
 import { useMount } from 'ahooks'
 import { Overlay, Window } from 'bridge'
-import { useMemo, useState } from 'react'
-import { AppTabs, FloatingBallMode } from '@/components'
+import { lazy, useMemo, useState } from 'react'
+import { AppTabs, FloatingBallMode, SuspenseFallback } from '@/components'
 import { useDraggable } from '@/hooks'
-import { AugmentsPage } from '@/pages/AugmentsPage'
-import { ChampionsPage } from '@/pages/ChampionsPage'
-import { CompRankingsPage } from '@/pages/CompsPage'
-import { ItemsPage } from '@/pages/ItemsPage'
 import { useConfigStore, useGameDataStore } from '@/store'
+
+const CompRankingsPage = lazy(() => import('@/pages/CompsPage/index.lazy').then(m => ({ default: m.default })))
+const ItemsPage = lazy(() => import('@/pages/ItemsPage/index.lazy').then(m => ({ default: m.default })))
+const ChampionsPage = lazy(() => import('@/pages/ChampionsPage/index.lazy').then(m => ({ default: m.default })))
+const AugmentsPage = lazy(() => import('@/pages/AugmentsPage/index.lazy').then(m => ({ default: m.default })))
 
 function App() {
   const [activeTab, setActiveTab] = useState('comps')
   const { fetchChampions, fetchItems, fetchAugments } = useGameDataStore()
   const { windowMode, setWindowMode } = useConfigStore()
 
-  // 窗口拖动处理（标准模式和小窗模式）
   const { onMouseDown } = useDraggable({
     onDrag: (dx, dy) => Window.drag(dx, dy),
     onDragStart: async () => {
@@ -35,7 +35,6 @@ function App() {
     fetchItems()
     fetchAugments()
 
-    // 同步窗口模式
     Window.setMode(windowMode).then((result) => {
       if (result.success && result.data) {
         setWindowMode(result.data)
@@ -43,18 +42,48 @@ function App() {
     })
   })
 
-  // Tabs 配置
   const tabs = useMemo(() => [
-    { value: 'comps', label: '阵容', content: <CompRankingsPage /> },
-    { value: 'items', label: '装备', content: <ItemsPage /> },
-    { value: 'champions', label: '英雄', content: <ChampionsPage /> },
-    { value: 'augments', label: '符文', content: <AugmentsPage /> },
+    {
+      value: 'comps',
+      label: '阵容',
+      content: (
+        <SuspenseFallback skeletonType="comp">
+          <CompRankingsPage />
+        </SuspenseFallback>
+      ),
+    },
+    {
+      value: 'items',
+      label: '装备',
+      content: (
+        <SuspenseFallback>
+          <ItemsPage />
+        </SuspenseFallback>
+      ),
+    },
+    {
+      value: 'champions',
+      label: '英雄',
+      content: (
+        <SuspenseFallback>
+          <ChampionsPage />
+        </SuspenseFallback>
+      ),
+    },
+    {
+      value: 'augments',
+      label: '符文',
+      content: (
+        <SuspenseFallback>
+          <AugmentsPage />
+        </SuspenseFallback>
+      ),
+    },
   ], [])
 
   return (
     <div className={`overflow-hidden ${windowMode === 'floating' ? 'rounded-full' : 'rounded-2xl'}`}>
       <div className={`min-h-screen ${windowMode === 'floating' ? '' : 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-2'}`}>
-        {/* 悬浮球模式 */}
         <div
           className="flex items-center justify-center h-screen z-[60] pointer-events-auto"
           style={{ display: windowMode === 'floating' ? 'flex' : 'none' }}
@@ -63,7 +92,6 @@ function App() {
           <FloatingBallMode />
         </div>
 
-        {/* 标准模式和小窗模式 */}
         <div
           className="relative"
           style={{ display: windowMode !== 'floating' ? 'block' : 'none' }}

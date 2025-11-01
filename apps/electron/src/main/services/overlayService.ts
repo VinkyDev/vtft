@@ -53,7 +53,7 @@ export class OverlayService {
 
     const leftThird = screenWidth / 3
     const rightThird = (screenWidth * 2) / 3
-    const SNAP_ZONE_SIZE = 220
+    const SNAP_ZONE_SIZE = 280
 
     return `
       <!DOCTYPE html>

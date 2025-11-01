@@ -4,11 +4,6 @@ import logo from '@/assets/logo.png'
 import { useDraggable } from '@/hooks'
 import { useConfigStore } from '@/store/configStore'
 
-/**
- * 悬浮球模式专用组件
- * 为 40x40 的小窗口设计，显示应用 logo
- * 支持拖动整个窗口，点击切换到标准模式并居中
- */
 export function FloatingBallMode() {
   const { setWindowMode } = useConfigStore()
 
@@ -28,16 +23,13 @@ export function FloatingBallMode() {
   })
 
   const handleClick = async (e: React.MouseEvent) => {
-    // 阻止事件冒泡，防止触发下层元素
     e.stopPropagation()
 
-    // 如果发生了拖动，阻止点击事件
     if (checkIfMoved()) {
       e.preventDefault()
       return
     }
 
-    // 切换到标准模式并居中
     const result = await Window.switchToStandardAndCenter()
     if (result.success && result.data) {
       setWindowMode(result.data)

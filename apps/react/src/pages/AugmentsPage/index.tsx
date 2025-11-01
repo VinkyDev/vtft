@@ -2,41 +2,34 @@ import type { AugmentLevelFilter } from './components'
 import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
+import { DataSkeleton, EmptyState } from '@/components'
 import { useGameDataStore } from '@/store'
 import { filterByPinyinSearch } from '@/utils/search'
 import { getTierTextColor, groupAndSortByTier } from '@/utils/tier'
 import { AugmentCard, AugmentFilter } from './components'
 
-/**
- * 强化符文页面
- */
 export function AugmentsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [levelFilter, setLevelFilter] = useState<AugmentLevelFilter>('all')
 
-  // 从 store 获取强化符文数据
   const { augments, augmentsLoading: loading } = useGameDataStore()
 
-  // 搜索、筛选和分组强化符文
   const groupedAugments = useMemo(() => {
     if (!augments.length)
       return []
 
     let filteredAugments = augments
 
-    // 按级别筛选
     if (levelFilter !== 'all') {
       filteredAugments = filteredAugments.filter(augment => augment.level === levelFilter)
     }
 
-    // 搜索过滤（支持拼音）
     filteredAugments = filterByPinyinSearch(
       filteredAugments,
       searchQuery,
       augment => augment.name,
     )
 
-    // 按 tier 分组并排序
     return groupAndSortByTier(
       filteredAugments,
       augment => augment.tier || 'D',
@@ -69,19 +62,11 @@ export function AugmentsPage() {
 
       <ScrollArea className="h-[calc(100vh-110px)] sm:h-[calc(100vh-120px)]" type="scroll">
         <div className="pb-2">
-          {loading && (
-            <div className="flex items-center justify-center py-20">
-              <p className="text-gray-400 text-lg">加载中...</p>
-            </div>
-          )}
-          {!loading && totalAugments === 0 && (
-            <div className="flex items-center justify-center py-20">
-              <p className="text-gray-400 text-lg">
-                {searchQuery.trim() ? '未找到匹配的符文' : '暂无强化符文数据'}
-              </p>
-            </div>
-          )}
-          {!loading && groupedAugments.length > 0 && (
+          <DataSkeleton
+            loading={loading}
+            isEmpty={totalAugments === 0}
+            empty={<EmptyState message={searchQuery.trim() ? '未找到匹配的符文' : '暂无强化符文数据'} />}
+          >
             <div className="space-y-4">
               {groupedAugments.map(({ tier, items }) => (
                 <div key={tier}>
@@ -103,7 +88,7 @@ export function AugmentsPage() {
                 </div>
               ))}
             </div>
-          )}
+          </DataSkeleton>
         </div>
       </ScrollArea>
     </div>

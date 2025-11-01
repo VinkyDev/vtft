@@ -1,9 +1,15 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { useRequest } from 'ahooks'
-import { useMemo, useState } from 'react'
-import { Drawer, DrawerContent, DrawerDescription, DrawerTitle, Spinner } from 'ui'
+import { useEffect, useMemo, useState } from 'react'
+import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from 'ui'
 import { getCompDetails } from '@/api-client'
-import { AppTabs } from '@/components'
+import {
+  AppTabs,
+  AugmentsGridSkeleton,
+  ChampionEnhancementsGridSkeleton,
+  FormationBoardSkeleton,
+  ItemsGridSkeleton,
+} from '@/components'
 import { useConfigStore } from '@/store'
 import { AugmentsGrid, ChampionEnhancementsGrid, FormationBoard, ItemsGrid } from './components'
 
@@ -12,13 +18,16 @@ interface CompDetailPageProps {
   onClose: () => void
 }
 
-/**
- * 阵容详情页面
- * 全屏展示阵容的详细信息
- */
 export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
   const [activeTab, setActiveTab] = useState('overview')
   const { windowMode } = useConfigStore()
+
+  // 当打开新阵容时，重置为概览页
+  useEffect(() => {
+    if (comp) {
+      setActiveTab('overview')
+    }
+  }, [comp])
 
   // 在悬浮球模式下，降低 Drawer 的 z-index，确保悬浮球在最上层
   const drawerZIndex = windowMode === 'floating' ? '!z-10' : 'z-50'
@@ -44,7 +53,31 @@ export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
     },
   )
 
-  // Tabs 配置
+  // 骨架屏 Tabs 配置
+  const skeletonTabs = useMemo(() => [
+    {
+      value: 'overview',
+      label: '概览',
+      content: <FormationBoardSkeleton />,
+    },
+    {
+      value: 'items',
+      label: '装备',
+      content: <ItemsGridSkeleton />,
+    },
+    {
+      value: 'augments',
+      label: '推荐符文',
+      content: <AugmentsGridSkeleton />,
+    },
+    {
+      value: 'championEnhancements',
+      label: '推荐果实',
+      content: <ChampionEnhancementsGridSkeleton />,
+    },
+  ], [])
+
+  // 实际 Tabs 配置
   const tabs = useMemo(() => {
     if (!compDetails?.data)
       return []
@@ -130,9 +163,14 @@ export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
 
         {/* 内容区域 */}
         <div className={`flex-1 overflow-hidden ${windowMode === 'floating' ? 'pointer-events-none' : ''}`}>
-          {loading && (
-            <div className="flex items-center justify-center h-full">
-              <Spinner />
+          {loading && comp && (
+            <div className="flex flex-col h-full p-2">
+              <AppTabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                tabs={skeletonTabs}
+                enableAnimation={true}
+              />
             </div>
           )}
 

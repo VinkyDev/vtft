@@ -35,10 +35,10 @@ export class WindowService {
 
   /**
    * 检查鼠标是否在左上角吸附区域内
-   * 吸附区域：左上角 220x220 的区域
+   * 吸附区域：左上角 280x280 的区域
    */
   private isInSnapZone(mouseX: number, mouseY: number): boolean {
-    const SNAP_ZONE_SIZE = 220
+    const SNAP_ZONE_SIZE = 280
     return mouseX <= SNAP_ZONE_SIZE && mouseY <= SNAP_ZONE_SIZE
   }
 

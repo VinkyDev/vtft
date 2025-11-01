@@ -18,10 +18,6 @@ interface ChampionWithItemsProps {
   className?: string
 }
 
-/**
- * 阵容中的英雄组件
- * 显示英雄图标和装备，使用通用的 Champion 和 Item 组件
- */
 export const ChampionWithItems = memo(({
   champion,
   championSize = 'medium',
@@ -32,7 +28,6 @@ export const ChampionWithItems = memo(({
 }: ChampionWithItemsProps) => {
   return (
     <div className={`flex flex-col items-center gap-0.5 ${className}`}>
-      {/* 英雄图标 - 使用通用的 Champion 组件 */}
       <ChampionComponent
         championName={champion.name}
         size={championSize}
@@ -41,7 +36,6 @@ export const ChampionWithItems = memo(({
         showTooltip={showTooltip}
       />
 
-      {/* 装备图标 - 显示在英雄下方 */}
       {champion.items && champion.items.length > 0 && (
         <div className="flex gap-0.5">
           {champion.items.slice(0, 3).map((item, i) => (

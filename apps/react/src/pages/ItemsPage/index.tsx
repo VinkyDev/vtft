@@ -3,37 +3,29 @@ import type { SortField } from './helper'
 import type { FilterGroup } from '@/components'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
-import { FilterBar } from '@/components'
+import { DataSkeleton, EmptyState, FilterBar } from '@/components'
 import { useGameDataStore } from '@/store'
 import { ItemCard } from './components'
 import { sortItems } from './helper'
 
-/**
- * 装备页面
- */
 export function ItemsPage() {
   const [category, setCategory] = useState<ItemCategory>('core')
   const [sortField, setSortField] = useState<SortField>('composite')
 
-  // 从 store 获取装备数据
   const { items, itemsLoading: loading } = useGameDataStore()
 
-  // 筛选和排序装备
   const filteredItems = useMemo<ItemMeta[]>(() => {
     if (!items.length)
       return []
 
-    // 按类型筛选
     let filtered = items
     if (category !== 'all') {
       filtered = filtered.filter(item => item.category === category)
     }
 
-    // 排序
     return sortItems(filtered, sortField)
   }, [items, category, sortField])
 
-  // FilterBar 配置
   const filterGroups: FilterGroup[] = [
     {
       value: category,
@@ -65,17 +57,11 @@ export function ItemsPage() {
       <FilterBar groups={filterGroups} />
       <ScrollArea className="h-[calc(100vh-120px)]" type="scroll">
         <div className="pb-2">
-          {loading && (
-            <div className="flex items-center justify-center py-20">
-              <p className="text-gray-400 text-lg">加载中...</p>
-            </div>
-          )}
-          {!loading && filteredItems.length === 0 && (
-            <div className="flex items-center justify-center py-20">
-              <p className="text-gray-400 text-lg">暂无装备数据</p>
-            </div>
-          )}
-          {!loading && filteredItems.length > 0 && (
+          <DataSkeleton
+            loading={loading}
+            isEmpty={filteredItems.length === 0}
+            empty={<EmptyState message="暂无装备数据" />}
+          >
             <div
               className="grid gap-2"
               style={{
@@ -86,7 +72,7 @@ export function ItemsPage() {
                 <ItemCard key={`${item.rank}-${item.name}`} item={item} />
               ))}
             </div>
-          )}
+          </DataSkeleton>
         </div>
       </ScrollArea>
     </div>

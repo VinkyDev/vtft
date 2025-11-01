@@ -2,45 +2,24 @@ import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui'
 
-/**
- * Tab 配置项
- */
 export interface AppTab {
-  /** Tab 的值 */
   value: string
-  /** Tab 的显示文本 */
   label: string
-  /** Tab 内容 */
   content: ReactNode
 }
 
-/**
- * AppTabs 组件属性
- */
 interface AppTabsProps {
-  /** 当前激活的 tab */
   value: string
-  /** Tab 切换回调 */
   onValueChange: (value: string) => void
-  /** Tab 配置列表 */
   tabs: AppTab[]
-  /** TabsList 额外类名 */
   tabListClassName?: string
-  /** 是否启用平滑切换动画 */
   enableAnimation?: boolean
-  /** 容器类名 */
   className?: string
-  /** TabsList 之前的元素 */
   beforeTabList?: ReactNode
-  /** TabsList 之后的元素 */
   afterTabList?: ReactNode
-  /** TabsList 容器的布局方式 */
   tabListLayout?: 'center' | 'space-between'
 }
 
-/**
- * 应用通用 Tabs 组件
- */
 export const AppTabs = memo((props: AppTabsProps) => {
   const {
     value,
@@ -76,7 +55,6 @@ export const AppTabs = memo((props: AppTabsProps) => {
         {afterTabList}
       </div>
 
-      {/* 内容区√域 */}
       {enableAnimation
         ? (
             <div className="relative overflow-hidden h-full">

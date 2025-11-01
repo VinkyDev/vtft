@@ -5,10 +5,10 @@ import { AppTabs, FloatingBallMode, SuspenseFallback } from '@/components'
 import { useDraggable } from '@/hooks'
 import { useConfigStore, useGameDataStore } from '@/store'
 
-const CompRankingsPage = lazy(() => import('@/pages/CompsPage/index.lazy').then(m => ({ default: m.default })))
-const ItemsPage = lazy(() => import('@/pages/ItemsPage/index.lazy').then(m => ({ default: m.default })))
-const ChampionsPage = lazy(() => import('@/pages/ChampionsPage/index.lazy').then(m => ({ default: m.default })))
-const AugmentsPage = lazy(() => import('@/pages/AugmentsPage/index.lazy').then(m => ({ default: m.default })))
+const CompRankingsPage = lazy(() => import('@/pages/CompsPage/index'))
+const ItemsPage = lazy(() => import('@/pages/ItemsPage/index'))
+const ChampionsPage = lazy(() => import('@/pages/ChampionsPage/index'))
+const AugmentsPage = lazy(() => import('@/pages/AugmentsPage/index'))
 
 function App() {
   const [activeTab, setActiveTab] = useState('comps')

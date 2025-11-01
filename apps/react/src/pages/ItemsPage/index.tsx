@@ -8,7 +8,7 @@ import { useGameDataStore } from '@/store'
 import { ItemCard } from './components'
 import { sortItems } from './helper'
 
-export function ItemsPage() {
+function ItemsPage() {
   const [category, setCategory] = useState<ItemCategory>('core')
   const [sortField, setSortField] = useState<SortField>('composite')
 
@@ -78,3 +78,5 @@ export function ItemsPage() {
     </div>
   )
 }
+
+export default ItemsPage

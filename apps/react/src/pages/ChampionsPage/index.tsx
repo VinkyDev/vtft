@@ -7,7 +7,7 @@ import { useGameDataStore } from '@/store'
 import { ChampionCard, ChampionFilter } from './components'
 import { sortChampions } from './helper'
 
-export function ChampionsPage() {
+function ChampionsPage() {
   const [costFilter, setCostFilter] = useState<ChampionCostFilter>('all')
   const [sortField, setSortField] = useState<ChampionSortField>('composite')
 
@@ -56,3 +56,5 @@ export function ChampionsPage() {
     </div>
   )
 }
+
+export default ChampionsPage

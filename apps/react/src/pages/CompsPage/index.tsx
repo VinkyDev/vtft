@@ -8,7 +8,7 @@ import { CompDetailPage } from '@/pages/CompDetailsPage'
 import { processComps } from '@/utils/compRating'
 import { TierSection } from './components'
 
-export function CompRankingsPage() {
+function CompRankingsPage() {
   const [selectedComp, setSelectedComp] = useState<EnhancedCompData | null>(null)
 
   const { data, loading } = useRequest(
@@ -51,3 +51,5 @@ export function CompRankingsPage() {
     </>
   )
 }
+
+export default CompRankingsPage

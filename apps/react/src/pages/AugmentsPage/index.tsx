@@ -8,7 +8,7 @@ import { filterByPinyinSearch } from '@/utils/search'
 import { getTierTextColor, groupAndSortByTier } from '@/utils/tier'
 import { AugmentCard, AugmentFilter } from './components'
 
-export function AugmentsPage() {
+function AugmentsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [levelFilter, setLevelFilter] = useState<AugmentLevelFilter>('all')
 
@@ -94,3 +94,5 @@ export function AugmentsPage() {
     </div>
   )
 }
+
+export default AugmentsPage

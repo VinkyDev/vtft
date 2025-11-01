@@ -47,7 +47,7 @@ function CompRankingsPage() {
             )}
       </ScrollArea>
 
-      <CompDetailPage comp={selectedComp} onClose={handleCloseDetail} />
+      <CompDetailPage key={selectedComp?.compId} comp={selectedComp} onClose={handleCloseDetail} />
     </>
   )
 }

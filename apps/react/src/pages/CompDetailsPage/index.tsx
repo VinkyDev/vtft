@@ -1,6 +1,6 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { useRequest } from 'ahooks'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from 'ui'
 import { getCompDetails } from '@/api-client'
 import {
@@ -21,13 +21,6 @@ interface CompDetailPageProps {
 export function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
   const [activeTab, setActiveTab] = useState('overview')
   const { windowMode } = useConfigStore()
-
-  // 当打开新阵容时，重置为概览页
-  useEffect(() => {
-    if (comp) {
-      setActiveTab('overview')
-    }
-  }, [comp])
 
   // 在悬浮球模式下，降低 Drawer 的 z-index，确保悬浮球在最上层
   const drawerZIndex = windowMode === 'floating' ? '!z-10' : 'z-50'

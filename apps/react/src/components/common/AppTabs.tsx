@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
 import { memo } from 'react'
+import { Overlay, Window } from 'bridge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui'
+import { useDraggable } from '@/hooks'
+import { useConfigStore } from '@/store'
 
 export interface AppTab {
   value: string
@@ -33,11 +36,30 @@ export const AppTabs = memo((props: AppTabsProps) => {
     tabListLayout = 'center',
   } = props
 
+  const { windowMode, setWindowMode } = useConfigStore()
+
+  // 拖动功能：只在非悬浮球模式下启用
+  const { onMouseDown } = useDraggable({
+    onDrag: (dx, dy) => Window.drag(dx, dy),
+    onDragStart: async () => {
+      await Window.startDrag()
+      await Overlay.show()
+    },
+    onDragEnd: async (mouseX, mouseY) => {
+      const result = await Window.endDrag(mouseX, mouseY)
+      if (result.success && result.data) {
+        setWindowMode(result.data)
+      }
+      await Overlay.hide()
+    },
+    enabled: windowMode !== 'floating',
+  })
+
   const layoutClass = tabListLayout === 'space-between' ? 'justify-between' : 'justify-center'
 
   return (
     <Tabs value={value} onValueChange={onValueChange} className={`h-full ${className}`}>
-      <div className={`flex items-center ${layoutClass}`}>
+      <div className={`flex items-center ${layoutClass}`} onMouseDown={onMouseDown}>
         {beforeTabList}
 
         <TabsList className={`bg-black/30 border border-white/20 h-7 sm:h-9 p-1 no-drag ${tabListClassName}`}>
@@ -57,7 +79,10 @@ export const AppTabs = memo((props: AppTabsProps) => {
 
       {enableAnimation
         ? (
-            <div className="relative overflow-hidden h-full">
+            <div
+              className="relative overflow-hidden h-full"
+              onMouseDown={e => e.stopPropagation()}
+            >
               <div
                 className="flex transition-transform duration-300 ease-in-out h-full"
                 style={{
@@ -86,13 +111,13 @@ export const AppTabs = memo((props: AppTabsProps) => {
             </div>
           )
         : (
-            <>
+            <div onMouseDown={e => e.stopPropagation()}>
               {tabs.map(tab => (
                 <TabsContent key={tab.value} value={tab.value} className="h-full m-0 no-drag">
                   {tab.content}
                 </TabsContent>
               ))}
-            </>
+            </div>
           )}
     </Tabs>
   )

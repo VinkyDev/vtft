@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import { IPC_EVENTS } from 'utils'
-import { WindowService } from '../services/windowService'
+import { windowService } from '../services/windowService'
 
 // 存储拖动时的初始窗口位置、大小和累积偏移量
 const dragStateMap = new WeakMap<BrowserWindow, {
@@ -16,8 +16,6 @@ const dragStateMap = new WeakMap<BrowserWindow, {
 }>()
 
 export async function setupWindowHandlers() {
-  const windowService = new WindowService()
-
   // 设置窗口模式
   ipcMain.handle(
     IPC_EVENTS.WINDOW.SET_MODE,

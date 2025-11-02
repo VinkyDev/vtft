@@ -1,8 +1,7 @@
 import { useMount } from 'ahooks'
-import { Overlay, Window } from 'bridge'
+import { Window } from 'bridge'
 import { lazy, useMemo, useState } from 'react'
 import { AppTabs, FloatingBallMode, SuspenseFallback } from '@/components'
-import { useDraggable } from '@/hooks'
 import CompRankingsPage from '@/pages/CompsPage/index'
 import { useConfigStore, useGameDataStore } from '@/store'
 
@@ -14,21 +13,6 @@ function App() {
   const [activeTab, setActiveTab] = useState('comps')
   const { fetchChampions, fetchItems, fetchAugments } = useGameDataStore()
   const { windowMode, setWindowMode } = useConfigStore()
-
-  const { onMouseDown } = useDraggable({
-    onDrag: (dx, dy) => Window.drag(dx, dy),
-    onDragStart: async () => {
-      await Window.startDrag()
-      await Overlay.show()
-    },
-    onDragEnd: async (mouseX, mouseY) => {
-      const result = await Window.endDrag(mouseX, mouseY)
-      if (result.success && result.data) {
-        setWindowMode(result.data)
-      }
-      await Overlay.hide()
-    },
-  })
 
   useMount(() => {
     Promise.all([
@@ -95,7 +79,6 @@ function App() {
         <div
           className="relative"
           style={{ display: windowMode !== 'floating' ? 'block' : 'none' }}
-          onMouseDown={onMouseDown}
         >
           <AppTabs
             value={activeTab}

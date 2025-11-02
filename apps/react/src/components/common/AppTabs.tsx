@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { memo } from 'react'
 import { Overlay, Window } from 'bridge'
+import { memo } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui'
 import { useDraggable } from '@/hooks'
 import { useConfigStore } from '@/store'

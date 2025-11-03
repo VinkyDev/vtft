@@ -20,6 +20,7 @@
     "pinyin-pro": "^3.27.0",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-helper": "workspace:*",
     "types": "workspace:*",
     "ui": "workspace:*",
     "zustand": "^5.0.8"

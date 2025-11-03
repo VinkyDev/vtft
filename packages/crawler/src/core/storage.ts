@@ -93,6 +93,11 @@ async function atomicUpdate<T>(
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
 export async function saveAugments(augments: AugmentMeta[]) {
+  if (!augments || augments.length < 10) {
+    logger.warn(`强化符文数据量过少，共 ${augments?.length || 0} 个，跳过保存`)
+    return
+  }
+
   await atomicUpdate('强化符文', augments, async (tftDb) => {
     logger.info('清空旧的强化符文数据...')
     await tftDb.augments.deleteAll()
@@ -107,6 +112,11 @@ export async function saveAugments(augments: AugmentMeta[]) {
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
 export async function saveChampions(champions: ChampionMeta[]) {
+  if (!champions || champions.length < 10) {
+    logger.warn(`英雄数据量过少，共 ${champions?.length || 0} 个，跳过保存`)
+    return
+  }
+
   await atomicUpdate('英雄', champions, async (tftDb) => {
     logger.info('清空旧的英雄数据...')
     await tftDb.champions.deleteAll()
@@ -121,6 +131,11 @@ export async function saveChampions(champions: ChampionMeta[]) {
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
 export async function saveItems(items: ItemMeta[]) {
+  if (!items || items.length < 10) {
+    logger.warn(`装备数据量过少，共 ${items?.length || 0} 个，跳过保存`)
+    return
+  }
+
   await atomicUpdate('装备', items, async (tftDb) => {
     logger.info('清空旧的装备数据...')
     await tftDb.items.deleteAll()
@@ -135,26 +150,25 @@ export async function saveItems(items: ItemMeta[]) {
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
 export async function saveComps(comps: CompData[]) {
+  if (!comps || comps.length < 10) {
+    logger.warn(`阵容数据量过少，共 ${comps?.length || 0} 个，跳过保存`)
+    return
+  }
+
   await atomicUpdate('阵容', comps, async (tftDb) => {
     // 统计有详情的阵容
-    const compsWithDetails = comps.filter(c => c.details)
+    const compsWithDetails = comps.filter(c => c?.details)
 
-    // 删除旧的阵容数据
+    // 更新阵容数据
     logger.info('清空旧的阵容数据...')
     await tftDb.comps.deleteAll()
-
-    // 删除旧的阵容详情数据
-    if (compsWithDetails.length > 0) {
-      logger.info('清空旧的阵容详情数据...')
-      await tftDb.compDetails.deleteAll()
-    }
-
-    // 插入新的阵容数据
     logger.info('插入新的阵容数据...')
     await tftDb.comps.upsertMany(comps)
 
-    // 插入新的阵容详情数据
-    if (compsWithDetails.length > 0) {
+    // 更新阵容详情数据
+    if (compsWithDetails.length > 5) {
+      logger.info('清空旧的阵容详情数据...')
+      await tftDb.compDetails.deleteAll()
       logger.info(`插入 ${compsWithDetails.length} 个阵容详情...`)
       await tftDb.compDetails.upsertMany(compsWithDetails)
       logger.success(`✓ 成功保存 ${compsWithDetails.length} 个阵容详情`)

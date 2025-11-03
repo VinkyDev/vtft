@@ -19,11 +19,6 @@ export const apiClient = axios.create({
 /** 请求拦截器 */
 apiClient.interceptors.request.use(
   (config) => {
-    // 可在此添加认证 token 等
-    // const token = localStorage.getItem('token')
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`
-    // }
     return config
   },
   (error) => {
@@ -37,19 +32,6 @@ apiClient.interceptors.response.use(
     return response
   },
   (error) => {
-    // 统一错误处理
-    if (error.response) {
-      // 服务器返回错误状态码
-      console.error('API Error:', error.response.data)
-    }
-    else if (error.request) {
-      // 请求已发送但未收到响应
-      console.error('Network Error:', error.message)
-    }
-    else {
-      // 请求配置错误
-      console.error('Request Error:', error.message)
-    }
     return Promise.reject(error)
   },
 )

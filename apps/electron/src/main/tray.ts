@@ -16,7 +16,7 @@ function resolveResource(...p: string[]) {
  * 创建系统托盘
  */
 export function createTray(): void {
-  const iconName = process.platform === 'win32' ? '256x256.png' : '64x64.png'
+  const iconName = process.platform === 'win32' ? '64x64.png' : '32x32.png'
   const iconPath = resolveResource('icons/png', iconName)
   const icon = nativeImage.createFromPath(iconPath)
 
@@ -66,6 +66,9 @@ export function createTray(): void {
 
   // 点击托盘图标切换窗口显示/隐藏
   tray.on('click', () => {
+    if (process.platform === 'darwin')
+      return
+
     const window = getMainWindow()
     if (window) {
       if (window.isVisible()) {

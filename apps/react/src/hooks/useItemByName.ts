@@ -1,6 +1,6 @@
 import type { ItemMeta } from 'types'
 import { useMemo } from 'react'
-import { useGameDataStore } from '@/store'
+import { useGameDataStore } from '@/store/dataStore'
 
 /**
  * 通过装备名称获取装备详细信息

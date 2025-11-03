@@ -10,17 +10,14 @@ interface GameDataState {
   // 英雄数据
   champions: ChampionMeta[]
   championsLoading: boolean
-  championsError: string | null
 
   // 装备数据
   items: ItemMeta[]
   itemsLoading: boolean
-  itemsError: string | null
 
   // 强化符文数据
   augments: AugmentMeta[]
   augmentsLoading: boolean
-  augmentsError: string | null
 
   // Actions
   fetchChampions: () => Promise<void>
@@ -36,37 +33,32 @@ interface GameDataState {
  * 包含英雄、装备和强化符文数据的管理
  */
 export const useGameDataStore = create<GameDataState>((set, get) => ({
-  // 初始状态
+
   champions: [],
   championsLoading: false,
-  championsError: null,
 
   items: [],
   itemsLoading: false,
-  itemsError: null,
 
   augments: [],
   augmentsLoading: false,
-  augmentsError: null,
 
   // 获取英雄数据
   fetchChampions: async () => {
     if (get().championsLoading)
       return
 
-    set({ championsLoading: true, championsError: null })
+    set({ championsLoading: true })
     try {
       const response = await queryChampions()
       set({
         champions: response.data,
         championsLoading: false,
-        championsError: null,
       })
     }
-    catch (error) {
+    catch {
       set({
         championsLoading: false,
-        championsError: error instanceof Error ? error.message : '获取英雄数据失败',
       })
     }
   },
@@ -76,19 +68,17 @@ export const useGameDataStore = create<GameDataState>((set, get) => ({
     if (get().itemsLoading)
       return
 
-    set({ itemsLoading: true, itemsError: null })
+    set({ itemsLoading: true })
     try {
       const response = await queryItems()
       set({
         items: response.data,
         itemsLoading: false,
-        itemsError: null,
       })
     }
-    catch (error) {
+    catch {
       set({
         itemsLoading: false,
-        itemsError: error instanceof Error ? error.message : '获取装备数据失败',
       })
     }
   },
@@ -98,19 +88,17 @@ export const useGameDataStore = create<GameDataState>((set, get) => ({
     if (get().augmentsLoading)
       return
 
-    set({ augmentsLoading: true, augmentsError: null })
+    set({ augmentsLoading: true })
     try {
       const response = await queryAugments()
       set({
         augments: response.data,
         augmentsLoading: false,
-        augmentsError: null,
       })
     }
-    catch (error) {
+    catch {
       set({
         augmentsLoading: false,
-        augmentsError: error instanceof Error ? error.message : '获取强化符文数据失败',
       })
     }
   },
@@ -120,7 +108,6 @@ export const useGameDataStore = create<GameDataState>((set, get) => ({
     set({
       champions: [],
       championsLoading: false,
-      championsError: null,
     })
   },
 
@@ -129,7 +116,6 @@ export const useGameDataStore = create<GameDataState>((set, get) => ({
     set({
       items: [],
       itemsLoading: false,
-      itemsError: null,
     })
   },
 
@@ -138,7 +124,6 @@ export const useGameDataStore = create<GameDataState>((set, get) => ({
     set({
       augments: [],
       augmentsLoading: false,
-      augmentsError: null,
     })
   },
 }))

@@ -1,7 +1,7 @@
 import type { ItemMeta } from 'types'
 import { find } from 'lodash-es'
 import { memo, useMemo } from 'react'
-import { useGameDataStore } from '@/store'
+import { useGameDataStore } from '@/store/dataStore'
 import { getItemSizeClasses, getItemVariantClasses } from '@/utils/styles'
 import { WithTooltip } from '../common/WithTooltip'
 

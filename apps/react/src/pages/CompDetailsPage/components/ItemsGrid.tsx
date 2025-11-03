@@ -2,8 +2,8 @@ import type { ItemCategory, RecommendedItem } from 'types'
 import type { FilterGroup } from '@/components'
 import { memo, useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
-import { FilterBar } from '@/components'
-import { useGameDataStore } from '@/store'
+import { EmptyState, FilterBar } from '@/components'
+import { useGameDataStore } from '@/store/dataStore'
 import { rankItems } from '@/utils/ranking'
 import { ItemCard } from './ItemCard'
 
@@ -128,9 +128,7 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
 
   if (!sortedItems || sortedItems.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-400">暂无装备推荐</p>
-      </div>
+      <EmptyState message="暂无装备推荐" />
     )
   }
 

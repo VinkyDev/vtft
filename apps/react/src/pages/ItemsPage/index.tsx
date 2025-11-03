@@ -4,7 +4,7 @@ import type { FilterGroup } from '@/components'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
 import { DataSkeleton, EmptyState, FilterBar } from '@/components'
-import { useGameDataStore } from '@/store'
+import { useGameDataStore } from '@/store/dataStore'
 import { ItemCard } from './components'
 import { sortItems } from './helper'
 

@@ -3,7 +3,7 @@ import { Overlay, Window } from 'bridge'
 import { memo } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui'
 import { useDraggable } from '@/hooks'
-import { useConfigStore } from '@/store'
+import { useConfigStore } from '@/store/dataStore'
 
 export interface AppTab {
   value: string
@@ -38,7 +38,6 @@ export const AppTabs = memo((props: AppTabsProps) => {
 
   const { windowMode, setWindowMode } = useConfigStore()
 
-  // 拖动功能：只在非悬浮球模式下启用
   const { onMouseDown } = useDraggable({
     onDrag: (dx, dy) => Window.drag(dx, dy),
     onDragStart: async () => {

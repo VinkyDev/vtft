@@ -3,7 +3,7 @@ import type { ChampionCostFilter, ChampionSortField } from './components'
 import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
 import { DataSkeleton, EmptyState } from '@/components'
-import { useGameDataStore } from '@/store'
+import { useGameDataStore } from '@/store/dataStore'
 import { ChampionCard, ChampionFilter } from './components'
 import { sortChampions } from './helper'
 

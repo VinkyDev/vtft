@@ -1,4 +1,6 @@
+import { InboxIcon } from 'lucide-react'
 import { memo } from 'react'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia } from 'ui'
 
 interface EmptyStateProps {
   /** 空状态提示文本 */
@@ -7,9 +9,14 @@ interface EmptyStateProps {
 
 export const EmptyState = memo(({ message }: EmptyStateProps) => {
   return (
-    <div className="flex items-center justify-center py-20">
-      <p className="text-gray-400 text-lg">{message}</p>
-    </div>
+    <Empty className="h-full">
+      <EmptyHeader>
+        <EmptyMedia variant="icon" className="bg-gray-800 text-gray-400 border border-gray-600">
+          <InboxIcon />
+        </EmptyMedia>
+        <EmptyDescription className="text-gray-400">{message}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   )
 })
 

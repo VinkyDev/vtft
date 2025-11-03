@@ -1,21 +1,70 @@
 import { useMount } from 'ahooks'
 import { Window } from 'bridge'
 import { lazy, useMemo, useState } from 'react'
-import { AppTabs, FloatingBallMode, SuspenseFallback } from '@/components'
+import { withErrorBoundary, withSuspense } from 'react-helper'
+import { retryLoadWithFallBack } from 'utils'
+import { AppTabs, ErrorState, FloatingBallMode } from '@/components'
 import CompRankingsPage from '@/pages/CompsPage/index'
-import { useConfigStore, useGameDataStore } from '@/store'
+import { useConfigStore, useGameDataStore } from '@/store/dataStore'
 
-const ItemsPage = lazy(() => import('@/pages/ItemsPage/index'))
-const ChampionsPage = lazy(() => import('@/pages/ChampionsPage/index'))
-const AugmentsPage = lazy(() => import('@/pages/AugmentsPage/index'))
+const ItemsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBack({ fn: () => import('@/pages/ItemsPage/index') }))), {
+  errorBoundaryName: 'ItemsPage',
+  FallbackComponent: ({ resetErrorBoundary }) => {
+    const { fetchItems } = useGameDataStore()
+    return (
+      <ErrorState
+        message="装备数据加载失败"
+        onReload={() => {
+          fetchItems().then(() => {
+            resetErrorBoundary()
+          })
+        }}
+      />
+    )
+  },
+})
+
+const ChampionsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBack({ fn: () => import('@/pages/ChampionsPage/index') }))), {
+  errorBoundaryName: 'ChampionsPage',
+  FallbackComponent: ({ resetErrorBoundary }) => {
+    const { fetchChampions } = useGameDataStore()
+    return (
+      <ErrorState
+        message="英雄数据加载失败"
+        onReload={() => {
+          fetchChampions().then(() => {
+            resetErrorBoundary()
+          })
+        }}
+      />
+    )
+  },
+})
+
+const AugmentsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBack({ fn: () => import('@/pages/AugmentsPage/index') }))), {
+  errorBoundaryName: 'AugmentsPage',
+  FallbackComponent: ({ resetErrorBoundary }) => {
+    const { fetchAugments } = useGameDataStore()
+    return (
+      <ErrorState
+        message="符文数据加载失败"
+        onReload={() => {
+          fetchAugments().then(() => {
+            resetErrorBoundary()
+          })
+        }}
+      />
+    )
+  },
+})
 
 function App() {
   const [activeTab, setActiveTab] = useState('comps')
   const { fetchChampions, fetchItems, fetchAugments } = useGameDataStore()
   const { windowMode, setWindowMode } = useConfigStore()
 
-  useMount(() => {
-    Promise.all([
+  useMount(async () => {
+    Promise.allSettled([
       fetchChampions(),
       fetchItems(),
       fetchAugments(),
@@ -40,27 +89,21 @@ function App() {
       value: 'items',
       label: '装备',
       content: (
-        <SuspenseFallback>
-          <ItemsPage />
-        </SuspenseFallback>
+        <ItemsPage />
       ),
     },
     {
       value: 'champions',
       label: '英雄',
       content: (
-        <SuspenseFallback>
-          <ChampionsPage />
-        </SuspenseFallback>
+        <ChampionsPage />
       ),
     },
     {
       value: 'augments',
       label: '符文',
       content: (
-        <SuspenseFallback>
-          <AugmentsPage />
-        </SuspenseFallback>
+        <AugmentsPage />
       ),
     },
   ], [])

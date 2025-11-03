@@ -48,5 +48,9 @@ export async function queryComps(params?: CompQueryParams): Promise<CompResponse
  */
 export async function getCompDetails(compId: string): Promise<CompDetailsResponse> {
   const response = await apiClient.get<CompDetailsResponse>(`/comps/${compId}?includeDetails=true`)
+
+  if (response.status === 404)
+    throw new Error('Comp not found')
+
   return response.data
 }

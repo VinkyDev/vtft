@@ -92,7 +92,7 @@ export async function extractItemsFromPage(page: Page, category: ItemCategory): 
 
   try {
     // 等待表格加载
-    await page.locator('table tbody tr').waitFor({ timeout: 30000 })
+    await page.locator('table tbody tr').first().waitFor({ timeout: 30000 })
 
     // 查找表格行
     const rows = await page.locator('table tbody tr').all()

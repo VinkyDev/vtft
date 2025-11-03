@@ -1,6 +1,6 @@
 import type { ChampionMeta } from 'types'
 import { useMemo } from 'react'
-import { useGameDataStore } from '@/store'
+import { useGameDataStore } from '@/store/dataStore'
 
 /**
  * 通过英雄名称获取英雄详细信息

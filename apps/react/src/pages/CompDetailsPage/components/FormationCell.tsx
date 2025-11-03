@@ -1,6 +1,6 @@
 import type { Formation } from 'types'
 import { memo, useMemo } from 'react'
-import { useGameDataStore } from '@/store'
+import { useGameDataStore } from '@/store/dataStore'
 
 interface FormationCellProps {
   position: Formation['positions'][0] | null

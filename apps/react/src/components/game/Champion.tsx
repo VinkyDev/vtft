@@ -1,7 +1,7 @@
 import type { ChampionMeta } from 'types'
 import { find } from 'lodash-es'
 import { memo, useMemo } from 'react'
-import { useGameDataStore } from '@/store'
+import { useGameDataStore } from '@/store/dataStore'
 import { getChampionCostColor, getChampionSizeClasses } from '@/utils/styles'
 import { WithTooltip } from '../common/WithTooltip'
 

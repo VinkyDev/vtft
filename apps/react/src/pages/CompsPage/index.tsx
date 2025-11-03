@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
 import { queryComps } from '@/api-client'
 import { CompPageSkeleton } from '@/components'
-import { CompDetailPage } from '@/pages/CompDetailsPage'
+import CompDetailPage from '@/pages/CompDetailsPage'
 import { processComps } from '@/utils/compRating'
 import { TierSection } from './components'
 

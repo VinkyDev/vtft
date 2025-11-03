@@ -2,7 +2,7 @@ import type { ChampionEnhancement, Enhancement } from 'types'
 import { memo } from 'react'
 import { ScrollArea, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { t } from 'utils'
-import { Champion } from '@/components'
+import { Champion, EmptyState } from '@/components'
 import { useIsSmallWindow } from '@/hooks'
 import { getTierBgColor } from '@/utils/tier'
 
@@ -144,9 +144,7 @@ export const ChampionEnhancementsGrid = memo(({ championEnhancements }: Champion
 
   if (!championEnhancements || championEnhancements.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-400">暂无果实推荐</p>
-      </div>
+      <EmptyState message="暂无果实推荐" />
     )
   }
 

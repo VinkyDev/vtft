@@ -50,12 +50,6 @@ export const ErrorBoundary = forwardRef<ReactErrorBoundary, ErrorBoundaryProps>(
   ) => {
     const logger = console
 
-    if (!logger) {
-      console.warn(
-        `@flow-web/l1-arch-base-logger ErrorBoundary: not found logger instance in either props or context. errorBoundaryName: ${errorBoundaryName}`,
-      )
-    }
-
     const { fallback, fallbackRender, FallbackComponent } = restProps
 
     const logFallbackPropsEmpty = useCallback(

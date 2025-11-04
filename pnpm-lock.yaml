@@ -58,7 +58,7 @@ catalogs:
       specifier: ^4.1.14
       version: 4.1.14
     typescript:
-      specifier: ^5.9.3
+      specifier: 5.9.3
       version: 5.9.3
     vite:
       specifier: ^7.1.6
@@ -353,6 +353,22 @@ importers:
         version: 24.7.2
       typescript:
         specifier: 'catalog:'
+        version: 5.9.3
+
+  packages/logger:
+    dependencies:
+      utils:
+        specifier: workspace:*
+        version: link:../utils
+    devDependencies:
+      '@rslib/core':
+        specifier: ^0.17.0
+        version: 0.17.0(typescript@5.9.3)
+      '@types/node':
+        specifier: ^22.18.12
+        version: 22.19.0
+      typescript:
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/react-helper:
@@ -2118,6 +2134,9 @@ packages:
 
   '@types/node@22.18.10':
     resolution: {integrity: sha512-anNG/V/Efn/YZY4pRzbACnKxNKoBng2VTFydVu8RRs5hQjikP8CQfaeAV59VFSCzKNp90mXiVXW2QzV56rwMrg==}
+
+  '@types/node@22.19.0':
+    resolution: {integrity: sha512-xpr/lmLPQEj+TUnHmR+Ab91/glhJvsqcjB+yY0Ix9GO70H6Lb4FHH5GeqdOE5btAx7eIMwuHkp4H2MSkLcqWbA==}
 
   '@types/node@24.7.2':
     resolution: {integrity: sha512-/NbVmcGTP+lj5oa4yiYxxeBjRivKQ5Ns1eSZeB99ExsEQ6rX5XYU1Zy/gGxY/ilqtD4Etx9mKyrPxZRetiahhA==}
@@ -7269,6 +7288,10 @@ snapshots:
   '@types/node-cron@3.0.11': {}
 
   '@types/node@22.18.10':
+    dependencies:
+      undici-types: 6.21.0
+
+  '@types/node@22.19.0':
     dependencies:
       undici-types: 6.21.0
 

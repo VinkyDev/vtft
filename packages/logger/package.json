@@ -1,0 +1,35 @@
+{
+  "name": "logger",
+  "type": "module",
+  "version": "0.0.0",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/src/client.d.ts",
+      "import": "./dist/client.js"
+    },
+    "./server": {
+      "types": "./dist/src/server.d.ts",
+      "import": "./dist/server.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch"
+  },
+  "dependencies": {
+    "utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@rslib/core": "^0.17.0",
+    "@types/node": "^22.18.12",
+    "typescript": "^5.9.3"
+  }
+}

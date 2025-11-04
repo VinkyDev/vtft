@@ -18,7 +18,7 @@ export default antfu(
     rules: {
       ...reactHooks.configs['recommended-latest'].rules,
       ...reactRefresh.configs.vite.rules,
-      'no-console': 'off',
+      'react-refresh/only-export-components': 'off',
     },
   },
 )

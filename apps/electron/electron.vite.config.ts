@@ -8,6 +8,7 @@ export default defineConfig({
         exclude: [
           'types',
           'utils',
+          'logger',
         ],
       }),
     ],
@@ -15,6 +16,7 @@ export default defineConfig({
       alias: {
         types: resolve('../../packages/types/src'),
         utils: resolve('../../packages/utils/src'),
+        logger: resolve('../../packages/logger/src'),
       },
     },
     build: {

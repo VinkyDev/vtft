@@ -1,5 +1,8 @@
 import type { ScheduledTask as CronTask } from 'node-cron'
+import { Logger } from 'logger'
 import cron from 'node-cron'
+
+const logger = new Logger({ namespace: 'scheduler', scope: 'index', withTime: true })
 
 export interface ScheduledTask {
   name: string
@@ -17,7 +20,7 @@ class TaskScheduler {
    */
   register(config: ScheduledTask): void {
     if (this.taskConfigs.has(config.name)) {
-      console.warn(`任务 "${config.name}" 已存在，将被覆盖`)
+      logger.warning(`任务 "${config.name}" 已存在，将被覆盖`)
       this.unregister(config.name)
     }
 
@@ -34,38 +37,38 @@ class TaskScheduler {
   start(taskName: string): boolean {
     const config = this.taskConfigs.get(taskName)
     if (!config) {
-      console.error(`任务 "${taskName}" 不存在`)
+      logger.error({ message: `任务 "${taskName}" 不存在`, error: new Error(`Task "${taskName}" not found`) })
       return false
     }
 
     if (this.tasks.has(taskName)) {
-      console.warn(`任务 "${taskName}" 已经在运行中`)
+      logger.warning(`任务 "${taskName}" 已经在运行中`)
       return false
     }
 
     try {
       const task = cron.schedule(config.schedule, async () => {
-        console.log(`[定时任务] 开始执行: ${config.name}`)
+        logger.info(`[定时任务] 开始执行: ${config.name}`)
         const startTime = Date.now()
 
         try {
           await config.task()
           const duration = Date.now() - startTime
-          console.log(`[定时任务] 执行完成: ${config.name} (耗时: ${duration}ms)`)
+          logger.success(`[定时任务] 执行完成: ${config.name} (耗时: ${duration}ms)`)
         }
         catch (error) {
-          console.error(`[定时任务] 执行失败: ${config.name}`, error)
+          logger.error({ message: `[定时任务] 执行失败: ${config.name}`, error: error as Error })
         }
       }, {
         timezone: 'Asia/Shanghai',
       })
 
       this.tasks.set(taskName, task)
-      console.log(`[定时任务] 已启动: ${config.name} (cron: ${config.schedule})`)
+      logger.info(`[定时任务] 已启动: ${config.name} (cron: ${config.schedule})`)
       return true
     }
     catch (error) {
-      console.error(`[定时任务] 启动失败: ${taskName}`, error)
+      logger.error({ message: `[定时任务] 启动失败: ${taskName}`, error: error as Error })
       return false
     }
   }
@@ -76,13 +79,13 @@ class TaskScheduler {
   stop(taskName: string): boolean {
     const task = this.tasks.get(taskName)
     if (!task) {
-      console.warn(`任务 "${taskName}" 未运行`)
+      logger.warning(`任务 "${taskName}" 未运行`)
       return false
     }
 
     task.stop()
     this.tasks.delete(taskName)
-    console.log(`[定时任务] 已停止: ${taskName}`)
+    logger.info(`[定时任务] 已停止: ${taskName}`)
     return true
   }
 
@@ -133,21 +136,21 @@ class TaskScheduler {
   async trigger(taskName: string): Promise<boolean> {
     const config = this.taskConfigs.get(taskName)
     if (!config) {
-      console.error(`任务 "${taskName}" 不存在`)
+      logger.error({ message: `任务 "${taskName}" 不存在`, error: new Error(`Task "${taskName}" not found`) })
       return false
     }
 
-    console.log(`[定时任务] 手动触发: ${config.name}`)
+    logger.info(`[定时任务] 手动触发: ${config.name}`)
     const startTime = Date.now()
 
     try {
       await config.task()
       const duration = Date.now() - startTime
-      console.log(`[定时任务] 手动执行完成: ${config.name} (耗时: ${duration}ms)`)
+      logger.success(`[定时任务] 手动执行完成: ${config.name} (耗时: ${duration}ms)`)
       return true
     }
     catch (error) {
-      console.error(`[定时任务] 手动执行失败: ${config.name}`, error)
+      logger.error({ message: `[定时任务] 手动执行失败: ${config.name}`, error: error as Error })
       return false
     }
   }

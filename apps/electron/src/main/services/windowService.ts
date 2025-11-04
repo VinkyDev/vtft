@@ -165,7 +165,6 @@ export class WindowService {
     try {
       // 防止快速连续调用
       if (this.isTogglingVisibility) {
-        console.log('[WindowService] Toggle already in progress, ignoring...')
         return ResultUtil.success(window.isVisible())
       }
 
@@ -177,7 +176,6 @@ export class WindowService {
       this.isTogglingVisibility = true
 
       const isVisible = window.isVisible()
-      console.log(`[WindowService] Toggling visibility, current state: ${isVisible ? 'visible' : 'hidden'}`)
 
       if (isVisible) {
         window.hide()

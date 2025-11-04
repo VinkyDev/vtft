@@ -1,5 +1,8 @@
 import type { Context, Next } from 'hono'
+import { Logger } from 'logger'
 import { LRUCache } from 'lru-cache'
+
+const logger = new Logger({ namespace: 'middleware', scope: 'cache', withTime: true })
 
 interface CacheOptions {
   /** 缓存过期时间（毫秒），默认 300000 毫秒（5 分钟） */
@@ -106,7 +109,7 @@ export function cacheMiddleware(options: CacheOptions = {}) {
       }
       catch (error) {
         // 缓存失败不影响正常响应
-        console.warn('Cache storage failed:', error)
+        logger.warning({ message: 'Cache storage failed', error: error as Error })
       }
     }
   }

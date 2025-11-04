@@ -1,7 +1,9 @@
 import type { Page } from 'playwright'
 import type { CompData } from 'types'
 import * as cheerio from 'cheerio'
-import { logger } from '../core/logger'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/comp', withTime: true })
 
 /**
  * 从 class 中提取英雄费用

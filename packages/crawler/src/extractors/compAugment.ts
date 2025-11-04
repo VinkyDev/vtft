@@ -1,6 +1,8 @@
 import type { Locator } from 'playwright'
 import type { Augment } from 'types'
-import { logger } from '../core/logger'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compAugment', withTime: true })
 
 /**
  * 从展开的阵容中提取推荐强化符文
@@ -13,17 +15,14 @@ export async function extractRecommendedAugments(
   try {
     // 从表格中提取强化符文数据
     const augmentTables = await compLocator.locator('table').all()
-    logger.info(`找到 ${augmentTables.length} 个强化符文表格`)
 
     for (const table of augmentTables) {
       try {
         const caption = await table.locator('caption').textContent().catch(() => '')
-        logger.info(`强化符文表格标题: ${caption}`)
 
         if (caption && (caption.includes('强化') || caption.includes('符文'))) {
           await table.locator('tbody tr').first().waitFor({ timeout: 5000 }).catch(() => {})
           const rows = await table.locator('tbody tr').all()
-          logger.info(`强化符文表格有 ${rows.length} 行数据`)
 
           for (const row of rows) {
             try {
@@ -57,29 +56,27 @@ export async function extractRecommendedAugments(
                     name,
                     icon,
                   })
-
-                  logger.info(`提取到强化符文: ${name}`)
                 }
                 catch (error) {
-                  logger.warn('提取单元格中的强化符文失败:', error)
+                  logger.warning({ message: '提取单元格中的强化符文失败', error: error as Error })
                 }
               }
             }
             catch (error) {
-              logger.warn('提取强化符文行失败:', error)
+              logger.warning({ message: '提取强化符文行失败', error: error as Error })
             }
           }
         }
       }
       catch (error) {
-        logger.error('处理强化符文表格失败:', error)
+        logger.error({ message: '处理强化符文表格失败', error: error as Error })
       }
     }
 
     logger.info(`提取到 ${augments.length} 个推荐强化符文`)
   }
   catch (error) {
-    logger.error('提取推荐强化符文列表失败:', error)
+    logger.error({ message: '提取推荐强化符文列表失败', error: error as Error })
   }
 
   return augments

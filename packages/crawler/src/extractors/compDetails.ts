@@ -1,8 +1,8 @@
 import type { Locator } from 'playwright'
 import type { CompDetails, Formation, Item, Position, PositionChampion } from 'types'
+import { Logger } from 'logger'
 import { withRetry } from 'utils'
 import { BaseExtractor } from '../core/baseExtractor'
-import { logger } from '../core/logger'
 import {
   TIMEOUT_FAST_MS,
   TIMEOUT_STANDARD_MS,
@@ -31,6 +31,8 @@ import {
 } from './compDetails.constants'
 import { extractChampionEnhancements } from './compEnhancement'
 import { extractRecommendedItems } from './compItem'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compDetails', withTime: true })
 
 const COMP_ITEM_FULL_SELECTOR = `${COMP_ITEM_SELECTOR}:has(${COMP_IDENTIFIER_SELECTOR})`
 
@@ -190,7 +192,7 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
         maxRetries: RETRY_MAX_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`展开阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`)
+          logger.warning(`展开阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`)
         },
       },
     )
@@ -201,7 +203,7 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
         maxRetries: RETRY_MAX_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`折叠阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`)
+          logger.warning(`折叠阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`)
         },
       },
     )
@@ -237,7 +239,7 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
       )
     }
     catch (error) {
-      logger.error(`提取阵容 ${compIndex + 1} 失败: ${error}`)
+      logger.error({ message: `提取阵容 ${compIndex + 1} 失败`, error: error as Error })
       throw error
     }
 

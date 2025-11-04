@@ -3,11 +3,12 @@ import type { ChampionMeta, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { Logger } from 'logger'
 import { withRetry } from 'utils'
 import { BrowserManager, PageHelper } from '../core/browser'
-import { getCwd, logger } from '../core/logger'
 import { PageStateManager } from '../core/pageState'
 import { WAIT_SHORT_MS } from '../core/timing'
+import { getCwd } from '../core/utils'
 import { extractChampionsFromPage } from '../extractors/champion'
 import {
   ELEMENT_WAIT_TIMEOUT_MS,
@@ -17,6 +18,8 @@ import {
   TABLE_ROW_SELECTOR,
   TARGET_URL,
 } from './champion.constants'
+
+const logger = new Logger({ namespace: 'ChampionCrawler' })
 
 /**
  * 英雄爬虫
@@ -87,13 +90,13 @@ export class ChampionCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`导航到目标页面失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `导航到目标页面失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
 
     await navigateWithRetry()
-    logger.info(`已导航到: ${TARGET_URL}`)
+    logger.info({ message: `已导航到: ${TARGET_URL}` })
   }
 
   /**
@@ -106,13 +109,13 @@ export class ChampionCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`等待页面加载失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `等待页面加载失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
 
     await waitWithRetry()
-    logger.info('页面内容已加载')
+    logger.info({ message: '页面内容已加载' })
   }
 
   /**
@@ -125,7 +128,7 @@ export class ChampionCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`提取英雄数据失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `提取英雄数据失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -138,10 +141,10 @@ export class ChampionCrawler {
    */
   private validateDataQuality(champions: ChampionMeta[]): void {
     if (champions.length < MIN_CHAMPION_COUNT) {
-      logger.warn(`英雄数据量不足: ${champions.length} < ${MIN_CHAMPION_COUNT}`)
+      logger.warning({ message: `英雄数据量不足: ${champions.length} < ${MIN_CHAMPION_COUNT}` })
     }
     else {
-      logger.info(`英雄数据质量良好: ${champions.length} 个英雄`)
+      logger.info({ message: `英雄数据质量良好: ${champions.length} 个英雄` })
     }
   }
 

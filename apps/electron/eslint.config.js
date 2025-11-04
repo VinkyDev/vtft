@@ -8,7 +8,6 @@ export default antfu(
   },
   {
     rules: {
-      'no-console': 'off',
       'node/prefer-global/process': 'off',
       'node/prefer-global/buffer': 'off',
       'ts/no-floating-promises': 'off',

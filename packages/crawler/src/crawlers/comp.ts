@@ -3,9 +3,10 @@ import type { CompData, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { Logger } from 'logger'
 import { BrowserManager, PageHelper } from '../core/browser'
-import { getCwd, logger } from '../core/logger'
 import { PageStateManager } from '../core/pageState'
+import { getCwd } from '../core/utils'
 import { extractCompsFromPage } from '../extractors/comp'
 import { CompDetailsExtractor } from '../extractors/compDetails'
 import {
@@ -13,6 +14,8 @@ import {
   MAX_CONSECUTIVE_FAILURES,
   TARGET_URL,
 } from './comp.constants'
+
+const logger = new Logger({ namespace: 'CompCrawler' })
 
 export class CompCrawler {
   private browserManager: BrowserManager
@@ -83,18 +86,18 @@ export class CompCrawler {
         stateManager.recordOperation()
       }
       catch (error) {
-        logger.error(`获取阵容 ${i + 1} 详细信息失败: ${error}`)
+        logger.error({ message: `获取阵容 ${i + 1} 详细信息失败`, error: error as Error })
         consecutiveFailures++
 
         if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
-          logger.warn(`连续失败 ${consecutiveFailures} 次,尝试刷新页面恢复`)
+          logger.warning({ message: `连续失败 ${consecutiveFailures} 次,尝试刷新页面恢复` })
 
           try {
             await stateManager.refresh()
             consecutiveFailures = 0
           }
           catch (refreshError) {
-            logger.error(`刷新失败,停止爬取: ${refreshError}`)
+            logger.error({ message: `刷新失败,停止爬取`, error: refreshError as Error })
             break
           }
         }

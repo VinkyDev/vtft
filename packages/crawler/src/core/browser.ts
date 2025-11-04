@@ -1,7 +1,7 @@
 import type { Browser, BrowserContext, Page } from 'playwright'
+import logger from 'logger/server'
 import { chromium } from 'playwright'
 import { sleep } from 'utils'
-import { logger } from './logger'
 
 /** 浏览器配置 */
 const BROWSER_CONFIG = {
@@ -134,7 +134,7 @@ export class PageHelper {
       logger.info('页面加载完成')
     }
     catch {
-      logger.warn('等待超时，继续执行...')
+      logger.warning('等待超时，继续执行...')
     }
   }
 

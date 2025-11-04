@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { exit, getArgv, withTimer } from '../core/logger'
 import { saveAugments } from '../core/storage'
+import { exit, getArgv, withTimer } from '../core/utils'
 import { crawlAugments } from '../crawlers/augment'
 
 // 如果直接运行此文件

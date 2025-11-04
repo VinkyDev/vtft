@@ -1,6 +1,5 @@
 export { BaseExtractor } from './core/baseExtractor'
 export { BrowserManager, PageHelper } from './core/browser'
-export { logger } from './core/logger'
 export { PageStateManager } from './core/pageState'
 export { saveAugments, saveChampions, saveComps, saveItems } from './core/storage'
 export * from './core/timing'

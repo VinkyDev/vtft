@@ -61,7 +61,7 @@ const AugmentsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFall
 function App() {
   const [activeTab, setActiveTab] = useState('comps')
   const { fetchChampions, fetchItems, fetchAugments } = useGameDataStore()
-  const { windowMode, setWindowMode } = useConfigStore()
+  const { windowMode } = useConfigStore()
 
   useMount(async () => {
     Promise.allSettled([
@@ -69,12 +69,6 @@ function App() {
       fetchItems(),
       fetchAugments(),
     ])
-
-    Window.setMode(windowMode).then((result) => {
-      if (result.success && result.data) {
-        setWindowMode(result.data)
-      }
-    })
   })
 
   const tabs = useMemo(() => [

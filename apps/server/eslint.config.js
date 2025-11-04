@@ -13,7 +13,6 @@ export default antfu(
   },
   {
     rules: {
-      'no-console': 'off',
       'node/prefer-global/process': 'off',
       'node/no-process-env': 'off',
       'antfu/no-top-level-await': 'off',

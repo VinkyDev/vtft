@@ -132,6 +132,9 @@ importers:
       bridge:
         specifier: workspace:*
         version: link:../../packages/bridge
+      logger:
+        specifier: workspace:*
+        version: link:../../packages/logger
     devDependencies:
       '@electron-toolkit/tsconfig':
         specifier: ^2.0.0
@@ -257,6 +260,9 @@ importers:
       hono:
         specifier: 'catalog:'
         version: 4.9.12
+      logger:
+        specifier: workspace:*
+        version: link:../../packages/logger
       lru-cache:
         specifier: ^11.2.2
         version: 11.2.2
@@ -319,6 +325,9 @@ importers:
       db:
         specifier: workspace:*
         version: link:../db
+      logger:
+        specifier: workspace:*
+        version: link:../logger
       playwright:
         specifier: ^1.49.0
         version: 1.56.0
@@ -341,6 +350,9 @@ importers:
 
   packages/db:
     dependencies:
+      logger:
+        specifier: workspace:*
+        version: link:../logger
       mongodb:
         specifier: ^6.12.0
         version: 6.20.0(socks@2.8.7)
@@ -373,6 +385,9 @@ importers:
 
   packages/react-helper:
     dependencies:
+      logger:
+        specifier: workspace:*
+        version: link:../logger
       react-dom:
         specifier: '>=16.9.0'
         version: 19.2.0(react@19.2.0)

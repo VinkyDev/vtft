@@ -21,6 +21,7 @@
     "react-dom": ">=16.9.0"
   },
   "dependencies": {
+    "logger": "workspace:*",
     "react-error-boundary": "^6.0.0"
   },
   "devDependencies": {

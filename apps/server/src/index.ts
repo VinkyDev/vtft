@@ -7,14 +7,17 @@ import { Hono } from 'hono'
 import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
 import { etag } from 'hono/etag'
-import { logger } from 'hono/logger'
+import { logger as honoLogger } from 'hono/logger'
 import { timing } from 'hono/timing'
+import { Logger } from 'logger'
 import { openapiConfig } from './config/openapi'
 import { errorHandler } from './middleware'
 import apiRoutes from './routes'
 import { taskScheduler } from './scheduler'
 import { createCrawlerTasks } from './scheduler/crawler-tasks'
 import { databaseService } from './services'
+
+const logger = new Logger({ namespace: 'server', withTime: true })
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -25,7 +28,7 @@ const app = new Hono()
 
 // 1. 请求日志和性能追踪
 app.use('*', timing())
-app.use('*', logger())
+app.use('*', honoLogger())
 
 // 2. CORS 配置
 app.use('*', cors())
@@ -93,20 +96,20 @@ async function start() {
     // 注册爬虫定时任务
     const crawlerTasks = createCrawlerTasks()
     crawlerTasks.forEach(task => taskScheduler.register(task))
-    console.log(`✓ 已注册 ${crawlerTasks.length} 个爬虫任务`)
+    logger.info(`✓ 已注册 ${crawlerTasks.length} 个爬虫任务`)
 
     // 启动所有已启用的定时任务
     taskScheduler.startAll()
 
     // 如果配置了启动时运行爬虫，则执行一次
     if (process.env.CRAWLER_RUN_ON_STARTUP === 'true') {
-      console.log('检测到 CRAWLER_RUN_ON_STARTUP=true，将在后台运行爬虫任务...')
+      logger.info('检测到 CRAWLER_RUN_ON_STARTUP=true，将在后台运行爬虫任务...')
       Promise.all(
         crawlerTasks
           .filter(t => t.enabled)
           .map(t => taskScheduler.trigger(t.name)),
       ).catch((error) => {
-        console.error('启动时运行爬虫任务失败:', error)
+        logger.error({ message: '启动时运行爬虫任务失败', error: error as Error })
       })
     }
 
@@ -116,26 +119,26 @@ async function start() {
       port,
     })
 
-    console.log(`✓ Server is running on http://localhost:${port}`)
-    console.log(`✓ API base URL: http://localhost:${port}/api`)
-    console.log(`✓ Swagger UI: http://localhost:${port}/docs`)
-    console.log(`✓ Scheduler status: http://localhost:${port}/api/scheduler/status`)
+    logger.success(`✓ Server is running on http://localhost:${port}`)
+    logger.info(`✓ API base URL: http://localhost:${port}/api`)
+    logger.info(`✓ Swagger UI: http://localhost:${port}/docs`)
+    logger.info(`✓ Scheduler status: http://localhost:${port}/api/scheduler/status`)
   }
   catch (error) {
-    console.error('Failed to start server:', error)
+    logger.fatal({ message: 'Failed to start server', error: error as Error })
     process.exit(1)
   }
 }
 
 process.on('SIGINT', async () => {
-  console.log('\nShutting down gracefully...')
+  logger.info('\nShutting down gracefully...')
   taskScheduler.stopAll()
   await databaseService.disconnect()
   process.exit(0)
 })
 
 process.on('SIGTERM', async () => {
-  console.log('\nShutting down gracefully...')
+  logger.info('\nShutting down gracefully...')
   taskScheduler.stopAll()
   await databaseService.disconnect()
   process.exit(0)

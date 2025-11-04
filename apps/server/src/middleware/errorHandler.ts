@@ -1,4 +1,7 @@
 import type { Context, Next } from 'hono'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'middleware', scope: 'errorHandler', withTime: true })
 
 export interface ErrorResponse {
   success: false
@@ -22,7 +25,7 @@ export async function errorHandler(c: Context, next: Next) {
     await next()
   }
   catch (error) {
-    console.error('Error:', error)
+    logger.error({ message: 'Error', error: error as Error })
 
     let statusCode = 500
     let message = 'Internal server error'

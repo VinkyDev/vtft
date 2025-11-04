@@ -3,11 +3,12 @@ import type { AugmentLevel, AugmentMeta, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { Logger } from 'logger'
 import { withRetry } from 'utils'
 import { BrowserManager, PageHelper } from '../core/browser'
-import { getCwd, logger } from '../core/logger'
 import { PageStateManager } from '../core/pageState'
 import { TIMEOUT_PAGE_LOAD_MS, TIMEOUT_STANDARD_MS, WAIT_SHORT_MS } from '../core/timing'
+import { getCwd } from '../core/utils'
 import { extractAugmentsByLevel } from '../extractors/augment'
 import {
   AUGMENT_LEVELS,
@@ -19,6 +20,8 @@ import {
   TARGET_URL,
 } from './augment.constants'
 import { crawlOpggAugments } from './augmentOpgg'
+
+const logger = new Logger({ namespace: 'AugmentCrawler' })
 
 /**
  * 强化符文爬虫
@@ -57,11 +60,11 @@ export class AugmentCrawler {
           return opggData
         }
         else {
-          logger.warn(`OP.GG 爬取到 ${opggData.length} 个强化符文，数量不足（< ${OPGG_MIN_DATA_THRESHOLD}），降级到 MetaTFT`)
+          logger.warning(`OP.GG 爬取到 ${opggData.length} 个强化符文，数量不足（< ${OPGG_MIN_DATA_THRESHOLD}），降级到 MetaTFT`)
         }
       }
       catch (error) {
-        logger.error('OP.GG 爬取失败，降级到 MetaTFT:', error)
+        logger.error({ message: 'OP.GG 爬取失败，降级到 MetaTFT:', error: error as Error })
       }
 
       // 第二步：降级到 MetaTFT 爬取数据
@@ -69,7 +72,7 @@ export class AugmentCrawler {
       return await this.crawlFromMetaTFT()
     }
     catch (error) {
-      logger.error('强化符文爬取完全失败:', error)
+      logger.error({ message: '强化符文爬取完全失败:', error: error as Error })
       throw error
     }
   }
@@ -145,7 +148,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`导航到首页失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `导航到首页失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -168,7 +171,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`设置语言配置失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `设置语言配置失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -190,7 +193,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`导航到目标页面失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `导航到目标页面失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -209,7 +212,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`等待表格加载失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `等待表格加载失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -240,7 +243,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`重置筛选状态失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `重置筛选状态失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -262,7 +265,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`点击 ${level} 筛选按钮失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `点击 ${level} 筛选按钮失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -281,7 +284,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`等待表格更新失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `等待表格更新失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )
@@ -300,7 +303,7 @@ export class AugmentCrawler {
         maxRetries: MAX_RETRY_ATTEMPTS,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`提取 ${level} 强化符文失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}`)
+          logger.warning({ message: `提取 ${level} 强化符文失败，重试 ${attempt}/${MAX_RETRY_ATTEMPTS}: ${error}` })
         },
       },
     )

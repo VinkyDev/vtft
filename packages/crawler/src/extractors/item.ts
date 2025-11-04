@@ -1,6 +1,8 @@
 import type { Locator, Page } from 'playwright'
 import type { ItemCategory, ItemMeta } from 'types'
-import { logger } from '../core/logger'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/item', withTime: true })
 
 /**
  * 从表格行提取装备元数据
@@ -79,7 +81,7 @@ export async function extractItemFromRow(row: Locator, category: ItemCategory): 
     }
   }
   catch (error) {
-    logger.error('提取装备行失败:', error)
+    logger.error({ message: '提取装备行失败', error: error as Error })
     return null
   }
 }
@@ -109,7 +111,7 @@ export async function extractItemsFromPage(page: Page, category: ItemCategory): 
     logger.info(`装备元数据提取完成，共 ${items.length} 个装备`)
   }
   catch (error) {
-    logger.error('提取装备元数据失败:', error)
+    logger.error({ message: '提取装备元数据失败', error: error as Error })
   }
 
   return items

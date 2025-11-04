@@ -1,11 +1,13 @@
 import type { Locator, Page } from 'playwright'
 import type { AugmentLevel, AugmentMeta } from 'types'
+import { Logger } from 'logger'
 import { sleep } from 'utils'
-import { logger } from '../core/logger'
 import {
   EXTRACTOR_SELECTORS,
   TIER_ICON_MAP,
 } from './augmentOpgg.constants'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augmentOpgg', withTime: true })
 
 /**
  * 从强化符文容器提取数据
@@ -58,15 +60,14 @@ async function extractAugmentFromContainer(container: Locator, level: AugmentLev
         }
 
         augments.push(augment)
-        logger.info(`提取到强化符文: ${augment.name} (${level} - ${tier})`)
       }
       catch (error) {
-        logger.error('提取单个强化符文失败:', error)
+        logger.error({ message: '提取单个强化符文失败', error: error as Error })
       }
     }
   }
   catch (error) {
-    logger.error('提取强化符文容器失败:', error)
+    logger.error({ message: '提取强化符文容器失败', error: error as Error })
   }
 
   return augments
@@ -83,7 +84,6 @@ export async function extractOpggAugmentsByLevel(page: Page, level: AugmentLevel
 
     // 查找所有强化符文容器
     const containers = await page.locator(EXTRACTOR_SELECTORS.AUGMENT_CONTAINER).all()
-    logger.info(`找到 ${containers.length} 个强化符文容器`)
 
     for (const container of containers) {
       const containerAugments = await extractAugmentFromContainer(container, level)
@@ -99,7 +99,7 @@ export async function extractOpggAugmentsByLevel(page: Page, level: AugmentLevel
     return uniqueAugments
   }
   catch (error) {
-    logger.error(`提取 ${level} 强化符文失败:`, error)
+    logger.error({ message: `提取 ${level} 强化符文失败`, error: error as Error })
     return []
   }
 }

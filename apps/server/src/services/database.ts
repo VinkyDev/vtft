@@ -1,5 +1,8 @@
 import type { MongoDBManager, TFTDatabase } from 'db'
 import { createTFTDatabase, getMongoClient } from 'db'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'service', scope: 'database', withTime: true })
 
 class DatabaseService {
   private mongo: MongoDBManager
@@ -18,7 +21,7 @@ class DatabaseService {
     await this.mongo.connect()
     this.tftDb = createTFTDatabase(this.mongo)
     this.connected = true
-    console.log('✓ Connected to MongoDB')
+    logger.success('✓ Connected to MongoDB')
   }
 
   async disconnect(): Promise<void> {
@@ -29,7 +32,7 @@ class DatabaseService {
     await this.mongo.disconnect()
     this.tftDb = null
     this.connected = false
-    console.log('✓ Disconnected from MongoDB')
+    logger.info('✓ Disconnected from MongoDB')
   }
 
   getTFTDatabase(): TFTDatabase {

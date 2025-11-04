@@ -11,12 +11,6 @@ class GlobalShortcutManager {
    * @param accelerator 快捷键组合，例如: 'CommandOrControl+X', 'Alt+Shift+F'
    * @param eventName 事件名称，用于标识这个快捷键
    * @param callback 快捷键触发时的回调函数
-   * @example
-   * ```typescript
-   * GlobalShortcut.register('CommandOrControl+Shift+K', 'open-search', () => {
-   *   console.log('Search shortcut triggered!')
-   * })
-   * ```
    */
   async register(
     accelerator: string,

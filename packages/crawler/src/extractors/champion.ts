@@ -1,6 +1,8 @@
 import type { Locator, Page } from 'playwright'
 import type { ChampionMeta, Trait } from 'types'
-import { logger } from '../core/logger'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/champion', withTime: true })
 
 /**
  * 从单行中提取英雄数据
@@ -77,7 +79,7 @@ async function extractChampionFromRow(row: Locator): Promise<ChampionMeta | null
     }
   }
   catch (error) {
-    logger.error('提取英雄行数据失败:', error)
+    logger.error({ message: '提取英雄行数据失败', error: error as Error })
     return null
   }
 }
@@ -101,8 +103,6 @@ export async function extractChampionsFromPage(page: Page): Promise<ChampionMeta
         continue
       }
 
-      logger.info(`表格 ${i + 1} 有 ${rows.length} 行数据，开始提取`)
-
       for (const row of rows) {
         const champion = await extractChampionFromRow(row)
         if (champion) {
@@ -110,7 +110,7 @@ export async function extractChampionsFromPage(page: Page): Promise<ChampionMeta
           logger.info(`成功提取英雄: ${champion.name} (${champion.rank})`)
         }
         else {
-          logger.warn(`提取英雄失败`)
+          logger.warning(`提取英雄失败`)
         }
       }
 
@@ -122,7 +122,7 @@ export async function extractChampionsFromPage(page: Page): Promise<ChampionMeta
     logger.info(`总共成功提取 ${champions.length} 个英雄数据`)
   }
   catch (error) {
-    logger.error('提取英雄数据失败:', error)
+    logger.error({ message: '提取英雄数据失败', error: error as Error })
   }
 
   return champions

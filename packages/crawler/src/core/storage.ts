@@ -1,6 +1,6 @@
 import type { AugmentMeta, ChampionMeta, CompData, ItemMeta } from 'types'
 import { createTFTDatabase, getMongoClient } from 'db'
-import { logger } from '../core/logger'
+import logger from 'logger/server'
 
 /**
  * 数据验证结果
@@ -51,7 +51,7 @@ async function atomicUpdate<T>(
   // 1. 验证数据
   const validation = validateData(data, dataType)
   if (!validation.isValid) {
-    logger.error(`数据验证失败: ${validation.reason}`)
+    logger.error({ message: `数据验证失败: ${validation.reason}`, error: new Error(validation.reason) })
     throw new Error(validation.reason)
   }
 
@@ -83,7 +83,7 @@ async function atomicUpdate<T>(
     }
   }
   catch (error) {
-    logger.error(`保存${dataType}失败:`, error)
+    logger.error({ message: `保存${dataType}失败:`, error: error as Error })
     throw error
   }
 }
@@ -94,12 +94,12 @@ async function atomicUpdate<T>(
  */
 export async function saveAugments(augments: AugmentMeta[]) {
   if (!augments || augments.length < 10) {
-    logger.warn(`强化符文数据量过少，共 ${augments?.length || 0} 个，跳过保存`)
+    logger.warning({ message: `强化符文数据量过少，共 ${augments?.length || 0} 个，跳过保存` })
     return
   }
 
   await atomicUpdate('强化符文', augments, async (tftDb) => {
-    logger.info('清空旧的强化符文数据...')
+    logger.info({ message: '清空旧的强化符文数据...' })
     await tftDb.augments.deleteAll()
 
     logger.info('插入新的强化符文数据...')
@@ -113,7 +113,7 @@ export async function saveAugments(augments: AugmentMeta[]) {
  */
 export async function saveChampions(champions: ChampionMeta[]) {
   if (!champions || champions.length < 10) {
-    logger.warn(`英雄数据量过少，共 ${champions?.length || 0} 个，跳过保存`)
+    logger.warning({ message: `英雄数据量过少，共 ${champions?.length || 0} 个，跳过保存` })
     return
   }
 
@@ -132,7 +132,7 @@ export async function saveChampions(champions: ChampionMeta[]) {
  */
 export async function saveItems(items: ItemMeta[]) {
   if (!items || items.length < 10) {
-    logger.warn(`装备数据量过少，共 ${items?.length || 0} 个，跳过保存`)
+    logger.warning({ message: `装备数据量过少，共 ${items?.length || 0} 个，跳过保存` })
     return
   }
 
@@ -151,7 +151,7 @@ export async function saveItems(items: ItemMeta[]) {
  */
 export async function saveComps(comps: CompData[]) {
   if (!comps || comps.length < 10) {
-    logger.warn(`阵容数据量过少，共 ${comps?.length || 0} 个，跳过保存`)
+    logger.warning({ message: `阵容数据量过少，共 ${comps?.length || 0} 个，跳过保存` })
     return
   }
 
@@ -191,7 +191,7 @@ export async function initializeDatabase() {
     logger.success('✓ 数据库索引初始化完成')
   }
   catch (error) {
-    logger.error('初始化数据库失败:', error)
+    logger.error({ message: '初始化数据库失败:', error: error as Error })
     throw error
   }
   finally {

@@ -1,6 +1,8 @@
 import type { Locator } from 'playwright'
 import type { RecommendedItem } from 'types'
-import { logger } from '../core/logger'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compItem', withTime: true })
 
 /**
  * 从展开的阵容中提取推荐道具
@@ -13,23 +15,20 @@ export async function extractRecommendedItems(
   try {
     // 从表格中提取道具数据
     const itemTables = await compLocator.locator('table').all()
-    logger.info(`找到 ${itemTables.length} 个道具表格`)
 
     for (const table of itemTables) {
       try {
         const caption = await table.locator('caption').textContent().catch(() => '')
-        logger.info(`道具表格标题: ${caption}`)
         if (caption && caption.includes('道具')) {
           await table.locator('tbody tr').first().waitFor({ timeout: 5000 }).catch(() => {})
           const rows = await table.locator('tbody tr').all()
-          logger.info(`道具表格有 ${rows.length} 行数据`)
 
           for (const row of rows) {
             try {
               // 提取各列数据
               const cells = await row.locator('td').all()
               if (cells.length < 7) {
-                logger.warn(`行的列数不足: ${cells.length}`)
+                logger.warning(`行的列数不足: ${cells.length}`)
                 continue
               }
 
@@ -77,20 +76,20 @@ export async function extractRecommendedItems(
               })
             }
             catch (error) {
-              logger.error('提取道具行失败:', error)
+              logger.error({ message: '提取道具行失败', error: error as Error })
             }
           }
         }
       }
       catch (error) {
-        logger.error('处理道具表格失败:', error)
+        logger.error({ message: '处理道具表格失败', error: error as Error })
       }
     }
 
     logger.info(`提取到 ${items.length} 个推荐道具`)
   }
   catch (error) {
-    logger.error('提取推荐道具列表失败:', error)
+    logger.error({ message: '提取推荐道具列表失败', error: error as Error })
   }
 
   return items

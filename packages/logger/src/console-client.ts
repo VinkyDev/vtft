@@ -20,11 +20,13 @@ export function getColorByLogLevel(type?: LogLevel): string {
 }
 
 function doConsole(
-  { namespace, scope, level, message, ...rest }: LogOptions,
+  { namespace, scope, level, message, withTime = false, ...rest }: LogOptions,
   ...restArgs: unknown[]
 ): void {
+  const time = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
+
   const logs: unknown[] = [
-    `%c Logger %c ${namespace || level}${
+    `%c Logger %c ${withTime ? `${time} %c ` : ''}${namespace || level}${
       scope ? ` %c ${scope}` : ''
     } %c`,
     'background:#444444 ; padding: 1px; border-radius: 3px 0 0 3px; color: #fff',
@@ -51,12 +53,12 @@ function doConsole(
 }
 
 export class ConsoleLogClient implements LoggerReportClient {
-  send({ meta, message, withTime = false, ...rest }: CommonLogOptions): void {
+  send({ meta, message, ...rest }: CommonLogOptions): void {
     const resolvedMsg = message || undefined
     if (!resolvedMsg) {
       return
     }
-    const payload = { ...rest, message: `${withTime ? new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) : ''} ${resolvedMsg}` }
+    const payload = { ...rest, message: resolvedMsg }
     if (meta) {
       doConsole(payload, meta)
     }

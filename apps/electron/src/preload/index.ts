@@ -1,5 +1,6 @@
 import { electronAPI } from '@electron-toolkit/preload'
 import { contextBridge } from 'electron'
+import logger from 'logger/client'
 
 // Custom APIs for renderer
 const api = {}
@@ -13,7 +14,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('api', api)
   }
   catch (error) {
-    console.error(error)
+    logger.error({ message: '[Preload] Failed to expose Electron APIs', error })
   }
 }
 else {

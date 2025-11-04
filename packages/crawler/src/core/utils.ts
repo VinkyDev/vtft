@@ -1,24 +1,7 @@
 import process from 'node:process'
+import { Logger } from 'logger'
 
-/**
- * 日志工具
- */
-export const logger = {
-  info: (...args: any[]) => {
-    // eslint-disable-next-line no-console
-    console.log(...args)
-  },
-  success: (...args: any[]) => {
-    // eslint-disable-next-line no-console
-    console.log('✓', ...args)
-  },
-  warn: (...args: any[]) => {
-    console.warn(...args)
-  },
-  error: (...args: any[]) => {
-    console.error(...args)
-  },
-}
+const logger = new Logger({ namespace: 'crawler', scope: 'utils', withTime: true })
 
 /**
  * 获取当前工作目录
@@ -82,7 +65,7 @@ export async function withTimer<T>(
   }
   catch (error) {
     const duration = Date.now() - startTime
-    logger.error(`${taskName}失败 (耗时: ${formatDuration(duration)}):`, error)
+    logger.error({ message: `${taskName}失败 (耗时: ${formatDuration(duration)})`, error: error as Error })
     throw error
   }
 }

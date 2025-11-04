@@ -3,9 +3,10 @@ import type { AugmentMeta, CrawlOptions } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { Logger } from 'logger'
 import { BrowserManager, PageHelper } from '../core/browser'
-import { getCwd, logger } from '../core/logger'
 import { TIMEOUT_PAGE_LOAD_MS, TIMEOUT_STANDARD_MS } from '../core/timing'
+import { getCwd } from '../core/utils'
 import { extractOpggAugmentsByLevel } from '../extractors/augmentOpgg'
 import {
   DATA_QUALITY,
@@ -13,6 +14,8 @@ import {
   SELECTORS,
   TARGET_URL,
 } from './augmentOpgg.constants'
+
+const logger = new Logger({ namespace: 'OpggAugmentCrawler' })
 
 /**
  * OP.GG 强化符文爬虫
@@ -124,7 +127,7 @@ export class OpggAugmentCrawler {
         }
       }
       catch (error) {
-        logger.error(`爬取 ${label} 级别失败:`, error)
+        logger.error({ message: `爬取 ${label} 级别失败:`, error: error as Error })
       }
     }
 
@@ -151,10 +154,10 @@ export class OpggAugmentCrawler {
    */
   private validateDataQuality(augments: AugmentMeta[]): void {
     if (augments.length < DATA_QUALITY.MIN_AUGMENT_COUNT) {
-      logger.warn(`强化符文数量过少: ${augments.length}, 期望至少 ${DATA_QUALITY.MIN_AUGMENT_COUNT} 个`)
+      logger.warning({ message: `强化符文数量过少: ${augments.length}, 期望至少 ${DATA_QUALITY.MIN_AUGMENT_COUNT} 个` })
     }
     else {
-      logger.info(`数据质量验证通过: ${augments.length} 个强化符文`)
+      logger.info({ message: `数据质量验证通过: ${augments.length} 个强化符文` })
     }
   }
 

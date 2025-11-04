@@ -1,6 +1,8 @@
 import type { Locator } from 'playwright'
 import type { ChampionEnhancement } from 'types'
-import { logger } from '../core/logger'
+import { Logger } from 'logger'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compEnhancement', withTime: true })
 
 /**
  * 提取单个英雄的强化推荐
@@ -78,7 +80,7 @@ async function extractChampionEnhancement(section: Locator): Promise<ChampionEnh
     return championEnhancement
   }
   catch (error) {
-    logger.error('提取英雄强化失败:', error)
+    logger.error({ message: '提取英雄强化失败', error: error as Error })
     return null
   }
 }
@@ -106,7 +108,7 @@ export async function extractChampionEnhancements(
     logger.info(`提取到 ${championEnhancements.length} 个英雄强化`)
   }
   catch (error) {
-    logger.error('提取英雄强化列表失败:', error)
+    logger.error({ message: '提取英雄强化列表失败', error: error as Error })
   }
 
   return championEnhancements

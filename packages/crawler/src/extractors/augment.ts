@@ -1,8 +1,8 @@
 import type { Locator, Page } from 'playwright'
 import type { AugmentLevel, AugmentMeta } from 'types'
+import { Logger } from 'logger'
 import { withRetry } from 'utils'
 import { BaseExtractor } from '../core/baseExtractor'
-import { logger } from '../core/logger'
 import { TIMEOUT_STANDARD_MS, WAIT_SHORT_MS } from '../core/timing'
 import {
   AUGMENT_COLUMN_INDEX,
@@ -14,6 +14,8 @@ import {
   TIER_COLUMN_INDEX,
   TYPE_COLUMN_INDEX,
 } from './augment.constants'
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augment', withTime: true })
 
 /**
  * 强化符文提取器
@@ -83,7 +85,7 @@ export class AugmentExtractor extends BaseExtractor<AugmentMeta[]> {
         maxRetries: 3,
         delayMs: WAIT_SHORT_MS,
         onRetry: (error, attempt) => {
-          logger.warn(`等待表格加载失败，重试 ${attempt}/3: ${error}`)
+          logger.warning(`等待表格加载失败，重试 ${attempt}/3: ${error}`)
         },
       },
     )
@@ -103,7 +105,7 @@ export class AugmentExtractor extends BaseExtractor<AugmentMeta[]> {
         }
       }
       catch (error) {
-        logger.error('提取强化符文行失败:', error)
+        logger.error({ message: '提取强化符文行失败', error: error as Error })
       }
     }
 

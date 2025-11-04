@@ -1,7 +1,10 @@
 import type { Db } from 'mongodb'
 import type { MongoDBClient, MongoDBConfig } from './types'
 import process from 'node:process'
+import { Logger } from 'logger'
 import { MongoClient } from 'mongodb'
+
+const logger = new Logger({ namespace: 'db', scope: 'mongodb', withTime: true })
 
 class MongoDBManager implements MongoDBClient {
   private client: MongoClient | null = null
@@ -40,7 +43,7 @@ class MongoDBManager implements MongoDBClient {
     catch (error) {
       this.connected = false
       this.client = null
-      console.error('MongoDB connection failed:', error)
+      logger.error({ message: 'MongoDB connection failed', error: error as Error })
       throw error
     }
   }
@@ -56,7 +59,7 @@ class MongoDBManager implements MongoDBClient {
       this.client = null
     }
     catch (error) {
-      console.error('MongoDB disconnection failed:', error)
+      logger.error({ message: 'MongoDB disconnection failed', error: error as Error })
       throw error
     }
   }

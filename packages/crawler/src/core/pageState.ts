@@ -1,5 +1,5 @@
 import type { Page } from 'playwright'
-import { logger } from './logger'
+import logger from 'logger/server'
 import { TIMEOUT_PAGE_LOAD_MS } from './timing'
 
 const DEFAULT_REFRESH_INTERVAL = 20

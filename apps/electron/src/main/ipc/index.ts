@@ -1,3 +1,4 @@
+import logger from 'logger/client'
 import { setupClipboardHandlers } from './clipboardHandlers'
 import { setupGlobalShortcutHandlers } from './globalShortcutHandlers'
 import { setupOverlayHandlers } from './overlayHandlers'
@@ -10,4 +11,9 @@ export async function ipcInit() {
     setupWindowHandlers(),
     setupOverlayHandlers(),
   ])
+  logger.success({
+    namespace: 'Ipc',
+    scope: 'ipcInit',
+    message: 'initialized',
+  })
 }

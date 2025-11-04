@@ -6,17 +6,17 @@ export default defineConfig({
     plugins: [
       externalizeDepsPlugin({
         exclude: [
-          'types',
           'utils',
           'logger',
+          'bridge',
         ],
       }),
     ],
     resolve: {
       alias: {
-        types: resolve('../../packages/types/src'),
         utils: resolve('../../packages/utils/src'),
         logger: resolve('../../packages/logger/src'),
+        bridge: resolve('../../packages/bridge/src'),
       },
     },
     build: {

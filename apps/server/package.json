@@ -20,13 +20,13 @@
     "logger": "workspace:*",
     "lru-cache": "^11.2.2",
     "node-cron": "^4.2.1",
-    "types": "workspace:*",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
     "@types/node-cron": "^3.0.11",
     "tsx": "^4.19.2",
+    "types": "workspace:*",
     "typescript": "catalog:"
   }
 }

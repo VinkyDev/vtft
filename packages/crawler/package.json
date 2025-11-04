@@ -24,12 +24,12 @@
     "db": "workspace:*",
     "logger": "workspace:*",
     "playwright": "^1.49.0",
-    "types": "workspace:*",
     "utils": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "tsx": "^4.19.2",
+    "types": "workspace:*",
     "typescript": "catalog:"
   }
 }

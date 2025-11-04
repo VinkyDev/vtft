@@ -20,7 +20,8 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "bridge": "workspace:*",
-    "logger": "workspace:*"
+    "logger": "workspace:*",
+    "utils": "workspace:*"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^2.0.0",
@@ -28,6 +29,7 @@
     "electron": "39.0.0",
     "electron-builder": "^25.1.8",
     "electron-vite": "^4.0.1",
+    "types": "workspace:*",
     "typescript": "catalog:",
     "vite": "catalog:"
   },

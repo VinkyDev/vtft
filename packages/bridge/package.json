@@ -18,9 +18,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "types": "workspace:*"
+    "utils": "workspace:*"
   },
   "devDependencies": {
+    "types": "workspace:*",
     "typescript": "catalog:"
   }
 }

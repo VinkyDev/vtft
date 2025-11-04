@@ -27,11 +27,6 @@
     "typecheck": "pnpm -r typecheck",
     "prepare": "husky"
   },
-  "dependencies": {
-    "bridge": "workspace:*",
-    "types": "workspace:*",
-    "utils": "workspace:*"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^5.4.1",
     "@clack/prompts": "^0.11.0",

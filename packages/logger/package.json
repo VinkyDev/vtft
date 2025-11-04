@@ -22,14 +22,16 @@
   ],
   "scripts": {
     "build": "rslib build",
-    "dev": "rslib build --watch"
+    "dev": "rslib build --watch",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "utils": "workspace:*"
   },
   "devDependencies": {
-    "@rslib/core": "^0.17.0",
-    "@types/node": "^22.18.12",
-    "typescript": "^5.9.3"
+    "@rslib/core": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   }
 }

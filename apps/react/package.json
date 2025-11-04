@@ -21,8 +21,8 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-helper": "workspace:*",
-    "types": "workspace:*",
     "ui": "workspace:*",
+    "utils": "workspace:*",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
@@ -35,6 +35,7 @@
     "babel-plugin-react-compiler": "catalog:",
     "eslint-plugin-react": "catalog:",
     "tailwindcss": "catalog:",
+    "types": "workspace:*",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

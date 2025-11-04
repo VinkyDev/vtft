@@ -3,9 +3,12 @@ import type { CrawlOptions, ItemCategory, ItemMeta } from 'types'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { Logger } from 'logger'
 import { BrowserManager, PageHelper } from '../core/browser'
-import { getCwd, logger } from '../core/logger'
+import { getCwd } from '../core/utils'
 import { extractItemsFromPage } from '../extractors/item'
+
+const logger = new Logger({ namespace: 'ItemMetaCrawler' })
 
 /** 目标URL */
 const TARGET_URL = 'https://op.gg/zh-cn/tft/meta-trends/item?tier=Diamond%2B'

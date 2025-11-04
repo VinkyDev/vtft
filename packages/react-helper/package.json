@@ -14,7 +14,9 @@
   ],
   "scripts": {
     "build": "rslib build",
-    "dev": "rslib build --watch"
+    "dev": "rslib build --watch",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": ">=16.9.0",
@@ -22,13 +24,13 @@
   },
   "dependencies": {
     "logger": "workspace:*",
-    "react-error-boundary": "^6.0.0"
+    "react-error-boundary": "catalog:"
   },
   "devDependencies": {
-    "@rsbuild/plugin-react": "^1.4.1",
-    "@rslib/core": "^0.17.0",
-    "@types/react": "^19.2.2",
-    "react": "^19.2.0",
-    "typescript": "^5.9.3"
+    "@rsbuild/plugin-react": "catalog:",
+    "@rslib/core": "catalog:",
+    "@types/react": "catalog:",
+    "react": "catalog:",
+    "typescript": "catalog:"
   }
 }

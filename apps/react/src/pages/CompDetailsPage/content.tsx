@@ -137,7 +137,6 @@ function CompDetailContent({ comp }: CompDetailContentProps) {
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export default withErrorBoundary(CompDetailContent, {
   errorBoundaryName: 'comp_details_content',
   FallbackComponent: ({ resetErrorBoundary }) => {

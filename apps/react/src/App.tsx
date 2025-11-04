@@ -1,5 +1,4 @@
 import { useMount } from 'ahooks'
-import { Window } from 'bridge'
 import { lazy, useMemo, useState } from 'react'
 import { withErrorBoundary, withSuspense } from 'react-helper'
 import { retryLoadWithFallBack } from 'utils'

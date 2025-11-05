@@ -1,5 +1,5 @@
 /** 尺寸类型 */
-export type Size = 'tiny' | 'small' | 'medium' | 'large' | 'xl'
+type Size = 'tiny' | 'small' | 'medium' | 'large' | 'xl'
 
 /** 获取符文等级颜色 */
 export function getAugmentLevelColor(level: string) {

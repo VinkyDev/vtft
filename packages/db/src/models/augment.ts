@@ -12,11 +12,3 @@ export interface AugmentDocument extends AugmentMeta {
 
 /** 集合名称 */
 export const COLLECTION_NAME = 'augments'
-
-/** 索引定义 */
-export const INDEXES = [
-  { key: { name: 1 }, unique: true },
-  { key: { level: 1 } },
-  { key: { tier: 1 } },
-  { key: { updatedAt: -1 } },
-]

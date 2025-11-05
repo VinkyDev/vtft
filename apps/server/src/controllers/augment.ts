@@ -2,7 +2,7 @@ import type { Context } from 'hono'
 import type { AugmentLevel } from 'types'
 import { augmentService } from '../services'
 
-export class AugmentController {
+class AugmentController {
   /**
    * 统一的强化符文查询接口
    * 支持参数：

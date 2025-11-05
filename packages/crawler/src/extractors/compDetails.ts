@@ -78,6 +78,8 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
 
     if (await this.isCompExpanded(index)) {
       throw new Error(`折叠阵容 ${index + 1} 失败`)
+    } else {
+      logger.info(`阵容 ${index + 1} 已折叠`)
     }
   }
 
@@ -232,7 +234,7 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
 
       logger.info(
         `阵容 ${compIndex + 1}: `
-        + `${details.formation?.positions.length || 0} 位置, `
+        + `${details.formation?.positions.filter(pos => pos.champion).length || 0} 站位信息, `
         + `${details.augments.length} 符文, `
         + `${details.items.length} 道具, `
         + `${details.championEnhancements.length} 强化`,

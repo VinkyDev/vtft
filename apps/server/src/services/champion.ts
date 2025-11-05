@@ -1,7 +1,7 @@
 import type { ChampionMeta } from 'types'
 import { databaseService } from './database'
 
-export interface ChampionQueryOptions {
+interface ChampionQueryOptions {
   page: number
   pageSize: number
   costs?: number[]
@@ -10,13 +10,13 @@ export interface ChampionQueryOptions {
   sortOrder: 'asc' | 'desc'
 }
 
-export interface ChampionQueryResult {
+interface ChampionQueryResult {
   data: ChampionMeta[]
   count: number
   total: number
 }
 
-export class ChampionService {
+class ChampionService {
   async queryChampions(options: ChampionQueryOptions): Promise<ChampionQueryResult> {
     const db = databaseService.getTFTDatabase()
     const { page, pageSize, costs, names, sortBy, sortOrder } = options

@@ -1,7 +1,7 @@
 import type { ItemMeta } from 'types'
 import { databaseService } from './database'
 
-export interface ItemQueryOptions {
+interface ItemQueryOptions {
   page: number
   pageSize: number
   names?: string[]
@@ -10,13 +10,13 @@ export interface ItemQueryOptions {
   sortOrder: 'asc' | 'desc'
 }
 
-export interface ItemQueryResult {
+interface ItemQueryResult {
   data: ItemMeta[]
   count: number
   total: number
 }
 
-export class ItemService {
+class ItemService {
   async queryItems(options: ItemQueryOptions): Promise<ItemQueryResult> {
     const db = databaseService.getTFTDatabase()
     const { page, pageSize, names, champion, sortBy, sortOrder } = options

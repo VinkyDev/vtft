@@ -1,7 +1,7 @@
 import type { CommonLogOptions, LoggerReportClient, LogLevel, LogOptions } from './type'
 import { isEmpty } from 'lodash-es'
 
-export function getColorByLogLevel(type?: LogLevel): string {
+function getColorByLogLevel(type?: LogLevel): string {
   if (type === 'success') {
     return '#00CC00'
   }
@@ -25,24 +25,38 @@ function doConsole(
 ): void {
   const time = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
 
-  const logs: unknown[] = [
-    `%c Logger %c ${withTime ? `${time} %c ` : ''}${namespace || level}${
-      scope ? ` %c ${scope}` : ''
-    } %c`,
+  // 构建模板字符串和对应的样式
+  let template = '%c Logger %c'
+  const styles = [
     'background:#444444 ; padding: 1px; border-radius: 3px 0 0 3px; color: #fff',
-    `background:${getColorByLogLevel(level)}; padding: 1px; border-radius: ${
-      scope ? '0' : '0 3px 3px 0'
-    }; color: #fff`,
-    scope
-      ? 'background:#777777; padding: 1px; border-radius: 0 3px 3px 0; color: #fff; margin-left: -1px;'
-      : 'background:transparent',
+    `background:${getColorByLogLevel(level)}; padding: 1px; border-radius: 0; color: #fff`,
   ]
 
-  if (scope) {
-    logs.push('background:transparent')
+  // 添加时间部分
+  if (withTime) {
+    template += ` ${time} %c `
+    styles.push('background:transparent')
   }
 
-  logs.push(message)
+  // 添加命名空间/级别部分
+  template += ` ${namespace || level}`
+
+  // 添加作用域部分
+  if (scope) {
+    template += ` %c ${scope}`
+    styles.push('background:#777777; padding: 1px; border-radius: 0 3px 3px 0; color: #fff; margin-left: -1px;')
+  }
+  else {
+    // 如果没有作用域，调整第二个样式的圆角
+    styles[1] = `background:${getColorByLogLevel(level)}; padding: 1px; border-radius: 0 3px 3px 0; color: #fff`
+  }
+
+  // 结束标记
+  template += ' %c'
+  styles.push('background:transparent')
+
+  const logs: unknown[] = [template, ...styles, message]
+
   const payload = rest.error ? rest : rest.meta
   if (!isEmpty(payload)) {
     logs.push(payload)
@@ -52,10 +66,11 @@ function doConsole(
   console.log(...logs)
 }
 
-export class ConsoleLogClient implements LoggerReportClient {
+class ConsoleLogClient implements LoggerReportClient {
   send({ meta, message, ...rest }: CommonLogOptions): void {
-    const resolvedMsg = message || undefined
-    if (!resolvedMsg) {
+    // 允许 message 为空字符串，但排除 null 和 undefined
+    const resolvedMsg = message !== null && message !== undefined ? message : undefined
+    if (resolvedMsg === undefined) {
       return
     }
     const payload = { ...rest, message: resolvedMsg }

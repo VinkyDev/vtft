@@ -11,7 +11,7 @@ interface PageSkeletonProps {
 }
 
 /** 页面骨架屏 */
-export const PageSkeleton = memo(({ showFilter = true, cardCount = 8, className = '' }: PageSkeletonProps) => {
+const PageSkeleton = memo(({ showFilter = true, cardCount = 8, className = '' }: PageSkeletonProps) => {
   return (
     <div className={`flex flex-col gap-1.5 px-2 ${className}`}>
       {showFilter && (

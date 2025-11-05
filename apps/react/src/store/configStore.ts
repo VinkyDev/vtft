@@ -3,7 +3,7 @@ import { create } from 'zustand'
 /**
  * 窗口模式类型
  */
-export type WindowMode = 'standard' | 'compact' | 'floating'
+type WindowMode = 'standard' | 'compact' | 'floating'
 
 interface ConfigState {
   windowMode: WindowMode

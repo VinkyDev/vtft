@@ -1,0 +1,13 @@
+node_modules
+src
+.env
+.env.local
+*.log
+.git
+.gitignore
+tsconfig.json
+tsup.config.ts
+eslint.config.js
+README.md
+.deploy
+package.json.backup

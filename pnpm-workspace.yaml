@@ -1,3 +1,6 @@
+injectWorkspacePackages: true
+forceLegacyDeploy: true
+
 packages:
   - apps/*
   - packages/*
@@ -25,3 +28,4 @@ catalog:
   '@rslib/core': "^0.17.0"
   '@rsbuild/plugin-react': "^1.4.1"
   'react-error-boundary': "^6.0.0"
+  '@rsbuild/core': "^1.6.1"

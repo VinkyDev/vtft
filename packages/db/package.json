@@ -1,16 +1,21 @@
 {
   "name": "db",
   "type": "module",
+  "version": "0.0.0",
   "exports": {
-    ".": "./src/index.ts",
-    "./src/*": "./src/*",
-    "./*": "./src/*"
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
-  "types": "./src/index.ts",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rm -rf ./{*.tsbuildinfo,build,dist,.hash}",
-    "build": "vite build",
-    "watch": "vite build --watch --mode development",
+    "build": "rslib build",
+    "dev": "rslib build --watch",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit"
   },
@@ -20,6 +25,7 @@
     "types": "workspace:*"
   },
   "devDependencies": {
+    "@rslib/core": "catalog:",
     "@types/node": "catalog:",
     "typescript": "catalog:"
   }

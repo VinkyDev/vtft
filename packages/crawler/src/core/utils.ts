@@ -29,7 +29,7 @@ export function getArgv(): string[] {
  * @param ms 毫秒数
  * @returns 格式化后的时间字符串
  */
-export function formatDuration(ms: number): string {
+function formatDuration(ms: number): string {
   const seconds = Math.floor(ms / 1000)
   const minutes = Math.floor(seconds / 60)
   const remainingSeconds = seconds % 60

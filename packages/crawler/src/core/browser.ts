@@ -117,25 +117,10 @@ export class PageHelper {
     }
 
     await this.page.goto(url, {
-      waitUntil: 'domcontentloaded',
+      waitUntil: 'load',
       timeout: 60000,
     })
     logger.info(`已导航到: ${url}`)
-  }
-
-  /**
-   * 等待页面加载
-   */
-  async waitForLoad(): Promise<void> {
-    logger.info('等待页面加载...')
-    try {
-      await sleep(3000)
-      await this.page.locator('img[alt]').waitFor({ timeout: 10000 })
-      logger.info('页面加载完成')
-    }
-    catch {
-      logger.warning('等待超时，继续执行...')
-    }
   }
 
   /**

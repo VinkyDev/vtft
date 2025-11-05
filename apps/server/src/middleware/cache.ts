@@ -145,6 +145,3 @@ export function clearCache(pattern?: string): number {
 
   return cleared
 }
-
-/** 导出缓存实例供外部使用 */
-export { cache as cacheInstance }

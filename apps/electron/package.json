@@ -19,7 +19,6 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
-    "bridge": "workspace:*",
     "logger": "workspace:*",
     "utils": "workspace:*"
   },
@@ -32,11 +31,5 @@
     "types": "workspace:*",
     "typescript": "catalog:",
     "vite": "catalog:"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "electron",
-      "esbuild"
-    ]
   }
 }

@@ -4,7 +4,6 @@ import { FilterBar } from '@/components'
 
 export type ChampionCostFilter = 'all' | '1' | '2' | '3' | '4' | '5'
 export type ChampionSortField = 'composite' | 'matches' | 'avgPlace' | 'top4Rate' | 'firstPlaceRate'
-export type SortOrder = 'asc' | 'desc'
 
 interface ChampionFilterProps {
   costFilter: ChampionCostFilter

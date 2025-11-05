@@ -18,7 +18,7 @@ import { pinyin } from 'pinyin-pro'
  * matchPinyinSearch('冰川之心', '冰川') // true
  * ```
  */
-export function matchPinyinSearch(text: string, query: string): boolean {
+function matchPinyinSearch(text: string, query: string): boolean {
   if (!query)
     return true
 

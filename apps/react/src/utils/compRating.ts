@@ -3,12 +3,12 @@ import type { CompData } from 'types'
 /**
  * 阵容评级类型
  */
-export type CompTier = 'S' | 'A' | 'B' | 'C' | 'D'
+type CompTier = 'S' | 'A' | 'B' | 'C' | 'D'
 
 /**
  * 阵容类型
  */
-export type CompCategory = 'normal' | 'low_pickrate'
+type CompCategory = 'normal' | 'low_pickrate'
 
 /**
  * 增强的阵容数据
@@ -151,7 +151,7 @@ function isLowPickrateComp(comp: CompData): boolean {
  * @param comps 原始阵容数据
  * @returns 增强后的阵容数据
  */
-export function enhanceComps(comps: CompData[]): EnhancedCompData[] {
+function enhanceComps(comps: CompData[]): EnhancedCompData[] {
   // 1. 分离低出场率阵容和普通阵容
   const lowPickrateComps: CompData[] = []
   const normalComps: CompData[] = []
@@ -221,7 +221,7 @@ export function enhanceComps(comps: CompData[]): EnhancedCompData[] {
  * @param comps 增强后的阵容数据
  * @returns 分组后的阵容数据
  */
-export function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
+function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
   const groups: Record<CompTier, GroupedComps> = {
     S: { tier: 'S', normal: [], lowPickrate: [] },
     A: { tier: 'A', normal: [], lowPickrate: [] },

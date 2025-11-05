@@ -175,26 +175,3 @@ export async function saveComps(comps: CompData[]) {
     }
   })
 }
-
-/**
- * 初始化数据库索引
- */
-export async function initializeDatabase() {
-  const mongo = getMongoClient()
-
-  try {
-    await mongo.connect()
-    const tftDb = createTFTDatabase(mongo)
-
-    logger.info('初始化数据库索引...')
-    await tftDb.initializeIndexes()
-    logger.success('✓ 数据库索引初始化完成')
-  }
-  catch (error) {
-    logger.error({ message: '初始化数据库失败:', error: error as Error })
-    throw error
-  }
-  finally {
-    await mongo.disconnect()
-  }
-}

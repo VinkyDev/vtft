@@ -15,7 +15,7 @@
  * - 建议范围: 3-8
  * - 推荐值: 5 (平衡质量和流行度)
  */
-export const POPULARITY_CAP = 5
+const POPULARITY_CAP = 5
 
 /**
  * 基础置信度的幂次调整
@@ -25,8 +25,8 @@ export const POPULARITY_CAP = 5
  * - 建议范围: 0.1-1.0
  * - 推荐值: 0.3-0.5
  */
-export const CONFIDENCE_ECDF_POWER = 0.3
-export const CONFIDENCE_COUNT_POWER = 0.5
+const CONFIDENCE_ECDF_POWER = 0.3
+const CONFIDENCE_COUNT_POWER = 0.5
 
 /**
  * 贝叶斯收缩的强度系数
@@ -36,7 +36,7 @@ export const CONFIDENCE_COUNT_POWER = 0.5
  * - 建议范围: 0.5-2.0
  * - 推荐值: 1.0 (直接使用中位数)
  */
-export const SHRINKAGE_STRENGTH = 1.0
+const SHRINKAGE_STRENGTH = 1.0
 
 /**
  * 样本比调整的强度系数
@@ -46,22 +46,13 @@ export const SHRINKAGE_STRENGTH = 1.0
  * - 建议范围: 0.5-2.0
  * - 推荐值: 1.0
  */
-export const SAMPLE_RATIO_STRENGTH = 1.0
+const SAMPLE_RATIO_STRENGTH = 1.0
 
 // ====================================================
-
-/**
- * 排序算法参数
- */
-export interface RankingParams {
-  /** 流行度加成上限,默认 15 */
-  popularityCap: number
-}
-
 /**
  * 全局统计量
  */
-export interface GlobalStats {
+interface GlobalStats {
   /** 全局先验均值 mean(-impact) */
   mu0: number
   /** 场次中位数 */
@@ -72,18 +63,6 @@ export interface GlobalStats {
   p90Matches: number
   /** 场次的ECDF函数 (经验累积分布函数) */
   ecdf: (n: number) => number
-}
-
-/**
- * 带有评分的数据项
- */
-export interface RankedItem {
-  /** 场次数 */
-  matches: number
-  /** 影响值 (avgRank - 4.5) */
-  impact: number
-  /** 综合得分 */
-  compositeScore?: number
 }
 
 /**
@@ -139,7 +118,7 @@ function buildECDF(matches: number[]): (n: number) => number {
  * @param items 所有装备/英雄数据
  * @returns 全局统计量
  */
-export function calculateGlobalStats(
+function calculateGlobalStats(
   items: Array<{ matches?: number, avgPlace?: number, avgRank?: number }>,
 ): GlobalStats {
   // 过滤掉没有必要数据的项
@@ -188,7 +167,7 @@ export function calculateGlobalStats(
  * @param globalStats 全局统计量
  * @returns 综合得分 (0-100+)
  */
-export function calculateCompositeScore(
+function calculateCompositeScore(
   matches: number,
   avgRank: number,
   globalStats: GlobalStats,

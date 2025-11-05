@@ -1,7 +1,7 @@
 import type { Context } from 'hono'
 import { itemService } from '../services'
 
-export class ItemController {
+class ItemController {
   /**
    * 统一的装备查询接口
    * 支持参数：

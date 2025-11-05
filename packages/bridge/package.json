@@ -2,18 +2,19 @@
   "name": "bridge",
   "type": "module",
   "version": "0.0.0",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./src/index.ts"
-      ]
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc",
+    "build": "rslib build",
+    "dev": "rslib build --watch",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit"
   },
@@ -21,6 +22,7 @@
     "utils": "workspace:*"
   },
   "devDependencies": {
+    "@rslib/core": "catalog:",
     "types": "workspace:*",
     "typescript": "catalog:"
   }

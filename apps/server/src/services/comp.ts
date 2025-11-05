@@ -1,7 +1,7 @@
 import type { CompData, CompDetails } from 'types'
 import { databaseService } from './database'
 
-export interface CompQueryOptions {
+interface CompQueryOptions {
   page: number
   pageSize: number
   name?: string
@@ -11,13 +11,13 @@ export interface CompQueryOptions {
   sortOrder: 'asc' | 'desc'
 }
 
-export interface CompQueryResult {
+interface CompQueryResult {
   data: CompData[]
   count: number
   total: number
 }
 
-export class CompService {
+class CompService {
   async queryComps(options: CompQueryOptions): Promise<CompQueryResult> {
     const db = databaseService.getTFTDatabase()
     const { page, pageSize, name, tier, levelType, sortBy, sortOrder } = options

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Tabs, TabsList, TabsTrigger } from 'ui'
 
-export interface FilterOption<T = string> {
+interface FilterOption<T = string> {
   value: T
   label: string
 }

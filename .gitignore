@@ -6,6 +6,7 @@ dist/
 out/
 *.tsbuildinfo
 publish/
+.deploy/
 
 # Environment variables
 .env

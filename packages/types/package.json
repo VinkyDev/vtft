@@ -5,16 +5,23 @@
   "author": "",
   "license": "ISC",
   "keywords": [],
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "require": "./src/index.ts"
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
-  "types": "./src/index.ts",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "rslib build",
+    "dev": "rslib build --watch"
+  },
+  "devDependencies": {
+    "@rslib/core": "catalog:",
+    "typescript": "catalog:"
   }
 }

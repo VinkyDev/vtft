@@ -10,7 +10,6 @@ export const MAX_RETRY_ATTEMPTS = 3
 
 /** 表格选择器 */
 export const TABLE_ROW_SELECTOR = 'table tbody tr'
-export const TABLE_CELL_SELECTOR = 'td'
 
 /** 数据质量阈值 */
 export const MIN_CHAMPION_COUNT = 50

@@ -107,10 +107,6 @@ export async function extractChampionsFromPage(page: Page): Promise<ChampionMeta
         const champion = await extractChampionFromRow(row)
         if (champion) {
           champions.push(champion)
-          logger.info(`成功提取英雄: ${champion.name} (${champion.rank})`)
-        }
-        else {
-          logger.warning(`提取英雄失败`)
         }
       }
 

@@ -18,17 +18,10 @@ export function getMainWindow() {
 }
 
 /**
- * 设置退出标志，允许窗口真正关闭
- */
-export function setQuitting(): void {
-  isQuitting = true
-}
-
-/**
  * 销毁主窗口
  */
 export function destroyMainWindow(): void {
-  setQuitting()
+  isQuitting = true
   if (mainWindow && !mainWindow.isDestroyed()) {
     // 移除所有事件监听器，防止阻止关闭
     mainWindow.removeAllListeners('close')

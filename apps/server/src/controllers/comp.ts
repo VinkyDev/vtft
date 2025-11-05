@@ -1,7 +1,7 @@
 import type { Context } from 'hono'
 import { compService } from '../services'
 
-export class CompController {
+class CompController {
   /**
    * 统一的阵容查询接口
    * 支持参数：

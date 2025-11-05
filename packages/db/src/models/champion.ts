@@ -12,12 +12,3 @@ export interface ChampionDocument extends ChampionMeta {
 
 /** 集合名称 */
 export const COLLECTION_NAME = 'champions'
-
-/** 索引定义 */
-export const INDEXES = [
-  { key: { name: 1 }, unique: true },
-  { key: { cost: 1 } },
-  { key: { rank: 1 } },
-  { key: { avgPlace: 1 } },
-  { key: { updatedAt: -1 } },
-]

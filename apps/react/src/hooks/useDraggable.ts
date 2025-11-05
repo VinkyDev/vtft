@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-export interface UseDraggableOptions {
+interface UseDraggableOptions {
   /**
    * 拖动回调函数，接收 x 和 y 轴的偏移量
    */
@@ -23,7 +23,7 @@ export interface UseDraggableOptions {
   enabled?: boolean
 }
 
-export interface UseDraggableReturn {
+interface UseDraggableReturn {
   /**
    * 绑定到可拖动元素上的 mousedown 事件处理器
    */

@@ -14,15 +14,3 @@ export interface CompDocument extends Omit<CompData, 'details'> {
 
 /** 集合名称 */
 export const COLLECTION_NAME = 'comps'
-
-/** 索引定义 */
-export const INDEXES = [
-  { key: { compId: 1 }, unique: true },
-  { key: { name: 1 } },
-  { key: { rank: 1 } },
-  { key: { tier: 1 } },
-  { key: { levelType: 1 } },
-  { key: { avgPlace: 1 } },
-  { key: { pickRate: -1 } },
-  { key: { updatedAt: -1 } },
-]

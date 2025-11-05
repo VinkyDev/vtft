@@ -16,9 +16,3 @@ export interface CompDetailDocument {
 
 /** 集合名称 */
 export const COLLECTION_NAME = 'comp_details'
-
-/** 索引定义 */
-export const INDEXES = [
-  { key: { compId: 1 }, unique: true },
-  { key: { updatedAt: -1 } },
-]

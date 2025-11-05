@@ -1,12 +1,12 @@
 /**
  * Tier 等级定义
  */
-export type Tier = 'OP' | 'S' | 'A' | 'B' | 'C' | 'D'
+type Tier = 'OP' | 'S' | 'A' | 'B' | 'C' | 'D'
 
 /**
  * Tier 排序权重（数字越小优先级越高）
  */
-export const TIER_ORDER: Record<Tier, number> = {
+const TIER_ORDER: Record<Tier, number> = {
   OP: 0,
   S: 1,
   A: 2,
@@ -18,7 +18,7 @@ export const TIER_ORDER: Record<Tier, number> = {
 /**
  * Tier 文本颜色映射（Tailwind CSS类名）
  */
-export const TIER_TEXT_COLORS: Record<Tier, string> = {
+const TIER_TEXT_COLORS: Record<Tier, string> = {
   OP: 'text-red-400',
   S: 'text-orange-400',
   A: 'text-yellow-400',
@@ -30,7 +30,7 @@ export const TIER_TEXT_COLORS: Record<Tier, string> = {
 /**
  * Tier 背景渐变颜色映射（Tailwind CSS类名）
  */
-export const TIER_BG_COLORS: Record<Tier, string> = {
+const TIER_BG_COLORS: Record<Tier, string> = {
   OP: 'bg-gradient-to-br from-red-500 to-red-600 text-white',
   S: 'bg-gradient-to-br from-orange-500 to-orange-600 text-white',
   A: 'bg-gradient-to-br from-yellow-500 to-yellow-600 text-white',
@@ -81,7 +81,7 @@ export function getTierBgColor(tier: string): string {
  * getTierOrder('A') // 2
  * ```
  */
-export function getTierOrder(tier: string): number {
+function getTierOrder(tier: string): number {
   return TIER_ORDER[tier as Tier] ?? 999
 }
 
@@ -97,7 +97,7 @@ export function getTierOrder(tier: string): number {
  * ['C', 'S', 'A'].sort(compareTier) // ['S', 'A', 'C']
  * ```
  */
-export function compareTier(a: string, b: string): number {
+function compareTier(a: string, b: string): number {
   return getTierOrder(a) - getTierOrder(b)
 }
 
@@ -119,7 +119,7 @@ export function compareTier(a: string, b: string): number {
  * // => { S: [...], A: [...] }
  * ```
  */
-export function groupByTier<T>(
+function groupByTier<T>(
   items: T[],
   getTier: (item: T) => string,
 ): Record<string, T[]> {

@@ -22,9 +22,3 @@ export const EXTRACTOR_SELECTORS = {
   /** 选中标签选择器 */
   SELECTED_TAB: 'div.hidden.md\\:flex div[class*="bronze-500"]',
 } as const
-
-/** 重试配置 */
-export const EXTRACTOR_RETRY = {
-  /** 最大重试次数 */
-  MAX_RETRY_ATTEMPTS: 3,
-} as const

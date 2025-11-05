@@ -1,7 +1,7 @@
 import type { AugmentLevel, AugmentMeta } from 'types'
 import { databaseService } from './database'
 
-export interface AugmentQueryOptions {
+interface AugmentQueryOptions {
   page: number
   pageSize: number
   names?: string[]
@@ -11,13 +11,13 @@ export interface AugmentQueryOptions {
   sortOrder: 'asc' | 'desc'
 }
 
-export interface AugmentQueryResult {
+interface AugmentQueryResult {
   data: AugmentMeta[]
   count: number
   total: number
 }
 
-export class AugmentService {
+class AugmentService {
   async queryAugments(options: AugmentQueryOptions): Promise<AugmentQueryResult> {
     const db = databaseService.getTFTDatabase()
     const { page, pageSize, names, levels, tiers, sortBy, sortOrder } = options

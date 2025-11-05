@@ -20,7 +20,7 @@ const logger = new Logger({ namespace: 'OpggAugmentCrawler' })
 /**
  * OP.GG 强化符文爬虫
  */
-export class OpggAugmentCrawler {
+class OpggAugmentCrawler {
   private browserManager: BrowserManager
   private options: Required<CrawlOptions>
 

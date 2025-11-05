@@ -1,7 +1,7 @@
 import type { Context } from 'hono'
 import { championService } from '../services'
 
-export class ChampionController {
+class ChampionController {
   /**
    * 统一的英雄查询接口
    * 支持参数：

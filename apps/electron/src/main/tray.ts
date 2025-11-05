@@ -81,20 +81,3 @@ export function createTray(): void {
     }
   })
 }
-
-/**
- * 获取托盘实例
- */
-export function getTray(): Tray | null {
-  return tray
-}
-
-/**
- * 销毁托盘
- */
-export function destroyTray(): void {
-  if (tray) {
-    tray.destroy()
-    tray = null
-  }
-}

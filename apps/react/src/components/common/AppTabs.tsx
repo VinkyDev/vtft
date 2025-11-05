@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui'
 import { useDraggable } from '@/hooks'
 import { useConfigStore } from '@/store/dataStore'
 
-export interface AppTab {
+interface AppTab {
   value: string
   label: string
   content: ReactNode

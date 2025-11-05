@@ -1,52 +1,41 @@
 ### vtft
 
-## 🏗️ 项目架构
 
-- **桌面端**: Electron + Vite + TypeScript
-- **Web端**: React 19 + Vite + TypeScript
-- **API服务**: Hono + Node.js + TypeScript
-- **UI组件**: shadcn/ui + Tailwind CSS v4
-- **包管理**: pnpm workspace
-- **代码质量**: ESLint + 提交规范
+## 开发
 
-## 🚀 快速开始
+### 🏗️ 项目架构
 
-### 环境要求
-- Node.js >= 18.0.0
-- pnpm >= 8.0.0
+### 🚀 快速开始
 
-### 安装依赖
+#### 安装依赖
+
 ```bash
 pnpm run setup
 ```
 
-### 开发
+启动
 ```bash
 pnpm dev:react      # React Web应用
 pnpm dev:electron   # Electron桌面应用
 pnpm dev:api        # API服务
 ```
 
-## 📦 构建部署
+### 📦 构建部署
 
 ```bash
-# 构建桌面端应用
-pnpm build:unpkg  # 通用构建
-pnpm build:win      # Windows安装包
-pnpm build:mac      # macOS安装包
-pnpm build:linux    # Linux安装包
+pnpm build:unpack   # 通用构建（未打包）
+pnpm build:win      # Windows 安装包
+pnpm build:mac      # macOS 安装包
+pnpm build:linux    # Linux 安装包
 ```
 
-## 🔧 开发工具
+### Server 端部署
 
 ```bash
-# 代码检查
-pnpm lint
+# 推送到 main 分支自动构建
+git push origin main
 
-# 类型检查
-pnpm typecheck
+# 或创建版本标签
+git tag v1.0.0
+git push origin v1.0.0
 ```
-
-## 📄 许可证
-
-MIT License

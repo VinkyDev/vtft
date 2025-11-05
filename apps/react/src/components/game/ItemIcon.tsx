@@ -10,7 +10,7 @@ interface ItemIconProps {
   onClick?: (item: ItemMeta) => void
 }
 
-export const ItemIcon = memo(({ item, className = '', onClick }: ItemIconProps) => {
+const ItemIcon = memo(({ item, className = '', onClick }: ItemIconProps) => {
   return (
     <div className={`flex flex-col items-center gap-1 ${className}`}>
       <div

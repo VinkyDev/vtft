@@ -8,24 +8,26 @@
     "clean:all": "pnpm run clean:dist && pnpm run clean:modules",
     "clean:modules": "node scripts/clean.mjs modules",
     "clean:dist": "node scripts/clean.mjs dist",
-    "setup": "pnpm run clean:modules && pnpm i",
+    "setup": "pnpm run clean:modules && pnpm install --no-frozen-lockfile && pnpm run build:packages",
     "lint": "pnpm -r lint",
     "dev:react": "pnpm --filter react run dev",
     "dev:electron": "pnpm --filter electron --filter react run dev",
     "dev:server": "pnpm --filter server dev",
     "build:react": "pnpm --filter react run build",
     "build:electron": "pnpm --filter electron run build",
-    "prebuild": "pnpm run clean:dist && pnpm run build:react && pnpm run copy:render && pnpm run build:electron",
+    "prebuild": "pnpm run build:react && pnpm run copy:render && pnpm run build:electron",
     "copy:render": "node scripts/copyRenderer.js",
     "build:unpack": "pnpm run prebuild && pnpm --filter electron run build:unpack",
     "build:win": "pnpm run prebuild && pnpm --filter electron run build:win",
     "build:linux": "pnpm run prebuild && pnpm --filter electron run build:linux",
     "build:mac": "pnpm run prebuild && pnpm --filter electron run build:mac",
-    "build:packages": "pnpm --filter utils run build && pnpm --filter bridge run build && pnpm --filter types run build",
-    "build:server": "node scripts/buildServer.mjs",
+    "build:packages": "node scripts/buildPackages.mjs",
+    "build:server": "pnpm --filter server build",
+    "publish:server": "node scripts/publishServer.mjs",
     "fix:tsconfig": "node ./scripts/typescript/fixPaths.mjs",
     "typecheck": "pnpm -r typecheck",
-    "prepare": "husky"
+    "prepare": "husky",
+    "knip": "knip"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.4.1",
@@ -39,6 +41,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.23",
     "husky": "^9.1.7",
+    "knip": "^5.67.1",
     "lint-staged": "^16.2.4",
     "picocolors": "^1.1.1",
     "typescript": "catalog:"
@@ -56,5 +59,11 @@
     "npm": "only-allow-pnpm",
     "yarn": "only-allow-pnpm",
     "node": ">= 18"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild"
+    ]
   }
 }

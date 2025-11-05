@@ -3,14 +3,14 @@ import { Logger } from 'logger'
 
 const logger = new Logger({ namespace: 'middleware', scope: 'errorHandler', withTime: true })
 
-export interface ErrorResponse {
+interface ErrorResponse {
   success: false
   message: string
   error?: string
   stack?: string
 }
 
-export class APIError extends Error {
+class APIError extends Error {
   constructor(
     message: string,
     public statusCode: number = 500,

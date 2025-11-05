@@ -3,9 +3,9 @@ import type { BaseResult } from 'types'
 import { screen } from 'electron'
 import { ResultUtil } from 'utils'
 
-export type WindowMode = 'standard' | 'compact' | 'floating'
+type WindowMode = 'standard' | 'compact' | 'floating'
 
-export type ScreenZone = 'left' | 'center' | 'right'
+type ScreenZone = 'left' | 'center' | 'right'
 
 interface WindowConfig {
   width: number
@@ -27,7 +27,7 @@ const WINDOW_CONFIGS: Record<WindowMode, WindowConfig> = {
   },
 }
 
-export class WindowService {
+class WindowService {
   private currentMode: WindowMode = 'standard'
   private isTogglingVisibility = false
   private toggleTimeout: NodeJS.Timeout | null = null

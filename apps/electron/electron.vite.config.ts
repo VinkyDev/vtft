@@ -8,7 +8,6 @@ export default defineConfig({
         exclude: [
           'utils',
           'logger',
-          'bridge',
         ],
       }),
     ],
@@ -16,7 +15,6 @@ export default defineConfig({
       alias: {
         utils: resolve('../../packages/utils/src'),
         logger: resolve('../../packages/logger/src'),
-        bridge: resolve('../../packages/bridge/src'),
       },
     },
     build: {

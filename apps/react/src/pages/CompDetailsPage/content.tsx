@@ -14,7 +14,7 @@ import {
 import { useConfigStore } from '@/store/dataStore'
 import { AugmentsGrid, ChampionEnhancementsGrid, FormationBoard, ItemsGrid } from './components'
 
-export interface CompDetailContentProps {
+interface CompDetailContentProps {
   comp: EnhancedCompData | null
 }
 

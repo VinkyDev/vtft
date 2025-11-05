@@ -5,7 +5,7 @@ interface LoadingStateProps {
   message?: string
 }
 
-export const LoadingState = memo(({ message = '加载中...' }: LoadingStateProps) => {
+const LoadingState = memo(({ message = '加载中...' }: LoadingStateProps) => {
   return (
     <div className="flex items-center justify-center py-20">
       <p className="text-gray-400 text-lg">{message}</p>

@@ -15,7 +15,7 @@ import {
   TARGET_URL,
 } from './comp.constants'
 
-const logger = new Logger({ namespace: 'CompCrawler' })
+const logger = new Logger({ namespace: 'CompCrawler', withTime: true })
 
 export class CompCrawler {
   private browserManager: BrowserManager
@@ -38,7 +38,6 @@ export class CompCrawler {
       const helper = new PageHelper(page)
 
       await helper.navigate(TARGET_URL)
-      await helper.waitForLoad()
 
       if (this.options.debug || this.options.screenshot) {
         await this.saveDebugInfo(helper)

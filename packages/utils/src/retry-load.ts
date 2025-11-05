@@ -1,4 +1,4 @@
-import { sleep } from 'utils'
+import { sleep } from './common'
 
 /**
  * 自动重试import动态加载组件资源：加载异常，等待1s再次尝试加载

@@ -7,7 +7,7 @@ const logger = new Logger({ namespace: 'crawler', scope: 'extractor/item', withT
 /**
  * 从表格行提取装备元数据
  */
-export async function extractItemFromRow(row: Locator, category: ItemCategory): Promise<ItemMeta | null> {
+async function extractItemFromRow(row: Locator, category: ItemCategory): Promise<ItemMeta | null> {
   try {
     const cells = await row.locator('td, th').all()
 
@@ -104,7 +104,6 @@ export async function extractItemsFromPage(page: Page, category: ItemCategory): 
       const item = await extractItemFromRow(row, category)
       if (item) {
         items.push(item)
-        logger.info(`提取装备: ${item.name} (排名 #${item.rank}, 分类: ${item.category})`)
       }
     }
 

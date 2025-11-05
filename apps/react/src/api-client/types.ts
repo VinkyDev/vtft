@@ -5,7 +5,7 @@
 import type { AugmentLevel, AugmentMeta, ChampionMeta, CompData, CompDetails, ItemMeta } from 'types'
 
 /** 分页信息 */
-export interface Pagination {
+interface Pagination {
   /** 当前页码 */
   page: number
   /** 每页数量 */
@@ -15,7 +15,7 @@ export interface Pagination {
 }
 
 /** API 响应基础结构 */
-export interface ApiResponse<T> {
+interface ApiResponse<T> {
   /** 是否成功 */
   success: boolean
   /** 响应数据 */
@@ -28,18 +28,11 @@ export interface ApiResponse<T> {
   pagination?: Pagination
 }
 
-/** API 错误响应 */
-export interface ApiErrorResponse {
-  success: false
-  message: string
-  error?: string
-}
-
 /** 排序方向 */
-export type SortOrder = 'asc' | 'desc'
+type SortOrder = 'asc' | 'desc'
 
 /** 基础查询参数 */
-export interface BaseQueryParams {
+interface BaseQueryParams {
   /** 页码（-1 表示不分页） */
   page?: number
   /** 每页数量（-1 表示不分页） */
@@ -94,18 +87,9 @@ export interface CompQueryParams extends BaseQueryParams {
   sortBy?: 'rank' | 'pickRate' | 'firstPlaceRate' | 'avgPlace' | 'top4Rate'
 }
 
-/** 阵容详情查询参数 */
-export interface CompByIdParams {
-  /** 阵容 ID */
-  compId: string
-  /** 是否包含详细信息 */
-  includeDetails?: boolean
-}
-
 // 导出响应类型（复用 types 包中的类型）
 export type ChampionResponse = ApiResponse<ChampionMeta[]>
 export type ItemResponse = ApiResponse<ItemMeta[]>
 export type AugmentResponse = ApiResponse<AugmentMeta[]>
 export type CompResponse = ApiResponse<CompData[]>
-export type CompByIdResponse = ApiResponse<CompData>
 export type CompDetailsResponse = ApiResponse<CompDetails>

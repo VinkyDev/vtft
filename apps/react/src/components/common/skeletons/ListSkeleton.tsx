@@ -11,7 +11,7 @@ interface ListSkeletonProps {
 }
 
 /** 列表骨架屏 */
-export const ListSkeleton = memo(({ count = 5, itemHeight = 'h-16', className = '' }: ListSkeletonProps) => {
+const ListSkeleton = memo(({ count = 5, itemHeight = 'h-16', className = '' }: ListSkeletonProps) => {
   return (
     <div className={`space-y-2 ${className}`}>
       {Array.from({ length: count }).map((_, i) => (

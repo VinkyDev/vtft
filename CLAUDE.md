@@ -14,7 +14,7 @@ Monorepo with pnpm workspaces + TypeScript. Node.js >= 18 required.
 **Apps** (`apps/`)
 - `react` - Vite + React 19 + Tailwind v4
 - `electron` - Desktop app (uses React as renderer)
-- `api` - Hono API server with Node.js
+- `server` - Hono API server with Node.js
 
 **Packages** (`packages/`)
 - `ui` - shadcn/ui components + Radix UI
@@ -22,6 +22,9 @@ Monorepo with pnpm workspaces + TypeScript. Node.js >= 18 required.
 - `types` - Shared TypeScript types
 - `utils` - Common utilities
 - `config` - Shared build configs
+- `crawler` - crawler
+- `react-helper` - React helpers
+- `db` - MongoDB database
 
 ## Quick Start
 
@@ -32,7 +35,7 @@ pnpm run setup
 # Development
 pnpm dev:react              # Web app at http://localhost:5173
 pnpm dev:electron           # Desktop app (auto-starts React)
-pnpm dev:api                # API server
+pnpm dev:server             # API server
 
 # Build
 pnpm build:react            # Build web app

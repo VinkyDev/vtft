@@ -20,7 +20,7 @@ const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augment', wi
 /**
  * 强化符文提取器
  */
-export class AugmentExtractor extends BaseExtractor<AugmentMeta[]> {
+class AugmentExtractor extends BaseExtractor<AugmentMeta[]> {
   /**
    * 从表格行提取强化符文数据
    */

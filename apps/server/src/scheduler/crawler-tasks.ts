@@ -2,17 +2,6 @@ import type { ScheduledTask } from './index'
 import { clearCache } from '../middleware'
 
 /**
- * 爬虫任务配置
- * 使用环境变量控制是否启用和调度时间
- */
-export interface CrawlerTaskConfig {
-  name: string
-  enabled: boolean
-  schedule: string // Cron 表达式
-  crawlFn: () => Promise<void>
-}
-
-/**
  * 从环境变量读取配置，提供默认值
  */
 function getTaskConfig(
@@ -33,7 +22,6 @@ function getTaskConfig(
  * 创建爬虫任务配置
  */
 export function createCrawlerTasks(): ScheduledTask[] {
-  // 动态导入爬虫函数以避免循环依赖
   const crawlerTasks: Array<{
     name: string
     defaultSchedule: string

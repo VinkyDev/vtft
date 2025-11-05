@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync, copyFileSync, unlinkSync, rmSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -11,9 +11,6 @@ const __dirname = dirname(__filename);
 const PROJECT_ROOT = resolve(__dirname, '..');
 const SERVER_DIR = resolve(PROJECT_ROOT, 'apps/server');
 const DIST_DIR = resolve(SERVER_DIR, 'dist');
-const DEPLOY_DIR = resolve(SERVER_DIR, '.deploy');
-const PACKAGE_JSON_PATH = resolve(SERVER_DIR, 'package.json');
-const PACKAGE_JSON_BACKUP = resolve(SERVER_DIR, 'package.json.backup');
 
 // 颜色输出
 const colors = {
@@ -43,19 +40,14 @@ function exec(command, options = {}) {
   }
 }
 
-function restorePackageJson() {
-  if (existsSync(PACKAGE_JSON_BACKUP)) {
-    copyFileSync(PACKAGE_JSON_BACKUP, PACKAGE_JSON_PATH);
-    unlinkSync(PACKAGE_JSON_BACKUP);
-    log('\n✓ 已恢复原始 package.json', 'green');
-  }
-}
-
 function cleanup() {
-  restorePackageJson();
-  // 清理 deploy 目录
-  if (existsSync(DEPLOY_DIR)) {
-    rmSync(DEPLOY_DIR, { recursive: true, force: true });
+  try {
+    execSync('node scripts/prepareServerPackage.mjs restore', {
+      stdio: 'inherit',
+      cwd: PROJECT_ROOT,
+    });
+  } catch (error) {
+    // 忽略清理错误
   }
 }
 
@@ -76,86 +68,21 @@ if (!existsSync(DIST_DIR)) {
   log('✓ 已找到构建产物', 'green');
 }
 
-// 步骤 2: 使用 pnpm deploy 准备精简的 package.json
-log('\n🔧 pnpm deploy...', 'yellow');
+// 步骤 2: 使用 prepareServerPackage 准备精简的 package.json
+log('\n🔧 准备 package.json...', 'yellow');
 try {
-  // 清理可能存在的旧 deploy 目录
-  if (existsSync(DEPLOY_DIR)) {
-    rmSync(DEPLOY_DIR, { recursive: true, force: true });
-  }
-
-  // 使用 pnpm deploy 部署 server 子包
-  execSync(`pnpm deploy --filter=server --prod --legacy ${DEPLOY_DIR}`, {
+  execSync('node scripts/prepareServerPackage.mjs prepare', {
     stdio: 'inherit',
     cwd: PROJECT_ROOT,
   });
-  log('✓ 部署完成', 'green');
-
-  // 备份原始 package.json
-  copyFileSync(PACKAGE_JSON_PATH, PACKAGE_JSON_BACKUP);
-
-  // 从 deploy 目录读取并处理 package.json
-  const deployPkg = resolve(DEPLOY_DIR, 'package.json');
-  if (existsSync(deployPkg)) {
-    // 读取 catalog 配置
-    const workspaceYaml = readFileSync(resolve(PROJECT_ROOT, 'pnpm-workspace.yaml'), 'utf-8');
-    const catalog = {};
-    const catalogMatch = workspaceYaml.match(/catalog:\s*([\s\S]*?)(?=\n\S|\n*$)/);
-    if (catalogMatch) {
-      const catalogContent = catalogMatch[1];
-      const lines = catalogContent.split('\n').filter(line => line.trim());
-      lines.forEach(line => {
-        const match = line.match(/^\s*['"]?([^:'"]+)['"]?\s*:\s*(.+)$/);
-        if (match) {
-          const [, key, value] = match;
-          catalog[key.trim()] = value.trim().replace(/^['"]|['"]$/g, '');
-        }
-      });
-    }
-
-    // 读取并处理 package.json
-    const pkg = JSON.parse(readFileSync(deployPkg, 'utf-8'));
-
-    // 移除 workspace 依赖(这些已经被 tsup 打包进 dist 了)
-    const workspaceDeps = ['crawler', 'db', 'logger', 'types'];
-    let removedCount = 0;
-    workspaceDeps.forEach(dep => {
-      if (pkg.dependencies?.[dep]) {
-        delete pkg.dependencies[dep];
-        removedCount++;
-      }
-      if (pkg.devDependencies?.[dep]) {
-        delete pkg.devDependencies[dep];
-      }
-    });
-
-    // 替换 catalog: 依赖为实际版本
-    let catalogCount = 0;
-    ['dependencies', 'devDependencies'].forEach(depType => {
-      if (pkg[depType]) {
-        Object.keys(pkg[depType]).forEach(dep => {
-          if (pkg[depType][dep]?.startsWith('catalog:') && catalog[dep]) {
-            pkg[depType][dep] = catalog[dep];
-            catalogCount++;
-          }
-        });
-      }
-    });
-
-    // 写入处理后的 package.json
-    writeFileSync(PACKAGE_JSON_PATH, JSON.stringify(pkg, null, 2));
-    log(`  移除 ${removedCount} 个 workspace 依赖`, 'green');
-    log(`  替换 ${catalogCount} 个 catalog 依赖`, 'green');
-  }
 } catch (error) {
-  log(`❌ 准备文件失败: ${error.message}`, 'red');
+  log(`❌ 准备文件失败`, 'red');
   cleanup();
   process.exit(1);
 }
 
 // 步骤 3: 构建 Docker 镜像
 log(`\n🐳 构建 Docker 镜像 ${fullImageName}`, 'yellow');
-cleanup();
 exec(`docker build -t ${fullImageName} .`);
 
 // 清理临时文件

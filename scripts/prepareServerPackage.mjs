@@ -77,18 +77,27 @@ function preparePackage() {
     // 读取并处理 package.json
     const pkg = JSON.parse(readFileSync(deployPkg, 'utf-8'));
 
-    // 移除 workspace 依赖(这些已经被 tsup 打包进 dist 了)
-    const workspaceDeps = ['crawler', 'db', 'logger', 'types'];
+    // 移除所有 workspace 依赖
     let removedCount = 0;
-    workspaceDeps.forEach(dep => {
-      if (pkg.dependencies?.[dep]) {
-        delete pkg.dependencies[dep];
-        removedCount++;
-      }
-      if (pkg.devDependencies?.[dep]) {
-        delete pkg.devDependencies[dep];
+    const removedDeps = [];
+
+    ['dependencies', 'devDependencies'].forEach(depType => {
+      if (pkg[depType]) {
+        Object.entries(pkg[depType]).forEach(([name, version]) => {
+          if (version.startsWith('workspace:')) {
+            delete pkg[depType][name];
+            removedCount++;
+            removedDeps.push(name);
+          }
+        });
       }
     });
+
+    // 添加 playwright (tsup external 依赖)
+    if (!pkg.dependencies.playwright) {
+      pkg.dependencies.playwright = '^1.49.0';
+      log(`  添加 playwright 依赖`, 'green');
+    }
 
     // 替换 catalog: 依赖为实际版本
     let catalogCount = 0;
@@ -105,7 +114,9 @@ function preparePackage() {
 
     // 写入处理后的 package.json
     writeFileSync(PACKAGE_JSON_PATH, JSON.stringify(pkg, null, 2));
-    log(`  移除 ${removedCount} 个 workspace 依赖`, 'green');
+    if (removedCount > 0) {
+      log(`  移除 ${removedCount} 个 workspace 依赖: ${removedDeps.join(', ')}`, 'green');
+    }
     log(`  替换 ${catalogCount} 个 catalog 依赖`, 'green');
 
     return { success: true };

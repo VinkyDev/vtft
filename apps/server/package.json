@@ -12,20 +12,20 @@
   "dependencies": {
     "@hono/node-server": "^1.14.0",
     "@hono/swagger-ui": "^0.5.2",
+    "crawler": "workspace:*",
+    "db": "workspace:*",
     "dotenv": "^17.2.3",
     "hono": "catalog:",
-    "lru-cache": "^11.2.2",
-    "node-cron": "^4.2.1",
     "logger": "workspace:*",
-    "db": "workspace:*",
-    "crawler": "workspace:*"
+    "lru-cache": "^11.2.2",
+    "node-cron": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
     "@types/node-cron": "^3.0.11",
     "tsup": "^8.5.0",
     "tsx": "^4.20.6",
-    "typescript": "catalog:",
-    "types": "workspace:*"
+    "types": "workspace:*",
+    "typescript": "catalog:"
   }
 }

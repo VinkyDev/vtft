@@ -1,7 +1,6 @@
 import type { Browser, BrowserContext, Page } from 'playwright'
 import logger from 'logger/server'
 import { chromium } from 'playwright'
-import { sleep } from 'utils'
 
 /** 浏览器配置 */
 const BROWSER_CONFIG = {

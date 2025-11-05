@@ -78,7 +78,8 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
 
     if (await this.isCompExpanded(index)) {
       throw new Error(`折叠阵容 ${index + 1} 失败`)
-    } else {
+    }
+    else {
       logger.info(`阵容 ${index + 1} 已折叠`)
     }
   }

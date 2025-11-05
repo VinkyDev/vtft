@@ -1,13 +1,21 @@
 import type { Locator } from 'playwright'
-import type { CompDetails, Formation, Item, Position, PositionChampion } from 'types'
+import type {
+  CompDetails,
+  Formation,
+  Item,
+  Position,
+  PositionChampion,
+} from 'types'
 import { Logger } from 'logger'
 import { withRetry } from 'utils'
 import { BaseExtractor } from '../core/baseExtractor'
 import {
   TIMEOUT_FAST_MS,
+  TIMEOUT_PAGE_LOAD_MS,
   TIMEOUT_STANDARD_MS,
   WAIT_LONG_MS,
   WAIT_MEDIUM_MS,
+  WAIT_PAGE_RELOAD_MS,
   WAIT_SHORT_MS,
 } from '../core/timing'
 import { extractRecommendedAugments } from './compAugment'
@@ -32,7 +40,11 @@ import {
 import { extractChampionEnhancements } from './compEnhancement'
 import { extractRecommendedItems } from './compItem'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compDetails', withTime: true })
+const logger = new Logger({
+  namespace: 'crawler',
+  scope: 'extractor/compDetails',
+  withTime: true,
+})
 
 const COMP_ITEM_FULL_SELECTOR = `${COMP_ITEM_SELECTOR}:has(${COMP_IDENTIFIER_SELECTOR})`
 
@@ -60,13 +72,13 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
     await expandButton.click({ timeout: TIMEOUT_FAST_MS })
     await this.wait(WAIT_SHORT_MS)
 
-    if (!await this.isCompExpanded(index)) {
+    if (!(await this.isCompExpanded(index))) {
       throw new Error(`展开阵容 ${index + 1} 失败`)
     }
   }
 
   private async collapseComp(index: number): Promise<void> {
-    if (!await this.isCompExpanded(index)) {
+    if (!(await this.isCompExpanded(index))) {
       return
     }
 
@@ -86,7 +98,7 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
 
   private async clickTab(tabName: string): Promise<void> {
     const tab = this.page.locator(`div:text-is("${tabName}")`).first()
-    if (await tab.count() > 0) {
+    if ((await tab.count()) > 0) {
       await tab.click()
       await this.wait(WAIT_MEDIUM_MS)
     }
@@ -96,7 +108,7 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
     const comp = await this.getCompItem(compIndex)
     const moreButton = comp.locator(MORE_BUTTON_SELECTOR).first()
 
-    if (await moreButton.count() > 0) {
+    if ((await moreButton.count()) > 0) {
       await moreButton.click()
       await this.wait(WAIT_SHORT_MS)
     }
@@ -107,16 +119,25 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
 
     const formationArea = await this.locateFormationArea(compLocator)
     if (!formationArea) {
+      logger.warning('未能定位到阵容站位区域,返回空阵容')
       return { positions }
     }
 
     const rows = await formationArea.locator(FORMATION_ROW_SELECTOR).all()
 
-    for (let rowIndex = 0; rowIndex < Math.min(rows.length, BOARD_ROWS); rowIndex++) {
+    for (
+      let rowIndex = 0;
+      rowIndex < Math.min(rows.length, BOARD_ROWS);
+      rowIndex++
+    ) {
       const row = rows[rowIndex]
       const positionsInRow = await row.locator('> div').all()
 
-      for (let colIndex = 0; colIndex < Math.min(positionsInRow.length, BOARD_COLS); colIndex++) {
+      for (
+        let colIndex = 0;
+        colIndex < Math.min(positionsInRow.length, BOARD_COLS);
+        colIndex++
+      ) {
         const positionElement = positionsInRow[colIndex]
         const champion = await this.extractPositionChampion(positionElement)
 
@@ -127,24 +148,39 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
     return { positions }
   }
 
-  private async locateFormationArea(compLocator: Locator): Promise<Locator | null> {
-    await compLocator.locator(FORMATION_AREA_SELECTORS).first().waitFor({ state: 'visible', timeout: TIMEOUT_STANDARD_MS })
+  private async locateFormationArea(
+    compLocator: Locator,
+  ): Promise<Locator | null> {
+    await compLocator
+      .locator(FORMATION_AREA_SELECTORS)
+      .first()
+      .waitFor({ state: 'visible', timeout: TIMEOUT_PAGE_LOAD_MS })
     const area = compLocator.locator(FORMATION_AREA_SELECTORS).first()
-    if (await area.count() > 0) {
+    if ((await area.count()) > 0) {
       return area
     }
+
     return null
   }
 
-  private async extractPositionChampion(positionLocator: Locator): Promise<PositionChampion | null> {
-    const hasChampion = await positionLocator.locator(HERO_AVATAR_SELECTOR).count() > 0
+  private async extractPositionChampion(
+    positionLocator: Locator,
+  ): Promise<PositionChampion | null> {
+    const hasChampion
+      = (await positionLocator.locator(HERO_AVATAR_SELECTOR).count()) > 0
     if (!hasChampion) {
       return null
     }
 
     const championImg = positionLocator.locator(HERO_AVATAR_SELECTOR).first()
-    const name = await championImg.getAttribute('alt', { timeout: TIMEOUT_STANDARD_MS }) || ''
-    const icon = await championImg.getAttribute('src', { timeout: TIMEOUT_STANDARD_MS }) || ''
+    const name
+      = (await championImg.getAttribute('alt', {
+        timeout: TIMEOUT_STANDARD_MS,
+      })) || ''
+    const icon
+      = (await championImg.getAttribute('src', {
+        timeout: TIMEOUT_STANDARD_MS,
+      })) || ''
 
     if (!name) {
       return null
@@ -158,7 +194,7 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
 
   private async extractStars(championLocator: Locator): Promise<number> {
     const starContainer = championLocator.locator(HERO_STARS_SELECTOR)
-    if (await starContainer.count() === 0) {
+    if ((await starContainer.count()) === 0) {
       return DEFAULT_STAR_LEVEL
     }
 
@@ -166,14 +202,16 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
     return svgElements.length || DEFAULT_STAR_LEVEL
   }
 
-  private async extractChampionItems(championLocator: Locator): Promise<Item[]> {
+  private async extractChampionItems(
+    championLocator: Locator,
+  ): Promise<Item[]> {
     const items: Item[] = []
     const itemContainer = championLocator.locator(HERO_ITEMS_SELECTOR)
     const itemElements = await itemContainer.locator('img').all()
 
     for (const itemElement of itemElements) {
-      const name = await itemElement.getAttribute('alt') || ''
-      const icon = await itemElement.getAttribute('src') || ''
+      const name = (await itemElement.getAttribute('alt')) || ''
+      const icon = (await itemElement.getAttribute('src')) || ''
       if (name && icon) {
         items.push({ name, icon })
       }
@@ -189,30 +227,29 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
       championEnhancements: [],
     }
 
-    const expandWithRetry = withRetry(
-      () => this.expandComp(compIndex),
-      {
-        maxRetries: RETRY_MAX_ATTEMPTS,
-        delayMs: WAIT_SHORT_MS,
-        onRetry: (error, attempt) => {
-          logger.warning(`展开阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`)
-        },
+    const expandWithRetry = withRetry(() => this.expandComp(compIndex), {
+      maxRetries: RETRY_MAX_ATTEMPTS,
+      delayMs: WAIT_SHORT_MS,
+      onRetry: (error, attempt) => {
+        logger.warning(
+          `展开阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`,
+        )
       },
-    )
+    })
 
-    const collapseWithRetry = withRetry(
-      () => this.collapseComp(compIndex),
-      {
-        maxRetries: RETRY_MAX_ATTEMPTS,
-        delayMs: WAIT_SHORT_MS,
-        onRetry: (error, attempt) => {
-          logger.warning(`折叠阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`)
-        },
+    const collapseWithRetry = withRetry(() => this.collapseComp(compIndex), {
+      maxRetries: RETRY_MAX_ATTEMPTS,
+      delayMs: WAIT_SHORT_MS,
+      onRetry: (error, attempt) => {
+        logger.warning(
+          `折叠阵容失败,重试 ${attempt}/${RETRY_MAX_ATTEMPTS}: ${error}`,
+        )
       },
-    )
+    })
 
     try {
       await expandWithRetry()
+      await this.wait(WAIT_PAGE_RELOAD_MS)
 
       const compLocator = await this.getCompItem(compIndex)
 
@@ -224,7 +261,8 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
 
       await this.clickTab(TAB_ENHANCEMENTS)
       const compForEnhancement = await this.getCompItem(compIndex)
-      details.championEnhancements = await extractChampionEnhancements(compForEnhancement)
+      details.championEnhancements
+        = await extractChampionEnhancements(compForEnhancement)
 
       await this.clickTab(TAB_ITEMS)
       await this.clickMoreButton(compIndex)
@@ -242,7 +280,10 @@ export class CompDetailsExtractor extends BaseExtractor<CompDetails> {
       )
     }
     catch (error) {
-      logger.error({ message: `提取阵容 ${compIndex + 1} 失败`, error: error as Error })
+      logger.error({
+        message: `提取阵容 ${compIndex + 1} 失败`,
+        error: error as Error,
+      })
       throw error
     }
 

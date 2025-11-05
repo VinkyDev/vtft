@@ -95,7 +95,7 @@ function preparePackage() {
 
     // 添加 playwright (tsup external 依赖)
     if (!pkg.dependencies.playwright) {
-      pkg.dependencies.playwright = '^1.49.0';
+      pkg.dependencies.playwright = '1.49.1';
       log(`  添加 playwright 依赖`, 'green');
     }
 

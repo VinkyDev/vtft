@@ -52,6 +52,9 @@ catalogs:
     lodash-es:
       specifier: ^4.17.21
       version: 4.17.21
+    playwright:
+      specifier: 1.49.1
+      version: 1.49.1
     query-string:
       specifier: ^9.3.1
       version: 9.3.1
@@ -322,8 +325,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       playwright:
-        specifier: ^1.49.0
-        version: 1.56.1
+        specifier: 'catalog:'
+        version: 1.49.1
       utils:
         specifier: workspace:*
         version: link:../utils
@@ -4812,13 +4815,13 @@ packages:
   pkg-types@2.3.0:
     resolution: {integrity: sha512-SIqCzDRg0s9npO5XQ3tNZioRY1uK06lA41ynBC1YmFTmnY6FjUjVt6s4LoADmwoig1qqD0oK8h1p/8mlMx8Oig==}
 
-  playwright-core@1.56.1:
-    resolution: {integrity: sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==}
+  playwright-core@1.49.1:
+    resolution: {integrity: sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.56.1:
-    resolution: {integrity: sha512-aFi5B0WovBHTEvpM3DzXTUaeN6eN0qWnTkKx4NQaH4Wvcmc153PdaY2UBdSYKaGYw+UyWXSVyxDUg5DoPEttjw==}
+  playwright@1.49.1:
+    resolution: {integrity: sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -10609,11 +10612,11 @@ snapshots:
       exsolve: 1.0.7
       pathe: 2.0.3
 
-  playwright-core@1.56.1: {}
+  playwright-core@1.49.1: {}
 
-  playwright@1.56.1:
+  playwright@1.49.1:
     dependencies:
-      playwright-core: 1.56.1
+      playwright-core: 1.49.1
     optionalDependencies:
       fsevents: 2.3.2
 

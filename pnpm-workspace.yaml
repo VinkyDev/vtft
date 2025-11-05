@@ -29,3 +29,4 @@ catalog:
   '@rsbuild/plugin-react': "^1.4.1"
   'react-error-boundary': "^6.0.0"
   '@rsbuild/core': "^1.6.1"
+  'playwright': '1.49.1'

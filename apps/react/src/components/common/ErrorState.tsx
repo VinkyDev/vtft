@@ -5,18 +5,21 @@ import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia 
 interface ErrorStateProps {
   /** 错误提示文本 */
   message?: string
+  /** 错误描述文本 */
+  description?: string
   /** 重新加载回调 */
   onReload?: () => void
 }
 
-export const ErrorState = memo(({ message = '加载失败，请重试', onReload }: ErrorStateProps) => {
+export const ErrorState = memo(({ message = '加载失败，请重试', description, onReload }: ErrorStateProps) => {
   return (
     <Empty className="h-full">
       <EmptyHeader>
         <EmptyMedia variant="icon" className="bg-red-950 text-red-400 border border-red-800">
           <AlertCircleIcon />
         </EmptyMedia>
-        <EmptyDescription className="text-gray-400">{message}</EmptyDescription>
+        <EmptyDescription className="text-gray-400 text-md">{message}</EmptyDescription>
+        {description && <EmptyDescription className="text-gray-600 text-xs">{description}</EmptyDescription>}
       </EmptyHeader>
       {onReload && (
         <EmptyContent>

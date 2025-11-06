@@ -1,4 +1,5 @@
 import type { EnhancedCompData } from '@/utils/compRating'
+import { getApiErrorRecord } from 'logger'
 import { useMemo, useState } from 'react'
 import { useRequest, withErrorBoundary } from 'react-helper'
 import { getCompDetails } from '@/api-client'
@@ -139,7 +140,18 @@ function CompDetailContent({ comp }: CompDetailContentProps) {
 
 export default withErrorBoundary(CompDetailContent, {
   errorBoundaryName: 'comp_details_content',
-  FallbackComponent: ({ resetErrorBoundary }) => {
+  FallbackComponent: ({ resetErrorBoundary, error }) => {
+    const { httpStatus } = getApiErrorRecord(error)
+
+    if (httpStatus === '404') {
+      return (
+        <ErrorState
+          message="该阵容详情不存在"
+          description="正在紧锣密鼓建设中..."
+        />
+      )
+    }
+
     return (
       <ErrorState
         message="加载阵容详情失败"

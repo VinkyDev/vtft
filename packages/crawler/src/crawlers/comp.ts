@@ -4,6 +4,7 @@ import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { Logger } from 'logger'
+import { withRetry } from 'utils'
 import { BrowserManager, PageHelper } from '../core/browser'
 import { PageStateManager } from '../core/pageState'
 import { getCwd } from '../core/utils'
@@ -43,11 +44,7 @@ export class CompCrawler {
         await this.saveDebugInfo(helper)
       }
 
-      const comps = await extractCompsFromPage(page)
-
-      if (this.options.fetchDetails) {
-        await this.fetchDetails(comps, page)
-      }
+      const comps = await this.crawlWithRetry(page)
 
       if (this.options.debug) {
         await this.saveResults(comps)
@@ -60,7 +57,37 @@ export class CompCrawler {
     }
   }
 
-  private async fetchDetails(comps: CompData[], page: Page): Promise<void> {
+  private async crawlWithRetry(page: Page): Promise<CompData[]> {
+    const crawlOnce = async (): Promise<CompData[]> => {
+      const comps = await extractCompsFromPage(page)
+
+      if (this.options.fetchDetails) {
+        const shouldRetry = await this.fetchDetails(comps, page)
+
+        if (shouldRetry) {
+          throw new Error('刷新页面重新爬取')
+        }
+      }
+
+      return comps
+    }
+
+    const crawlWithRetryWrapper = withRetry(crawlOnce, {
+      maxRetries: 3,
+      delayMs: 0,
+      onRetry: (error, attempt) => {
+        logger.warning({ message: `爬取需要重试 (尝试 ${attempt}/3)`, error: error as Error })
+      },
+    })
+
+    logger.info('开始爬取阵容')
+    const result = await crawlWithRetryWrapper()
+    logger.info('爬取成功完成')
+
+    return result
+  }
+
+  private async fetchDetails(comps: CompData[], page: Page): Promise<boolean> {
     logger.info('开始获取阵容详细信息')
 
     const maxDetails = Math.min(comps.length, MAX_COMPS_LIMIT)
@@ -75,6 +102,8 @@ export class CompCrawler {
       try {
         if (stateManager.shouldRefresh()) {
           await stateManager.refresh()
+          logger.warning('页面已刷新,需要完整重新爬取')
+          return true
         }
 
         logger.info(`正在获取阵容 ${i + 1}/${maxDetails} 的详细信息`)
@@ -89,21 +118,22 @@ export class CompCrawler {
         consecutiveFailures++
 
         if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
-          logger.warning({ message: `连续失败 ${consecutiveFailures} 次,尝试刷新页面恢复` })
+          logger.warning({ message: `连续失败 ${consecutiveFailures} 次,刷新页面并完整重新爬取` })
 
           try {
             await stateManager.refresh()
-            consecutiveFailures = 0
+            return true
           }
           catch (refreshError) {
             logger.error({ message: `刷新失败,停止爬取`, error: refreshError as Error })
-            break
+            throw refreshError
           }
         }
       }
     }
 
     logger.info('阵容详细信息获取完成')
+    return false
   }
 
   private async saveDebugInfo(helper: PageHelper): Promise<void> {

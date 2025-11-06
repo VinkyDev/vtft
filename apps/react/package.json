@@ -15,6 +15,7 @@
     "axios": "^1.12.2",
     "bridge": "workspace:*",
     "lodash-es": "catalog:",
+    "logger": "workspace:*",
     "lucide-react": "^0.545.0",
     "pinyin-pro": "^3.27.0",
     "react": "catalog:",

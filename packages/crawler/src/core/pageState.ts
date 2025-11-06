@@ -26,7 +26,7 @@ export class PageStateManager {
   async refresh(): Promise<void> {
     logger.info(`已执行 ${this.operationCount} 次操作,刷新页面以重置状态`)
     await this.page.reload({
-      waitUntil: 'domcontentloaded',
+      waitUntil: 'load',
       timeout: TIMEOUT_PAGE_LOAD_MS,
     })
     this.reset()

@@ -17,7 +17,7 @@ const AugmentCard = memo(({ augment }: AugmentCardProps) => {
       {/* 符文图标 */}
       <div className="flex justify-center mb-2">
         <div className="relative overflow-hidden rounded border border-white/10 bg-black/20">
-          <AugmentComponent className="!size-8" augmentName={augment.name} showTooltip={true} />
+          <AugmentComponent className="size-8!" augmentName={augment.name} showTooltip={true} />
         </div>
       </div>
 

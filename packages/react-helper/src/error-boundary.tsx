@@ -5,6 +5,7 @@ import type {
 } from 'react-error-boundary'
 import { once } from 'lodash-es'
 import React, { forwardRef, isValidElement, useCallback, version } from 'react'
+import logger from 'logger/client'
 
 import {
   ErrorBoundary as ReactErrorBoundary,
@@ -48,20 +49,16 @@ export const ErrorBoundary = forwardRef<ReactErrorBoundary, ErrorBoundaryProps>(
     },
     ref,
   ) => {
-    const logger = console
 
     const { fallback, fallbackRender, FallbackComponent } = restProps
 
     const logFallbackPropsEmpty = useCallback(
       once(() => {
         logger?.error({
-          eventName: 'boundary_fallback_props_empty',
+          namespace: errorBoundaryName,
+          scope: errorBoundaryScope,
+          message: 'boundary_fallback_props_empty',
           error: new Error('boundary_fallback_props_empty'),
-          meta: {
-            errorBoundaryName,
-            errorBoundaryScope,
-            is_package: 1,
-          },
         })
       }),
       [],
@@ -102,7 +99,9 @@ export const ErrorBoundary = forwardRef<ReactErrorBoundary, ErrorBoundaryProps>(
         }
 
         logger?.error({
-          eventName: 'boundary_react_error_collection',
+          namespace: errorBoundaryName,
+          scope: errorBoundaryScope,
+          message: 'boundary_react_error_collection',
           error,
           meta,
         })

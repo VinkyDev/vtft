@@ -56,6 +56,7 @@ export function createWindow(): void {
       sandbox: false,
       contextIsolation: true,
       nodeIntegration: false,
+      webSecurity: true,
     },
   })
 

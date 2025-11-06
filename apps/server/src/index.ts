@@ -15,10 +15,12 @@ import apiRoutes from './routes'
 import { taskScheduler } from './scheduler'
 import { createCrawlerTasks } from './scheduler/crawler-tasks'
 import { databaseService } from './services'
+import { getDirname } from './helpers'
 
 const logger = new Logger({ namespace: 'server', withTime: true })
 
-const projectRoot = join(__dirname, '../')
+
+const projectRoot = join(getDirname(import.meta.url), '../')
 dotenv.config({ path: join(projectRoot, '.env') })
 
 const app = new Hono()

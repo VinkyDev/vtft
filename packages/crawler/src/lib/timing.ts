@@ -3,23 +3,21 @@
  * 定义标准的等待时间级别
  */
 
-/** 极短等待: 用于快速动画完成后 */
-export const WAIT_INSTANT_MS = 100 as const
 
 /** 短等待: 用于滚动、简单动画 */
-export const WAIT_SHORT_MS = 300 as const
+export const WAIT_SHORT_MS = 1000 as const
 
-/** 中等待: 用于页面元素渲染、Tab切换 */
-export const WAIT_MEDIUM_MS = 800 as const
+/** 短等待: 用于页面元素渲染、Tab切换 */
+export const WAIT_MEDIUM_MS = 2000 as const
 
-/** 长等待: 用于复杂内容加载、Tab内容渲染 */
-export const WAIT_LONG_MS = 1500 as const
+/** 中等待: 用于复杂内容加载、Tab内容渲染 */
+export const WAIT_LONG_MS = 3000 as const
 
-/** 超长等待: 用于失败后恢复 */
-export const WAIT_EXTRA_LONG_MS = 2000 as const
+/** 长等待: 用于失败后恢复 */
+export const WAIT_EXTRA_LONG_MS = 4000 as const
 
 /** 页面重新加载等待 */
-export const WAIT_PAGE_RELOAD_MS = 3000 as const
+export const WAIT_PAGE_RELOAD_MS = 5000 as const
 
 /**
  * 通用超时常量

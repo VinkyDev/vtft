@@ -3,7 +3,6 @@
  * 定义标准的等待时间级别
  */
 
-
 /** 短等待: 用于滚动、简单动画 */
 export const WAIT_SHORT_MS = 1000 as const
 

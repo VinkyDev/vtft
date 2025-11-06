@@ -10,15 +10,14 @@ import { logger as honoLogger } from 'hono/logger'
 import { timing } from 'hono/timing'
 import { Logger } from 'logger'
 import { openapiConfig } from './config/openapi'
+import { getDirname } from './helpers'
 import { errorHandler } from './middleware'
 import apiRoutes from './routes'
 import { taskScheduler } from './scheduler'
 import { createCrawlerTasks } from './scheduler/crawler-tasks'
 import { databaseService } from './services'
-import { getDirname } from './helpers'
 
 const logger = new Logger({ namespace: 'server', withTime: true })
-
 
 const projectRoot = join(getDirname(import.meta.url), '../')
 dotenv.config({ path: join(projectRoot, '.env') })

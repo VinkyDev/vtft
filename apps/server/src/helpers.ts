@@ -1,10 +1,11 @@
-import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-export const getDirname = (metaUrl: string) => {
+export function getDirname(metaUrl: string) {
   try {
     return dirname(fileURLToPath(metaUrl))
-  } catch {
+  }
+  catch {
     return __dirname // CJS fallback
   }
 }

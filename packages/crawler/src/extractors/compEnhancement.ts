@@ -9,7 +9,7 @@ const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compEnhancem
  */
 async function extractChampionEnhancement(section: Locator): Promise<ChampionEnhancement | null> {
   try {
-    // 提取英雄信息
+    await section.locator('img[alt]').first().waitFor({ state: 'visible', timeout: 10000 })
     const championImg = section.locator('img[alt]').first()
     const championName = await championImg.getAttribute('alt').catch(() => '')
     const championIcon = await championImg.getAttribute('src').catch(() => '')

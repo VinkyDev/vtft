@@ -1,6 +1,6 @@
 import type { EnhancedCompData, GroupedComps } from '@/utils/compRating'
-import { useRequest } from 'ahooks'
 import { useMemo, useState } from 'react'
+import { useRequest } from 'react-helper'
 import { ScrollArea } from 'ui'
 import { queryComps } from '@/api-client'
 import { CompPageSkeleton } from '@/components'

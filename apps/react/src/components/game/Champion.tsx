@@ -1,9 +1,10 @@
-import type { ChampionMeta } from 'types'
+import type { ChampionMeta, Item as ItemType } from 'types'
 import { find } from 'lodash-es'
 import { memo, useMemo } from 'react'
 import { useGameDataStore } from '@/store/dataStore'
 import { getChampionCostColor, getChampionSizeClasses } from '@/utils/styles'
 import { WithTooltip } from '../common/WithTooltip'
+import { Item } from './Item'
 
 interface ChampionProps {
   /** 英雄名称 */
@@ -20,6 +21,12 @@ interface ChampionProps {
   className?: string
   /** 点击回调 */
   onClick?: (champion: ChampionMeta) => void
+  /** 装备列表（可选，用于显示英雄携带的装备） */
+  items?: ItemType[]
+  /** 装备尺寸 */
+  itemSize?: 'tiny' | 'small' | 'medium' | 'large' | 'xl'
+  /** 装备显示位置 */
+  itemsPosition?: 'bottom' | 'right'
 }
 
 export const Champion = memo(({
@@ -30,6 +37,9 @@ export const Champion = memo(({
   showTooltip = true,
   className = '',
   onClick,
+  items,
+  itemSize = 'small',
+  itemsPosition = 'bottom',
 }: ChampionProps) => {
   const { champions } = useGameDataStore()
 
@@ -70,7 +80,7 @@ export const Champion = memo(({
     </div>
   )
 
-  return (
+  const championWithTooltip = (
     <WithTooltip
       show={showTooltip}
       content={(
@@ -81,6 +91,34 @@ export const Champion = memo(({
     >
       {championElement}
     </WithTooltip>
+  )
+
+  // 如果没有装备，直接返回英雄组件
+  if (!items || items.length === 0) {
+    return championWithTooltip
+  }
+
+  // 根据位置参数决定布局方向
+  const containerClass = itemsPosition === 'right' ? 'flex-row gap-1' : 'flex-col gap-0.5'
+  const itemsClass = itemsPosition === 'right' ? 'flex-col gap-0.5' : 'flex-row gap-0.5'
+
+  return (
+    <div className={`flex items-center ${containerClass}`}>
+      {championWithTooltip}
+
+      {items.length > 0 && (
+        <div className={`flex ${itemsClass}`}>
+          {items.slice(0, 3).map((item, i) => (
+            <Item
+              key={i}
+              itemName={item.name}
+              size={itemSize}
+              showTooltip={showTooltip}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   )
 })
 

@@ -6,7 +6,7 @@ import type { Locator } from 'playwright'
 import type { Augment } from 'types'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compAugment', withTime: true })
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compAugment' })
 
 /**
  * 从单个图片元素提取强化符文

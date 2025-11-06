@@ -1,7 +1,7 @@
 import type { Context, Next } from 'hono'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'middleware', scope: 'errorHandler', withTime: true })
+const logger = new Logger({ namespace: 'middleware', scope: 'errorHandler' })
 
 interface ErrorResponse {
   success: false

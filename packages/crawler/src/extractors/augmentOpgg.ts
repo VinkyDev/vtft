@@ -18,7 +18,7 @@ const TIER_ICON_MAP: Record<string, string> = {
   prism: 'SS',
 }
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augmentOpgg', withTime: true })
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augmentOpgg' })
 
 /**
  * 从强化符文容器提取数据

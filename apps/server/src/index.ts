@@ -17,7 +17,7 @@ import { taskScheduler } from './scheduler'
 import { createCrawlerTasks } from './scheduler/crawler-tasks'
 import { databaseService } from './services'
 
-const logger = new Logger({ namespace: 'server', withTime: true })
+const logger = new Logger({ namespace: 'server' })
 
 const projectRoot = join(getDirname(import.meta.url), '../')
 dotenv.config({ path: join(projectRoot, '.env') })

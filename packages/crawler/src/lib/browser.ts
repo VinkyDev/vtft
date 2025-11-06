@@ -3,7 +3,7 @@
  */
 
 import type { Browser, BrowserContext, Page } from 'playwright'
-import logger from 'logger/server'
+import logger from 'logger'
 import { chromium } from 'playwright'
 import { TIMEOUT_PAGE_LOAD_MS } from './timing'
 

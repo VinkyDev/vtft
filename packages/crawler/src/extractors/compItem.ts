@@ -2,7 +2,7 @@ import type { Locator } from 'playwright'
 import type { RecommendedItem } from 'types'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compItem', withTime: true })
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compItem' })
 
 /**
  * 从展开的阵容中提取推荐道具

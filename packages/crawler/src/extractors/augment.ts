@@ -9,7 +9,7 @@ import { withRetry } from 'utils'
 import { SELECTORS, TABLE_COLUMNS } from '@/constants'
 import { TIMEOUT_STANDARD_MS, WAIT_LONG_MS } from '@/lib/timing'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augment', withTime: true })
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augment' })
 
 /**
  * 从单行提取强化符文

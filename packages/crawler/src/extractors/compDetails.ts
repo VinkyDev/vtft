@@ -30,7 +30,6 @@ import { extractRecommendedItems } from './compItem'
 const logger = new Logger({
   namespace: 'crawler',
   scope: 'extractor/compDetails',
-  withTime: true,
 })
 
 const COMP_ITEM_FULL_SELECTOR = `${SELECTORS.COMP.ITEM}:has(${SELECTORS.COMP.IDENTIFIER})`

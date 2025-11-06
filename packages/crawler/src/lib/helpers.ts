@@ -18,14 +18,14 @@ import { getCwd } from './utils'
  * 创建 Crawler Logger
  */
 export function createCrawlerLogger(name: string): Logger {
-  return new LoggerClass({ namespace: 'crawler', scope: name, withTime: true })
+  return new LoggerClass({ namespace: 'crawler', scope: name })
 }
 
 /**
  * 创建 Extractor Logger
  */
 export function createExtractorLogger(name: string): Logger {
-  return new LoggerClass({ namespace: 'crawler', scope: `extractor/${name}`, withTime: true })
+  return new LoggerClass({ namespace: 'crawler', scope: `extractor/${name}` })
 }
 
 /**

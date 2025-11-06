@@ -4,7 +4,7 @@ import type {
   ErrorBoundaryProps as ReactErrorBoundaryProps,
 } from 'react-error-boundary'
 import { once } from 'lodash-es'
-import logger from 'logger/client'
+import logger from 'logger'
 import React, { forwardRef, isValidElement, useCallback, version } from 'react'
 
 import {

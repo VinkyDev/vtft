@@ -47,55 +47,98 @@ function getColorByLogLevel(type?: LogLevel): string {
   }
 }
 
-function getAnsiColorByLogLevel(type?: LogLevel): string {
+function getAnsiBgColorByLogLevel(type?: LogLevel): string {
   if (type === 'success') {
-    return ANSI.green
+    return ANSI.bgGreen
   }
   else if (type === 'warning') {
-    return ANSI.yellow
+    return ANSI.bgYellow
   }
   else if (type === 'error') {
-    return ANSI.red
+    return ANSI.bgRed
   }
   else if (type === 'fatal') {
-    return `${ANSI.bold}${ANSI.red}`
+    return ANSI.bgRed
   }
   else {
-    return ANSI.cyan
+    return ANSI.bgCyan
   }
 }
 
-// 浏览器
-function doConsoleBrowser(
-  { namespace, scope, level, message, withTime = false, ...rest }: LogOptions,
-  ...restArgs: unknown[]
-): void {
-  const time = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
-
-  // 构建模板字符串和对应的样式
-  let template = '%c Logger %c'
-  const styles = [
-    'background:#444444 ; padding: 1px; border-radius: 3px 0 0 3px; color: #fff',
-    `background:${getColorByLogLevel(level)}; padding: 1px; border-radius: 0; color: #fff`,
-  ]
-
-  // 添加时间部分
-  if (withTime) {
-    template += ` ${time} %c `
-    styles.push('background:transparent')
+function getLevelLabel(type?: LogLevel): string {
+  if (type === 'success') {
+    return 'SUCCESS'
   }
-
-  // 添加命名空间/级别部分
-  template += ` ${namespace || level}`
-
-  // 添加作用域部分
-  if (scope) {
-    template += ` %c ${scope}`
-    styles.push('background:#777777; padding: 1px; border-radius: 0 3px 3px 0; color: #fff; margin-left: -1px;')
+  else if (type === 'warning') {
+    return 'WARN'
+  }
+  else if (type === 'error') {
+    return 'ERROR'
+  }
+  else if (type === 'fatal') {
+    return 'FATAL'
   }
   else {
-    // 如果没有作用域，调整第二个样式的圆角
-    styles[1] = `background:${getColorByLogLevel(level)}; padding: 1px; border-radius: 0 3px 3px 0; color: #fff`
+    return 'INFO'
+  }
+}
+
+// 固定宽度对齐
+const LEVEL_WIDTH = 7
+const NAMESPACE_WIDTH = 10
+const SCOPE_WIDTH = 15
+
+function padEnd(str: string, width: number): string {
+  return str.padEnd(width, ' ')
+}
+
+// 浏览器环境
+function doConsoleBrowser(
+  { namespace, scope, level, message, ...rest }: LogOptions,
+  ...restArgs: unknown[]
+): void {
+  // 构建模板字符串和对应的样式
+  let template = '%c'
+  const styles: string[] = []
+
+  const levelLabel = getLevelLabel(level)
+  const hasNamespaceOrScope = Boolean(namespace || scope)
+
+  // 基础样式：使用 inline-block 和固定宽度实现对齐
+  const baseStyle = 'display: inline-block; text-align: center; padding: 1px 4px; color: #fff;'
+
+  // 第一个部分：固定显示日志级别（SUCCESS/WARN/ERROR/FATAL/INFO），固定宽度
+  if (hasNamespaceOrScope) {
+    // 有 namespace 或 scope 时，左圆角
+    template += ` ${levelLabel} %c`
+    styles.push(`${baseStyle} background:${getColorByLogLevel(level)}; min-width: 56px; border-radius: 3px 0 0 3px;`)
+  }
+  else {
+    // 没有 namespace 和 scope 时，全圆角
+    template += ` ${levelLabel} %c`
+    styles.push(`${baseStyle} background:${getColorByLogLevel(level)}; min-width: 56px; border-radius: 3px;`)
+  }
+
+  // 添加 namespace 部分
+  if (namespace && scope) {
+    // 有 namespace 和 scope，namespace 无圆角
+    template += ` %c ${namespace} %c`
+    styles.push('background:transparent')
+    styles.push(`${baseStyle} background:#555555; min-width: 80px; border-radius: 0; margin-left: -1px;`)
+  }
+  else if (namespace) {
+    // 只有 namespace，右圆角
+    template += ` %c ${namespace} %c`
+    styles.push('background:transparent')
+    styles.push(`${baseStyle} background:#555555; min-width: 80px; border-radius: 0 3px 3px 0; margin-left: -1px;`)
+  }
+
+  // 添加 scope 部分
+  if (scope) {
+    // scope 作为最后一个部分，右圆角
+    template += ` %c ${scope} %c`
+    styles.push('background:transparent')
+    styles.push(`${baseStyle} background:#777777; min-width: 120px; border-radius: 0 3px 3px 0; margin-left: -1px;`)
   }
 
   // 结束标记
@@ -113,25 +156,39 @@ function doConsoleBrowser(
   console.log(...logs)
 }
 
-// Node.js
+// Node.js 环境固定显示时间
 function doConsoleNode(
-  { namespace, scope, level, message, withTime = false, ...rest }: LogOptions,
+  { namespace, scope, level, message, ...rest }: LogOptions,
   ...restArgs: unknown[]
 ): void {
   const time = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
-  const levelColor = getAnsiColorByLogLevel(level)
+  const levelBgColor = getAnsiBgColorByLogLevel(level)
+  const levelLabel = getLevelLabel(level)
 
-  // 构建日志字符串
-  let logStr = `${ANSI.bgGray}${ANSI.white} Logger ${ANSI.reset}`
-  logStr += ` ${levelColor}${namespace || level}${ANSI.reset}`
+  // 构建日志字符串，使用固定宽度对齐每个部分
+  // 日志级别部分：固定宽度，背景色
+  let logStr = `${levelBgColor}${ANSI.white} ${padEnd(levelLabel, LEVEL_WIDTH)} ${ANSI.reset}`
 
+  // 添加 namespace：固定宽度，青色
+  if (namespace) {
+    logStr += ` ${ANSI.cyan}${padEnd(namespace, NAMESPACE_WIDTH)}${ANSI.reset}`
+  }
+  else {
+    // 没有 namespace 时用空格填充，保持对齐
+    logStr += ` ${padEnd('', NAMESPACE_WIDTH)}`
+  }
+
+  // 添加 scope：固定宽度，暗色
   if (scope) {
-    logStr += ` ${ANSI.dim}${scope}${ANSI.reset}`
+    logStr += ` ${ANSI.dim}${padEnd(scope, SCOPE_WIDTH)}${ANSI.reset}`
+  }
+  else {
+    // 没有 scope 时用空格填充，保持对齐
+    logStr += ` ${padEnd('', SCOPE_WIDTH)}`
   }
 
-  if (withTime) {
-    logStr += ` ${ANSI.dim}[${time}]${ANSI.reset}`
-  }
+  // Node.js 环境固定显示时间
+  logStr += ` ${ANSI.dim}[${time}]${ANSI.reset}`
 
   logStr += ` ${message}`
 

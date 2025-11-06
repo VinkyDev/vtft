@@ -1,4 +1,5 @@
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
 import { swaggerUI } from '@hono/swagger-ui'
 import dotenv from 'dotenv'
@@ -10,7 +11,6 @@ import { logger as honoLogger } from 'hono/logger'
 import { timing } from 'hono/timing'
 import { Logger } from 'logger'
 import { openapiConfig } from './config/openapi'
-import { getDirname } from './helpers'
 import { errorHandler } from './middleware'
 import apiRoutes from './routes'
 import { taskScheduler } from './scheduler'
@@ -19,7 +19,7 @@ import { databaseService } from './services'
 
 const logger = new Logger({ namespace: 'server' })
 
-const projectRoot = join(getDirname(import.meta.url), '../')
+const projectRoot = join(dirname(fileURLToPath(import.meta.url)), '../')
 dotenv.config({ path: join(projectRoot, '.env') })
 
 const app = new Hono()

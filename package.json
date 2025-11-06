@@ -10,6 +10,7 @@
     "clean:dist": "node scripts/clean.mjs dist",
     "setup": "pnpm run clean:modules && pnpm install --no-frozen-lockfile && pnpm run build:packages",
     "lint": "pnpm -r lint",
+    "check": "pnpm dlx concurrently 'pnpm lint' 'pnpm typecheck'",
     "dev:react": "pnpm --filter react run dev",
     "dev:electron": "pnpm --filter electron --filter react run dev",
     "dev:server": "pnpm --filter server dev",

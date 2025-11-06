@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { CardSkeleton } from './skeletons'
+import { CardSkeleton } from '../skeletons'
 
 interface DataSkeletonProps {
   /** 是否加载中 */

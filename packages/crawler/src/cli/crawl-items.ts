@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { saveItems } from '../core/storage'
-import { exit, getArgv, withTimer } from '../core/utils'
-import { crawlItemMeta } from '../crawlers/itemMeta'
+import { crawlItemMeta } from '../crawlers/ItemMetaCrawler'
+import { saveItems } from '../lib/storage'
+import { exit, getArgv, withTimer } from '../lib/utils'
 
 // 如果直接运行此文件
 const currentFile = fileURLToPath(import.meta.url)

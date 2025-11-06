@@ -2,7 +2,7 @@ import type { Context, Next } from 'hono'
 import { Logger } from 'logger'
 import { LRUCache } from 'lru-cache'
 
-const logger = new Logger({ namespace: 'middleware', scope: 'cache', withTime: true })
+const logger = new Logger({ namespace: 'middleware', scope: 'cache' })
 
 interface CacheOptions {
   /** 缓存过期时间（毫秒），默认 300000 毫秒（5 分钟） */

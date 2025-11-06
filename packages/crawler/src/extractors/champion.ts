@@ -2,7 +2,7 @@ import type { Locator, Page } from 'playwright'
 import type { ChampionMeta, Trait } from 'types'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/champion', withTime: true })
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/champion' })
 
 /**
  * 从单行中提取英雄数据

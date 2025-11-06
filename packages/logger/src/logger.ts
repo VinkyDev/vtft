@@ -72,3 +72,5 @@ export class Logger<T extends CommonLogOptions = CommonLogOptions> {
     })
   }
 }
+
+export const logger = new Logger()

@@ -1,4 +1,3 @@
-export * from './ChampionIcon'
 export * from './CompCard'
 export * from './CompStats'
 export * from './TierBadge'

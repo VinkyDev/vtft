@@ -2,7 +2,7 @@ import type { MongoDBManager, TFTDatabase } from 'db'
 import { createTFTDatabase, getMongoClient } from 'db'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'service', scope: 'database', withTime: true })
+const logger = new Logger({ namespace: 'service', scope: 'database' })
 
 class DatabaseService {
   private mongo: MongoDBManager

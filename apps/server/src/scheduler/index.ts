@@ -2,7 +2,7 @@ import type { ScheduledTask as CronTask } from 'node-cron'
 import { Logger } from 'logger'
 import cron from 'node-cron'
 
-const logger = new Logger({ namespace: 'scheduler', scope: 'index', withTime: true })
+const logger = new Logger({ namespace: 'scheduler', scope: 'index' })
 
 export interface ScheduledTask {
   name: string
@@ -25,10 +25,6 @@ class TaskScheduler {
     }
 
     this.taskConfigs.set(config.name, config)
-
-    if (config.enabled) {
-      this.start(config.name)
-    }
   }
 
   /**

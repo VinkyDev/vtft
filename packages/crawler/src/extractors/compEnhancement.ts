@@ -2,14 +2,14 @@ import type { Locator } from 'playwright'
 import type { ChampionEnhancement } from 'types'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compEnhancement', withTime: true })
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compEnhancement' })
 
 /**
  * 提取单个英雄的强化推荐
  */
 async function extractChampionEnhancement(section: Locator): Promise<ChampionEnhancement | null> {
   try {
-    // 提取英雄信息
+    await section.locator('img[alt]').first().waitFor({ state: 'visible', timeout: 10000 })
     const championImg = section.locator('img[alt]').first()
     const championName = await championImg.getAttribute('alt').catch(() => '')
     const championIcon = await championImg.getAttribute('src').catch(() => '')

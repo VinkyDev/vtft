@@ -1,8 +1,12 @@
-import type { Browser, BrowserContext, Page } from 'playwright'
-import logger from 'logger/server'
-import { chromium } from 'playwright'
+/**
+ * 浏览器管理
+ */
 
-/** 浏览器配置 */
+import type { Browser, BrowserContext, Page } from 'playwright'
+import logger from 'logger'
+import { chromium } from 'playwright'
+import { TIMEOUT_PAGE_LOAD_MS } from './timing'
+
 const BROWSER_CONFIG = {
   userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
   viewport: { width: 1920, height: 1080 },
@@ -29,14 +33,10 @@ const BROWSER_CONFIG = {
   ],
 } as const
 
-/** 浏览器管理器 */
 export class BrowserManager {
   private browser: Browser | null = null
   private context: BrowserContext | null = null
 
-  /**
-   * 启动浏览器
-   */
   async launch(headless: boolean = true): Promise<void> {
     this.browser = await chromium.launch({
       headless,
@@ -54,9 +54,6 @@ export class BrowserManager {
     logger.info('浏览器已启动')
   }
 
-  /**
-   * 创建新页面
-   */
   async newPage(): Promise<Page> {
     if (!this.context) {
       throw new Error('浏览器未启动，请先调用 launch()')
@@ -64,7 +61,6 @@ export class BrowserManager {
 
     const page = await this.context.newPage()
 
-    // 隐藏 webdriver 特征
     await page.addInitScript(() => {
       Object.defineProperty(navigator, 'webdriver', {
         get: () => undefined,
@@ -74,9 +70,6 @@ export class BrowserManager {
     return page
   }
 
-  /**
-   * 关闭浏览器
-   */
   async close(): Promise<void> {
     if (this.browser) {
       await this.browser.close()
@@ -86,23 +79,15 @@ export class BrowserManager {
     }
   }
 
-  /**
-   * 获取浏览器实例
-   */
   getBrowser(): Browser | null {
     return this.browser
   }
 }
 
-/** 页面辅助工具 */
 export class PageHelper {
   constructor(private page: Page) {}
 
-  /**
-   * 导航到 URL
-   */
   async navigate(url: string, useCache: boolean = false): Promise<void> {
-    // 禁用缓存
     if (!useCache) {
       await this.page.route('**/*', (route) => {
         const headers = {
@@ -122,18 +107,41 @@ export class PageHelper {
     logger.info(`已导航到: ${url}`)
   }
 
-  /**
-   * 保存截图
-   */
   async screenshot(path: string): Promise<void> {
     await this.page.screenshot({ path, fullPage: true })
     logger.info(`截图已保存: ${path}`)
   }
 
-  /**
-   * 获取页面实例
-   */
   getPage(): Page {
     return this.page
+  }
+}
+
+export class PageStateManager {
+  private operationCount = 0
+  private readonly refreshInterval: number
+
+  constructor(
+    private page: Page,
+    refreshInterval: number = 20,
+  ) {
+    this.refreshInterval = refreshInterval
+  }
+
+  recordOperation(): void {
+    this.operationCount++
+  }
+
+  shouldRefresh(): boolean {
+    return this.operationCount >= this.refreshInterval
+  }
+
+  async refresh(): Promise<void> {
+    await this.page.reload({ waitUntil: 'load', timeout: TIMEOUT_PAGE_LOAD_MS })
+    this.reset()
+  }
+
+  reset(): void {
+    this.operationCount = 0
   }
 }

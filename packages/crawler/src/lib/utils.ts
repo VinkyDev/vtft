@@ -1,7 +1,7 @@
 import process from 'node:process'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'utils', withTime: true })
+const logger = new Logger({ namespace: 'crawler', scope: 'utils' })
 
 /**
  * 获取当前工作目录

@@ -1,16 +1,8 @@
-export { BaseExtractor } from './core/baseExtractor'
-export { BrowserManager, PageHelper } from './core/browser'
-export { PageStateManager } from './core/pageState'
-export { saveAugments, saveChampions, saveComps, saveItems } from './core/storage'
-export * from './core/timing'
-export { AugmentCrawler, crawlAugments } from './crawlers/augment'
-export { ChampionCrawler, crawlChampions } from './crawlers/champion'
-export { CompCrawler, crawlComps } from './crawlers/comp'
-export { crawlItemMeta, ItemMetaCrawler } from './crawlers/itemMeta'
-export { extractAugmentsByLevel } from './extractors/augment'
-export { extractChampionsFromPage } from './extractors/champion'
-export { extractCompsFromPage } from './extractors/comp'
-export { CompDetailsExtractor } from './extractors/compDetails'
-export { extractChampionEnhancements } from './extractors/compEnhancement'
-export { extractRecommendedItems } from './extractors/compItem'
-export { extractItemsFromPage } from './extractors/item'
+/**
+ * Crawler Package 主导出文件
+ */
+
+export * from './constants'
+export * from './crawlers'
+export * from './extractors'
+export * from './lib'

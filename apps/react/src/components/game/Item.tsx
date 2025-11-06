@@ -6,8 +6,10 @@ import { getItemSizeClasses, getItemVariantClasses } from '@/utils/styles'
 import { WithTooltip } from '../common/WithTooltip'
 
 interface ItemProps {
-  /** 装备名称 */
-  itemName: string
+  /** 装备名称（使用 itemName 时会从 store 查找装备数据） */
+  itemName?: string
+  /** 直接传入装备数据（优先级高于 itemName，用于简化场景） */
+  item?: ItemMeta
   /** 尺寸大小 */
   size?: 'tiny' | 'small' | 'medium' | 'large' | 'xl'
   /** 样式变体 */
@@ -30,8 +32,12 @@ export const Item = memo(({
 }: ItemProps) => {
   const { items } = useGameDataStore()
 
+  // 优先使用直接传入的 item，否则从 store 查找
   const item = useMemo(() => {
-    return find(items, it => it.name === itemName)
+    if (itemName) {
+      return find(items, it => it.name === itemName)
+    }
+    return undefined
   }, [items, itemName])
 
   if (!item) {

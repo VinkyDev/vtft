@@ -1,6 +1,4 @@
 export * from './Augment'
 export * from './Champion'
-export * from './ChampionWithItems'
 export * from './Impact'
 export * from './Item'
-export * from './ItemIcon'

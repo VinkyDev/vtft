@@ -1,7 +1,7 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { memo } from 'react'
 import { Badge } from 'ui'
-import { ChampionIcon } from './ChampionIcon'
+import { Champion } from '@/components'
 import { CompStats } from './CompStats'
 import { TierBadge } from './TierBadge'
 import { TraitIcon } from './TraitIcon'
@@ -60,8 +60,16 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
           {/* 英雄图标 */}
           {comp.champions && comp.champions.length > 0 && (
             <div className="flex flex-wrap gap-0.5">
-              {comp.champions.slice(0, 9).map((champion, idx) => (
-                <ChampionIcon key={idx} champion={champion} />
+              {comp.champions.slice(0, 9).map(champion => (
+                <Champion
+                  championName={champion.name}
+                  size="medium"
+                  showPriority={true}
+                  priority={champion.priority}
+                  showTooltip={true}
+                  items={champion.items}
+                  itemSize="small"
+                />
               ))}
             </div>
           )}

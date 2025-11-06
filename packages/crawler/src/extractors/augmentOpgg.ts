@@ -1,13 +1,24 @@
 import type { Locator, Page } from 'playwright'
 import type { AugmentLevel, AugmentMeta } from 'types'
 import { Logger } from 'logger'
-import { sleep } from 'utils'
-import {
-  EXTRACTOR_SELECTORS,
-  TIER_ICON_MAP,
-} from './augmentOpgg.constants'
+import { SELECTORS } from '@/constants'
+import { sleep } from '@/lib/dom'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augmentOpgg', withTime: true })
+const EXTRACTOR_SELECTORS = {
+  TIER_ICON: 'img[alt*="TIER"]',
+  AUGMENT_ITEM: '.css-1l9khv7',
+  AUGMENT_ICON: 'img[alt]:not([alt*="TIER"])',
+  AUGMENT_NAME: 'span',
+  AUGMENT_CONTAINER: SELECTORS.AUGMENT.OPGG_CONTAINER,
+}
+
+const TIER_ICON_MAP: Record<string, string> = {
+  silver: 'S',
+  gold: 'A',
+  prism: 'SS',
+}
+
+const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augmentOpgg' })
 
 /**
  * 从强化符文容器提取数据
@@ -21,13 +32,11 @@ async function extractAugmentFromContainer(container: Locator, level: AugmentLev
 
     const tierIcon = container.locator(EXTRACTOR_SELECTORS.TIER_ICON).first()
     if (await tierIcon.count() > 0) {
-      const src = await tierIcon.getAttribute('src')
-      if (src) {
-        for (const [iconName, tierValue] of Object.entries(TIER_ICON_MAP)) {
-          if (src.includes(iconName)) {
-            tier = tierValue
-            break
-          }
+      const src = await tierIcon.getAttribute('src') || ''
+      for (const [iconName, tierValue] of Object.entries(TIER_ICON_MAP)) {
+        if (src.includes(iconName)) {
+          tier = tierValue
+          break
         }
       }
     }

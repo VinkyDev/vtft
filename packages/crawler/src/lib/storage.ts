@@ -1,6 +1,6 @@
 import type { AugmentMeta, ChampionMeta, CompData, ItemMeta } from 'types'
 import { createTFTDatabase, getMongoClient } from 'db'
-import logger from 'logger/server'
+import logger from 'logger'
 
 /**
  * 数据验证结果

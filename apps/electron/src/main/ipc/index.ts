@@ -1,4 +1,4 @@
-import logger from 'logger/client'
+import logger from 'logger'
 import { setupClipboardHandlers } from './clipboardHandlers'
 import { setupGlobalShortcutHandlers } from './globalShortcutHandlers'
 import { setupOverlayHandlers } from './overlayHandlers'

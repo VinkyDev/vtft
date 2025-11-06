@@ -11,8 +11,6 @@ export const enum LogLevel {
    */
   SUCCESS = 'success',
   /**
-   * 接口问题导致的错误
-   * 不影响用户使用的边缘 case
    * 非核心功能问题
    */
   WARNING = 'warning',
@@ -24,7 +22,6 @@ export const enum LogLevel {
    * 故障
    */
   FATAL = 'fatal',
-  // DEBUG = 'debug', 暂时去掉，目前和 info 重合，后面按需加
 }
 
 /**
@@ -60,11 +57,6 @@ export interface CommonLogOptions {
    * 错误日志/事件场景下必填
    */
   error?: Error
-  /**
-   * 是否携带当前时间
-   * @default false
-   */
-  withTime?: boolean
 }
 
 export type LogOptions = WithRequired<CommonLogOptions, 'message'>

@@ -4,7 +4,7 @@ import process from 'node:process'
 import { Logger } from 'logger'
 import { MongoClient } from 'mongodb'
 
-const logger = new Logger({ namespace: 'db', scope: 'mongodb', withTime: true })
+const logger = new Logger({ namespace: 'db', scope: 'mongodb' })
 
 class MongoDBManager implements MongoDBClient {
   private client: MongoClient | null = null

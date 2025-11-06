@@ -85,7 +85,6 @@ export async function retryAsync<T>(func: () => Promise<T>, tryTimes: number, in
   throw new Error('retry times out of limit')
 }
 
-
 export function withRetry<T extends any[], R>(
   fn: (...args: T) => Promise<R>,
   {

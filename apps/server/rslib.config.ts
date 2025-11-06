@@ -1,6 +1,10 @@
 import { readFileSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from '@rslib/core'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 function getWorkspaceInternals(pkgPath: string) {
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))

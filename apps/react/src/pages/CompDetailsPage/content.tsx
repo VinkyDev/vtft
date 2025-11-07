@@ -49,7 +49,7 @@ function CompDetailContent({ comp }: CompDetailContentProps) {
     },
     {
       value: 'augments',
-      label: '强化',
+      label: '符文',
       content: <AugmentsGridSkeleton />,
     },
     {
@@ -69,7 +69,7 @@ function CompDetailContent({ comp }: CompDetailContentProps) {
         label: '概览',
         content: compDetails.data.formation
           ? (
-              <FormationBoard formation={compDetails.data.formation} />
+              <FormationBoard formation={compDetails.data.formation} traits={comp?.traits} />
             )
           : (
               <EmptyState message="暂无阵容信息" />
@@ -88,13 +88,13 @@ function CompDetailContent({ comp }: CompDetailContentProps) {
       },
       {
         value: 'augments',
-        label: '强化',
+        label: '符文',
         content: compDetails.data.augments && compDetails.data.augments.length > 0
           ? (
               <AugmentsGrid augments={compDetails.data.augments} />
             )
           : (
-              <EmptyState message="暂无强化信息" />
+              <EmptyState message="暂无符文信息" />
             ),
       },
       {
@@ -109,7 +109,7 @@ function CompDetailContent({ comp }: CompDetailContentProps) {
             ),
       },
     ]
-  }, [compDetails])
+  }, [compDetails, comp?.traits])
 
   return (
     <div className={`flex-1 overflow-hidden ${windowMode === 'floating' ? 'pointer-events-none' : ''}`}>

@@ -65,7 +65,7 @@ jobs:
             type=semver,pattern={{major}}
             type=ref,event=branch
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,prefix={{branch}}-
+            type=sha,prefix=sha-
 
       - name: 构建并推送 Docker 镜像
         uses: docker/build-push-action@v5

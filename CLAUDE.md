@@ -1,135 +1,212 @@
-# 业务相关
+# CLAUDE.md
 
-这是一个云顶之弈辅助工具的桌面应用
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-有三种窗口模式：
-  标准模式，小窗模式，悬浮球模式
+## Project Overview
 
-# 技术相关
+VTFT is a multi-platform application (React Web, Electron Desktop) with an API server backend. The project crawls and manages game data using Playwright-based scrapers and MongoDB for storage.
 
-## Project Structure
+## Architecture
 
-Monorepo with pnpm workspaces + TypeScript. Node.js >= 18 required.
+**Monorepo Structure** (pnpm workspaces):
+- `apps/`: Application entry points
+  - `react/`: Web application (Vite + React 19 + TailwindCSS)
+  - `electron/`: Desktop application (Electron 39 + electron-vite)
+  - `server/`: API server (Hono + Node.js)
+- `packages/`: Shared libraries
+  - `bridge/`: Electron IPC communication layer (clipboard, shortcuts, overlay, window)
+  - `crawler/`: Playwright-based web scraping (champions, items, comps, augments)
+  - `db/`: MongoDB database layer
+  - `logger/`: Logging utilities
+  - `react-helper/`: React utilities
+  - `types/`: Shared TypeScript types
+  - `ui/`: UI components
+  - `utils/`: General utilities
 
-**Apps** (`apps/`)
-- `react` - Vite + React 19 + Tailwind v4
-- `electron` - Desktop app (uses React as renderer)
-- `server` - Hono API server with Node.js
+**Build Dependencies** (must be built in order):
+1. `types`
+2. `utils`
+3. `logger`, `bridge` (parallel)
+4. `db`, `react-helper` (parallel)
+5. `crawler`
 
-**Packages** (`packages/`)
-- `ui` - shadcn/ui components + Radix UI
-- `bridge` - Electron IPC types
-- `types` - Shared TypeScript types
-- `utils` - Common utilities
-- `config` - Shared build configs
-- `crawler` - crawler
-- `react-helper` - React helpers
-- `db` - MongoDB database
+Packages are built with `rslib` (db, crawler, bridge, react-helper) or `tsup` (server). The `ui` and `config` packages skip build steps.
 
-## Quick Start
+## Common Commands
 
+### Setup
 ```bash
-# First time setup
-pnpm run setup
+pnpm run setup              # Clean, install deps, build packages
+```
 
-# Development
-pnpm dev:react              # Web app at http://localhost:5173
-pnpm dev:electron           # Desktop app (auto-starts React)
-pnpm dev:server             # API server
+### Development
+```bash
+pnpm dev:react              # React web app (Vite dev server)
+pnpm dev:electron           # Electron desktop app
+pnpm dev:server             # API server (tsx watch)
+```
 
-# Build
-pnpm build:react            # Build web app
-pnpm build:unpack           # Build desktop app (unpacked, for testing)
-pnpm build:mac              # macOS installer
+### Building
+```bash
+pnpm build:packages         # Build all workspace packages in correct order
+pnpm build:react            # Build React web app
+pnpm build:electron         # Build Electron app
+pnpm build:server           # Build API server (tsup)
+
+# Desktop builds (runs prebuild automatically)
+pnpm build:unpack           # Unpacked desktop app
 pnpm build:win              # Windows installer
+pnpm build:mac              # macOS installer
 pnpm build:linux            # Linux installer
 ```
 
-## Working with Workspaces
-
+### Quality Checks
 ```bash
-# Run command in specific package
-pnpm --filter <name> <command>
-
-# Examples
-pnpm --filter react dev
-pnpm --filter utils build
-
-# Add dependencies
-pnpm add <pkg> --filter <workspace>         # Production dependency
-pnpm add -D <pkg> --filter <workspace>      # Dev dependency
+pnpm lint                   # Lint all packages
+pnpm typecheck              # Type check all packages
+pnpm check                  # Run lint + typecheck in parallel
 ```
 
-## Shared Dependencies
-
-Versions managed in `pnpm-workspace.yaml` catalog. To update a cataloged dependency:
-
-```yaml
-# In pnpm-workspace.yaml
-catalog:
-  'react': ^19.2.0           # Change version here
-```
-
-Then in package.json use: `"react": "catalog:"`
-
-## Key Workflows
-
-**Add UI Component**
+### Crawler Scripts
 ```bash
-cd packages/ui
-pnpm adc <component-name>
+# Run standalone crawlers (packages/crawler)
+pnpm --filter crawler crawl:comps
+pnpm --filter crawler crawl:items
+pnpm --filter crawler crawl:champions
+pnpm --filter crawler crawl:augments
 ```
 
-**Build Electron App**
-- `pnpm build:react` builds React app to `apps/react/dist`
-- `scripts/copyRenderer.js` copies to `apps/electron/out/renderer`
-- `electron-builder` packages the final app
-
-**Linting & Type Checking**
+### Cleaning
 ```bash
-pnpm lint                   # ESLint all packages
-pnpm typecheck              # TypeScript check all packages
+pnpm clean:dist             # Remove all dist/build outputs
+pnpm clean:modules          # Remove node_modules
+pnpm clean:all              # Clean everything
 ```
 
-## Git Commit Standards
+## Key Technical Details
 
-Pre-commit hook runs `pnpm lint` automatically. Commits must follow conventional commits:
+### Package Manager
+- **pnpm 10.12.4** is required (enforced by `packageManager` field)
+- Only pnpm allowed (`preinstall` hook blocks npm/yarn)
+- Workspace packages use `catalog:` protocol for shared dependencies
+- Only build `electron` and `esbuild` dependencies (`onlyBuiltDependencies`)
 
-```
-feat: add new feature
-fix: resolve bug
-chore: update dependencies
-docs: update documentation
-```
+### Server (apps/server)
+- Built with Hono framework for API routes
+- Uses `node-cron` task scheduler for periodic crawler jobs
+- Connects to MongoDB via `db` package
+- Middleware stack: timing, logger, cors, compress, etag, error handler
+- Swagger UI at `/docs`, OpenAPI spec at `/openapi.json`
+- Health check endpoint at `/health`
+- Graceful shutdown on SIGINT/SIGTERM
 
-Enforced types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`
+### Electron (apps/electron)
+- Main process: `apps/electron/src/main/index.ts`
+- Preload scripts: `apps/electron/src/preload/`
+- IPC bridge defined in `packages/bridge/src/electron/`
+- System tray support
+- Global shortcuts, overlay windows, clipboard access
 
-## Common Issues
+### React (apps/react)
+- React 19 with Vite 7 and TailwindCSS 4
+- Babel React Compiler enabled
+- State management: Zustand
+- API client in `src/api-client/` with typed endpoints
+- Routes defined in `src/routes.tsx`
 
-**Electron build fails**
-- Ensure React app is built first: `pnpm build:react`
-- Check renderer files copied: `ls apps/electron/out/renderer`
+### Database
+- MongoDB via `mongodb` package
+- Database service in `packages/db/`
+- Used by server and crawler packages
 
-**Type errors in workspace packages**
-- Run `pnpm build:packages` to build shared packages
-- For utils/bridge, rebuild with `pnpm --filter <pkg> build`
+### Crawler
+- Playwright-based (runs in Playwright Docker container in production)
+- CLI scripts in `packages/crawler/src/cli/`
+- Can run standalone or via scheduled tasks in server
 
-**Clean install**
-```bash
-pnpm clean:all              # Remove node_modules + build artifacts
-pnpm run setup              # Fresh install
-```
+## Deployment
 
-## Technical Stack
+### Server Deployment
+- Automatic Docker build/push on main branch via GitHub Actions (`.github/workflows/docker-publish.yml`)
+- Docker image: `${DOCKER_USERNAME}/vtft-server`
+- Base image: `mcr.microsoft.com/playwright:v1.49.1-noble`
+- Build process:
+  1. Build packages: `pnpm run build:packages`
+  2. Build server: `pnpm run build:server`
+  3. Prepare server package: `node scripts/prepareServerPackage.mjs prepare`
+  4. Docker build from `apps/server/Dockerfile`
+- Server runs as `node dist/index.cjs` on port 3000
 
-- **React**: v19 with React Compiler
-- **Tailwind**: v4 with PostCSS
-- **Build**: Vite (web), electron-vite (desktop)
-- **Lint**: @antfu/eslint-config
-- **Package Manager**: pnpm v10.12.4 (enforced)
-- **Electron**: v38 with electron-builder
+### Desktop Deployment
+- GitHub Actions can be added for desktop app releases
+- Current manual build via `pnpm build:win|mac|linux`
 
-## Others (important!)
+## Development Notes
 
-- 注释规范: 仅写有必要写的注释, 不要写无意义的注释, 请使用中文写注释
-- 代码规范: 不要重复造轮子, 不要造劣质轮子, 对于 React hooks 推荐使用 ahooks, 对于 通用 utils 推荐使用 lodash-es. 如果无法使用三方库满足需求, 请在 packages/utils 中实现
+### TypeScript Configuration
+- Project uses TypeScript 5.9.3
+- Path aliases configured for workspace packages
+- Run `pnpm fix:tsconfig` to fix TypeScript paths if needed
+
+### Linting
+- ESLint 9 with `@antfu/eslint-config`
+- React plugins: `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`
+- Format plugin: `eslint-plugin-format`
+- Ignores: `node_modules`, `dist`, `build`, `out`, `.vite`
+
+### Commit Conventions
+- Uses Commitlint with conventional commits
+- Husky git hooks configured
+- lint-staged runs ESLint on staged files
+
+### Knip Configuration
+- Dependency/export analysis configured in `.knip.json`
+- Run `pnpm knip` to check for unused dependencies
+
+## Environment Variables
+- Server uses `.env` file in root (loaded via dotenv)
+- Required vars for server: `PORT` (default: 3000), MongoDB connection string
+
+## Code Standards
+
+### Comments
+- Use Chinese comments (中文注释) to explain key logic and complex algorithms
+- Only add comments where necessary - code should be self-documenting when possible
+- Focus comments on "why" rather than "what"
+
+### Libraries and Dependencies
+- **Don't reinvent the wheel** - prefer established libraries:
+  - React hooks: Use `ahooks` for common hook patterns
+  - Utilities: Use `lodash-es` for general utilities
+- If third-party libraries cannot meet requirements, check `packages/utils` first before implementing
+- Add new utilities to `packages/utils` for project-wide reuse
+
+### Code Organization
+- **High cohesion, low coupling**: Split components and logic reasonably
+- **Single Responsibility Principle**: Each module/function should have one clear purpose
+- Keep components focused and composable
+- Extract shared logic into hooks or utilities
+
+### TypeScript
+- **Never use `any`** - use generics to improve code reusability and type safety
+- When `any` is unavoidable, use `unknown` instead and narrow the type
+- Leverage TypeScript's type system fully for better IDE support and fewer runtime errors
+- Define clear interfaces and types for data structures
+
+### Modern JavaScript/TypeScript Patterns
+- Use optional chaining `?.` to safely access nested properties
+- Use nullish coalescing `??` instead of `||` when appropriate
+- Prefer `async/await` over raw Promises for asynchronous operations
+- Use template literals for string interpolation
+
+### Error Handling
+- Flatten error handling - avoid excessive nested `try-catch` blocks
+- Use centralized, converged error handling patterns
+- Let errors bubble up to appropriate boundaries (API middleware, error boundaries)
+- For expected errors, use explicit error types/codes rather than throwing
+
+### Design Principles
+- Follow **DRY (Don't Repeat Yourself)** - extract repeated logic
+- Avoid over-engineering - balance abstraction with practicality
+- Prioritize **readability** and **maintainability** over cleverness
+- Keep code simple and obvious when possible

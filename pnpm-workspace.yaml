@@ -27,6 +27,7 @@ catalog:
   react-error-boundary: ^6.0.0
   '@rsbuild/core': ^1.6.1
   playwright: 1.49.1
+  axios: ^1.13.2
 
 forceLegacyDeploy: true
 

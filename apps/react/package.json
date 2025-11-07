@@ -12,7 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "catalog:",
     "ahooks": "catalog:",
-    "axios": "^1.12.2",
+    "axios": "catalog:",
     "bridge": "workspace:*",
     "lodash-es": "catalog:",
     "logger": "workspace:*",

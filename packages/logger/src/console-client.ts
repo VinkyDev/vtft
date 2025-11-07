@@ -86,7 +86,7 @@ function getLevelLabel(type?: LogLevel): string {
 // 固定宽度对齐
 const LEVEL_WIDTH = 7
 const NAMESPACE_WIDTH = 10
-const SCOPE_WIDTH = 15
+const SCOPE_WIDTH = 20
 
 function padEnd(str: string, width: number): string {
   return str.padEnd(width, ' ')
@@ -178,6 +178,9 @@ function doConsoleNode(
     logStr += ` ${padEnd('', NAMESPACE_WIDTH)}`
   }
 
+  // Node.js 环境固定显示时间
+  logStr += ` ${ANSI.dim}[${time}]${ANSI.reset}`
+
   // 添加 scope：固定宽度，暗色
   if (scope) {
     logStr += ` ${ANSI.dim}${padEnd(scope, SCOPE_WIDTH)}${ANSI.reset}`
@@ -186,9 +189,6 @@ function doConsoleNode(
     // 没有 scope 时用空格填充，保持对齐
     logStr += ` ${padEnd('', SCOPE_WIDTH)}`
   }
-
-  // Node.js 环境固定显示时间
-  logStr += ` ${ANSI.dim}[${time}]${ANSI.reset}`
 
   logStr += ` ${message}`
 

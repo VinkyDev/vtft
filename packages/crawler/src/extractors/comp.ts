@@ -3,7 +3,7 @@ import type { CompData } from 'types'
 import * as cheerio from 'cheerio'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/comp' })
+const logger = new Logger({ namespace: 'crawler', scope: 'xtr/comp' })
 
 /**
  * 从 class 中提取英雄费用

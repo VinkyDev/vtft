@@ -2,7 +2,7 @@ import type { Locator } from 'playwright'
 import type { ChampionEnhancement } from 'types'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/compEnhancement' })
+const logger = new Logger({ namespace: 'crawler', scope: 'xtr/compEnhancement' })
 
 /**
  * 提取单个英雄的强化推荐

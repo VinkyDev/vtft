@@ -1,3 +1,5 @@
+import type { AugmentDocument } from 'db'
+import type { Filter, Sort } from 'mongodb'
 import type { AugmentLevel, AugmentMeta } from 'types'
 import { databaseService } from './database'
 
@@ -23,7 +25,7 @@ class AugmentService {
     const { page, pageSize, names, levels, tiers, sortBy, sortOrder } = options
 
     // 构建筛选条件
-    const filter: any = {}
+    const filter: Filter<AugmentDocument> = {}
 
     if (names && names.length > 0) {
       filter.name = { $in: names }
@@ -38,8 +40,7 @@ class AugmentService {
     }
 
     // 构建排序
-    const sort: any = {}
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1
+    const sort: Sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
 
     // 获取总数
     const total = await db.augments.count(filter)

@@ -1,3 +1,5 @@
+import type { ItemDocument } from 'db'
+import type { Filter, Sort } from 'mongodb'
 import type { ItemMeta } from 'types'
 import { databaseService } from './database'
 
@@ -22,7 +24,7 @@ class ItemService {
     const { page, pageSize, names, champion, sortBy, sortOrder } = options
 
     // 构建筛选条件
-    const filter: any = {}
+    const filter: Filter<ItemDocument> = {}
 
     if (names && names.length > 0) {
       filter.name = { $in: names }
@@ -33,8 +35,7 @@ class ItemService {
     }
 
     // 构建排序
-    const sort: any = {}
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1
+    const sort: Sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
 
     // 获取总数
     const total = await db.items.count(filter)

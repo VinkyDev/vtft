@@ -4,11 +4,11 @@
 
 import type { Page } from 'playwright'
 import type { CrawlOptions, ItemMeta } from 'types'
-import { ITEM_CATEGORIES, SELECTORS, URLS } from '../constants'
-import { extractItemsFromPage } from '../extractors/item'
-import { BaseCrawler } from '../lib/BaseCrawler'
-import { safeClick, waitForElement } from '../lib/dom'
-import { createCrawlerLogger, navigateToUrl, withErrorHandler } from '../lib/helpers'
+import { ITEM_CATEGORIES, SELECTORS, URLS } from '@/constants'
+import { extractItemsFromPage } from '@/extractors/item'
+import { BaseCrawler } from '@/lib/BaseCrawler'
+import { safeClick, waitForElement } from '@/lib/dom'
+import { createCrawlerLogger, navigateToUrl, withErrorHandler } from '@/lib/helpers'
 
 const logger = createCrawlerLogger('ItemMetaCrawler')
 
@@ -22,7 +22,7 @@ export class ItemMetaCrawler extends BaseCrawler<ItemMeta[]> {
 
   async crawl(): Promise<ItemMeta[]> {
     try {
-      const { page, helper } = await this.initBrowser()
+      const page = await this.initBrowser()
 
       await navigateToUrl(page, URLS.OPGG.ITEMS, this.logger)
 
@@ -48,7 +48,7 @@ export class ItemMetaCrawler extends BaseCrawler<ItemMeta[]> {
         this.logger.info(`分类 ${category.label} 抓取完成,共 ${items.length} 个装备`)
       }
 
-      await this.saveDebugInfo(helper, 'item-meta')
+      await this.saveDebugInfo(page, 'item-meta')
       await this.saveResults(allItems, 'item-meta')
 
       this.logger.info(`所有分类抓取完成,共 ${allItems.length} 个装备`)

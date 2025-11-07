@@ -17,10 +17,6 @@ const logger = new Logger({ namespace: 'crawler', scope: 'extractor/augment' })
 async function extractAugmentFromRow(row: Locator, level: AugmentLevel): Promise<AugmentMeta | null> {
   const cells = await row.locator(SELECTORS.AUGMENT.TABLE_CELL).all()
 
-  if (cells.length < TABLE_COLUMNS.MIN_COUNT) {
-    return null
-  }
-
   const augmentCell = cells[TABLE_COLUMNS.AUGMENT]
   const augmentImg = augmentCell.locator(SELECTORS.AUGMENT.IMAGE).first()
   const name = await augmentImg.getAttribute('alt', { timeout: TIMEOUT_STANDARD_MS }).catch(() => '')

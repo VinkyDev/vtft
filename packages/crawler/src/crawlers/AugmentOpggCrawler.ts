@@ -22,7 +22,7 @@ export class AugmentOpggCrawler extends BaseCrawler<AugmentMeta[]> {
 
   async crawl(): Promise<AugmentMeta[]> {
     try {
-      const { page, helper } = await this.initBrowser()
+      const page = await this.initBrowser()
 
       await this.setupHeaders(page)
       await navigateToUrl(page, URLS.OPGG.AUGMENTS, this.logger)
@@ -46,7 +46,7 @@ export class AugmentOpggCrawler extends BaseCrawler<AugmentMeta[]> {
 
           allAugments.push(...augments)
 
-          await this.saveDebugInfo(helper, `opgg-augments-${level.toLowerCase()}`)
+          await this.saveDebugInfo(page, `opgg-augments-${level.toLowerCase()}`)
         }
         catch (error) {
           this.logger.error({ message: `爬取 ${label} 级别失败`, error: error as Error })

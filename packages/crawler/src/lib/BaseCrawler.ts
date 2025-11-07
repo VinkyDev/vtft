@@ -5,7 +5,7 @@
 import type { Logger } from 'logger'
 import type { Page } from 'playwright'
 import type { CrawlOptions } from 'types'
-import { BrowserManager, PageHelper } from './browser'
+import { BrowserManager } from './browser'
 import { saveJsonResult, savePageDebug } from './helpers'
 
 /**
@@ -34,13 +34,12 @@ export abstract class BaseCrawler<T> {
   /**
    * 初始化浏览器和页面
    */
-  protected async initBrowser(): Promise<{ page: Page, helper: PageHelper }> {
+  protected async initBrowser(): Promise<Page> {
     await this.browserManager.launch(this.options.headless)
     const page = await this.browserManager.newPage()
-    const helper = new PageHelper(page)
 
     this.logger.info('浏览器已初始化')
-    return { page, helper }
+    return page
   }
 
   /**
@@ -54,7 +53,7 @@ export abstract class BaseCrawler<T> {
    * 保存页面调试信息
    */
   protected async saveDebugInfo(
-    helper: PageHelper,
+    page: Page,
     name: string,
   ): Promise<void> {
     if (!this.options.debug && !this.options.screenshot) {
@@ -62,7 +61,7 @@ export abstract class BaseCrawler<T> {
     }
 
     await savePageDebug(
-      helper,
+      page,
       name,
       {
         saveHtml: this.options.debug,

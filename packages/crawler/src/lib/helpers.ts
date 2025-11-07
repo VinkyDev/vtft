@@ -4,13 +4,13 @@
 
 import type { Logger } from 'logger'
 import type { Page } from 'playwright'
-import type { PageHelper } from './browser'
 import { writeFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { Logger as LoggerClass } from 'logger'
 import { withRetry } from 'utils'
 import { RETRY } from '../constants'
+import { takeScreenshot } from './browser'
 import { TIMEOUT_PAGE_LOAD_MS } from './timing'
 import { getCwd } from './utils'
 
@@ -79,7 +79,7 @@ export async function setLocalStorage(
  * 保存页面调试信息
  */
 export async function savePageDebug(
-  helper: PageHelper,
+  page: Page,
   name: string,
   options: {
     saveHtml?: boolean
@@ -91,7 +91,7 @@ export async function savePageDebug(
   await mkdir(debugDir, { recursive: true })
 
   if (options.saveHtml) {
-    const html = await helper.getPage().content()
+    const html = await page.content()
     const htmlPath = resolve(debugDir, `${name}.html`)
     writeFileSync(htmlPath, html)
     logger.info(`已保存 HTML: ${htmlPath}`)
@@ -99,7 +99,7 @@ export async function savePageDebug(
 
   if (options.saveScreenshot) {
     const screenshotPath = resolve(debugDir, `${name}.png`)
-    await helper.screenshot(screenshotPath)
+    await takeScreenshot(page, screenshotPath)
   }
 }
 

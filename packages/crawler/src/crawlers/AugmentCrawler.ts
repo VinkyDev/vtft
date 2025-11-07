@@ -9,11 +9,11 @@ import {
   DATA_QUALITY,
   SELECTORS,
   URLS,
-} from '../constants'
-import { extractAugmentsByLevel } from '../extractors/augment'
-import { BaseCrawler } from '../lib/BaseCrawler'
-import { safeClick, waitForElement } from '../lib/dom'
-import { createCrawlerLogger, navigateToUrl, setLocalStorage, withErrorHandler } from '../lib/helpers'
+} from '@/constants'
+import { extractAugmentsByLevel } from '@/extractors/augment'
+import { BaseCrawler } from '@/lib/BaseCrawler'
+import { safeClick, waitForElement } from '@/lib/dom'
+import { createCrawlerLogger, navigateToUrl, setLocalStorage, withErrorHandler } from '@/lib/helpers'
 import { crawlOpggAugments } from './AugmentOpggCrawler'
 
 const logger = createCrawlerLogger('AugmentCrawler')
@@ -63,7 +63,7 @@ export class AugmentCrawler extends BaseCrawler<AugmentMeta[]> {
 
   private async crawlFromMetaTFT(): Promise<AugmentMeta[]> {
     try {
-      const { page, helper } = await this.initBrowser()
+      const page = await this.initBrowser()
 
       await navigateToUrl(page, URLS.METATFT.HOME, this.logger)
       await setLocalStorage(
@@ -99,7 +99,7 @@ export class AugmentCrawler extends BaseCrawler<AugmentMeta[]> {
 
         allAugments.push(...augments)
 
-        await this.saveDebugInfo(helper, `augments-${level.toLowerCase()}`)
+        await this.saveDebugInfo(page, `augments-${level.toLowerCase()}`)
       }
 
       await this.saveResults(allAugments, 'augments-metatft')

@@ -30,7 +30,6 @@ export const TABLE_COLUMNS = {
   AUGMENT: 0,
   TIER: 1,
   TYPE: 2,
-  MIN_COUNT: 3,
 } as const
 
 /** 装备分类配置 */

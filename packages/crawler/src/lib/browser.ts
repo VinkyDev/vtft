@@ -8,12 +8,14 @@ import { chromium } from 'playwright'
 import { TIMEOUT_PAGE_LOAD_MS } from './timing'
 
 const BROWSER_CONFIG = {
-  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  userAgent:
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
   viewport: { width: 1920, height: 1080 },
   locale: 'zh-CN',
   timezoneId: 'Asia/Shanghai',
   headers: {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+    'Accept':
+      'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
     'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
     'Accept-Encoding': 'gzip, deflate, br',
     'Connection': 'keep-alive',
@@ -84,64 +86,23 @@ export class BrowserManager {
   }
 }
 
-export class PageHelper {
-  constructor(private page: Page) {}
-
-  async navigate(url: string, useCache: boolean = false): Promise<void> {
-    if (!useCache) {
-      await this.page.route('**/*', (route) => {
-        const headers = {
-          ...route.request().headers(),
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-        }
-        route.continue({ headers })
-      })
-    }
-
-    await this.page.goto(url, {
-      waitUntil: 'load',
-      timeout: 60000,
-    })
-    logger.info(`已导航到: ${url}`)
-  }
-
-  async screenshot(path: string): Promise<void> {
-    await this.page.screenshot({ path, fullPage: true })
-    logger.info(`截图已保存: ${path}`)
-  }
-
-  getPage(): Page {
-    return this.page
-  }
+/**
+ * 截图
+ */
+export async function takeScreenshot(
+  page: Page,
+  path: string,
+): Promise<void> {
+  await page.screenshot({ path, fullPage: true })
+  logger.info(`截图已保存: ${path}`)
 }
 
-export class PageStateManager {
-  private operationCount = 0
-  private readonly refreshInterval: number
-
-  constructor(
-    private page: Page,
-    refreshInterval: number = 20,
-  ) {
-    this.refreshInterval = refreshInterval
-  }
-
-  recordOperation(): void {
-    this.operationCount++
-  }
-
-  shouldRefresh(): boolean {
-    return this.operationCount >= this.refreshInterval
-  }
-
-  async refresh(): Promise<void> {
-    await this.page.reload({ waitUntil: 'load', timeout: TIMEOUT_PAGE_LOAD_MS })
-    this.reset()
-  }
-
-  reset(): void {
-    this.operationCount = 0
-  }
+/**
+ * 重新加载页面
+ */
+export async function reloadPage(page: Page): Promise<void> {
+  await page.reload({
+    waitUntil: 'load',
+    timeout: TIMEOUT_PAGE_LOAD_MS,
+  })
 }

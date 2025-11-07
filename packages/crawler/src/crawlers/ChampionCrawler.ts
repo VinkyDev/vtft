@@ -3,11 +3,11 @@
  */
 
 import type { ChampionMeta, CrawlOptions } from 'types'
-import { DATA_QUALITY, SELECTORS, URLS } from '../constants'
-import { extractChampionsFromPage } from '../extractors/champion'
-import { BaseCrawler } from '../lib/BaseCrawler'
-import { waitForElement } from '../lib/dom'
-import { createCrawlerLogger, navigateToUrl, withErrorHandler } from '../lib/helpers'
+import { DATA_QUALITY, SELECTORS, URLS } from '@/constants'
+import { extractChampionsFromPage } from '@/extractors/champion'
+import { BaseCrawler } from '@/lib/BaseCrawler'
+import { waitForElement } from '@/lib/dom'
+import { createCrawlerLogger, navigateToUrl, withErrorHandler } from '@/lib/helpers'
 
 const logger = createCrawlerLogger('ChampionCrawler')
 
@@ -21,14 +21,14 @@ export class ChampionCrawler extends BaseCrawler<ChampionMeta[]> {
 
   async crawl(): Promise<ChampionMeta[]> {
     try {
-      const { page, helper } = await this.initBrowser()
+      const page = await this.initBrowser()
 
       await navigateToUrl(page, URLS.OPGG.CHAMPIONS, this.logger)
 
       await waitForElement(page, SELECTORS.CHAMPION.TABLE_ROW)
       this.logger.info('页面内容已加载')
 
-      await this.saveDebugInfo(helper, 'champions-page')
+      await this.saveDebugInfo(page, 'champions-page')
 
       const champions = await withErrorHandler(
         () => extractChampionsFromPage(page),

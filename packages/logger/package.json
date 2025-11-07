@@ -27,10 +27,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "lodash-es": "catalog:",
     "utils": "workspace:*"
   },
   "devDependencies": {
     "@rslib/core": "catalog:",
+    "@types/lodash-es": "catalog:",
     "@types/node": "catalog:",
     "typescript": "catalog:"
   }

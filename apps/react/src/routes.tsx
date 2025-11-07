@@ -57,7 +57,7 @@ const AugmentsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFall
   },
 })
 
-export interface AppRoute {
+interface AppRoute {
   value: string
   label: string
   content: ReactNode

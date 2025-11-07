@@ -4,7 +4,6 @@
   "description": "",
   "exports": {
     "./*": {
-      "types": "./types.d.ts",
       "import": "./*",
       "require": "./*"
     },

@@ -23,12 +23,16 @@
     "react-dom": ">=16.9.0"
   },
   "dependencies": {
+    "ahooks": "catalog:",
+    "axios": "catalog:",
+    "lodash-es": "catalog:",
     "logger": "workspace:*",
     "react-error-boundary": "catalog:"
   },
   "devDependencies": {
     "@rsbuild/plugin-react": "catalog:",
     "@rslib/core": "catalog:",
+    "@types/lodash-es": "catalog:",
     "@types/react": "catalog:",
     "react": "catalog:",
     "typescript": "catalog:"

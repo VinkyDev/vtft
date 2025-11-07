@@ -2,7 +2,7 @@ import type { Locator, Page } from 'playwright'
 import type { ItemCategory, ItemMeta } from 'types'
 import { Logger } from 'logger'
 
-const logger = new Logger({ namespace: 'crawler', scope: 'extractor/item' })
+const logger = new Logger({ namespace: 'crawler', scope: 'xtr/item' })
 
 /**
  * 从表格行提取装备元数据

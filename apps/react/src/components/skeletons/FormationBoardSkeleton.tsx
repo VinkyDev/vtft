@@ -9,10 +9,11 @@ interface FormationBoardSkeletonProps {
 export const FormationBoardSkeleton = memo(({ className = '' }: FormationBoardSkeletonProps) => {
   const ROWS = 4
   const COLS = 7
+  const TRAITS_COUNT = 5 // 羁绊数量骨架屏
   const hexagonClipPath = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
 
   return (
-    <div className={`flex items-center justify-center h-full w-full p-4 ${className}`}>
+    <div className={`flex flex-col items-center justify-center h-full w-full p-4 gap-1 ${className}`}>
       <div className="flex items-center justify-center">
         <div className="p-3 sm:p-5">
           <div className="flex flex-col gap-1.5 sm:gap-2">
@@ -55,6 +56,24 @@ export const FormationBoardSkeleton = memo(({ className = '' }: FormationBoardSk
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* 羁绊信息骨架屏 */}
+      <div className="w-full px-2">
+        <div className="flex flex-wrap gap-0.5 sm:gap-2 items-center justify-center">
+          {Array.from({ length: TRAITS_COUNT }).map((_, idx) => (
+            <div
+              key={idx}
+              className="animate-skeleton-pulse"
+              style={{ animationDelay: `${idx * 0.1}s` }}
+            >
+              {/* 小屏幕版本 */}
+              <div className="sm:hidden h-5 w-5 rounded border border-white/10 bg-white/10" />
+              {/* 正常屏幕版本 */}
+              <div className="hidden sm:block h-7 w-24 rounded border border-white/10 bg-white/10" />
+            </div>
+          ))}
         </div>
       </div>
     </div>

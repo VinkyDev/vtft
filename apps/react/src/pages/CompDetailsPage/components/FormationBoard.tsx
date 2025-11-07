@@ -1,16 +1,18 @@
-import type { Formation } from 'types'
-import { memo } from 'react'
+import type { Formation, Trait } from 'types'
+import { memo, useMemo } from 'react'
 import { FormationCell } from './FormationCell'
+import { TraitDisplay } from './TraitDisplay'
 
 interface FormationBoardProps {
   formation: Formation
+  traits?: Trait[]
 }
 
 /**
  * 阵容站位棋盘组件
  * 展示 7x4 的云顶之弈六边形棋盘布局
  */
-export const FormationBoard = memo(({ formation }: FormationBoardProps) => {
+export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) => {
   // 创建 7列 x 4行 的棋盘网格
   const ROWS = 4
   const COLS = 7
@@ -28,8 +30,15 @@ export const FormationBoard = memo(({ formation }: FormationBoardProps) => {
     }
   })
 
+  // 按照 count 降序排序羁绊
+  const sortedTraits = useMemo(() => {
+    if (!traits)
+      return []
+    return [...traits].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+  }, [traits])
+
   return (
-    <div className="flex items-center justify-center h-full w-full p-4">
+    <div className="flex flex-col items-center justify-center h-full w-full p-4 gap-1">
       <div className="flex items-center justify-center">
         {/* 棋盘 - 使用响应式尺寸 */}
         <div className="p-3 sm:p-5">
@@ -56,6 +65,17 @@ export const FormationBoard = memo(({ formation }: FormationBoardProps) => {
           </div>
         </div>
       </div>
+
+      {/* 羁绊信息 */}
+      {sortedTraits.length > 0 && (
+        <div className="w-full px-2">
+          <div className="flex flex-wrap gap-0.5 sm:gap-2 items-center justify-center">
+            {sortedTraits.map((trait, idx) => (
+              <TraitDisplay key={idx} trait={trait} traitsCount={sortedTraits.length} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 })

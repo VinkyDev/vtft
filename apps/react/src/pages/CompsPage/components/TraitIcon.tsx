@@ -26,7 +26,7 @@ export const TraitIcon = memo(({ trait }: TraitIconProps) => {
 
           {/* 羁绊等级小标 */}
           <div className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-sm text-[8px] font-bold text-white shadow-lg">
-            {trait.level}
+            {trait.count}
           </div>
         </div>
       </TooltipTrigger>
@@ -37,7 +37,7 @@ export const TraitIcon = memo(({ trait }: TraitIconProps) => {
         {trait.name}
         {' '}
         (
-        {trait.level}
+        {trait.count}
         )
       </TooltipContent>
     </Tooltip>

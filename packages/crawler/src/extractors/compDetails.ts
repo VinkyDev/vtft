@@ -27,10 +27,7 @@ import { extractRecommendedAugments } from './compAugment'
 import { extractChampionEnhancements } from './compEnhancement'
 import { extractRecommendedItems } from './compItem'
 
-const logger = new Logger({
-  namespace: 'crawler',
-  scope: 'extractor/compDetails',
-})
+const logger = new Logger({ namespace: 'crawler', scope: 'xtr/compDetails' })
 
 const COMP_ITEM_FULL_SELECTOR = `${SELECTORS.COMP.ITEM}:has(${SELECTORS.COMP.IDENTIFIER})`
 

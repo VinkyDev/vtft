@@ -1,3 +1,5 @@
+import type { CompDocument } from 'db'
+import type { Filter, Sort } from 'mongodb'
 import type { CompData, CompDetails } from 'types'
 import { databaseService } from './database'
 
@@ -23,7 +25,7 @@ class CompService {
     const { page, pageSize, name, tier, levelType, sortBy, sortOrder } = options
 
     // 构建筛选条件
-    const filter: any = {}
+    const filter: Filter<CompDocument> = {}
 
     if (name) {
       filter.name = { $regex: name, $options: 'i' } // 模糊匹配
@@ -38,8 +40,7 @@ class CompService {
     }
 
     // 构建排序
-    const sort: any = {}
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1
+    const sort: Sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
 
     // 获取总数
     const total = await db.comps.count(filter)

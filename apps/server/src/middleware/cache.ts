@@ -16,7 +16,7 @@ interface CacheOptions {
 }
 
 interface CacheEntry {
-  body: any
+  body: unknown
   status: number
   headers: Record<string, string>
   timestamp: number

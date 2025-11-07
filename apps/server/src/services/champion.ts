@@ -1,3 +1,5 @@
+import type { ChampionDocument } from 'db'
+import type { Filter, Sort } from 'mongodb'
 import type { ChampionMeta } from 'types'
 import { databaseService } from './database'
 
@@ -22,7 +24,7 @@ class ChampionService {
     const { page, pageSize, costs, names, sortBy, sortOrder } = options
 
     // 构建筛选条件
-    const filter: any = {}
+    const filter: Filter<ChampionDocument> = {}
 
     if (costs && costs.length > 0) {
       filter.cost = { $in: costs }
@@ -33,8 +35,7 @@ class ChampionService {
     }
 
     // 构建排序
-    const sort: any = {}
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1
+    const sort: Sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
 
     // 获取总数
     const total = await db.champions.count(filter)

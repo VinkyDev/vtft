@@ -1,15 +1,12 @@
-import type { Filter, FindOptions } from 'mongodb'
 import type { ItemMeta } from 'types'
-import type { MongoDBManager } from '../client'
 import type { ItemDocument } from '../models/item'
 import { COLLECTION_NAME } from '../models/item'
+import { BaseRepository } from './BaseRepository'
 
-export class ItemRepository {
-  constructor(private db: MongoDBManager) {}
-
-  /** 获取集合 */
-  private getCollection() {
-    return this.db.getDb().collection<ItemDocument>(COLLECTION_NAME)
+export class ItemRepository extends BaseRepository<ItemDocument, ItemMeta> {
+  /** 获取集合名称 */
+  protected getCollectionName(): string {
+    return COLLECTION_NAME
   }
 
   /** 初始化索引 */
@@ -24,48 +21,15 @@ export class ItemRepository {
 
   /** 批量插入或更新装备 */
   async upsertMany(items: ItemMeta[]) {
-    const collection = this.getCollection()
-    const now = new Date()
-
-    const operations = items.map(item => ({
-      updateOne: {
-        filter: { name: item.name },
-        update: {
-          $set: {
-            ...item,
-            updatedAt: now,
-          },
-          $setOnInsert: {
-            createdAt: now,
-          },
-        },
-        upsert: true,
-      },
-    }))
-
-    if (operations.length > 0) {
-      return await collection.bulkWrite(operations)
-    }
-  }
-
-  /** 通用查询方法 */
-  async find(filter: Filter<ItemDocument> = {}, options?: FindOptions<ItemDocument>) {
-    return await this.getCollection().find(filter, options).toArray()
-  }
-
-  /** 通用计数方法 */
-  async count(filter: Filter<ItemDocument> = {}) {
-    return await this.getCollection().countDocuments(filter)
-  }
-
-  /** 根据名称查找装备 */
-  async findByName(name: string) {
-    return await this.getCollection().findOne({ name })
+    return await super.upsertMany(items, {
+      uniqueField: 'name',
+      getFilterKey: item => item.name,
+    })
   }
 
   /** 获取所有装备，按排名排序 */
   async findAll() {
-    return await this.getCollection().find({}).sort({ rank: 1 }).toArray()
+    return await super.findAll('rank' as keyof ItemDocument, 1)
   }
 
   /** 获取前 N 名装备 */
@@ -79,10 +43,5 @@ export class ItemRepository {
       .find({ recommendedFor: championName })
       .sort({ rank: 1 })
       .toArray()
-  }
-
-  /** 删除所有数据 */
-  async deleteAll() {
-    return await this.getCollection().deleteMany({})
   }
 }

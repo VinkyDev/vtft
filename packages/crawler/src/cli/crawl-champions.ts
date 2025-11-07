@@ -1,35 +1,15 @@
 #!/usr/bin/env node
-import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 import { crawlChampions } from '../crawlers/ChampionCrawler'
+import { createCrawlerCLI } from '../lib/createCrawlerCLI'
 import { saveChampions } from '../lib/storage'
-import { exit, getArgv, withTimer } from '../lib/utils'
 
-// 如果直接运行此文件
-const currentFile = fileURLToPath(import.meta.url)
-const runningFile = getArgv()[1]
-if (currentFile === runningFile) {
-  // 解析命令行参数
-  const args = process.argv.slice(2)
-  const shouldSave = args.includes('--save')
-
-  withTimer(
-    async () => {
-      const champions = await crawlChampions({
-        headless: true,
-        debug: true,
-        screenshot: true,
-      })
-
-      // 如果指定了 --save，保存到数据库
-      if (shouldSave) {
-        await saveChampions(champions)
-      }
-
-      return champions
-    },
-    '爬取英雄数据',
-  )
-    .then(() => exit(0))
-    .catch(() => exit(1))
-}
+createCrawlerCLI({
+  name: '爬取英雄数据',
+  crawlFn: crawlChampions,
+  saveFn: saveChampions,
+  defaultOptions: {
+    headless: true,
+    debug: true,
+    screenshot: true,
+  },
+})

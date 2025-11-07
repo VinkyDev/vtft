@@ -1,15 +1,12 @@
-import type { Filter, FindOptions } from 'mongodb'
 import type { CompData } from 'types'
-import type { MongoDBManager } from '../client'
 import type { CompDocument } from '../models/comp'
 import { COLLECTION_NAME } from '../models/comp'
+import { BaseRepository } from './BaseRepository'
 
-export class CompRepository {
-  constructor(private db: MongoDBManager) {}
-
-  /** 获取集合 */
-  private getCollection() {
-    return this.db.getDb().collection<CompDocument>(COLLECTION_NAME)
+export class CompRepository extends BaseRepository<CompDocument, CompData> {
+  /** 获取集合名称 */
+  protected getCollectionName(): string {
+    return COLLECTION_NAME
   }
 
   /** 初始化索引 */
@@ -37,44 +34,13 @@ export class CompRepository {
 
   /** 批量插入或更新阵容（不含 details） */
   async upsertMany(comps: CompData[]) {
-    const collection = this.getCollection()
-    const now = new Date()
-
-    const operations = comps.map((comp) => {
-      const compId = this.generateCompId(comp)
-      const { details, ...compWithoutDetails } = comp
-
-      return {
-        updateOne: {
-          filter: { compId },
-          update: {
-            $set: {
-              ...compWithoutDetails,
-              compId,
-              updatedAt: now,
-            },
-            $setOnInsert: {
-              createdAt: now,
-            },
-          },
-          upsert: true,
-        },
-      }
-    })
-
-    if (operations.length > 0) {
-      return await collection.bulkWrite(operations)
-    }
-  }
-
-  /** 通用查询方法 */
-  async find(filter: Filter<CompDocument> = {}, options?: FindOptions<CompDocument>) {
-    return await this.getCollection().find(filter, options).toArray()
-  }
-
-  /** 通用计数方法 */
-  async count(filter: Filter<CompDocument> = {}) {
-    return await this.getCollection().countDocuments(filter)
+    return await super.upsertMany(
+      comps.map(({ details, ...comp }) => comp as CompData),
+      {
+        uniqueField: 'compId',
+        getFilterKey: comp => this.generateCompId(comp),
+      },
+    )
   }
 
   /** 根据 compId 查找阵容 */
@@ -82,13 +48,8 @@ export class CompRepository {
     return await this.getCollection().findOne({ compId })
   }
 
-  /** 根据名称查找阵容 */
-  async findByName(name: string) {
-    return await this.getCollection().find({ name }).toArray()
-  }
-
-  /** 获取所有阵容，按排名排序 */
-  async findAll(options?: { limit?: number, skip?: number }) {
+  /** 获取所有阵容，按排名排序(带分页) */
+  async findAllPaginated(options?: { limit?: number, skip?: number }) {
     const query = this.getCollection().find({}).sort({ rank: 1 })
 
     if (options?.skip)
@@ -97,6 +58,11 @@ export class CompRepository {
       query.limit(options.limit)
 
     return await query.toArray()
+  }
+
+  /** 根据名称查找多个阵容 */
+  async findManyByName(name: string) {
+    return await this.getCollection().find({ name }).toArray()
   }
 
   /** 根据评级查找阵容 */
@@ -125,10 +91,5 @@ export class CompRepository {
       .sort({ top4Rate: -1 })
       .limit(limit)
       .toArray()
-  }
-
-  /** 删除所有数据 */
-  async deleteAll() {
-    return await this.getCollection().deleteMany({})
   }
 }

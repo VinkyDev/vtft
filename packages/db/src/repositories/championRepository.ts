@@ -20,6 +20,8 @@ export class ChampionRepository {
     await collection.createIndex({ rank: 1 })
     await collection.createIndex({ avgPlace: 1 })
     await collection.createIndex({ updatedAt: -1 })
+    await collection.createIndex({ cost: 1, rank: 1 })
+    await collection.createIndex({ cost: 1, avgPlace: 1 })
   }
 
   /** 批量插入或更新英雄 */

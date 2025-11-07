@@ -19,6 +19,8 @@ export class AugmentRepository {
     await collection.createIndex({ level: 1 })
     await collection.createIndex({ tier: 1 })
     await collection.createIndex({ updatedAt: -1 })
+    await collection.createIndex({ level: 1, tier: 1 })
+    await collection.createIndex({ rank: 1 })
   }
 
   /** 批量插入或更新强化符文 */

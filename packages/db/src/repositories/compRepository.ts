@@ -22,7 +22,10 @@ export class CompRepository {
     await collection.createIndex({ levelType: 1 })
     await collection.createIndex({ avgPlace: 1 })
     await collection.createIndex({ pickRate: -1 })
-    await collection.createIndex({ updatedAt: -1 })
+    await collection.createIndex({ name: 'text' })
+    await collection.createIndex({ tier: 1, rank: 1 })
+    await collection.createIndex({ levelType: 1, rank: 1 })
+    await collection.createIndex({ tier: 1, levelType: 1, rank: 1 })
   }
 
   /** 生成阵容 ID */

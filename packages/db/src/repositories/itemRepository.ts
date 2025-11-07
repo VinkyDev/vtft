@@ -19,6 +19,7 @@ export class ItemRepository {
     await collection.createIndex({ rank: 1 })
     await collection.createIndex({ avgPlace: 1 })
     await collection.createIndex({ updatedAt: -1 })
+    await collection.createIndex({ recommendedFor: 1 })
   }
 
   /** 批量插入或更新装备 */

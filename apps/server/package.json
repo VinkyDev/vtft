@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "build": "rslib build",
+    "build": "tsup",
     "dev": "tsx watch src/index.ts",
-    "start": "pnpm run build && NODE_ENV=production node dist/index.js",
+    "start": "pnpm run build && NODE_ENV=production node dist/index.cjs",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit"
   },
@@ -21,7 +21,7 @@
     "node-cron": "^4.2.1"
   },
   "devDependencies": {
-    "@rslib/core": "catalog:",
+    "tsup": "^8.5.0",
     "@types/node": "^24.7.1",
     "@types/node-cron": "^3.0.11",
     "tsx": "^4.20.6",

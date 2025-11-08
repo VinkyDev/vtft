@@ -88,24 +88,28 @@ export const AppTabs = memo((props: AppTabsProps) => {
                   transform: `translateX(-${tabs.findIndex(t => t.value === value) * 100}%)`,
                 }}
               >
-                {tabs.map(tab => (
-                  <TabsContent
-                    key={tab.value}
-                    value={tab.value}
-                    className="min-w-full shrink-0 no-drag"
-                    forceMount
-                  >
-                    <div
-                      className="transition-opacity duration-300 h-full"
-                      style={{
-                        opacity: value === tab.value ? 1 : 0,
-                        pointerEvents: value === tab.value ? 'auto' : 'none',
-                      }}
+                {tabs.map((tab) => {
+                  const isActive = value === tab.value
+                  return (
+                    <TabsContent
+                      key={tab.value}
+                      value={tab.value}
+                      className="min-w-full shrink-0 no-drag"
+                      forceMount
+                      {...(!isActive && { inert: true })}
                     >
-                      {tab.content}
-                    </div>
-                  </TabsContent>
-                ))}
+                      <div
+                        className="transition-opacity duration-300 h-full"
+                        style={{
+                          opacity: isActive ? 1 : 0,
+                          pointerEvents: isActive ? 'auto' : 'none',
+                        }}
+                      >
+                        {tab.content}
+                      </div>
+                    </TabsContent>
+                  )
+                })}
               </div>
             </div>
           )

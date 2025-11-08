@@ -35,10 +35,13 @@ export class CompRepository extends BaseRepository<CompDocument, CompData> {
   /** 批量插入或更新阵容（不含 details） */
   async upsertMany(comps: CompData[]) {
     return await super.upsertMany(
-      comps.map(({ details, ...comp }) => comp as CompData),
+      comps.map(({ details, ...comp }) => ({
+        ...comp,
+        compId: this.generateCompId(comp),
+      } as CompData)),
       {
         uniqueField: 'compId',
-        getFilterKey: comp => this.generateCompId(comp),
+        getFilterKey: comp => comp.compId,
       },
     )
   }

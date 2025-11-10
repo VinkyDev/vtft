@@ -1,6 +1,5 @@
 import { spawn } from 'node:child_process'
-import { styleText } from 'node:util'
-
+import { info, success, error, logWithTag, table, Timer, newline } from './utils/index.mjs'
 
 const BUILD_LEVELS = [
   ['types'],
@@ -12,10 +11,15 @@ const BUILD_LEVELS = [
 
 const SKIP_PACKAGES = ['ui', 'config']
 
+/**
+ * 构建单个包
+ * @param {string} packageName - 包名
+ * @returns {Promise<{packageName: string, success: boolean, duration: string}>}
+ */
 function buildPackage(packageName) {
   return new Promise((resolve, reject) => {
-    const startTime = Date.now()
-    console.log(styleText('cyan', `[${packageName}]`), 'Building...')
+    const timer = new Timer()
+    logWithTag(packageName, 'Building...', 'info')
 
     const child = spawn('pnpm', ['--filter', packageName, 'build'], {
       stdio: 'pipe',
@@ -34,48 +38,42 @@ function buildPackage(packageName) {
     })
 
     child.on('close', (code) => {
-      const duration = ((Date.now() - startTime) / 1000).toFixed(2)
+      const duration = timer.elapsed()
 
       if (code === 0) {
-        console.log(
-          styleText('green', `[${packageName}]`),
-          styleText('green', `✓ Built successfully in ${duration}s`),
-        )
+        logWithTag(packageName, `✓ Built successfully in ${duration}s`, 'success')
         resolve({ packageName, success: true, duration })
       }
       else {
-        console.error(
-          styleText('red', `[${packageName}]`),
-          styleText('red', `✗ Build failed in ${duration}s`),
-        )
+        logWithTag(packageName, `✗ Build failed in ${duration}s`, 'error')
         if (stderr)
-          console.error(styleText('red', stderr))
+          error(stderr)
         if (stdout)
           console.error(stdout)
         reject(new Error(`${packageName} build failed`))
       }
     })
 
-    child.on('error', (error) => {
-      console.error(
-        styleText('red', `[${packageName}]`),
-        styleText('red', `✗ Build error: ${error.message}`),
-      )
-      reject(error)
+    child.on('error', (err) => {
+      logWithTag(packageName, `✗ Build error: ${err.message}`, 'error')
+      reject(err)
     })
   })
 }
 
+/**
+ * 构建一个层级的包（并行）
+ * @param {string[]} packages - 包名数组
+ * @returns {Promise<Array>}
+ */
 async function buildLevel(packages) {
   const validPackages = packages.filter(pkg => !SKIP_PACKAGES.includes(pkg))
 
   if (validPackages.length === 0)
     return []
 
-  console.log(
-    styleText('yellow', '\n▶ Building:'),
-    styleText('bold', validPackages.join(', ')),
-  )
+  newline()
+  info(`▶ Building: ${validPackages.join(', ')}`)
 
   try {
     const results = await Promise.all(
@@ -83,44 +81,46 @@ async function buildLevel(packages) {
     )
     return results
   }
-  catch (error) {
+  catch (err) {
     // 如果某个包构建失败，立即停止
-    throw error
+    throw err
   }
 }
 
+/**
+ * 构建所有包
+ */
 async function buildAll() {
-  const overallStartTime = Date.now()
-  console.log(styleText('bold', '🚀 Starting parallel package builds...\n'))
+  const timer = new Timer()
+  info('🚀 Starting parallel package builds...')
 
   const allResults = []
 
   try {
-    for (let i = 0; i < BUILD_LEVELS.length; i++) {
-      const level = BUILD_LEVELS[i]
+    for (const level of BUILD_LEVELS) {
       const results = await buildLevel(level)
       allResults.push(...results)
     }
 
-    const totalDuration = ((Date.now() - overallStartTime) / 1000).toFixed(2)
+    const totalDuration = timer.elapsed()
     const packageCount = allResults.length
 
-    console.log(
-      styleText('green', `\n✓ All packages built successfully!`),
-    )
-    console.log(
-      styleText('bold', `  📦 ${packageCount} packages built in ${totalDuration}s`),
-    )
+    newline()
+    success('✓ All packages built successfully!')
+    info(`  📦 ${packageCount} packages built in ${totalDuration}s`)
 
-    console.log(styleText('gray', '\n  Build times:'))
-    allResults.forEach(({ packageName, duration }) => {
-      console.log(styleText('gray', `    • ${packageName.padEnd(15)} ${duration}s`))
-    })
-  }
-  catch (error) {
-    console.error(
-      styleText('red', `\n✗ Build failed: ${error.message}`),
+    newline()
+    info('  Build times:')
+    table(
+      allResults.map(({ packageName, duration }) => ({
+        label: packageName,
+        value: `${duration}s`,
+      })),
     )
+  }
+  catch (err) {
+    newline()
+    error(`✗ Build failed: ${err.message}`)
     process.exit(1)
   }
 }

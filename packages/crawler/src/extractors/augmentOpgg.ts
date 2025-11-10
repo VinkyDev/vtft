@@ -5,18 +5,14 @@ import { SELECTORS } from '@/constants'
 import { sleep } from '@/lib/dom'
 
 const EXTRACTOR_SELECTORS = {
-  TIER_ICON: 'img[alt*="TIER"]',
-  AUGMENT_ITEM: '.css-1l9khv7',
-  AUGMENT_ICON: 'img[alt]:not([alt*="TIER"])',
+  TIER_ICON: 'img[alt*="OP"], img[alt*="S"], img[alt*="A"], img[alt*="B"], img[alt*="C"], img[alt*="D"]',
+  AUGMENT_ITEM: 'div.flex.flex-col.items-center.gap-\\[4px\\]',
+  AUGMENT_ICON: 'img[alt*="Augment"]',
   AUGMENT_NAME: 'span',
   AUGMENT_CONTAINER: SELECTORS.AUGMENT.OPGG_CONTAINER,
 }
 
-const TIER_ICON_MAP: Record<string, string> = {
-  silver: 'S',
-  gold: 'A',
-  prism: 'SS',
-}
+const TIER_LEVELS = ['OP', 'S', 'A', 'B', 'C', 'D'] as const
 
 const logger = new Logger({ namespace: 'crawler', scope: 'xtr/augmentOpgg' })
 
@@ -28,52 +24,43 @@ async function extractAugmentFromContainer(container: Locator, level: AugmentLev
 
   try {
     // 提取梯度等级
-    let tier = 'Unknown'
-
     const tierIcon = container.locator(EXTRACTOR_SELECTORS.TIER_ICON).first()
-    if (await tierIcon.count() > 0) {
-      const src = await tierIcon.getAttribute('src') || ''
-      for (const [iconName, tierValue] of Object.entries(TIER_ICON_MAP)) {
-        if (src.includes(iconName)) {
-          tier = tierValue
-          break
-        }
-      }
-    }
+    const alt = (await tierIcon.getAttribute('alt').catch(() => '')) || ''
+    const tier = TIER_LEVELS.find(t => alt.includes(t)) || 'Unknown'
 
     // 提取强化符文列表
     const augmentItems = await container.locator(EXTRACTOR_SELECTORS.AUGMENT_ITEM).all()
 
-    for (const item of augmentItems) {
+    const extractPromises = augmentItems.map(async (item) => {
       try {
-        // 提取强化符文图标
         const iconImg = item.locator(EXTRACTOR_SELECTORS.AUGMENT_ICON).first()
-        const icon = await iconImg.getAttribute('src').catch(() => '')
-
-        if (!icon)
-          continue
-
-        // 提取强化符文名称
         const nameSpan = item.locator(EXTRACTOR_SELECTORS.AUGMENT_NAME).first()
-        const name = await nameSpan.textContent()
 
-        if (!name?.trim())
-          continue
+        const [icon, name] = await Promise.all([
+          iconImg.getAttribute('src').catch(() => ''),
+          nameSpan.textContent().catch(() => ''),
+        ])
+
+        if (!icon || !name?.trim())
+          return null
 
         // 创建强化符文数据
-        const augment: AugmentMeta = {
+        return {
           name: name.trim(),
-          icon: icon.startsWith('http') ? icon : `https://op.gg${icon}`,
+          icon,
           level,
           tier,
-        }
-
-        augments.push(augment)
+        } as AugmentMeta
       }
       catch (error) {
         logger.error({ message: '提取单个强化符文失败', error: error as Error })
+        return null
       }
-    }
+    })
+
+    const results = await Promise.all(extractPromises)
+    const validAugments = results.filter((augment): augment is AugmentMeta => augment !== null)
+    augments.push(...validAugments)
   }
   catch (error) {
     logger.error({ message: '提取强化符文容器失败', error: error as Error })

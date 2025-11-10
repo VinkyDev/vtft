@@ -35,6 +35,8 @@ jobs:
 
       - name: 构建 Windows 应用
         run: pnpm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
@@ -74,6 +76,8 @@ jobs:
 
       - name: 构建 macOS 应用
         run: pnpm run build:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4

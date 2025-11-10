@@ -1,5 +1,4 @@
-import type { AugmentDocument } from 'db'
-import type { Filter, Sort } from 'mongodb'
+import type { AugmentDocument, Filter, Sort } from 'db'
 import type { AugmentLevel, AugmentMeta } from 'types'
 import { databaseService } from './database'
 

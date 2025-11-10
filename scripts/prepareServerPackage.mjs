@@ -7,166 +7,169 @@
  * 3. 替换 catalog 依赖为实际版本
  */
 
-import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync, copyFileSync, unlinkSync, rmSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { copyFileSync, unlinkSync } from 'node:fs'
+import { join } from 'node:path'
+import {
+  PROJECT_ROOT,
+  exists,
+  removeRecursive,
+  readJSON,
+  writeJSON,
+  readText,
+  exec,
+  info,
+  success,
+  error,
+  section,
+} from './utils/index.mjs'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const SERVER_DIR = join(PROJECT_ROOT, 'apps/server')
+const DEPLOY_DIR = join(SERVER_DIR, '.deploy')
+const PACKAGE_JSON_PATH = join(SERVER_DIR, 'package.json')
+const PACKAGE_JSON_BACKUP = join(SERVER_DIR, 'package.json.backup')
 
-const PROJECT_ROOT = resolve(__dirname, '..');
-const SERVER_DIR = resolve(PROJECT_ROOT, 'apps/server');
-const DEPLOY_DIR = resolve(SERVER_DIR, '.deploy');
-const PACKAGE_JSON_PATH = resolve(SERVER_DIR, 'package.json');
-const PACKAGE_JSON_BACKUP = resolve(SERVER_DIR, 'package.json.backup');
-
-// 颜色输出
-const colors = {
-  reset: '\x1b[0m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  red: '\x1b[31m',
-  blue: '\x1b[34m',
-};
-
-function log(message, color = 'reset') {
-  console.log(`${colors[color]}${message}${colors.reset}`);
-}
-
-function preparePackage() {
-  try {
+/**
+ * 准备 package.json
+ */
+async function preparePackage() {
+  await section('准备 Server Package', async () => {
     // 清理可能存在的旧 deploy 目录
-    if (existsSync(DEPLOY_DIR)) {
-      rmSync(DEPLOY_DIR, { recursive: true, force: true });
+    if (exists(DEPLOY_DIR)) {
+      await removeRecursive(DEPLOY_DIR, { silent: true })
     }
 
     // 使用 pnpm deploy 部署 server 子包
-    log('执行 pnpm deploy...', 'blue');
-    execSync(`pnpm deploy --filter=server --prod --legacy ${DEPLOY_DIR}`, {
-      stdio: 'inherit',
+    info('执行 pnpm deploy...')
+    exec(`pnpm deploy --filter=server --prod --legacy ${DEPLOY_DIR}`, {
       cwd: PROJECT_ROOT,
-    });
-    log('✓ 部署完成', 'green');
+    })
+    success('✓ 部署完成')
 
     // 备份原始 package.json
-    copyFileSync(PACKAGE_JSON_PATH, PACKAGE_JSON_BACKUP);
+    copyFileSync(PACKAGE_JSON_PATH, PACKAGE_JSON_BACKUP)
 
     // 从 deploy 目录读取并处理 package.json
-    const deployPkg = resolve(DEPLOY_DIR, 'package.json');
-    if (!existsSync(deployPkg)) {
-      throw new Error('未找到部署后的 package.json');
+    const deployPkg = join(DEPLOY_DIR, 'package.json')
+    if (!exists(deployPkg)) {
+      throw new Error('未找到部署后的 package.json')
     }
 
     // 读取 catalog 配置
-    const workspaceYaml = readFileSync(resolve(PROJECT_ROOT, 'pnpm-workspace.yaml'), 'utf-8');
-    const catalog = {};
-    const catalogMatch = workspaceYaml.match(/catalog:\s*([\s\S]*?)(?=\n\S|\n*$)/);
+    const workspaceYaml = await readText(join(PROJECT_ROOT, 'pnpm-workspace.yaml'))
+    const catalog = {}
+    const catalogMatch = workspaceYaml.match(/catalog:\s*([\s\S]*?)(?=\n\S|\n*$)/)
     if (catalogMatch) {
-      const catalogContent = catalogMatch[1];
-      const lines = catalogContent.split('\n').filter(line => line.trim());
-      lines.forEach(line => {
-        const match = line.match(/^\s*['"]?([^:'"]+)['"]?\s*:\s*(.+)$/);
+      const catalogContent = catalogMatch[1]
+      const lines = catalogContent.split('\n').filter(line => line.trim())
+      lines.forEach((line) => {
+        const match = line.match(/^\s*['"]?([^:'"]+)['"]?\s*:\s*(.+)$/)
         if (match) {
-          const [, key, value] = match;
-          catalog[key.trim()] = value.trim().replace(/^['"]|['"]$/g, '');
+          const [, key, value] = match
+          catalog[key.trim()] = value.trim().replace(/^['"]|['"]$/g, '')
         }
-      });
+      })
     }
 
     // 读取并处理 package.json
-    const pkg = JSON.parse(readFileSync(deployPkg, 'utf-8'));
+    const pkg = await readJSON(deployPkg)
 
     // 移除所有 workspace 依赖
-    let removedCount = 0;
-    const removedDeps = [];
+    let removedCount = 0
+    const removedDeps = []
 
-    ['dependencies', 'devDependencies'].forEach(depType => {
+    for (const depType of ['dependencies', 'devDependencies']) {
       if (pkg[depType]) {
-        Object.entries(pkg[depType]).forEach(([name, version]) => {
+        for (const [name, version] of Object.entries(pkg[depType])) {
           if (version.startsWith('workspace:')) {
-            delete pkg[depType][name];
-            removedCount++;
-            removedDeps.push(name);
+            delete pkg[depType][name]
+            removedCount++
+            removedDeps.push(name)
           }
-        });
+        }
       }
-    });
+    }
 
     // 添加 playwright (tsup external 依赖)
     if (!pkg.dependencies.playwright) {
-      pkg.dependencies.playwright = '1.49.1';
-      log(`  添加 playwright 依赖`, 'green');
+      pkg.dependencies.playwright = '1.49.1'
+      success('添加 playwright 依赖')
     }
 
     // 替换 catalog: 依赖为实际版本
-    let catalogCount = 0;
-    ['dependencies', 'devDependencies'].forEach(depType => {
+    let catalogCount = 0
+    for (const depType of ['dependencies', 'devDependencies']) {
       if (pkg[depType]) {
-        Object.keys(pkg[depType]).forEach(dep => {
+        for (const dep of Object.keys(pkg[depType])) {
           if (pkg[depType][dep] === 'catalog:' && catalog[dep]) {
-            pkg[depType][dep] = catalog[dep];
-            catalogCount++;
+            pkg[depType][dep] = catalog[dep]
+            catalogCount++
           }
-        });
+        }
       }
-    });
+    }
 
     // 写入处理后的 package.json
-    writeFileSync(PACKAGE_JSON_PATH, JSON.stringify(pkg, null, 2));
+    await writeJSON(PACKAGE_JSON_PATH, pkg)
     if (removedCount > 0) {
-      log(`  移除 ${removedCount} 个 workspace 依赖: ${removedDeps.join(', ')}`, 'green');
+      success(`移除 ${removedCount} 个 workspace 依赖: ${removedDeps.join(', ')}`)
     }
-    log(`  替换 ${catalogCount} 个 catalog 依赖`, 'green');
-
-    return { success: true };
-  } catch (error) {
-    log(`❌ 准备失败: ${error.message}`, 'red');
-    return { success: false, error: error.message };
-  }
+    success(`替换 ${catalogCount} 个 catalog 依赖`)
+  })
 }
 
-function restorePackage() {
-  try {
-    if (existsSync(PACKAGE_JSON_BACKUP)) {
-      copyFileSync(PACKAGE_JSON_BACKUP, PACKAGE_JSON_PATH);
-      unlinkSync(PACKAGE_JSON_BACKUP);
-      log('✓ 已恢复原始 package.json', 'green');
+/**
+ * 恢复原始 package.json
+ */
+async function restorePackage() {
+  await section('恢复 Package', async () => {
+    if (exists(PACKAGE_JSON_BACKUP)) {
+      copyFileSync(PACKAGE_JSON_BACKUP, PACKAGE_JSON_PATH)
+      unlinkSync(PACKAGE_JSON_BACKUP)
+      success('✓ 已恢复原始 package.json')
     }
-    if (existsSync(DEPLOY_DIR)) {
-      rmSync(DEPLOY_DIR, { recursive: true, force: true });
+    if (exists(DEPLOY_DIR)) {
+      await removeRecursive(DEPLOY_DIR, { silent: true })
     }
-    return { success: true };
-  } catch (error) {
-    log(`❌ 恢复失败: ${error.message}`, 'red');
-    return { success: false, error: error.message };
-  }
+  })
 }
 
-function cleanup() {
-  if (existsSync(DEPLOY_DIR)) {
-    rmSync(DEPLOY_DIR, { recursive: true, force: true });
+/**
+ * 清理临时文件
+ */
+async function cleanup() {
+  if (exists(DEPLOY_DIR)) {
+    await removeRecursive(DEPLOY_DIR, { silent: true })
   }
+  success('✓ 清理完成')
 }
 
 // 命令行接口
-const command = process.argv[2];
+const command = process.argv[2]
 
-if (command === 'prepare') {
-  const result = preparePackage();
-  process.exit(result.success ? 0 : 1);
-} else if (command === 'restore') {
-  const result = restorePackage();
-  process.exit(result.success ? 0 : 1);
-} else if (command === 'cleanup') {
-  cleanup();
-  log('✓ 清理完成', 'green');
-  process.exit(0);
-} else {
-  console.log('用法: node prepareServerPackage.mjs <command>');
-  console.log('命令:');
-  console.log('  prepare  - 准备 package.json');
-  console.log('  restore  - 恢复原始 package.json');
-  console.log('  cleanup  - 清理临时文件');
-  process.exit(1);
+async function main() {
+  try {
+    if (command === 'prepare') {
+      await preparePackage()
+    }
+    else if (command === 'restore') {
+      await restorePackage()
+    }
+    else if (command === 'cleanup') {
+      await cleanup()
+    }
+    else {
+      error('用法: node prepareServerPackage.mjs <command>')
+      info('命令:')
+      info('  prepare  - 准备 package.json')
+      info('  restore  - 恢复原始 package.json')
+      info('  cleanup  - 清理临时文件')
+      process.exit(1)
+    }
+  }
+  catch (err) {
+    error(`执行失败: ${err.message}`)
+    process.exit(1)
+  }
 }
+
+main()

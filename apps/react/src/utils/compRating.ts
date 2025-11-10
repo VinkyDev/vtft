@@ -44,54 +44,134 @@ const TIER_PERCENTILES = {
 }
 
 /**
+ * 标准化配置
+ */
+const NORMALIZATION_CONFIG = {
+  // 平均排名范围
+  avgPlace: { min: 1.0, max: 8.0 },
+  // 前四率范围（百分比）
+  top4Rate: { min: 0, max: 100 },
+  // 吃鸡率范围（百分比）
+  firstPlaceRate: { min: 0, max: 80 },
+  // 选取率范围（百分比）
+  pickRate: { min: 0.01, max: 10 },
+} as const
+
+/**
+ * 指标权重配置
+ */
+const METRIC_WEIGHTS = {
+  avgPlace: 0.40,
+  top4Rate: 0.20,
+  firstPlaceRate: 0.10,
+  pickRate: 0.30,
+} as const
+
+/**
+ * 通用归一化函数
+ * 将任意范围的值映射到 0-100 区间
+ *
+ * @param value 原始值
+ * @param min 最小值
+ * @param max 最大值
+ * @param reverse 是否反向（true: 值越小分数越高，如平均排名）
+ * @returns 归一化后的分数 (0-100)
+ */
+function normalize(value: number, min: number, max: number, reverse = false): number {
+  const clampedValue = Math.max(min, Math.min(max, value))
+  const normalized = (clampedValue - min) / (max - min)
+  const score = reverse ? (1 - normalized) : normalized
+  return score * 100
+}
+
+/**
+ * 指数变换函数
+ * 用于强调极端值，适合需要放大差异的指标
+ *
+ * @param normalizedScore 归一化分数 (0-100)
+ * @param exponent 指数因子 (> 1: 强调高分，< 1: 压缩差异)
+ * @returns 变换后的分数 (0-100)
+ */
+function exponentialTransform(normalizedScore: number, exponent = 2): number {
+  const ratio = normalizedScore / 100
+  return (ratio ** exponent) * 100
+}
+
+/**
+ * 对数变换函数
+ * 用于压缩差异，适合范围跨度大的指标
+ *
+ * @param normalizedScore 归一化分数 (0-100)
+ * @returns 变换后的分数 (0-100)
+ */
+function logarithmicTransform(normalizedScore: number): number {
+  const ratio = normalizedScore / 100
+  // 使用 log(1 + x) 保证平滑过渡
+  return (Math.log(1 + ratio) / Math.log(2)) * 100
+}
+
+/**
+ * S 型曲线变换（Sigmoid）
+ * 用于平滑过渡，适合需要在中间值附近快速变化的指标
+ *
+ * @param normalizedScore 归一化分数 (0-100)
+ * @param steepness 陡峭度 (默认 10)
+ * @returns 变换后的分数 (0-100)
+ */
+function sigmoidTransform(normalizedScore: number, steepness = 10): number {
+  const x = (normalizedScore - 50) / 50 // 映射到 [-1, 1]
+  const sigmoid = 1 / (1 + Math.exp(-steepness * x))
+  return sigmoid * 100
+}
+
+/**
  * 计算阵容综合得分
- * 使用统计学方法优化计算，确保专属阵容也能获得合理评级
- *
- * 核心思路：
- * 1. 平均排名使用指数转换，强调极端值（非常好的阵容）
- * 2. 选取率使用对数转换，降低选取率的影响
- * 3. 前四率和吃鸡率直接使用，反映真实表现
- *
  * @param comp 阵容数据
  * @returns 综合得分（0-100）
  */
 function calculateCompScore(comp: CompData): number {
-  // ========== 1. 平均排名得分（权重 50%）==========
-  // 使用指数函数强化好排名的价值
-  // avgPlace: 1.0-8.0，越小越好
-  const avgPlace = Math.max(1.0, Math.min(8.0, comp.avgPlace || 4.5))
+  // ========== 1. 平均排名得分（权重 40%）==========
+  const avgPlace = comp.avgPlace || 4.5
+  const avgPlaceNormalized = normalize(
+    avgPlace,
+    NORMALIZATION_CONFIG.avgPlace.min,
+    NORMALIZATION_CONFIG.avgPlace.max,
+    true, // 反向：排名越小分数越高
+  )
+  const avgPlaceScore = exponentialTransform(avgPlaceNormalized, 2)
 
-  // 归一化到 0-1 范围：(8.0 - avgPlace) / 7.0
-  const normalizedAvgPlace = (8.0 - avgPlace) / 7.0
-
-  // 使用指数函数：exp(x) - 1，强调优秀表现
-  // 当 avgPlace = 1.0 时，normalizedAvgPlace = 1.0，得分最高
-  // 当 avgPlace = 8.0 时，normalizedAvgPlace = 0.0，得分最低
-  const avgPlaceScore = (Math.exp(normalizedAvgPlace * 2) - 1) / (Math.exp(2) - 1) * 100
-
-  // ========== 2. 前四率得分（权重 25%）==========
+  // ========== 2. 前四率得分（权重 20%）==========
   const top4Rate = comp.top4Rate || 0
-  const top4Score = top4Rate // 直接使用，已经是百分比
+  const top4Score = normalize(
+    top4Rate,
+    NORMALIZATION_CONFIG.top4Rate.min,
+    NORMALIZATION_CONFIG.top4Rate.max,
+  )
 
-  // ========== 3. 吃鸡率得分（权重 15%）==========
+  // ========== 3. 吃鸡率得分（权重 10%）==========
   const firstPlaceRate = comp.firstPlaceRate || 0
-  // 吃鸡率通常较低，放大权重
-  const firstPlaceScore = Math.min(100, firstPlaceRate * 3)
+  const firstPlaceNormalized = normalize(
+    firstPlaceRate,
+    NORMALIZATION_CONFIG.firstPlaceRate.min,
+    NORMALIZATION_CONFIG.firstPlaceRate.max,
+  )
+  const firstPlaceScore = sigmoidTransform(firstPlaceNormalized, 8)
 
-  // ========== 4. 选取率得分（权重 10%）==========
-  // 使用对数函数降低选取率的影响，保护专属阵容
-  const pickRate = comp.pickRate || 0.01 // 最小值 0.01% 防止 log(0)
-
-  // 对数归一化：log(pickRate + 1)
-  // 选取率从 0.01% 到 10% 映射到较小的得分差异
-  const pickRateScore = Math.min(100, Math.log10(pickRate + 1) * 50 + 50)
+  // ========== 4. 选取率得分（权重 30%）==========
+  const pickRate = comp.pickRate || NORMALIZATION_CONFIG.pickRate.min
+  const pickRateNormalized = normalize(
+    pickRate,
+    NORMALIZATION_CONFIG.pickRate.min,
+    NORMALIZATION_CONFIG.pickRate.max,
+  )
+  const pickRateScore = logarithmicTransform(pickRateNormalized)
 
   // ========== 加权计算综合得分 ==========
   const totalScore
-    = avgPlaceScore * 0.40
-      + top4Score * 0.20
-      + firstPlaceScore * 0.10
-      + pickRateScore * 0.30
+    = avgPlaceScore * METRIC_WEIGHTS.avgPlace
+      + top4Score * METRIC_WEIGHTS.top4Rate
+      + firstPlaceScore * METRIC_WEIGHTS.firstPlaceRate
+      + pickRateScore * METRIC_WEIGHTS.pickRate
 
   return Math.max(0, Math.min(100, totalScore))
 }
@@ -120,24 +200,16 @@ function getCompTier(_score: number, percentile: number): CompTier {
 /**
  * 判断阵容是否为低出场率阵容
  *
- * 低出场率阵容特征：
- * 1. 选取率极低（< 0.25%）
- * 2. 平均排名 < 4.5
- *
  * @param comp 阵容数据
  * @returns 是否为低出场率阵容
  */
 function isLowPickrateComp(comp: CompData): boolean {
   const pickRate = comp.pickRate || 0
-  const avgPlace = comp.avgPlace || 8.0
 
   // 选取率阈值：0.25%
   const isLowPickRate = pickRate < 0.25
 
-  // 平均排名要求 < 4.5
-  const isGoodAvgPlace = avgPlace < 4.5
-
-  return isLowPickRate && isGoodAvgPlace
+  return isLowPickRate
 }
 
 /**

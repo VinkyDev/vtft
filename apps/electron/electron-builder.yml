@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.vtft.app
 productName: vtft
 directories:
   buildResources: build
@@ -13,6 +13,13 @@ asar: false
 asarUnpack:
   - resources/**
 
+# 自动更新配置
+publish:
+  provider: github
+  owner: VinkyDev
+  repo: vtft
+  releaseType: release
+
 icon: resources/icons/png/1024x1024.png
 win:
   icon: resources/icons/win/icon.ico
@@ -20,7 +27,12 @@ win:
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
   target:
     - target: nsis
+      arch:
+        - x64
+        - arm64
     - target: portable
+      arch:
+        - x64
 nsis:
   installerIcon: resources/icons/win/icon.ico
   uninstallerIcon: resources/icons/win/icon.ico
@@ -30,6 +42,7 @@ nsis:
   createDesktopShortcut: always
   allowToChangeInstallationDirectory: true
   oneClick: false
+  differentialPackage: true
 portable:
   artifactName: ${productName}-${version}-${arch}-portable.${ext}
 mac:

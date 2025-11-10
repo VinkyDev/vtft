@@ -1,5 +1,4 @@
-import type { ItemDocument } from 'db'
-import type { Filter, Sort } from 'mongodb'
+import type { Filter, ItemDocument, Sort } from 'db'
 import type { ItemMeta } from 'types'
 import { databaseService } from './database'
 

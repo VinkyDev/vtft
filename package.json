@@ -25,6 +25,7 @@
     "build:packages": "node scripts/buildPackages.mjs",
     "build:server": "pnpm --filter server build",
     "publish:server": "node scripts/publishServer.mjs",
+    "release": "node scripts/release.mjs",
     "fix:tsconfig": "node ./scripts/typescript/fixPaths.mjs",
     "typecheck": "pnpm -r typecheck",
     "prepare": "husky",

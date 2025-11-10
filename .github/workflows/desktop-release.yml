@@ -41,11 +41,9 @@ jobs:
         with:
           name: windows-build
           path: |
-            apps/electron/dist/*.exe
+            apps/electron/dist/*-setup.exe
             apps/electron/dist/*.exe.blockmap
-            apps/electron/dist/*-x64.zip
-            apps/electron/dist/*-arm64.zip
-            apps/electron/dist/*.zip.blockmap
+            apps/electron/dist/latest.yml
           retention-days: 7
 
   build-macos:
@@ -84,8 +82,7 @@ jobs:
           path: |
             apps/electron/dist/*.dmg
             apps/electron/dist/*.dmg.blockmap
-            apps/electron/dist/*-arm64.zip
-            apps/electron/dist/*.zip.blockmap
+            apps/electron/dist/latest-mac.yml
           retention-days: 7
 
   create-release:
@@ -110,10 +107,31 @@ jobs:
           name: macos-build
           path: ./release-assets
 
+      - name: 生成安装说明
+        id: release-notes
+        run: |
+          cat << 'EOF' > release-body.md
+          ## 📦 安装说明
+
+          ### Windows 用户
+          1. 下载 `VTFT-Setup-{version}.exe` 文件
+          2. 双击运行安装程序, 按照向导完成安装
+
+          ### macOS 用户
+          1. 下载 `VTFT-{version}.dmg` 文件
+          2. 双击打开 DMG 文件后, 将 VTFT 图标拖拽到 Applications 文件夹
+          3. 首次打开时，如果系统提示"无法验证开发者"，请：
+             - 打开"系统偏好设置" > "安全性与隐私" > "通用"
+             - 点击"仍要打开"按钮
+          ---
+
+          EOF
+
       - name: 创建 Release
         uses: softprops/action-gh-release@v2
         with:
           files: ./release-assets/*
+          body_path: release-body.md
           generate_release_notes: true
           draft: false
           prerelease: false

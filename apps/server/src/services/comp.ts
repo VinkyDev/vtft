@@ -1,5 +1,4 @@
-import type { CompDocument } from 'db'
-import type { Filter, Sort } from 'mongodb'
+import type { CompDocument, Filter, Sort } from 'db'
 import type { CompData, CompDetails } from 'types'
 import { databaseService } from './database'
 

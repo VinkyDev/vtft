@@ -6,7 +6,7 @@ import { exit, getArgv, withTimer } from './utils'
 /**
  * 爬虫 CLI 配置
  */
-export interface CrawlerCLIConfig<T, TOptions = unknown> {
+interface CrawlerCLIConfig<T, TOptions = unknown> {
   /** 任务名称(用于日志显示) */
   name: string
   /** 爬虫函数 */

@@ -1,5 +1,4 @@
-import type { ChampionDocument } from 'db'
-import type { Filter, Sort } from 'mongodb'
+import type { ChampionDocument, Filter, Sort } from 'db'
 import type { ChampionMeta } from 'types'
 import { databaseService } from './database'
 

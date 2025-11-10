@@ -107,7 +107,7 @@ export function initUpdater(mainWindow: BrowserWindow | null) {
 /**
  * 手动检查更新
  */
-export function checkForUpdates() {
+function checkForUpdates() {
   if (process.env.NODE_ENV === 'development') {
     logger.info('开发环境，跳过更新检查')
     return
@@ -117,27 +117,4 @@ export function checkForUpdates() {
   autoUpdater.checkForUpdates().catch((error) => {
     logger.error({ message: '检查更新失败:', error })
   })
-}
-
-/**
- * 手动下载更新
- */
-export function downloadUpdate() {
-  if (process.env.NODE_ENV === 'development') {
-    logger.info('开发环境，跳过下载更新')
-    return
-  }
-
-  logger.info('开始下载更新...')
-  autoUpdater.downloadUpdate().catch((error) => {
-    logger.error({ message: '下载更新失败:', error })
-  })
-}
-
-/**
- * 立即安装更新
- */
-export function quitAndInstall() {
-  logger.info('退出并安装更新...')
-  autoUpdater.quitAndInstall(false, true)
 }

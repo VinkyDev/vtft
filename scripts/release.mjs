@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { execSync } from 'node:child_process'
 import { join, relative } from 'node:path'
 import {
   PROJECT_ROOT,
@@ -151,7 +152,7 @@ function checkGitStatus() {
  */
 function tagExists(tag) {
   try {
-    getOutput(`git rev-parse ${tag}`)
+    execSync(`git rev-parse ${tag}`, { stdio: 'ignore' })
     return true
   }
   catch {

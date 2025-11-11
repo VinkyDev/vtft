@@ -71,12 +71,8 @@ export function createTray(): void {
 
     const window = getMainWindow()
     if (window) {
-      if (window.isVisible()) {
-        window.hide()
-      }
-      else {
+      if (!window.isVisible()) {
         window.show()
-        window.focus()
       }
     }
   })

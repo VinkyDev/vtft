@@ -69,11 +69,13 @@ pnpm dev:server
 
 ### 环境变量配置
 
-在项目根目录创建 `.env` 文件：
 
 ```env
-# MongoDB 连接字符串
-MONGODB_URI=mongodb://localhost:27017/vtft
+# 服务端环境变量
+MONGODB_URI=mongodb://localhost:27017/vtft # 数据库链接
+
+# 桌面端环境变量
+VITE_APTABASE_CODE=xxx # 用于 Aptabase 埋点
 ```
 
 ## 📦 构建部署

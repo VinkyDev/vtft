@@ -7,6 +7,9 @@ settings:
 
 catalogs:
   default:
+    '@aptabase/electron':
+      specifier: ^0.3.1
+      version: 0.3.1
     '@rsbuild/plugin-react':
       specifier: ^1.4.1
       version: 1.4.2
@@ -123,6 +126,9 @@ importers:
 
   apps/electron:
     dependencies:
+      '@aptabase/electron':
+        specifier: 'catalog:'
+        version: 0.3.1(electron@39.0.0)
       '@electron-toolkit/preload':
         specifier: ^3.0.2
         version: 3.0.2(electron@39.0.0)
@@ -135,6 +141,9 @@ importers:
       logger:
         specifier: workspace:*
         version: link:../../packages/logger
+      node-machine-id:
+        specifier: ^1.1.12
+        version: 1.1.12
       utils:
         specifier: workspace:*
         version: link:../../packages/utils
@@ -592,6 +601,11 @@ packages:
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
+
+  '@aptabase/electron@0.3.1':
+    resolution: {integrity: sha512-FECaGsjuoQu70F+M6V1evdgLP7yaq/sne9fC60AZZ6B9RsCDlxFBnJzdq3+xevHlUx6AB5o9ygUhQ+ONT9EqiA==}
+    peerDependencies:
+      electron: '>= 3.x'
 
   '@ast-grep/napi-darwin-arm64@0.37.0':
     resolution: {integrity: sha512-QAiIiaAbLvMEg/yBbyKn+p1gX2/FuaC0SMf7D7capm/oG4xGMzdeaQIcSosF4TCxxV+hIH4Bz9e4/u7w6Bnk3Q==}
@@ -4464,6 +4478,9 @@ packages:
     engines: {node: ^12.13 || ^14.13 || >=16}
     hasBin: true
 
+  node-machine-id@1.1.12:
+    resolution: {integrity: sha512-QNABxbrPa3qEIfrE6GOJ7BYIuignnJw7iQ2YPbc3Nla1HzRJjXzZOiikfF8m7eAMfichLt3M4VgLOetqgDmgGQ==}
+
   node-releases@2.0.27:
     resolution: {integrity: sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==}
 
@@ -5698,6 +5715,10 @@ snapshots:
     dependencies:
       package-manager-detector: 1.5.0
       tinyexec: 1.0.2
+
+  '@aptabase/electron@0.3.1(electron@39.0.0)':
+    dependencies:
+      electron: 39.0.0
 
   '@ast-grep/napi-darwin-arm64@0.37.0':
     optional: true
@@ -10058,6 +10079,8 @@ snapshots:
     transitivePeerDependencies:
       - bluebird
       - supports-color
+
+  node-machine-id@1.1.12: {}
 
   node-releases@2.0.27: {}
 

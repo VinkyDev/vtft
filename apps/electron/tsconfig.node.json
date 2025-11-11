@@ -2,7 +2,7 @@
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
     "composite": true,
-    "types": ["electron-vite/node"],
+    "types": ["electron-vite/node", "./src/vite-env.d.ts"],
     "strict": false,
     "allowUnreachableCode": true,
     "noImplicitAny": false,

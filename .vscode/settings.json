@@ -19,7 +19,9 @@
   "eslint.useFlatConfig": true,
   "cSpell.words": [
     "ahooks",
+    "aptabase",
     "asar",
+    "axios",
     "blockmap",
     "commitlint",
     "Deendencies",

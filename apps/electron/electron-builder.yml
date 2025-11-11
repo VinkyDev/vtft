@@ -48,6 +48,8 @@ mac:
   icon: resources/icons/mac/icon.icns
   notarize: false
   artifactName: ${productName}-${arch}.${ext}
+  extendInfo:
+    LSUIElement: true
   target:
     - target: dmg
     - target: zip

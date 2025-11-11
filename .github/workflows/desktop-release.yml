@@ -37,6 +37,7 @@ jobs:
         run: pnpm run build:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_APTABASE_CODE: ${{ secrets.APTABASE_CODE }}
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
@@ -78,6 +79,7 @@ jobs:
         run: pnpm run build:mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_APTABASE_CODE: ${{ secrets.APTABASE_CODE }}
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4

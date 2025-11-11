@@ -118,11 +118,11 @@ jobs:
           ## 📦 安装说明
 
           ### Windows 用户
-          1. 下载 `VTFT-Setup-{version}.exe` 文件
+          1. 下载 `vtft-setup.exe` 文件
           2. 双击运行安装程序, 按照向导完成安装
 
           ### macOS 用户
-          1. 下载 `VTFT-{version}.dmg` 文件
+          1. 下载 `vtft.dmg` 文件
           2. 双击打开 DMG 文件后, 将 VTFT 图标拖拽到 Applications 文件夹
           3. 首次打开时，如果系统提示"无法验证开发者"，请：
              - 打开"系统偏好设置" > "安全性与隐私" > "通用"

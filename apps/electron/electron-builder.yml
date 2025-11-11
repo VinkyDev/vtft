@@ -23,7 +23,7 @@ icon: resources/icons/png/1024x1024.png
 win:
   icon: resources/icons/win/icon.ico
   executableName: vtft
-  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+  artifactName: ${productName}-${arch}-setup.${ext}
   target:
     - target: nsis
       arch:
@@ -43,11 +43,11 @@ nsis:
   oneClick: false
   differentialPackage: true
 portable:
-  artifactName: ${productName}-${version}-${arch}-portable.${ext}
+  artifactName: ${productName}-${arch}-portable.${ext}
 mac:
   icon: resources/icons/mac/icon.icns
   notarize: false
-  artifactName: ${productName}-${version}-${arch}.${ext}
+  artifactName: ${productName}-${arch}.${ext}
   target:
     - target: dmg
     - target: zip
@@ -55,7 +55,7 @@ mac:
         - arm64
         - x64
 linux:
-  artifactName: ${productName}-${version}-${arch}.${ext}
+  artifactName: ${productName}-${arch}.${ext}
   target:
     - target: AppImage
       arch:

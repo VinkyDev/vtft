@@ -21,6 +21,7 @@
     "ahooks",
     "asar",
     "blockmap",
+    "commitlint",
     "Deendencies",
     "dockerhub",
     "domcontentloaded",

@@ -1,0 +1,7 @@
+export { AugmentRepository } from './augmentRepository'
+export { BaseRepository } from './BaseRepository'
+export type { BaseDocument, UpsertConfig } from './BaseRepository'
+export { ChampionRepository } from './championRepository'
+export { CompDetailRepository } from './compDetailRepository'
+export { CompRepository } from './compRepository'
+export { ItemRepository } from './itemRepository'

@@ -1,0 +1,4 @@
+# 只包含 publish 目录，其他全部排除
+*
+!publish/
+!publish/**

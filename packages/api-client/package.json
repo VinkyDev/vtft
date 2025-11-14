@@ -1,0 +1,31 @@
+{
+  "name": "api-client",
+  "type": "module",
+  "version": "0.0.13",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint  --ext .ts,.tsx --fix"
+  },
+  "dependencies": {
+    "axios": "catalog:",
+    "types": "workspace:*",
+    "utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@rslib/core": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

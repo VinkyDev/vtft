@@ -1,0 +1,42 @@
+{
+  "name": "react",
+  "type": "module",
+  "version": "0.0.13",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc -b --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@aptabase/electron": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "ahooks": "catalog:",
+    "api-client": "workspace:*",
+    "bridge": "workspace:*",
+    "lodash-es": "catalog:",
+    "logger": "workspace:*",
+    "lucide-react": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-helper": "workspace:*",
+    "ui": "workspace:*",
+    "utils": "workspace:*",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "catalog:",
+    "@types/lodash-es": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "eslint-plugin-react": "catalog:",
+    "tailwindcss": "catalog:",
+    "types": "workspace:*",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

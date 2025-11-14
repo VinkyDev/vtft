@@ -1,0 +1,69 @@
+appId: com.vtft.app
+productName: vtft
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.js,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asar: false
+asarUnpack:
+  - resources/**
+
+publish:
+  provider: github
+  owner: VinkyDev
+  repo: vtft
+  releaseType: release
+
+icon: resources/icons/png/1024x1024.png
+win:
+  icon: resources/icons/win/icon.ico
+  executableName: vtft
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - arm64
+nsis:
+  installerIcon: resources/icons/win/icon.ico
+  uninstallerIcon: resources/icons/win/icon.ico
+  artifactName: ${productName}-${arch}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  allowToChangeInstallationDirectory: true
+  oneClick: false
+  differentialPackage: true
+mac:
+  icon: resources/icons/mac/icon.icns
+  notarize: false
+  identity: null
+  artifactName: ${productName}-${arch}.${ext}
+  extendInfo:
+    LSUIElement: true
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip
+      arch:
+        - x64
+        - arm64
+linux:
+  artifactName: ${productName}-${arch}.${ext}
+  target:
+    - target: AppImage
+      arch:
+        - arm64
+        - x64
+  maintainer: electronjs.org
+  category: Utility
+
+npmRebuild: false
+electronDownload:
+  mirror: https://npmmirror.com/mirrors/electron/

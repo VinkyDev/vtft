@@ -1,0 +1,72 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    "apps/react": {
+      "entry": ["index.html", "src/main.tsx", "src/App.tsx"],
+      "project": ["src/**/*.{js,ts,jsx,tsx}"]
+    },
+    "apps/electron": {
+      "entry": ["src/main/index.ts", "src/preload/index.ts"],
+      "project": ["src/**/*.{js,ts}"]
+    },
+    "apps/server": {
+      "project": ["src/**/*.{js,ts}"]
+    },
+    "apps/website": {
+      "project": ["app/**/*.{js,ts,jsx,tsx}"]
+    },
+    "packages/bridge": {
+      "project": ["src/**/*.{js,ts}"]
+    },
+    "packages/crawler": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{js,ts}"]
+    },
+    "packages/db": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{js,ts}"]
+    },
+    "packages/logger": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{js,ts}"]
+    },
+    "packages/react-helper": {
+      "project": ["src/**/*.{js,ts,jsx,tsx}"]
+    },
+    "packages/types": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{js,ts}", "*.d.ts"]
+    },
+    "packages/utils": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{js,ts}"]
+    },
+    "packages/ui": {
+      "project": ["src/**/*.{js,ts,jsx,tsx}"],
+      "ignore": ["src/styles/**"]
+    }
+  },
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/out/**",
+    "**/.{git,vscode,cursor,claude}/**",
+    "scripts/**",
+    "**/*.config.{js,ts}",
+    "**/*.d.ts",
+    "**/*.md",
+    "Dockerfile",
+    "docker-compose*",
+    "*.lock",
+    "*.log"
+  ],
+  "ignoreDependencies": [
+    "eslint*",
+    "tailwindcss",
+    "@tailwindcss/postcss",
+    "postcss"
+  ],
+  "ignoreBinaries": [
+    "only-allow"
+  ]
+}

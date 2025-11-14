@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+out/
+*.tsbuildinfo
+publish/
+.deploy/
+.next/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+next-env.d.ts
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Debug files
+debug/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*

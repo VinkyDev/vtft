@@ -1,0 +1,75 @@
+{
+  "name": "vtft",
+  "description": "VTFT 是一个基于 Electron 的云顶之弈桌面端助手",
+  "type": "module",
+  "version": "0.0.13",
+  "scripts": {
+    "postinstall": "node ./node_modules/electron/install.js",
+    "preinstall": "npx only-allow pnpm ",
+    "clean": "pnpm run clean:dist && pnpm run clean:modules",
+    "clean:modules": "node scripts/clean.mjs modules",
+    "clean:dist": "node scripts/clean.mjs dist",
+    "setup": "pnpm run clean:modules && pnpm install --no-frozen-lockfile && pnpm run build:packages",
+    "lint": "pnpm -r lint",
+    "check": "pnpm dlx concurrently 'pnpm lint' 'pnpm typecheck' 'pnpm knip'",
+    "dev:react": "pnpm --filter react run dev",
+    "dev:electron": "pnpm --filter electron --filter react run dev",
+    "dev:server": "pnpm --filter server dev",
+    "dev:website": "pnpm --filter website dev",
+    "build:react": "pnpm --filter react run build",
+    "build:electron": "pnpm --filter electron run build",
+    "build:website": "pnpm --filter website build",
+    "prebuild": "pnpm run build:react && pnpm run copy:render && pnpm run build:electron",
+    "copy:render": "node scripts/copyRenderer.js",
+    "build:unpack": "pnpm run prebuild && pnpm --filter electron run build:unpack",
+    "build:win": "pnpm run prebuild && pnpm --filter electron run build:win",
+    "build:linux": "pnpm run prebuild && pnpm --filter electron run build:linux",
+    "build:mac": "pnpm run prebuild && pnpm --filter electron run build:mac",
+    "build:packages": "node scripts/buildPackages.mjs",
+    "build:server": "pnpm --filter server build",
+    "publish:server": "node scripts/publishServer.mjs",
+    "release": "node scripts/release.mjs",
+    "fix:tsconfig": "node ./scripts/typescript/fixPaths.mjs",
+    "typecheck": "pnpm -r typecheck",
+    "prepare": "husky",
+    "knip": "knip"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^5.4.1",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "config": "workspace:*",
+    "eslint": "catalog:",
+    "eslint-plugin-format": "^1.0.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.23",
+    "husky": "^9.1.7",
+    "knip": "^5.67.1",
+    "typescript": "catalog:"
+  },
+  "lint-staged": {
+    "{packages,projects}/*/{src,types}/**/*.{ts,tsx,js,jsx}": [
+      "eslint"
+    ],
+    "{packages,projects}/**/*.d.ts": [
+      "eslint --ext .ts"
+    ]
+  },
+  "packageManager": "pnpm@10.12.4",
+  "bugs": {
+    "url": "https://github.com/VinkyDev/vtft/issues"
+  },
+  "homepage": "https://vinkydev.github.io/vtft",
+  "engines": {
+    "npm": "only-allow-pnpm",
+    "yarn": "only-allow-pnpm",
+    "node": ">= 18"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild"
+    ]
+  }
+}

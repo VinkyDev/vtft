@@ -1,0 +1,19 @@
+{
+  "name": "config",
+  "version": "0.0.13",
+  "description": "",
+  "exports": {
+    "./rslib.config": {
+      "import": "./rslib.config.ts",
+      "types": "./rslib.config.ts"
+    },
+    "./*": {
+      "import": "./*",
+      "require": "./*"
+    },
+    "./*.json": "./*.json"
+  },
+  "dependencies": {
+    "@rslib/core": "catalog:"
+  }
+}

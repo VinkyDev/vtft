@@ -1,0 +1,171 @@
+name: 构建并发布桌面应用
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建 packages
+        run: pnpm run build:packages
+
+      - name: 构建 Windows 应用
+        run: pnpm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_APTABASE_CODE: ${{ secrets.APTABASE_CODE }}
+          VITE_API_BASE_URL: ${{ secrets.API_BASE_URL }}
+
+      - name: 重命名 Windows x64 安装包
+        run: |
+          cd apps/electron/dist
+          if [ -f "vtft-x64-setup.exe" ]; then
+            cp vtft-x64-setup.exe vtft-setup.exe
+            cp vtft-x64-setup.exe.blockmap vtft-setup.exe.blockmap
+          fi
+        shell: bash
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: |
+            apps/electron/dist/vtft-setup.exe
+            apps/electron/dist/vtft-setup.exe.blockmap
+            apps/electron/dist/vtft-arm64-setup.exe
+            apps/electron/dist/vtft-arm64-setup.exe.blockmap
+            apps/electron/dist/latest.yml
+          retention-days: 7
+
+  build-macos:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建 packages
+        run: pnpm run build:packages
+
+      - name: 构建 macOS 应用
+        run: pnpm run build:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_APTABASE_CODE: ${{ secrets.APTABASE_CODE }}
+          VITE_API_BASE_URL: ${{ secrets.API_BASE_URL }}
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: |
+            apps/electron/dist/vtft-x64.dmg
+            apps/electron/dist/vtft-x64.dmg.blockmap
+            apps/electron/dist/vtft-x64.zip
+            apps/electron/dist/vtft-x64.zip.blockmap
+            apps/electron/dist/vtft-arm64.dmg
+            apps/electron/dist/vtft-arm64.dmg.blockmap
+            apps/electron/dist/vtft-arm64.zip
+            apps/electron/dist/vtft-arm64.zip.blockmap
+            apps/electron/dist/latest-mac.yml
+          retention-days: 7
+
+  create-release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 下载 Windows 构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+          path: ./release-assets
+
+      - name: 下载 macOS 构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+          path: ./release-assets
+
+      - name: 生成安装说明
+        id: release-notes
+        run: |
+          cat << 'EOF' > release-body.md
+          ## 📦 安装说明
+
+          ### Windows 用户
+          - **Intel/AMD 处理器**: 下载 `vtft-setup.exe`
+          - **ARM 处理器**: 下载 `vtft-arm64-setup.exe`
+
+          ### macOS 用户
+          - **Intel 芯片 (x64)**: 下载 `vtft-x64.dmg`
+          - **Apple 芯片 (M1/M2/M3)**: 下载 `vtft-arm64.dmg`
+
+          双击打开 DMG 文件，将 VTFT 图标拖拽到 Applications 文件夹。
+
+          首次打开时，如果系统提示"vtft.app"已损坏，请在终端运行：
+          ```bash
+          sudo xattr -r -d com.apple.quarantine /Applications/vtft.app
+          ```
+
+          ---
+
+          EOF
+
+      - name: 创建或更新 Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release-assets/*
+          body_path: release-body.md
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

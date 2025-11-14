@@ -1,0 +1,31 @@
+{
+  "name": "server",
+  "type": "module",
+  "version": "0.0.13",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx watch src/index.ts",
+    "start": "pnpm run build && NODE_ENV=production node dist/index.cjs",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "@hono/swagger-ui": "^0.5.2",
+    "crawler": "workspace:*",
+    "db": "workspace:*",
+    "dotenv": "^17.2.3",
+    "hono": "catalog:",
+    "logger": "workspace:*",
+    "lru-cache": "^11.2.2",
+    "node-cron": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/node-cron": "^3.0.11",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.6",
+    "types": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

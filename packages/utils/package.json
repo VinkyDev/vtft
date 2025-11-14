@@ -1,0 +1,35 @@
+{
+  "name": "utils",
+  "type": "module",
+  "version": "0.0.13",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf ./{*.tsbuildinfo,build,dist,.hash}",
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "pinyin-pro": "^3.27.0",
+    "query-string": "catalog:",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@rslib/core": "catalog:",
+    "types": "workspace:*",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

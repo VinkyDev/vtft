@@ -1,0 +1,32 @@
+{
+  "name": "website",
+  "version": "0.0.13",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "preview": "npx serve@latest out",
+    "lint": "eslint --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "framer-motion": "^12.23.24",
+    "lucide-react": "catalog:",
+    "next": "^16.0.1",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-helper": "workspace:*",
+    "ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-next": "^16.0.1",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

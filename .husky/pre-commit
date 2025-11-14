@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+echo "Checking lint status..."
+if ! pnpm lint; then
+  echo "❌ Lint failed. Please fix the errors before committing."
+  exit 1
+fi
+
+echo "Running typecheck..."
+if ! pnpm typecheck; then
+  echo "❌ Type check failed. Please fix the errors before committing."
+  exit 1
+fi
+
+echo "Running knip..."
+if ! pnpm knip; then
+  echo "❌ Knip check failed. Please fix the issues before committing."
+  exit 1
+fi
+
+echo "✓ All checks passed. Adding auto-fixed files to staging area..."
+git add -u
+
+echo "✓ Pre-commit checks completed successfully!"

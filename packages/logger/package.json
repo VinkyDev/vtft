@@ -1,7 +1,7 @@
 {
   "name": "logger",
   "type": "module",
-  "version": "0.0.13",
+  "version": "0.1.0",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",

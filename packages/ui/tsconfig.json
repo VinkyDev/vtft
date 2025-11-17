@@ -9,10 +9,4 @@
     "outDir": "./dist"
   },
   "include": ["src/**/*"],
-  "exclude": ["build", "tests"],
-  "references": [
-    {
-      "path": "../utils"
-    }
-  ]
 }

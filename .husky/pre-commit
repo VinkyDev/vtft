@@ -1,10 +1,5 @@
 #!/usr/bin/env sh
-
-echo "Checking lint status..."
-if ! pnpm lint; then
-  echo "❌ Lint failed. Please fix the errors before committing."
-  exit 1
-fi
+. "$(dirname -- "$0")/_/husky.sh"
 
 echo "Running typecheck..."
 if ! pnpm typecheck; then
@@ -18,7 +13,10 @@ if ! pnpm knip; then
   exit 1
 fi
 
-echo "✓ All checks passed. Adding auto-fixed files to staging area..."
-git add -u
+# set NODE_OPTIONS if not set
+if [ -z "$NODE_OPTIONS" ]; then
+  export NODE_OPTIONS="--max-old-space-size=16384"
+fi
 
-echo "✓ Pre-commit checks completed successfully!"
+# lint staged
+pnpm exec lint-staged --verbose

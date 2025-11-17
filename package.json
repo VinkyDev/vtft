@@ -38,6 +38,7 @@
     "@antfu/eslint-config": "^5.4.1",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "lint-staged": "^16.2.6",
     "config": "workspace:*",
     "eslint": "catalog:",
     "eslint-plugin-format": "^1.0.2",
@@ -49,11 +50,8 @@
     "typescript": "catalog:"
   },
   "lint-staged": {
-    "{packages,projects}/*/{src,types}/**/*.{ts,tsx,js,jsx}": [
-      "eslint"
-    ],
-    "{packages,projects}/**/*.d.ts": [
-      "eslint --ext .ts"
+    "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}": [
+      "eslint --fix --cache --cache-strategy content --cache-location ./node_modules/.cache/eslint/eslintcache.json --report-unused-disable-directives"
     ]
   },
   "packageManager": "pnpm@10.12.4",

@@ -83,7 +83,7 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
       // 将综合得分附加回原数据
       sorted = sorted.map((item, index) => ({
         ...item,
-        compositeScore: rankedItems[index].compositeScore ?? 0,
+        compositeScore: rankedItems[index]?.compositeScore ?? 0,
       }))
 
       // 按综合得分降序排序

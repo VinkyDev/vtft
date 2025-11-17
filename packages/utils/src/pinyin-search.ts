@@ -55,17 +55,17 @@ function matchPinyinArray(pinyinArray: string[], query: string): boolean {
   // 遍历每个起始位置
   for (let startIdx = 0; startIdx < pinyinArray.length; startIdx++) {
     let queryIdx = 0
-    let currentPinyin = pinyinArray[startIdx].toLowerCase()
+    let currentPinyin = pinyinArray[startIdx]?.toLowerCase()
     let pinyinIdx = 0
 
     // 尝试从当前起始位置开始匹配
     for (let i = startIdx; i < pinyinArray.length && queryIdx < lowerQuery.length; i++) {
-      currentPinyin = pinyinArray[i].toLowerCase()
+      currentPinyin = pinyinArray[i]?.toLowerCase()
       pinyinIdx = 0
 
       // 在当前拼音中匹配尽可能多的字符
-      while (pinyinIdx < currentPinyin.length && queryIdx < lowerQuery.length) {
-        if (currentPinyin[pinyinIdx] === lowerQuery[queryIdx]) {
+      while (pinyinIdx < (currentPinyin?.length || 0) && queryIdx < lowerQuery.length) {
+        if (currentPinyin?.[pinyinIdx] === lowerQuery[queryIdx]) {
           pinyinIdx++
           queryIdx++
         }
@@ -75,12 +75,12 @@ function matchPinyinArray(pinyinArray: string[], query: string): boolean {
       }
 
       // 如果当前拼音没有完全匹配完，说明查询字符串不匹配
-      if (pinyinIdx > 0 && pinyinIdx < currentPinyin.length && queryIdx < lowerQuery.length) {
+      if (pinyinIdx > 0 && pinyinIdx < (currentPinyin?.length || 0) && queryIdx < lowerQuery.length) {
         // 部分匹配了当前拼音，但还有剩余字符未匹配
         // 检查下一个拼音是否能继续匹配
         if (i + 1 < pinyinArray.length) {
-          const nextPinyin = pinyinArray[i + 1].toLowerCase()
-          if (nextPinyin[0] !== lowerQuery[queryIdx]) {
+          const nextPinyin = pinyinArray[i + 1]?.toLowerCase()
+          if (nextPinyin?.[0] !== lowerQuery[queryIdx]) {
             break
           }
         }

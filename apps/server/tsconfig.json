@@ -1,16 +1,5 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "strict": true,
-    "noEmit": true,
-    "isolatedModules": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"]
+  "extends": "config/tsconfig.node.json",
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

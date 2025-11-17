@@ -27,7 +27,7 @@ export function sortChampions(
     // 将综合得分附加回原数据
     sorted = sorted.map((champion, index) => ({
       ...champion,
-      compositeScore: rankedChampions[index].compositeScore ?? 0,
+      compositeScore: rankedChampions[index]?.compositeScore ?? 0,
     }))
 
     // 按综合得分降序排序

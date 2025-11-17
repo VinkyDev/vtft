@@ -34,35 +34,35 @@ export async function extractRecommendedItems(
 
               // 第2列：装备名称和图标
               const itemCell = cells[1]
-              const itemImg = itemCell.locator('img[alt][src*="tft-item"]').first()
-              const itemName = await itemImg.getAttribute('alt').catch(() => '')
-              const itemIcon = await itemImg.getAttribute('src').catch(() => '')
+              const itemImg = itemCell?.locator('img[alt][src*="tft-item"]').first()
+              const itemName = await itemImg?.getAttribute('alt').catch(() => '')
+              const itemIcon = await itemImg?.getAttribute('src').catch(() => '')
 
               if (!itemName || !itemIcon) {
                 continue
               }
 
               // 第3列：平均排名
-              const avgRankText = await cells[2].textContent()
+              const avgRankText = await cells[2]?.textContent()
               const avgRank = avgRankText ? Number.parseFloat(avgRankText.trim().replace('#', '')) : undefined
 
               // 第4列：前四率
-              const top4RateText = await cells[3].textContent()
+              const top4RateText = await cells[3]?.textContent()
               const top4Rate = top4RateText ? Number.parseFloat(top4RateText.trim().replace('%', '')) : undefined
 
               // 第5列：第一率
-              const firstPlaceRateText = await cells[4].textContent()
+              const firstPlaceRateText = await cells[4]?.textContent()
               const firstPlaceRate = firstPlaceRateText ? Number.parseFloat(firstPlaceRateText.trim().replace('%', '')) : undefined
 
               // 第6列：比赛次数
-              const matchesText = await cells[5].textContent()
+              const matchesText = await cells[5]?.textContent()
               const matches = matchesText ? Number.parseInt(matchesText.trim().replace(',', '')) : undefined
 
               // 第7列：推荐英雄（获取所有）
               const recommendedForCell = cells[6]
-              const championImgs = await recommendedForCell.locator('img[alt]').all()
+              const championImgs = await recommendedForCell?.locator('img[alt]').all()
               const recommendedFor = await Promise.all(
-                championImgs.map(img => img.getAttribute('alt')),
+                championImgs?.map(img => img.getAttribute('alt')) || [],
               ).then(alts => alts.filter(Boolean) as string[])
 
               items.push({

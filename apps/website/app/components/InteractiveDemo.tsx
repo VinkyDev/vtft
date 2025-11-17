@@ -298,7 +298,7 @@ export function InteractiveDemo() {
                           key={label}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setActiveTab(["comps", "items", "champions", "augments"][idx]);
+                            setActiveTab(["comps", "items", "champions", "augments"][idx] || "comps");
                           }}
                           className={`px-3 py-1 text-xs font-medium rounded transition-all ${activeTab === ["comps", "items", "champions", "augments"][idx]
                               ? "bg-blue-500/80 text-white shadow-sm"

@@ -119,7 +119,7 @@ export class CompCrawler extends BaseCrawler<CompData[]> {
       try {
         this.logger.info(`正在获取阵容 ${i + 1}/${maxDetails} 的详细信息`)
         const details = await extractCompDetails(page, i)
-        comps[i].details = details
+        comps[i]!.details = details
 
         consecutiveFailures = 0
       }

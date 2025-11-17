@@ -16,7 +16,6 @@
     "next": "^16.0.1",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-helper": "workspace:*",
     "ui": "workspace:*"
   },
   "devDependencies": {

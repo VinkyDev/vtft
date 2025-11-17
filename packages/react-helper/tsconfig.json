@@ -1,12 +1,8 @@
 {
-  "extends": "config/tsconfig.options.json",
+  "extends": "config/tsconfig.web.json",
   "compilerOptions": {
-    "jsx": "react-jsx"
+    "outDir": "./dist"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["dist"]
 }

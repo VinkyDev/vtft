@@ -78,8 +78,8 @@ function percentile(sorted: number[], p: number): number {
   const weight = index - lower
 
   if (lower === upper)
-    return sorted[lower]
-  return sorted[lower] * (1 - weight) + sorted[upper] * weight
+    return sorted[lower] ?? 0
+  return (sorted[lower] ?? 0) * (1 - weight) + (sorted[upper] ?? 0) * weight
 }
 
 /**
@@ -101,7 +101,9 @@ function buildECDF(matches: number[]): (n: number) => number {
 
     while (left < right) {
       const mid = Math.floor((left + right) / 2)
-      if (logMatches[mid] <= logN) {
+      const midLogMatches = logMatches[mid] ?? 0
+
+      if (midLogMatches <= logN) {
         left = mid + 1
       }
       else {

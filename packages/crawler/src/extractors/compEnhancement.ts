@@ -39,12 +39,12 @@ async function extractChampionEnhancement(section: Locator): Promise<ChampionEnh
         continue
 
       // 提取强化名称
-      const strongText = await cells[0].locator('strong').textContent().catch(() => '')
+      const strongText = await cells[0]?.locator('strong').textContent().catch(() => '')
       if (!strongText)
         continue
 
       // 提取标签
-      const tagDivs = await cells[0].locator('div[class*="rounded-"]').all()
+      const tagDivs = await cells[0]?.locator('div[class*="rounded-"]').all() || []
       const tags: string[] = []
       let weight: number | undefined
 
@@ -53,7 +53,7 @@ async function extractChampionEnhancement(section: Locator): Promise<ChampionEnh
         if (tagText?.includes('Weight:')) {
           const weightMatch = tagText.match(/Weight:\s*(\d+)/)
           if (weightMatch)
-            weight = Number.parseInt(weightMatch[1])
+            weight = Number.parseInt(weightMatch[1] || '0')
         }
         else if (tagText) {
           tags.push(tagText.trim())
@@ -61,12 +61,12 @@ async function extractChampionEnhancement(section: Locator): Promise<ChampionEnh
       }
 
       // 提取段位
-      const tierSrc = await cells[1].locator('img').first().getAttribute('src').catch(() => '')
+      const tierSrc = await cells[1]?.locator('img').first().getAttribute('src').catch(() => '')
       let tier: string | undefined
       if (tierSrc) {
         const tierMatch = tierSrc.match(/icon-tier-([A-Z])\./i)
         if (tierMatch)
-          tier = tierMatch[1].toUpperCase()
+          tier = tierMatch[1]?.toUpperCase()
       }
 
       championEnhancement.enhancements.push({

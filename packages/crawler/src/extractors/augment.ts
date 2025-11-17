@@ -18,18 +18,18 @@ async function extractAugmentFromRow(row: Locator, level: AugmentLevel): Promise
   const cells = await row.locator(SELECTORS.AUGMENT.TABLE_CELL).all()
 
   const augmentCell = cells[TABLE_COLUMNS.AUGMENT]
-  const augmentImg = augmentCell.locator(SELECTORS.AUGMENT.IMAGE).first()
-  const name = await augmentImg.getAttribute('alt', { timeout: TIMEOUT_STANDARD_MS }).catch(() => '')
-  const icon = await augmentImg.getAttribute('src', { timeout: TIMEOUT_STANDARD_MS }).catch(() => '')
+  const augmentImg = augmentCell?.locator(SELECTORS.AUGMENT.IMAGE).first()
+  const name = await augmentImg?.getAttribute('alt', { timeout: TIMEOUT_STANDARD_MS }).catch(() => '')
+  const icon = await augmentImg?.getAttribute('src', { timeout: TIMEOUT_STANDARD_MS }).catch(() => '')
 
   if (!name || !icon) {
     return null
   }
 
-  const tierText = await cells[TABLE_COLUMNS.TIER].textContent()
+  const tierText = await cells[TABLE_COLUMNS.TIER]?.textContent()
   const tier = tierText?.trim() || undefined
 
-  const typeText = await cells[TABLE_COLUMNS.TYPE].textContent()
+  const typeText = await cells[TABLE_COLUMNS.TYPE]?.textContent()
   const type = typeText?.trim() || undefined
 
   return { name, icon, level, tier, type }

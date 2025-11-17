@@ -1,7 +1,7 @@
 import type { CommonLogOptions, LoggerReportClient, LogLevel, LogOptions } from './type'
 import { isEmpty } from 'lodash-es'
 
-const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'
+const isBrowser = typeof (globalThis as any).window !== 'undefined' && typeof (globalThis as any).window.document !== 'undefined'
 
 // ANSI 颜色代码（用于 Node.js）
 const ANSI = {

@@ -1,9 +1,5 @@
 {
-  "extends": "config/tsconfig.options.json",
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist"
-  ]
+  "extends": "config/tsconfig.lib.json",
+  "include": ["src/**/*"],
+  "exclude": ["dist"]
 }

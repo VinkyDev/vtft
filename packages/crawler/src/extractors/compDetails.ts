@@ -215,11 +215,16 @@ async function extractFormation(compLocator: Locator): Promise<Formation> {
   const rows = await formationArea.locator(SELECTORS.FORMATION.ROW).all()
 
   for (let rowIndex = 0; rowIndex < Math.min(rows.length, COMP.BOARD_ROWS); rowIndex++) {
-    const row = rows[rowIndex]
-    const positionsInRow = await row.locator('> div').all()
+    const row = rows[rowIndex] || null
+    const positionsInRow = await row?.locator('> div').all() || []
 
     for (let colIndex = 0; colIndex < Math.min(positionsInRow.length, COMP.BOARD_COLS); colIndex++) {
       const positionElement = positionsInRow[colIndex]
+
+      if (!positionElement) {
+        continue
+      }
+
       const champion = await extractPositionChampion(positionElement)
 
       positions.push({ row: rowIndex, col: colIndex, champion })

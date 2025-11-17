@@ -29,7 +29,7 @@ export function t(str: string, options: TOptions = {}): string {
   if (ignoreCase) {
     const lowerTranslations: Record<string, string> = {}
     for (const key in translations) {
-      lowerTranslations[key.toLowerCase()] = translations[key]
+      lowerTranslations[key.toLowerCase()] = translations[key]!
     }
 
     const lowerKey = str.toLowerCase()
@@ -41,7 +41,7 @@ export function t(str: string, options: TOptions = {}): string {
       let result = str
       for (const key in lowerTranslations) {
         const re = new RegExp(key, 'gi')
-        result = result.replace(re, lowerTranslations[key])
+        result = result.replace(re, lowerTranslations[key]!)
       }
       return result
     }
@@ -58,7 +58,7 @@ export function t(str: string, options: TOptions = {}): string {
     let result = str
     for (const key in translations) {
       const re = new RegExp(key, 'g')
-      result = result.replace(re, translations[key])
+      result = result.replace(re, translations[key]!)
     }
     return result
   }

@@ -176,13 +176,13 @@ describe('filterByPinyinSearch', () => {
   it('通过首拼过滤', () => {
     const result = filterByPinyinSearch(champions, 'ax', item => item.name)
     expect(result).toHaveLength(1)
-    expect(result[0].name).toBe('艾希')
+    expect(result[0]?.name).toBe('艾希')
   })
 
   it('通过全拼过滤', () => {
     const result = filterByPinyinSearch(champions, 'gai', item => item.name)
     expect(result).toHaveLength(1)
-    expect(result[0].name).toBe('盖伦')
+    expect(result[0]?.name).toBe('盖伦')
   })
 
   it('过滤多个匹配项', () => {
@@ -211,6 +211,6 @@ describe('filterByPinyinSearch', () => {
   it('支持自定义提取函数', () => {
     const result = filterByPinyinSearch(champions, '射手', item => item.type)
     expect(result).toHaveLength(1)
-    expect(result[0].name).toBe('艾希')
+    expect(result[0]?.name).toBe('艾希')
   })
 })

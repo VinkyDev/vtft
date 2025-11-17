@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode, useState, useEffect, useCallback } from "react";
+import type { ReactNode } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Grid2x2, Airplay } from 'lucide-react';
 import { ShimmerButton } from "ui/components";
 

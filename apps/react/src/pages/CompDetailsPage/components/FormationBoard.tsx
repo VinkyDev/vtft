@@ -26,7 +26,7 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
   // 填充棋盘数据
   formation.positions.forEach((position) => {
     if (position.row >= 0 && position.row < ROWS && position.col >= 0 && position.col < COLS) {
-      board[position.row][position.col] = position
+      board[position.row]![position.col] = position
     }
   })
 

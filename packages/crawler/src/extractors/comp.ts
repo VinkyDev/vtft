@@ -10,7 +10,7 @@ const logger = new Logger({ namespace: 'crawler', scope: 'xtr/comp' })
  */
 function extractCost(classNames: string): number {
   const match = classNames.match(/border-champion-(\d+)/)
-  return match ? Number.parseInt(match[1], 10) : 1
+  return match ? Number.parseInt(match[1] || '1', 10) : 1
 }
 
 /**
@@ -18,7 +18,7 @@ function extractCost(classNames: string): number {
  */
 function extractTraitLevel(classNames: string): number {
   const match = classNames.match(/text-meta-trait-(\d+)/)
-  return match ? Number.parseInt(match[1], 10) : 1
+  return match ? Number.parseInt(match[1] || '1', 10) : 1
 }
 
 /**
@@ -67,7 +67,7 @@ export async function extractCompsFromPage(page: Page): Promise<CompData[]> {
 
     const levelMatch = levelText.match(/Lv\s*(\d+)/)
     if (levelMatch) {
-      comp.level = Number.parseInt(levelMatch[1], 10)
+      comp.level = Number.parseInt(levelMatch[1] || '0', 10)
       comp.levelType = 'reroll'
     }
 

@@ -18,7 +18,7 @@ export class TFTDatabase {
   public comps: CompRepository
   public compDetails: CompDetailRepository
 
-  constructor(private dbManager: MongoDBManager) {
+  constructor(dbManager: MongoDBManager) {
     this.augments = new AugmentRepository(dbManager)
     this.champions = new ChampionRepository(dbManager)
     this.items = new ItemRepository(dbManager)

@@ -1,14 +1,12 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { getCompDetails } from 'api-client'
-import { getApiErrorRecord } from 'logger'
 import { useMemo, useState } from 'react'
-import { useRequest, withErrorBoundary } from 'react-helper'
+import { useRequest } from 'react-helper'
 import {
   AppTabs,
   AugmentsGridSkeleton,
   ChampionEnhancementsGridSkeleton,
   EmptyState,
-  ErrorState,
   FormationBoardSkeleton,
   ItemsGridSkeleton,
 } from '@/components'
@@ -19,7 +17,7 @@ interface CompDetailContentProps {
   comp: EnhancedCompData | null
 }
 
-function CompDetailContent({ comp }: CompDetailContentProps) {
+export function CompDetailContent({ comp }: CompDetailContentProps) {
   const [activeTab, setActiveTab] = useState('overview')
   const { windowMode } = useConfigStore()
 
@@ -137,28 +135,3 @@ function CompDetailContent({ comp }: CompDetailContentProps) {
     </div>
   )
 }
-
-export default withErrorBoundary(CompDetailContent, {
-  errorBoundaryName: 'comp_details_content',
-  FallbackComponent: ({ resetErrorBoundary, error }) => {
-    const { httpStatus } = getApiErrorRecord(error)
-
-    if (httpStatus === '404') {
-      return (
-        <ErrorState
-          message="该阵容详情不存在"
-          description="正在紧锣密鼓建设中..."
-        />
-      )
-    }
-
-    return (
-      <ErrorState
-        message="加载阵容详情失败"
-        onReload={() => {
-          resetErrorBoundary()
-        }}
-      />
-    )
-  },
-})

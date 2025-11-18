@@ -1,4 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
+
+/**
+ * 获取当前窗口是否为小窗模式
+ */
+function getSnapshot(): boolean {
+  return window.innerWidth < 640
+}
+
+/**
+ * SSR 时的服务端快照
+ */
+function getServerSnapshot(): boolean {
+  return false
+}
+
+/**
+ * 订阅窗口尺寸变化
+ */
+function subscribe(callback: () => void): () => void {
+  window.addEventListener('resize', callback)
+  return () => {
+    window.removeEventListener('resize', callback)
+  }
+}
 
 /**
  * 检测当前是否为小窗模式
@@ -6,25 +30,5 @@ import { useEffect, useState } from 'react'
  * @returns boolean - 是否为小窗模式 (< 640px)
  */
 export function useIsSmallWindow(): boolean {
-  const [isSmallWindow, setIsSmallWindow] = useState(false)
-
-  useEffect(() => {
-    // 检查当前窗口尺寸
-    const checkWindowSize = () => {
-      setIsSmallWindow(window.innerWidth < 640)
-    }
-
-    // 初始检查
-    checkWindowSize()
-
-    // 监听窗口尺寸变化
-    window.addEventListener('resize', checkWindowSize)
-
-    // 清理事件监听器
-    return () => {
-      window.removeEventListener('resize', checkWindowSize)
-    }
-  }, [])
-
-  return isSmallWindow
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }

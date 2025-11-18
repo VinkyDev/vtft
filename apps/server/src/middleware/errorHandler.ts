@@ -1,4 +1,5 @@
 import type { Context, Next } from 'hono'
+import process from 'node:process'
 import { Logger } from 'logger'
 
 const logger = new Logger({ namespace: 'middleware', scope: 'errorHandler' })

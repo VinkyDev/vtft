@@ -13,7 +13,7 @@ let globalApiClient: AxiosInstance | null = null
  * @param baseURL API 基础路径，默认为 http://localhost:3000/api
  * @returns Axios 实例
  */
-export function createApiClient(baseURL: string = 'http://localhost:3000/api') {
+export function createApiClient(baseURL: string = 'http://localhost:3000/api'): AxiosInstance {
   const client = axios.create({
     baseURL,
     timeout: 10000,
@@ -47,7 +47,7 @@ export function createApiClient(baseURL: string = 'http://localhost:3000/api') {
  * 设置全局 API 客户端实例
  * @param client Axios 实例
  */
-export function setApiClient(client: AxiosInstance) {
+export function setApiClient(client: AxiosInstance): void {
   globalApiClient = client
 }
 

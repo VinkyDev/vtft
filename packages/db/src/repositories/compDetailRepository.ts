@@ -1,3 +1,4 @@
+import type { BulkWriteResult, Collection, DeleteResult, UpdateResult, WithId } from 'mongodb'
 import type { CompData, CompDetails } from 'types'
 import type { MongoDBManager } from '../client'
 import type { CompDetailDocument } from '../models/compDetail'
@@ -7,12 +8,12 @@ export class CompDetailRepository {
   constructor(private db: MongoDBManager) {}
 
   /** 获取集合 */
-  private getCollection() {
+  private getCollection(): Collection<CompDetailDocument> {
     return this.db.getDb().collection<CompDetailDocument>(COLLECTION_NAME)
   }
 
   /** 初始化索引 */
-  async createIndexes() {
+  async createIndexes(): Promise<void> {
     const collection = this.getCollection()
     await collection.createIndex({ compId: 1 }, { unique: true })
     await collection.createIndex({ updatedAt: -1 })
@@ -26,7 +27,7 @@ export class CompDetailRepository {
   }
 
   /** 插入或更新阵容详情 */
-  async upsert(comp: CompData) {
+  async upsert(comp: CompData): Promise<UpdateResult<CompDetailDocument> | null> {
     if (!comp.details) {
       return null
     }
@@ -52,7 +53,7 @@ export class CompDetailRepository {
   }
 
   /** 批量插入或更新阵容详情 */
-  async upsertMany(comps: CompData[]) {
+  async upsertMany(comps: CompData[]): Promise<BulkWriteResult | undefined> {
     const collection = this.getCollection()
     const now = new Date()
 
@@ -85,7 +86,7 @@ export class CompDetailRepository {
   }
 
   /** 根据 compId 查找详情 */
-  async findByCompId(compId: string) {
+  async findByCompId(compId: string): Promise<WithId<CompDetailDocument> | null> {
     return await this.getCollection().findOne({ compId })
   }
 
@@ -96,7 +97,7 @@ export class CompDetailRepository {
   }
 
   /** 删除所有数据 */
-  async deleteAll() {
+  async deleteAll(): Promise<DeleteResult> {
     return await this.getCollection().deleteMany({})
   }
 }

@@ -1,12 +1,40 @@
 import type { EnhancedCompData } from '@/utils/compRating'
+import { getApiErrorRecord } from 'logger'
+import { withErrorBoundary } from 'react-helper'
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from 'ui'
+import { ErrorState } from '@/components'
 import { useConfigStore } from '@/store/dataStore'
-import CompDetailContent from './content'
+import { CompDetailContent } from './content'
 
 interface CompDetailPageProps {
   comp: EnhancedCompData | null
   onClose: () => void
 }
+
+const CompDetailContentWithErrorBoundary = withErrorBoundary(CompDetailContent, {
+  errorBoundaryName: 'comp_details_content',
+  FallbackComponent: ({ resetErrorBoundary, error }) => {
+    const { httpStatus } = getApiErrorRecord(error)
+
+    if (httpStatus === '404') {
+      return (
+        <ErrorState
+          message="该阵容详情不存在"
+          description="正在紧锣密鼓建设中..."
+        />
+      )
+    }
+
+    return (
+      <ErrorState
+        message="加载阵容详情失败"
+        onReload={() => {
+          resetErrorBoundary()
+        }}
+      />
+    )
+  },
+})
 
 export default function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
   const { windowMode } = useConfigStore()
@@ -43,7 +71,7 @@ export default function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
           查看阵容站位和配置信息
         </DrawerDescription>
 
-        <CompDetailContent comp={comp} />
+        <CompDetailContentWithErrorBoundary comp={comp} />
       </DrawerContent>
     </Drawer>
   )

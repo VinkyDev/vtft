@@ -13,7 +13,8 @@
     "lint": "pnpm -r lint",
     "check": "pnpm dlx concurrently 'pnpm lint' 'pnpm typecheck' 'pnpm knip'",
     "dev:react": "pnpm --filter react run dev",
-    "dev:electron": "pnpm --filter electron --filter react run dev",
+    "dev:electron": "pnpm --filter electron run dev",
+    "dev:desktop": "pnpm --filter electron --filter react run dev",
     "dev:server": "pnpm --filter server dev",
     "dev:website": "pnpm --filter website dev",
     "build:react": "pnpm --filter react run build",
@@ -35,16 +36,12 @@
     "knip": "knip"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^5.4.1",
+    "@antfu/eslint-config": "^6.2.0",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "lint-staged": "^16.2.6",
     "config": "workspace:*",
     "eslint": "catalog:",
-    "eslint-plugin-format": "^1.0.2",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.23",
     "husky": "^9.1.7",
     "knip": "^5.67.1",
     "typescript": "catalog:"

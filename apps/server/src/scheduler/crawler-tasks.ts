@@ -1,4 +1,5 @@
 import type { ScheduledTask } from './index'
+import process from 'node:process'
 import { clearCache } from '../middleware'
 
 /**

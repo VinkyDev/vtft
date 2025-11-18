@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { memo } from 'react'
 
 interface FormationBoardSkeletonProps {

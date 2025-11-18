@@ -117,9 +117,9 @@ const ChampionEnhancementCard = memo(({ championEnhancement, isSmallWindow }: Ch
 
       {/* 果实列表 */}
       <div className={isSmallWindow ? 'space-y-1' : 'space-y-1.5'}>
-        {enhancements.map((enhancement, index) => (
+        {enhancements.map(enhancement => (
           <EnhancementItem
-            key={`${enhancement.name}-${index}`}
+            key={enhancement.name}
             enhancement={enhancement}
             isSmallWindow={isSmallWindow}
           />
@@ -153,9 +153,9 @@ export const ChampionEnhancementsGrid = memo(({ championEnhancements }: Champion
       <ScrollArea className="h-[calc(100vh-50px)] sm:h-[calc(100vh-60px)]" type="scroll">
         <div className={isSmallWindow ? 'p-3' : 'p-4'}>
           <div className={`grid grid-cols-3 ${isSmallWindow ? 'gap-2' : 'gap-3'}`}>
-            {championEnhancements.map((championEnhancement, index) => (
+            {championEnhancements.map(championEnhancement => (
               <ChampionEnhancementCard
-                key={`${championEnhancement.championName}-${index}`}
+                key={championEnhancement.championName}
                 championEnhancement={championEnhancement}
                 isSmallWindow={isSmallWindow}
               />

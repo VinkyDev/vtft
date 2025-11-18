@@ -45,6 +45,7 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
           <div className="flex flex-col gap-1.5 sm:gap-2">
             {board.map((row, rowIndex) => (
               <div
+                // eslint-disable-next-line react/no-array-index-key
                 key={rowIndex}
                 className="flex gap-1.5 sm:gap-2"
                 style={{
@@ -54,6 +55,7 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
               >
                 {row.map((position, colIndex) => (
                   <FormationCell
+                    // eslint-disable-next-line react/no-array-index-key
                     key={`${rowIndex}-${colIndex}`}
                     position={position}
                     rowIndex={rowIndex}
@@ -70,8 +72,8 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
       {sortedTraits.length > 0 && (
         <div className="w-full px-2">
           <div className="flex flex-wrap gap-0.5 sm:gap-2 items-center justify-center">
-            {sortedTraits.map((trait, idx) => (
-              <Trait key={idx} trait={trait} variant="with-label" />
+            {sortedTraits.map(trait => (
+              <Trait key={trait.name} trait={trait} variant="with-label" />
             ))}
           </div>
         </div>

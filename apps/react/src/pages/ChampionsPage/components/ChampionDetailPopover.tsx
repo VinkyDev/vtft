@@ -39,8 +39,8 @@ export const ChampionDetailPopover = memo(({ champion, children }: ChampionDetai
           {champion.traits && champion.traits.length > 0 && (
             <div className="border-t border-white/10">
               <div className="flex flex-wrap justify-center gap-0.5">
-                {champion.traits.map((trait, index) => (
-                  <Tooltip key={`${trait.name}-${index}`}>
+                {champion.traits.map(trait => (
+                  <Tooltip key={trait.name}>
                     <TooltipTrigger asChild>
                       <div className="size-5 overflow-hidden rounded border border-white/10 bg-black/20">
                         <img

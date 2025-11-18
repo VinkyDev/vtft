@@ -155,6 +155,7 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
           />
           <span className="text-white text-xs font-medium flex-1">{selectedChampion}</span>
           <button
+            type="button"
             onClick={() => setSelectedChampion(null)}
             className="text-gray-400 hover:text-white text-[10px] px-1.5 py-0.5 rounded bg-black/30 hover:bg-blue-500/20 transition-colors border border-white/5 hover:border-blue-500/30"
           >
@@ -171,9 +172,9 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
         : (
             <ScrollArea className="h-[calc(100vh-100px)] sm:h-[calc(100vh-110px)]">
               <div className="flex flex-col gap-1.5 p-1">
-                {sortedItems.map((item, index) => (
+                {sortedItems.map(item => (
                   <ItemCard
-                    key={`${item.name}-${index}`}
+                    key={`${item.name}`}
                     item={item}
                     onChampionClick={handleChampionClick}
                   />

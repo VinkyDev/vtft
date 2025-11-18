@@ -1,5 +1,5 @@
-import type { ComponentType } from 'react'
-import { forwardRef, Suspense } from 'react'
+import type { ComponentType, Ref } from 'react'
+import { Suspense } from 'react'
 
 export interface WithSuspenseOptions {
   /**
@@ -13,16 +13,16 @@ export interface WithSuspenseOptions {
 export function withSuspense<T,>(Target: ComponentType<T>, Fallback?: ComponentType<T>, options: WithSuspenseOptions = {}) {
   const { shouldForwardRef = true } = options
 
-  const SuspensedTarget = shouldForwardRef
-  // @ts-expect-error ignore
-    ? forwardRef((props: T, ref) => {
+  const WrappedTarget = shouldForwardRef
+    ? (props: T & { ref?: Ref<unknown> }) => {
+        const { ref, ...restProps } = props as T & { ref?: Ref<unknown> }
         return (
           // @ts-expect-error ignore
-          <Suspense fallback={Fallback && <Fallback {...props} />}>
-            <Target ref={ref} {...props} />
+          <Suspense fallback={Fallback && <Fallback {...restProps} />}>
+            <Target ref={ref} {...(restProps as T)} />
           </Suspense>
         )
-      })
+      }
     : (props: T) => {
         return (
           // @ts-expect-error ignore
@@ -36,7 +36,7 @@ export function withSuspense<T,>(Target: ComponentType<T>, Fallback?: ComponentT
       }
 
   // @ts-expect-error ignore
-  SuspensedTarget.displayName = Target.displayName ?? Fallback?.displayName
+  WrappedTarget.displayName = Target.displayName ?? Fallback?.displayName
 
-  return SuspensedTarget
+  return WrappedTarget
 }

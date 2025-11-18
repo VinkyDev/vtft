@@ -162,6 +162,7 @@ function doConsoleBrowser(
   }
   logs.push(...restArgs)
 
+  // eslint-disable-next-line no-console
   console.log(...logs)
 }
 
@@ -209,6 +210,7 @@ function doConsoleNode(
   }
   logs.push(...restArgs)
 
+  // eslint-disable-next-line no-console
   console.log(...logs)
 }
 

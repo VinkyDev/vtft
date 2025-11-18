@@ -1,6 +1,7 @@
 /**
  * 日志级别
  */
+// eslint-disable-next-line no-restricted-syntax
 export const enum LogLevel {
   /**
    * 调试信息

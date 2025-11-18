@@ -47,7 +47,7 @@ async function atomicUpdate<T>(
   dataType: string,
   data: T[],
   updateFn: (tftDb: ReturnType<typeof createTFTDatabase>) => Promise<void>,
-) {
+): Promise<void> {
   // 1. 验证数据
   const validation = validateData(data, dataType)
   if (!validation.isValid) {
@@ -92,7 +92,7 @@ async function atomicUpdate<T>(
  * 保存强化符文到数据库
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
-export async function saveAugments(augments: AugmentMeta[]) {
+export async function saveAugments(augments: AugmentMeta[]): Promise<void> {
   if (!augments || augments.length < 10) {
     logger.warn({ message: `强化符文数据量过少，共 ${augments?.length || 0} 个，跳过保存` })
     return
@@ -111,7 +111,7 @@ export async function saveAugments(augments: AugmentMeta[]) {
  * 保存英雄到数据库
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
-export async function saveChampions(champions: ChampionMeta[]) {
+export async function saveChampions(champions: ChampionMeta[]): Promise<void> {
   if (!champions || champions.length < 10) {
     logger.warn({ message: `英雄数据量过少，共 ${champions?.length || 0} 个，跳过保存` })
     return
@@ -130,7 +130,7 @@ export async function saveChampions(champions: ChampionMeta[]) {
  * 保存装备到数据库
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
-export async function saveItems(items: ItemMeta[]) {
+export async function saveItems(items: ItemMeta[]): Promise<void> {
   if (!items || items.length < 10) {
     logger.warn({ message: `装备数据量过少，共 ${items?.length || 0} 个，跳过保存` })
     return
@@ -149,7 +149,7 @@ export async function saveItems(items: ItemMeta[]) {
  * 保存阵容到数据库（包括详情）
  * 策略：先验证数据 -> 删除旧数据 -> 插入新数据（原子操作）
  */
-export async function saveComps(comps: CompData[]) {
+export async function saveComps(comps: CompData[]): Promise<void> {
   if (!comps || comps.length < 10) {
     logger.warn({ message: `阵容数据量过少，共 ${comps?.length || 0} 个，跳过保存` })
     return

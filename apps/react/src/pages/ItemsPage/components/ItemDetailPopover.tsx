@@ -46,7 +46,7 @@ export const ItemDetailPopover = memo(({ item, children }: ItemDetailPopoverProp
               <div className="border-t border-white/10 pt-1.5">
                 <div className="flex items-center justify-center">
                   {item.components.map((component: string, idx: number) => (
-                    <div key={idx} className="flex items-center">
+                    <div key={component} className="flex items-center">
                       <Item
                         itemName={component}
                         size="medium"
@@ -76,10 +76,10 @@ export const ItemDetailPopover = memo(({ item, children }: ItemDetailPopoverProp
           {item.recommendedFor && item.recommendedFor.length > 0 && (
             <div className="border-t border-white/10 pt-1.5">
               <div className="flex flex-wrap justify-center gap-0.5">
-                {item.recommendedFor.slice(0, 6).map((champion: string, idx: number) => (
+                {item.recommendedFor.slice(0, 6).map((champion: string) => (
                   <Champion
                     className="!w-5 !h-5"
-                    key={idx}
+                    key={champion}
                     championName={champion}
                     size="tiny"
                     showPriority={false}

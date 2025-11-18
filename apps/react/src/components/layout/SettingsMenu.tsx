@@ -33,7 +33,10 @@ export function SettingsMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="group p-2 rounded-md bg-black/30 border border-white/20 hover:bg-black/40 hover:border-white/30 transition-all duration-200 hidden sm:block">
+        <button
+          type="button"
+          className="group p-2 rounded-md bg-black/30 border border-white/20 hover:bg-black/40 hover:border-white/30 transition-all duration-200 hidden sm:block"
+        >
           <Settings className="h-4 w-4 text-gray-400 group-hover:text-gray-200 transition-colors duration-200" />
         </button>
       </DropdownMenuTrigger>

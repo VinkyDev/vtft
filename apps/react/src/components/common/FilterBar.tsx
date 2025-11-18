@@ -45,8 +45,8 @@ export const FilterBar = memo(({
 
   const content = (
     <div className={`flex ${layoutClasses[layout]} items-center flex-wrap gap-2`}>
-      {groups.map((group, index) => (
-        <div key={index} className="flex items-center gap-2">
+      {groups.map(group => (
+        <div key={group.value} className="flex items-center gap-2">
           {group.title && (
             <span className="text-gray-400 text-xs">{group.title}</span>
           )}

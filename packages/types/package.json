@@ -1,11 +1,11 @@
 {
   "name": "types",
+  "type": "module",
   "version": "0.1.0",
   "description": "",
   "author": "",
   "license": "ISC",
   "keywords": [],
-  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
@@ -18,7 +18,9 @@
   ],
   "scripts": {
     "build": "rslib build",
-    "dev": "rslib build --watch"
+    "dev": "rslib build --watch",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@rslib/core": "catalog:",

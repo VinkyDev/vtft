@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import type { ErrorInfo } from 'react'
 import type {
   ErrorBoundaryPropsWithRender,
@@ -5,7 +6,7 @@ import type {
 } from 'react-error-boundary'
 import { once } from 'lodash-es'
 import logger from 'logger'
-import React, { forwardRef, isValidElement, useCallback, version } from 'react'
+import React, { isValidElement, useCallback, version } from 'react'
 
 import {
   ErrorBoundary as ReactErrorBoundary,
@@ -38,20 +39,11 @@ export type ErrorBoundaryProps = ReactErrorBoundaryProps & {
   errorBoundaryScope?: ErrorBoundaryScopeEnum
 }
 
-export const ErrorBoundary = forwardRef<ReactErrorBoundary, ErrorBoundaryProps>(
-  (
-    {
-      onError: propsOnError,
-      errorBoundaryName = 'unknown',
-      children,
-      errorBoundaryScope = ErrorBoundaryScopeEnum.Component,
-      ...restProps
-    },
-    ref,
-  ) => {
-    const { fallback, fallbackRender, FallbackComponent } = restProps
+export function ErrorBoundary({ ref, onError: propsOnError, errorBoundaryName = 'unknown', children, errorBoundaryScope = ErrorBoundaryScopeEnum.Component, ...restProps }: ErrorBoundaryProps & { ref?: React.RefObject<ReactErrorBoundary | null> }): React.JSX.Element {
+  const { fallback, fallbackRender, FallbackComponent } = restProps
 
-    const logFallbackPropsEmpty = useCallback(
+  const logFallbackPropsEmpty = useCallback(
+    () => {
       once(() => {
         logger?.error({
           namespace: errorBoundaryName,
@@ -59,64 +51,64 @@ export const ErrorBoundary = forwardRef<ReactErrorBoundary, ErrorBoundaryProps>(
           message: 'boundary_fallback_props_empty',
           error: new Error('boundary_fallback_props_empty'),
         })
-      }),
-      [],
+      })()
+    },
+    [errorBoundaryName, errorBoundaryScope],
+  )
+
+  // 判断 fallback 是否为空，https://github.com/bvaughn/react-error-boundary/blob/master/src/ErrorBoundary.ts
+  if (
+    !(
+      typeof fallbackRender === 'function'
+      || FallbackComponent
+      || fallback === null
+      || isValidElement(fallback)
     )
+  ) {
+    logFallbackPropsEmpty()
+    // 如果所有 fallback 都无效，则指定一个兜底 fallback
+    restProps.fallback = null
+  }
 
-    // 判断 fallback 是否为空，https://github.com/bvaughn/react-error-boundary/blob/master/src/ErrorBoundary.ts
-    if (
-      !(
-        typeof fallbackRender === 'function'
-        || FallbackComponent
-        || fallback === null
-        || isValidElement(fallback)
-      )
-    ) {
-      logFallbackPropsEmpty()
-      // 如果所有 fallback 都无效，则指定一个兜底 fallback
-      restProps.fallback = null
-    }
+  const onError = useCallback(
+    (error: Error, info: ErrorInfo) => {
+      const { componentStack } = info
+      const cause = error.cause as {
+        msg: string
+        logId: string
+        isNotError?: boolean
+      }
 
-    const onError = useCallback(
-      (error: Error, info: ErrorInfo) => {
-        const { componentStack } = info
-        const cause = error.cause as {
-          msg: string
-          logId: string
-          isNotError?: boolean
-        }
+      const meta = {
+        reportJsError: !cause?.isNotError, // 标记为 JS Error，上报走 slardar.captureException
+        errorBoundaryName,
+        errorBoundaryScope,
+        reactInfo: {
+          componentStack,
+          version,
+          is_package: 1,
+        },
+      }
 
-        const meta = {
-          reportJsError: !cause?.isNotError, // 标记为 JS Error，上报走 slardar.captureException
-          errorBoundaryName,
-          errorBoundaryScope,
-          reactInfo: {
-            componentStack,
-            version,
-            is_package: 1,
-          },
-        }
+      logger?.error({
+        namespace: errorBoundaryName,
+        scope: errorBoundaryScope,
+        message: 'boundary_react_error_collection',
+        error,
+        meta,
+      })
 
-        logger?.error({
-          namespace: errorBoundaryName,
-          scope: errorBoundaryScope,
-          message: 'boundary_react_error_collection',
-          error,
-          meta,
-        })
+      propsOnError?.(error, info)
+    },
+    [errorBoundaryName, errorBoundaryScope, propsOnError],
+  )
 
-        propsOnError?.(error, info)
-      },
-      [],
-    )
-
-    return (
-      <ReactErrorBoundary {...restProps} onError={onError} ref={ref}>
-        {children}
-      </ReactErrorBoundary>
-    )
-  },
-)
+  return (
+    <ReactErrorBoundary {...restProps} onError={onError} ref={ref}>
+      {children}
+    </ReactErrorBoundary>
+  )
+}
 
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,

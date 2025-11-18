@@ -44,7 +44,8 @@ pnpm run setup              # Clean, install deps, build packages
 ### Development
 ```bash
 pnpm dev:react              # React web app (Vite dev server)
-pnpm dev:electron           # Electron desktop app
+pnpm dev:electron           # Electron desktop app (electron-vite dev server)
+pnpm dev:desktop            # Desktop app (electron-vite + React dev server)
 pnpm dev:server             # API server (tsx watch)
 pnpm dev:website            # Website (Next.js dev server)
 ```

@@ -26,6 +26,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@eslint-react/eslint-plugin": "catalog:",
     "@tailwindcss/postcss": "catalog:",
     "@types/lodash-es": "catalog:",
     "@types/node": "catalog:",
@@ -34,6 +35,8 @@
     "@vitejs/plugin-react": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
     "eslint-plugin-react": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-react-refresh": "catalog:",
     "tailwindcss": "catalog:",
     "types": "workspace:*",
     "typescript": "catalog:",

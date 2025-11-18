@@ -50,8 +50,8 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
           {/* 羁绊图标 */}
           {comp.traits && comp.traits.length > 0 && (
             <div className="flex flex-wrap gap-0.5">
-              {comp.traits.map((trait, idx) => (
-                <Trait key={idx} trait={trait} />
+              {comp.traits.map(trait => (
+                <Trait key={trait.name} trait={trait} />
               ))}
             </div>
           )}
@@ -61,6 +61,7 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
             <div className="flex flex-wrap gap-0.5">
               {comp.champions.slice(0, 9).map(champion => (
                 <Champion
+                  key={champion.name}
                   championName={champion.name}
                   size="medium"
                   showPriority={true}

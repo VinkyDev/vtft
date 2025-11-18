@@ -113,9 +113,9 @@ export const Champion = memo(({
 
       {items.length > 0 && (
         <div className={`flex ${itemsClass}`}>
-          {items.slice(0, 3).map((item, i) => (
+          {items.slice(0, 3).map(item => (
             <Item
-              key={i}
+              key={item.name}
               itemName={item.name}
               size={itemSize}
               showTooltip={showTooltip}

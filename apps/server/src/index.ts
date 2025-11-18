@@ -1,4 +1,5 @@
 import { dirname, join } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
 import { swaggerUI } from '@hono/swagger-ui'

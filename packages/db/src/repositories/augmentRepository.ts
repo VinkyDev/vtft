@@ -1,3 +1,4 @@
+import type { BulkWriteResult, WithId } from 'mongodb'
 import type { AugmentLevel, AugmentMeta } from 'types'
 import type { AugmentDocument } from '../models/augment'
 import { COLLECTION_NAME } from '../models/augment'
@@ -10,7 +11,7 @@ export class AugmentRepository extends BaseRepository<AugmentDocument, AugmentMe
   }
 
   /** 初始化索引 */
-  async createIndexes() {
+  async createIndexes(): Promise<void> {
     const collection = this.getCollection()
     await collection.createIndex({ name: 1 }, { unique: true })
     await collection.createIndex({ level: 1 })
@@ -21,7 +22,7 @@ export class AugmentRepository extends BaseRepository<AugmentDocument, AugmentMe
   }
 
   /** 批量插入或更新强化符文 */
-  async upsertMany(augments: AugmentMeta[]) {
+  async upsertMany(augments: AugmentMeta[]): Promise<BulkWriteResult | undefined> {
     return await super.upsertMany(augments, {
       uniqueField: 'name',
       getFilterKey: item => item.name,
@@ -29,17 +30,17 @@ export class AugmentRepository extends BaseRepository<AugmentDocument, AugmentMe
   }
 
   /** 根据级别查找强化符文 */
-  async findByLevel(level: AugmentLevel) {
+  async findByLevel(level: AugmentLevel): Promise<WithId<AugmentDocument>[]> {
     return await this.getCollection().find({ level }).toArray()
   }
 
   /** 根据段位查找强化符文 */
-  async findByTier(tier: string) {
+  async findByTier(tier: string): Promise<WithId<AugmentDocument>[]> {
     return await this.getCollection().find({ tier }).toArray()
   }
 
   /** 获取前 N 个强化符文（按排名排序） */
-  async findTopN(limit: number = 10) {
+  async findTopN(limit: number = 10): Promise<WithId<AugmentDocument>[]> {
     return await this.getCollection()
       .find({ rank: { $exists: true } })
       .sort({ rank: 1 })

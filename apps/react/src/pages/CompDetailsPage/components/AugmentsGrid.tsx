@@ -57,8 +57,8 @@ export const AugmentsGrid = memo(({ augments }: AugmentsGridProps) => {
               gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
             }}
           >
-            {augments.map((augment, index) => (
-              <AugmentCard key={`${augment.name}-${index}`} augment={augment} />
+            {augments.map(augment => (
+              <AugmentCard key={augment.name} augment={augment} />
             ))}
           </div>
         </div>

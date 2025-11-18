@@ -31,9 +31,9 @@ interface CrawlerCLIConfig<T, TOptions = unknown> {
  * })
  * ```
  */
-export function createCrawlerCLI<T, TOptions = unknown>(
+export async function createCrawlerCLI<T, TOptions = unknown>(
   config: CrawlerCLIConfig<T, TOptions>,
-) {
+): Promise<void> {
   // 解析命令行参数
   const args = process.argv.slice(2)
   const shouldSave = args.includes('--save')

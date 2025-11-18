@@ -29,7 +29,7 @@ export class TFTDatabase {
   /**
    * 初始化所有集合的索引
    */
-  async initializeIndexes() {
+  async initializeIndexes(): Promise<void> {
     await Promise.all([
       this.augments.createIndexes(),
       this.champions.createIndexes(),
@@ -42,7 +42,7 @@ export class TFTDatabase {
   /**
    * 清空所有数据
    */
-  async clearAll() {
+  async clearAll(): Promise<void> {
     await Promise.all([
       this.augments.deleteAll(),
       this.champions.deleteAll(),

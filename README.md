@@ -60,8 +60,11 @@ pnpm install
 # 启动 Web 应用
 pnpm dev:react
 
-# 启动桌面应用
+# 启动桌面应用 (electron-vite 开发服务器)
 pnpm dev:electron
+
+# 启动桌面应用 (electron-vite + React 开发服务器)
+pnpm dev:desktop
 
 # 启动服务
 pnpm dev:server

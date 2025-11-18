@@ -109,6 +109,7 @@ export const FormationCell = memo(({ position, rowIndex: _rowIndex, colIndex: _c
           <div className="flex items-center justify-center gap-0.5">
             {Array.from({ length: champion.stars }).map((_, i) => (
               <svg
+                // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 drop-shadow-[0_0_3px_rgba(250,204,21,0.9)]"
                 viewBox="0 0 24 24"
@@ -137,6 +138,7 @@ export const FormationCell = memo(({ position, rowIndex: _rowIndex, colIndex: _c
         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 z-10 flex">
           {champion.items.slice(0, 3).map((item, idx) => (
             <div
+              // eslint-disable-next-line react/no-array-index-key
               key={idx}
               className="w-3.5 h-3.5 sm:w-5 sm:h-5 bg-black/80 overflow-hidden border border-white/30"
               title={item.name}

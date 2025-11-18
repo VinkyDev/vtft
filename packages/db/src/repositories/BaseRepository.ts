@@ -1,4 +1,4 @@
-import type { BulkWriteResult, Collection, Filter, FindOptions } from 'mongodb'
+import type { BulkWriteResult, Collection, DeleteResult, Filter, FindOptions, WithId } from 'mongodb'
 import type { MongoDBManager } from '../client'
 
 /**
@@ -48,7 +48,7 @@ export abstract class BaseRepository<TDocument extends BaseDocument, TModel> {
   /**
    * 通用查询方法
    */
-  async find(filter: Filter<TDocument> = {}, options?: FindOptions<TDocument>) {
+  async find(filter: Filter<TDocument> = {}, options?: FindOptions<TDocument>): Promise<WithId<TDocument>[]> {
     return await this.getCollection().find(filter, options).toArray()
   }
 
@@ -62,14 +62,14 @@ export abstract class BaseRepository<TDocument extends BaseDocument, TModel> {
   /**
    * 根据名称查找
    */
-  async findByName(name: string) {
+  async findByName(name: string): Promise<WithId<TDocument> | null> {
     return await this.getCollection().findOne({ name } as unknown as Filter<TDocument>)
   }
 
   /**
    * 获取所有文档,按指定字段排序
    */
-  async findAll(sortField: keyof TDocument = 'name' as keyof TDocument, sortOrder: 1 | -1 = 1) {
+  async findAll(sortField: keyof TDocument = 'name' as keyof TDocument, sortOrder: 1 | -1 = 1): Promise<WithId<TDocument>[]> {
     return await this.getCollection()
       .find({})
       .sort({ [sortField]: sortOrder })
@@ -79,7 +79,7 @@ export abstract class BaseRepository<TDocument extends BaseDocument, TModel> {
   /**
    * 删除所有数据
    */
-  async deleteAll() {
+  async deleteAll(): Promise<DeleteResult> {
     return await this.getCollection().deleteMany({})
   }
 

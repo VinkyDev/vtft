@@ -8,7 +8,7 @@ export class ResultUtil {
     }
   }
 
-  static error<T>(error: any | string = '未知错误'): BaseResult<T> {
+  static error<T>(error: Error | string = '未知错误'): BaseResult<T> {
     const errorMessage = error instanceof Error ? error.message : error
     return {
       success: false,

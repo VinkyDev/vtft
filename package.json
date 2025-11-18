@@ -10,7 +10,7 @@
     "clean:modules": "node scripts/clean.mjs modules",
     "clean:dist": "node scripts/clean.mjs dist",
     "setup": "pnpm run clean:modules && pnpm install --no-frozen-lockfile && pnpm run build:packages",
-    "lint": "pnpm -r lint",
+    "lint": "pnpm -r --parallel lint",
     "check": "pnpm dlx concurrently 'pnpm lint' 'pnpm typecheck' 'pnpm knip'",
     "dev:react": "pnpm --filter react run dev",
     "dev:electron": "pnpm --filter electron run dev",
@@ -31,7 +31,7 @@
     "publish:server": "node scripts/publishServer.mjs",
     "release": "node scripts/release.mjs",
     "fix:tsconfig": "node ./scripts/typescript/fixPaths.mjs",
-    "typecheck": "pnpm -r typecheck",
+    "typecheck": "pnpm -r --parallel typecheck",
     "prepare": "husky",
     "knip": "knip"
   },

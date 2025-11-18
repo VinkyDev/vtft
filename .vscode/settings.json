@@ -98,7 +98,7 @@
   "eslint.codeAction.showDocumentation": {
     "enable": true
   },
-  "eslint.quiet": true,
+  "eslint.quiet": false,
   // Silent the stylistic rules in you IDE, but still auto fix them
   "eslint.rules.customizations": [
     {

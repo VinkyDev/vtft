@@ -146,3 +146,50 @@ export async function withErrorHandler<T>(
 
   return retryFn()
 }
+
+/**
+ * 安全地获取 DOM 属性值，失败时记录警告并返回默认值
+ */
+export async function safeGetAttribute(
+  element: { getAttribute: (name: string, options?: { timeout?: number }) => Promise<string | null> } | undefined,
+  attributeName: string,
+  logger: Logger,
+  context: string,
+  defaultValue = '',
+): Promise<string> {
+  if (!element) {
+    return defaultValue
+  }
+
+  try {
+    const value = await element.getAttribute(attributeName)
+    return value || defaultValue
+  }
+  catch (error) {
+    logger.warn(`提取${context}失败: ${error instanceof Error ? error.message : String(error)}`)
+    return defaultValue
+  }
+}
+
+/**
+ * 安全地获取文本内容，失败时记录警告并返回默认值
+ */
+export async function safeGetTextContent(
+  element: { textContent: (options?: { timeout?: number }) => Promise<string | null> } | undefined,
+  logger: Logger,
+  context: string,
+  defaultValue = '',
+): Promise<string> {
+  if (!element) {
+    return defaultValue
+  }
+
+  try {
+    const value = await element.textContent()
+    return value || defaultValue
+  }
+  catch (error) {
+    logger.warn(`提取${context}失败: ${error instanceof Error ? error.message : String(error)}`)
+    return defaultValue
+  }
+}

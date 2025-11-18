@@ -34,17 +34,27 @@ class MongoDBManager implements MongoDBClient {
     this.config.uri = this.userConfig?.uri || process.env.MONGODB_URI || ''
     this.config.dbName = this.userConfig?.dbName || process.env.MONGODB_DB_NAME || ''
 
+    // 验证环境变量
+    if (!this.config.uri) {
+      throw new Error('MongoDB URI is not configured. Set MONGODB_URI environment variable or provide uri in config.')
+    }
+
+    if (!this.config.dbName) {
+      throw new Error('MongoDB database name is not configured. Set MONGODB_DB_NAME environment variable or provide dbName in config.')
+    }
+
     try {
       this.client = new MongoClient(this.config.uri, this.config.options)
       await this.client.connect()
       this.connected = true
       await this.client.db(this.config.dbName).admin().ping()
+      logger.success(`✓ Connected to MongoDB: ${this.config.dbName}`)
     }
     catch (error) {
       this.connected = false
       this.client = null
       logger.error('MongoDB connection failed', error as Error)
-      throw error
+      throw new Error(`Failed to connect to MongoDB: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
@@ -69,7 +79,17 @@ class MongoDBManager implements MongoDBClient {
       throw new Error('MongoDB not connected. Call connect() first.')
     }
 
-    return this.client.db(name || this.config.dbName)
+    try {
+      const dbName = name || this.config.dbName
+      if (!dbName) {
+        throw new Error('Database name not specified')
+      }
+      return this.client.db(dbName)
+    }
+    catch (error) {
+      logger.error('Failed to get database instance', error as Error)
+      throw new Error(`Failed to get database: ${error instanceof Error ? error.message : String(error)}`)
+    }
   }
 
   isConnected(): boolean {

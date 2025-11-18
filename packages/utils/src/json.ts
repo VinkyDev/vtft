@@ -15,7 +15,10 @@ export function parseJSON<T = Record<string, unknown>, U = unknown>(
   try {
     return value ? JSON.parse(value) : (fallback as unknown as T)
   }
-  catch {
+  catch (error) {
+    console.warn(`JSON 解析失败: ${error instanceof Error ? error.message : String(error)}`, {
+      value: value?.substring(0, 100),
+    })
     return fallback as unknown as T
   }
 }

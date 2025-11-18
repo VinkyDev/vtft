@@ -1,6 +1,7 @@
 import type { Locator, Page } from 'playwright'
 import type { ChampionMeta, Trait } from 'types'
 import { Logger } from 'logger'
+import { safeGetAttribute, safeGetTextContent } from '../lib/helpers'
 
 const logger = new Logger({ namespace: 'crawler', scope: 'xtr/champion' })
 
@@ -22,12 +23,13 @@ async function extractChampionFromRow(row: Locator): Promise<ChampionMeta | null
     const championCell = cells[1]
     // 名称在 strong 标签中
     const nameElement = championCell?.locator('strong').first()
-    const name = await nameElement?.textContent().catch(() => '')
+    const name = await safeGetTextContent(nameElement, logger, '英雄名称')
     // 图标在 img 标签中
     const championImg = championCell?.locator('img[alt]').first()
-    const icon = await championImg?.getAttribute('src').catch(() => '')
+    const icon = await safeGetAttribute(championImg, 'src', logger, '英雄图标')
 
     if (!name || !icon) {
+      logger.warn(`英雄数据不完整: name=${name}, icon=${icon}`)
       return null
     }
 
@@ -36,8 +38,8 @@ async function extractChampionFromRow(row: Locator): Promise<ChampionMeta | null
     const traitImgs = await traitContainer?.locator('img[alt]').all() || []
     const traits: Trait[] = []
     for (const traitImg of traitImgs) {
-      const traitName = await traitImg.getAttribute('alt').catch(() => '')
-      const traitIcon = await traitImg.getAttribute('src').catch(() => '')
+      const traitName = await safeGetAttribute(traitImg, 'alt', logger, '羁绊名称')
+      const traitIcon = await safeGetAttribute(traitImg, 'src', logger, '羁绊图标')
       if (traitName && traitIcon) {
         traits.push({
           name: traitName,

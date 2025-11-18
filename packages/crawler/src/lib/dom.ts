@@ -111,22 +111,6 @@ export async function safeClick(
 }
 
 /**
- * 安全获取属性值
- */
-export async function safeGetAttribute(
-  locator: Locator,
-  attribute: string,
-  defaultValue: string = '',
-): Promise<string> {
-  try {
-    return (await locator.getAttribute(attribute)) ?? defaultValue
-  }
-  catch {
-    return defaultValue
-  }
-}
-
-/**
  * 安全获取文本内容
  */
 export async function safeGetText(

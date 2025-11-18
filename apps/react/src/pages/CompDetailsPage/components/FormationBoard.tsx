@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import type { Formation, Trait as TraitMeta } from 'types'
 import { memo, useMemo, useState } from 'react'
 import { Trait } from '@/components'
@@ -9,33 +10,33 @@ interface FormationBoardProps {
   traits?: TraitMeta[]
 }
 
+// 创建 7列 x 4行 的棋盘网格
+const ROWS = 4
+const COLS = 7
+
 /**
  * 阵容站位棋盘组件
  * 展示 7x4 的云顶之弈六边形棋盘布局
  */
 export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) => {
-  // 创建 7列 x 4行 的棋盘网格
-  const ROWS = 4
-  const COLS = 7
-
   // 当前 hover 的羁绊名称
   const [hoveredTrait, setHoveredTrait] = useState<string | null>(null)
-
-  // 获取英雄数据以获取羁绊信息
   const { champions } = useGameDataStore()
 
-  // 将 positions 转换为二维数组以便渲染
-  const board: Array<Array<typeof formation.positions[0] | null>> = Array.from(
-    { length: ROWS },
-    () => Array.from({ length: COLS }, () => null),
-  )
+  const board = useMemo(() => {
+    const grid: Array<Array<typeof formation.positions[0] | null>> = Array.from(
+      { length: ROWS },
+      () => Array.from({ length: COLS }, () => null),
+    )
 
-  // 填充棋盘数据
-  formation.positions.forEach((position) => {
-    if (position.row >= 0 && position.row < ROWS && position.col >= 0 && position.col < COLS) {
-      board[position.row]![position.col] = position
-    }
-  })
+    formation.positions.forEach((position) => {
+      if (position.row >= 0 && position.row < ROWS && position.col >= 0 && position.col < COLS) {
+        grid[position.row]![position.col] = position
+      }
+    })
+
+    return grid
+  }, [formation])
 
   // 按照 count 降序排序羁绊
   const sortedTraits = useMemo(() => {
@@ -62,12 +63,10 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full p-4 gap-1">
       <div className="flex items-center justify-center">
-        {/* 棋盘 - 使用响应式尺寸 */}
         <div className="p-3 sm:p-5">
           <div className="flex flex-col gap-1.5 sm:gap-2">
             {board.map((row, rowIndex) => (
               <div
-                // eslint-disable-next-line react/no-array-index-key
                 key={rowIndex}
                 className="flex gap-1.5 sm:gap-2"
                 style={{
@@ -77,7 +76,6 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
               >
                 {row.map((position, colIndex) => (
                   <FormationCell
-                    // eslint-disable-next-line react/no-array-index-key
                     key={`${rowIndex}-${colIndex}`}
                     position={position}
                     rowIndex={rowIndex}

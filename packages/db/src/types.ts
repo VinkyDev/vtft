@@ -13,6 +13,6 @@ export interface MongoDBConfig {
 export interface MongoDBClient {
   connect: () => Promise<void>
   disconnect: () => Promise<void>
-  getDb: (name?: string) => any
+  getDb: (name?: string) => import('mongodb').Db
   isConnected: () => boolean
 }

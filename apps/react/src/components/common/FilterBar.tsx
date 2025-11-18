@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { memo } from 'react'
 import { Tabs, TabsList, TabsTrigger } from 'ui'
 
@@ -21,7 +22,7 @@ export interface FilterGroup<T = string> {
 
 interface FilterBarProps {
   /** 过滤器组列表 */
-  groups: FilterGroup[]
+  groups: Array<FilterGroup<string>> | Array<FilterGroup<number>> | Array<FilterGroup<unknown>>
   /** 容器类名 */
   className?: string
   /** 是否显示容器（默认 true） */
@@ -45,34 +46,44 @@ export const FilterBar = memo(({
 
   const content = (
     <div className={`flex ${layoutClasses[layout]} items-center flex-wrap gap-2`}>
-      {groups.map(group => (
-        <div key={group.value} className="flex items-center gap-2">
-          {group.title && (
-            <span className="text-gray-400 text-xs">{group.title}</span>
-          )}
-          <Tabs
-            value={group.value as string}
-            onValueChange={value => group.onChange(value as never)}
-          >
-            <TabsList className="h-6 sm:h-8 bg-black/20 border-white/5 p-0.5">
-              {group.options.map(({ value, label }) => (
-                <TabsTrigger
-                  key={value as string}
-                  value={value as string}
-                  className="h-5 sm:h-6 px-2 text-[10px] sm:text-[12px] font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=inactive]:text-gray-500"
-                >
-                  {label}
-                  {group.renderSuffix && (
-                    <span className="ml-1 text-[8px] opacity-60">
-                      {group.renderSuffix(value as never)}
-                    </span>
-                  )}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
-      ))}
+      {groups.map((group, idx) => {
+        return (
+          <div key={`${String(group.value)}-${idx}`} className="flex items-center gap-2">
+            {group.title && (
+              <span className="text-gray-400 text-xs">{group.title}</span>
+            )}
+            <Tabs
+              value={String(group.value)}
+              onValueChange={(value) => {
+                // Tabs 组件只支持 string, 需要根据原类型转换回去
+                const typedValue = group.options.find(opt => String(opt.value) === value)?.value
+                if (typedValue !== undefined) {
+                  // @ts-expect-error: TS2345 - TypeScript 联合类型限制，实际类型匹配
+                  group.onChange(typedValue)
+                }
+              }}
+            >
+              <TabsList className="h-6 sm:h-8 bg-black/20 border-white/5 p-0.5">
+                {group.options.map(({ value, label }) => (
+                  <TabsTrigger
+                    key={String(value)}
+                    value={String(value)}
+                    className="h-5 sm:h-6 px-2 text-[10px] sm:text-[12px] font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=inactive]:text-gray-500"
+                  >
+                    {label}
+                    {group.renderSuffix && (
+                      <span className="ml-1 text-[8px] opacity-60">
+                        {/* @ts-expect-error: TS2345 - TypeScript 联合类型限制，实际类型匹配 */}
+                        {group.renderSuffix(value)}
+                      </span>
+                    )}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+        )
+      })}
     </div>
   )
 

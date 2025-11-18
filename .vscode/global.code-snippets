@@ -1,0 +1,19 @@
+
+{
+  "import": {
+    "scope": "javascript,typescript",
+    "prefix": "im",
+    "body": [
+      "import { $1 } from '$2';"
+    ],
+    "description": "Import a module"
+  },
+  "export-all": {
+    "scope": "javascript,typescript",
+    "prefix": "ex",
+    "body": [
+      "export * from '$2';"
+    ],
+    "description": "Export a module"
+  },
+}

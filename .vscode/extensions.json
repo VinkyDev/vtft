@@ -1,0 +1,25 @@
+{
+  "recommendations": [
+    "antfu.browse-lite",
+    "antfu.iconify",
+    "antfu.where-am-i",
+    "antfu.open-in-github-button",
+    "lokalise.i18n-ally",
+    "antfu.icons-carbon",
+    "file-icons.file-icons",
+    "sainnhe.gruvbox-material",
+    "Catppuccin.catppuccin-vsc-icons",
+    "dbaeumer.vscode-eslint",
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens",
+    "EditorConfig.EditorConfig",
+    "github.vscode-github-actions",
+    "GitHub.vscode-pull-request-github",
+    "johnsoncodehk.vscode-tsconfig-helper",
+    "mpontus.tab-cycle",
+    "naumovs.color-highlight",
+    "WakaTime.vscode-wakatime",
+    "znck.grammarly"
+  ]
+}

@@ -31,12 +31,12 @@ const TIER_TEXT_COLORS: Record<Tier, string> = {
  * Tier 背景渐变颜色映射（Tailwind CSS类名）
  */
 const TIER_BG_COLORS: Record<Tier, string> = {
-  OP: 'bg-gradient-to-br from-red-500 to-red-600 text-white',
-  S: 'bg-gradient-to-br from-orange-500 to-orange-600 text-white',
-  A: 'bg-gradient-to-br from-yellow-500 to-yellow-600 text-white',
-  B: 'bg-gradient-to-br from-green-500 to-green-600 text-white',
-  C: 'bg-gradient-to-br from-blue-500 to-blue-600 text-white',
-  D: 'bg-gradient-to-br from-gray-400 to-gray-500 text-white',
+  OP: 'bg-linear-to-br from-red-500 to-red-600 text-white',
+  S: 'bg-linear-to-br from-orange-500 to-orange-600 text-white',
+  A: 'bg-linear-to-br from-yellow-500 to-yellow-600 text-white',
+  B: 'bg-linear-to-br from-green-500 to-green-600 text-white',
+  C: 'bg-linear-to-br from-blue-500 to-blue-600 text-white',
+  D: 'bg-linear-to-br from-gray-400 to-gray-500 text-white',
 }
 
 /**

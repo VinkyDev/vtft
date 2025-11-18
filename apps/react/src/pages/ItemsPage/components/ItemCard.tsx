@@ -14,7 +14,7 @@ interface ItemCardProps {
 export const ItemCard = memo(({ item }: ItemCardProps) => {
   return (
     <ItemDetailPopover item={item}>
-      <div className="group relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2 transition-all hover:border-white/10 hover:from-white/[0.12] hover:to-white/[0.05] hover:shadow-lg hover:shadow-black/20 cursor-pointer">
+      <div className="group relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/[0.02] p-2 transition-all hover:border-white/10 hover:from-white/[0.12] hover:to-white/[0.05] hover:shadow-lg hover:shadow-black/20 cursor-pointer">
         {/* 装备图标 */}
         <div className="flex justify-center mb-2">
           <div className="relative size-8 overflow-hidden rounded border border-white/10 bg-black/20">

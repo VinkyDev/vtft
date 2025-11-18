@@ -1,4 +1,5 @@
 import { join } from 'node:path'
+import process from 'node:process'
 import { BrowserWindow, shell } from 'electron'
 import icon from '../../resources/icons/png/1024x1024.png?asset'
 import { isDev } from './constants'

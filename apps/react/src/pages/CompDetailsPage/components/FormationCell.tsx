@@ -6,6 +6,10 @@ interface FormationCellProps {
   position: Formation['positions'][0] | null
   rowIndex: number
   colIndex: number
+  /** 是否高亮显示（当 hover 羁绊时，拥有该羁绊的英雄高亮） */
+  isHighlighted?: boolean
+  /** 是否暗淡显示（当 hover 羁绊时，不拥有该羁绊的英雄暗淡） */
+  isDimmed?: boolean
 }
 
 /** 根据费用获取颜色 */
@@ -30,7 +34,7 @@ function getCostColor(cost: number) {
  * 棋盘格子组件 - 六边形样式
  * 展示单个位置上的英雄及其装备
  */
-export const FormationCell = memo(({ position, rowIndex: _rowIndex, colIndex: _colIndex }: FormationCellProps) => {
+export const FormationCell = memo(({ position, rowIndex: _rowIndex, colIndex: _colIndex, isHighlighted = false, isDimmed = false }: FormationCellProps) => {
   const champion = position?.champion
   const { champions } = useGameDataStore()
 
@@ -67,12 +71,25 @@ export const FormationCell = memo(({ position, rowIndex: _rowIndex, colIndex: _c
 
   return (
     <div
-      className="relative"
+      className={`relative transition-all duration-200 ${isHighlighted ? 'scale-110 z-10' : ''} ${isDimmed ? 'opacity-30' : ''}`}
       style={{
         width: 'min(9vw, 4.5rem)',
         height: 'min(10.5vw, 5.25rem)',
       }}
     >
+      {/* 高亮光晕效果 */}
+      {isHighlighted && (
+        <div
+          className="absolute -inset-1 animate-pulse"
+          style={{
+            clipPath: hexagonClipPath,
+            backgroundColor: borderColor,
+            opacity: 0.5,
+            filter: 'blur(4px)',
+          }}
+        />
+      )}
+
       {/* 六边形边框层（使用背景色作为边框） */}
       <div
         className="absolute inset-0"

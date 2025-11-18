@@ -47,9 +47,7 @@
     "typescript": "catalog:"
   },
   "lint-staged": {
-    "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}": [
-      "eslint --fix --cache --cache-strategy content --cache-location ./node_modules/.cache/eslint/eslintcache.json --report-unused-disable-directives"
-    ]
+    "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}": "node scripts/lint-staged-eslint.mjs"
   },
   "packageManager": "pnpm@10.12.4",
   "bugs": {

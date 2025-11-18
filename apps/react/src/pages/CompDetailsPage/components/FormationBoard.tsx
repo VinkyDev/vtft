@@ -1,6 +1,7 @@
 import type { Formation, Trait as TraitMeta } from 'types'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Trait } from '@/components'
+import { useGameDataStore } from '@/store/dataStore'
 import { FormationCell } from './FormationCell'
 
 interface FormationBoardProps {
@@ -16,6 +17,12 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
   // 创建 7列 x 4行 的棋盘网格
   const ROWS = 4
   const COLS = 7
+
+  // 当前 hover 的羁绊名称
+  const [hoveredTrait, setHoveredTrait] = useState<string | null>(null)
+
+  // 获取英雄数据以获取羁绊信息
+  const { champions } = useGameDataStore()
 
   // 将 positions 转换为二维数组以便渲染
   const board: Array<Array<typeof formation.positions[0] | null>> = Array.from(
@@ -36,6 +43,21 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
       return []
     return [...traits].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
   }, [traits])
+
+  // 计算当前 hover 羁绊对应的高亮英雄名称集合
+  const highlightedChampions = useMemo(() => {
+    if (!hoveredTrait)
+      return new Set<string>()
+
+    // 找出拥有该羁绊的英雄
+    const championNames = new Set<string>()
+    champions.forEach((champion) => {
+      if (champion.traits?.some(t => t.name === hoveredTrait)) {
+        championNames.add(champion.name)
+      }
+    })
+    return championNames
+  }, [hoveredTrait, champions])
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full p-4 gap-1">
@@ -60,6 +82,8 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
                     position={position}
                     rowIndex={rowIndex}
                     colIndex={colIndex}
+                    isHighlighted={position?.champion ? highlightedChampions.has(position.champion.name) : false}
+                    isDimmed={hoveredTrait !== null && position?.champion ? !highlightedChampions.has(position.champion.name) : false}
                   />
                 ))}
               </div>
@@ -73,7 +97,13 @@ export const FormationBoard = memo(({ formation, traits }: FormationBoardProps) 
         <div className="w-full px-2">
           <div className="flex flex-wrap gap-0.5 sm:gap-2 items-center justify-center">
             {sortedTraits.map(trait => (
-              <Trait key={trait.name} trait={trait} variant="with-label" />
+              <div
+                key={trait.name}
+                onMouseEnter={() => setHoveredTrait(trait.name)}
+                onMouseLeave={() => setHoveredTrait(null)}
+              >
+                <Trait trait={trait} variant="with-label" />
+              </div>
             ))}
           </div>
         </div>

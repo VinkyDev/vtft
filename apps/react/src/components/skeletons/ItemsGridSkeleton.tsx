@@ -19,7 +19,7 @@ export const ItemsGridSkeleton = memo(({ className = '' }: ItemsGridSkeletonProp
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2.5"
+              className="relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/[0.02] p-2.5"
             >
               <div className="flex items-center gap-2.5">
                 <SkeletonBase className="h-12 w-12 rounded-md shrink-0" />

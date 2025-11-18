@@ -16,7 +16,7 @@ export const CompCardSkeleton = memo(({ count = 5, className = '' }: CompCardSke
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2.5"
+          className="relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/[0.02] p-2.5"
         >
           <div className="flex items-start gap-2.5">
             {/* 左侧: Tier 徽章骨架 */}
@@ -50,7 +50,7 @@ export const CompCardSkeleton = memo(({ count = 5, className = '' }: CompCardSke
                 {Array.from({ length: 6 }).map((_, j) => (
 
                   <div key={j} className="flex flex-col items-center gap-0.5">
-                    <div className="relative overflow-hidden h-7 w-9 rounded border-2 border-white/20 bg-gradient-to-br from-gray-700/50 to-gray-800/50">
+                    <div className="relative overflow-hidden h-7 w-9 rounded border-2 border-white/20 bg-linear-to-br from-gray-700/50 to-gray-800/50">
                       <div className="absolute inset-0 animate-skeleton-pulse bg-white/15" />
                     </div>
                     <div className="flex gap-0.5">

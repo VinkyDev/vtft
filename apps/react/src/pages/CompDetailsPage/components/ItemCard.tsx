@@ -32,7 +32,7 @@ export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
   })
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-md p-1.5 border border-white/10 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20">
+    <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-md p-1.5 border border-white/10 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20">
       <div className="grid grid-cols-[25px_minmax(60px,10%)_minmax(60px,10%)_1fr] sm:grid-cols-[minmax(160px,25%)_minmax(80px,25%)_minmax(70px,25%)_1fr] gap-2 items-center">
         <div className="flex items-center gap-2 min-w-0">
           <img

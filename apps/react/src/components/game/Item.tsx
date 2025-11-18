@@ -47,7 +47,7 @@ export const Item = memo(({
     const variantClasses = getItemVariantClasses(variant)
     return (
       <div className={`${sizeClasses} ${variantClasses} ${className}`}>
-        <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700 rounded" />
+        <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700 rounded" />
       </div>
     )
   }
@@ -74,7 +74,7 @@ export const Item = memo(({
             />
           )
         : (
-            <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700 rounded" />
+            <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700 rounded" />
           )}
     </div>
   )

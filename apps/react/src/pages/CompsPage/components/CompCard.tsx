@@ -19,7 +19,7 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
 
   return (
     <div
-      className="group relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2.5 transition-all hover:border-white/10 hover:from-white/[0.12] hover:to-white/[0.05] hover:shadow-lg hover:shadow-black/20 cursor-pointer"
+      className="group relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/2 p-2.5 transition-all hover:border-white/10 hover:from-white/12 hover:to-white/5 hover:shadow-lg hover:shadow-black/20 cursor-pointer"
       onClick={handleClick}
     >
       <div className="flex items-start gap-2.5">
@@ -64,11 +64,12 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
                   key={champion.name}
                   championName={champion.name}
                   size="medium"
-                  showPriority={true}
+                  showPriority
                   priority={champion.priority}
-                  showTooltip={true}
+                  showTooltip
                   items={champion.items}
                   itemSize="small"
+                  showName
                 />
               ))}
             </div>
@@ -86,7 +87,7 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
 
       {/* Hover 高光效果 */}
       <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent" />
       </div>
     </div>
   )

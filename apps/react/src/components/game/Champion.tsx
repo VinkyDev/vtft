@@ -28,6 +28,8 @@ interface ChampionProps {
   itemSize?: 'tiny' | 'small' | 'medium' | 'large' | 'xl'
   /** 装备显示位置 */
   itemsPosition?: 'bottom' | 'right'
+  /** 是否显示英雄名称（开启后无 hover 效果） */
+  showName?: boolean
 }
 
 export const Champion = memo(({
@@ -41,6 +43,7 @@ export const Champion = memo(({
   items,
   itemSize = 'small',
   itemsPosition = 'bottom',
+  showName = false,
 }: ChampionProps) => {
   const { champions } = useGameDataStore()
   const { tooltipConfig } = useConfigStore()
@@ -57,11 +60,11 @@ export const Champion = memo(({
   const sizeClasses = getChampionSizeClasses(size)
 
   // 检查是否应该显示工具提示
-  const shouldShowTooltip = showTooltip && tooltipConfig.championTooltip
+  const shouldShowTooltip = showTooltip && tooltipConfig.championTooltip && !showName
 
   const championElement = (
     <div
-      className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 ${costColors.border} bg-black/40 transition-all hover:shadow-lg cursor-pointer ${className}`}
+      className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 ${costColors.border} bg-black/40 transition-all ${showName ? '' : 'hover:shadow-lg cursor-pointer'} ${className}`}
       onClick={() => onClick?.(champion)}
     >
       {champion.icon
@@ -74,12 +77,26 @@ export const Champion = memo(({
             />
           )
         : (
-            <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700" />
+            <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
           )}
 
       {showPriority && priority && (
         <div className={`absolute left-0 top-0 ${costColors.bg} ${sizeClasses.priority} font-bold leading-none text-white`}>
           {priority}
+        </div>
+      )}
+
+      {/* 英雄名称 - 中间偏下 */}
+      {showName && (
+        <div className="absolute bottom-px left-1/2 -translate-x-1/2 z-10">
+          <div
+            className="text-white text-[7px] font-bold px-1 whitespace-nowrap"
+            style={{
+              textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+            }}
+          >
+            {champion.name}
+          </div>
         </div>
       )}
     </div>

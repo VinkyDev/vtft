@@ -35,7 +35,7 @@ export const Augment = memo(({
     const sizeClasses = getAugmentSizeClasses(size)
     return (
       <div className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 border-gray-500 bg-black/40 ${className}`}>
-        <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700" />
+        <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-[6px] text-white/50">?</span>
         </div>
@@ -61,7 +61,7 @@ export const Augment = memo(({
             />
           )
         : (
-            <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700" />
+            <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
           )}
     </div>
   )

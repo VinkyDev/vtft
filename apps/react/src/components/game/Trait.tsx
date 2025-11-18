@@ -41,7 +41,7 @@ export const Trait = memo(({
             />
           )
         : (
-            <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700" />
+            <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
           )}
 
       {/* 羁绊等级小标 */}
@@ -126,7 +126,7 @@ export const Trait = memo(({
                 />
               )
             : (
-                <div className="h-full w-full bg-gradient-to-br from-gray-600 to-gray-700" />
+                <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
               )}
         </div>
         <span className="text-xs font-medium text-white/90 whitespace-nowrap">{trait.name}</span>

@@ -22,7 +22,7 @@ export const AugmentsGridSkeleton = memo(({ className = '' }: AugmentsGridSkelet
             {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="group relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2"
+                className="group relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/[0.02] p-2"
               >
                 <div className="flex justify-center mb-2">
                   <SkeletonBase className="h-8 w-8 rounded border border-white/10" />

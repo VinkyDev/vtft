@@ -45,8 +45,8 @@ export default function CompDetailPage({ comp, onClose }: CompDetailPageProps) {
     : `rounded-2xl z-50`
   // 在悬浮球模式下，隐藏 DrawerContent
   const drawerContentClassName = windowMode === 'floating'
-    ? `min-h-screen min-w-[90vw] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-none rounded-2xl !z-10 opacity-0 pointer-events-none`
-    : `min-h-screen min-w-[90vw] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-none rounded-2xl z-50`
+    ? `min-h-screen min-w-[90vw] bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 border-none rounded-2xl !z-10 opacity-0 pointer-events-none`
+    : `min-h-screen min-w-[90vw] bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 border-none rounded-2xl z-50`
 
   return (
     <Drawer

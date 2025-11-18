@@ -1,3 +1,4 @@
+import process from 'node:process'
 import { electronAPI } from '@electron-toolkit/preload'
 import { contextBridge } from 'electron'
 import logger from 'logger'

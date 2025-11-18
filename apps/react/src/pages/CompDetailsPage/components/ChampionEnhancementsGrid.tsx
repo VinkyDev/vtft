@@ -104,7 +104,7 @@ const ChampionEnhancementCard = memo(({ championEnhancement, isSmallWindow }: Ch
   const { championName, enhancements } = championEnhancement
 
   return (
-    <div className={`group relative overflow-hidden rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.07] to-white/[0.02] ${isSmallWindow ? 'p-2' : 'p-3'}`}>
+    <div className={`group relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/[0.02] ${isSmallWindow ? 'p-2' : 'p-3'}`}>
       {/* 英雄头像 */}
       <div className={`flex items-center justify-center ${isSmallWindow ? 'mb-2' : 'mb-3'}`}>
         <Champion

@@ -1,4 +1,5 @@
 import path from 'node:path'
+import process from 'node:process'
 import { app, Menu, nativeImage, Tray } from 'electron'
 import { isDev } from './constants'
 import { destroyMainWindow, getMainWindow } from './mainWIndow'

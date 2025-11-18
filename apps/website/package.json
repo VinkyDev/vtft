@@ -16,7 +16,8 @@
     "next": "^16.0.1",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "ui": "workspace:*"
+    "ui": "workspace:*",
+    "logger": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:",

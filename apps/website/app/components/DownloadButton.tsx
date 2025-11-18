@@ -1,9 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Grid2x2, Airplay } from 'lucide-react';
 import { ShimmerButton } from "ui/components";
+import logger from 'logger';
 
 interface DownloadInfo {
   platform: "Windows" | "macOS";
@@ -30,125 +31,89 @@ interface NavigatorUAData {
 const GITHUB_REPO = "VinkyDev/vtft";
 const GITHUB_MIRROR = "https://gh-proxy.com/";
 
-async function detectArchitecture(): Promise<{ isARM: boolean; platform: string }> {
+// 默认兜底配置：Windows Intel/AMD
+const DEFAULT_DOWNLOAD_INFO: DownloadInfo = {
+  platform: "Windows",
+  icon: <Grid2x2 />,
+  label: "Windows",
+  url: "vtft-setup.exe",
+};
+
+async function detectPlatform(): Promise<DownloadInfo> {
   try {
+    // 尝试使用现代 User-Agent Client Hints API
     if ('userAgentData' in navigator) {
-      const uaData = (navigator).userAgentData as NavigatorUAData;
+      const uaData = navigator.userAgentData as NavigatorUAData;
+      const highEntropyValues = await uaData.getHighEntropyValues(['architecture']);
+      const arch = highEntropyValues.architecture;
 
-      // macOS 检测
       if (uaData.platform === 'macOS') {
-        const highEntropyValues = await uaData.getHighEntropyValues(['architecture']);
-
-        // Apple Silicon 检测 (arm 架构)
-        if (highEntropyValues.architecture === 'arm') {
-          return { isARM: true, platform: 'macOS' };
-        }
-
-        // Intel 架构
-        if (highEntropyValues.architecture === 'x86') {
-          return { isARM: false, platform: 'macOS' };
-        }
-      }
-
-      // Windows 等其他平台
-      if (uaData.platform === 'Windows') {
-        const highEntropyValues = await uaData.getHighEntropyValues(['architecture']);
-        return { isARM: highEntropyValues.architecture === 'arm', platform: 'Windows' };
-      }
-    }
-  } catch (error) {
-    console.warn('无法使用 userAgentData API，降级到 UA 检测:', error);
-  }
-
-  // 降级方案：使用 userAgent 检测
-  const userAgent = navigator.userAgent.toLowerCase();
-  const platform = navigator.platform.toLowerCase();
-
-  // Apple Silicon 检测
-  if (platform.includes("mac")) {
-    const isAppleSilicon = userAgent.includes("arm") ||
-      userAgent.includes("aarch64") ||
-      platform.includes("arm") ||
-      userAgent.includes("apple silicon");
-
-    return { isARM: isAppleSilicon, platform: 'macOS' };
-  }
-
-  // Windows ARM 检测
-  if (platform.includes("win")) {
-    const isARM = userAgent.includes("arm") || userAgent.includes("aarch64");
-    return { isARM, platform: 'Windows' };
-  }
-
-  return { isARM: false, platform: 'Unknown' };
-}
-
-export const DownloadButton = () => {
-  const [downloadInfo, setDownloadInfo] = useState<DownloadInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const initPlatform = useCallback(async () => {
-    try {
-      const { isARM, platform } = await detectArchitecture();
-
-      if (platform === 'macOS') {
-        setDownloadInfo({
+        const isARM = arch === 'arm';
+        return {
           platform: "macOS",
           icon: <Airplay />,
           label: isARM ? "macOS (Apple Silicon)" : "macOS (Intel)",
           url: isARM ? "vtft-arm64.dmg" : "vtft-x64.dmg",
-        });
-      } else if (platform === 'Windows') {
-        setDownloadInfo({
+        };
+      }
+
+      if (uaData.platform === 'Windows') {
+        const isARM = arch === 'arm';
+        return {
           platform: "Windows",
           icon: <Grid2x2 />,
           label: isARM ? "Windows ARM" : "Windows",
           url: isARM ? "vtft-arm64-setup.exe" : "vtft-setup.exe",
-        });
-      } else {
-        // 默认返回 Windows
-        setDownloadInfo({
-          platform: "Windows",
-          icon: <Grid2x2 />,
-          label: "Windows",
-          url: "vtft-setup.exe",
-        });
+        };
       }
-    } catch (error) {
-      console.error("平台检测失败，使用默认值:", error);
-      // 降级方案：默认 Windows
-      setDownloadInfo({
+    }
+  } catch (error) {
+    logger.error('User-Agent Client Hints API 检测失败，降级到传统方法:', error as Error);
+  }
+
+  // 降级方案：使用传统 userAgent 检测
+  try {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const platform = navigator.platform.toLowerCase();
+
+    // macOS 检测
+    if (platform.includes("mac")) {
+      const isAppleSilicon = userAgent.includes("arm") ||
+        userAgent.includes("aarch64") ||
+        platform.includes("arm");
+
+      return {
+        platform: "macOS",
+        icon: <Airplay />,
+        label: isAppleSilicon ? "macOS (Apple Silicon)" : "macOS (Intel)",
+        url: isAppleSilicon ? "vtft-arm64.dmg" : "vtft-x64.dmg",
+      };
+    }
+
+    // Windows 检测
+    if (platform.includes("win")) {
+      const isARM = userAgent.includes("arm") || userAgent.includes("aarch64");
+      return {
         platform: "Windows",
         icon: <Grid2x2 />,
-        label: "Windows",
-        url: "vtft-setup.exe",
-      });
-    } finally {
-      setIsLoading(false);
+        label: isARM ? "Windows ARM" : "Windows",
+        url: isARM ? "vtft-arm64-setup.exe" : "vtft-setup.exe",
+      };
     }
-  }, []);
+  } catch (error) {
+    logger.warn(`平台检测失败: ${error instanceof Error ? error.message : String(error)}`);
+  }
+
+  // 最终兜底：返回 Windows Intel/AMD
+  return DEFAULT_DOWNLOAD_INFO;
+}
+
+export const DownloadButton = () => {
+  const [downloadInfo, setDownloadInfo] = useState<DownloadInfo>(DEFAULT_DOWNLOAD_INFO);
 
   useEffect(() => {
-    initPlatform();
-  }, [initPlatform]);
-
-  if (!downloadInfo || isLoading) {
-    return (
-      <div className="flex flex-col items-center gap-4">
-        <button
-          disabled
-          className="flex items-center gap-2 rounded-lg bg-indigo-600/50 px-8 py-2 text-lg font-semibold text-white shadow-lg cursor-not-allowed"
-        >
-          <div className="h-6 w-6 animate-pulse rounded bg-white/20" />
-          <span>检测中...</span>
-        </button>
-        <div className="text-center">
-          <p className="h-5 w-32 animate-pulse rounded bg-slate-700" />
-        </div>
-        <div className="h-5 w-28 animate-pulse rounded bg-slate-700" />
-      </div>
-    );
-  }
+    detectPlatform().then(setDownloadInfo);
+  }, []);
 
   const handleDownload = () => {
     const githubUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/${downloadInfo.url}`;

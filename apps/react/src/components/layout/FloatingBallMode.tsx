@@ -38,7 +38,7 @@ export function FloatingBallMode() {
 
   return (
     <div
-      className="relative w-full h-full flex items-center justify-center cursor-move bg-transparent z-[60] pointer-events-auto"
+      className="relative w-full h-full flex items-center justify-center cursor-move bg-transparent z-60 pointer-events-auto"
       onMouseDown={onMouseDown}
       onClick={e => e.stopPropagation()}
     >

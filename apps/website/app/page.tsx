@@ -153,7 +153,7 @@ export default function Home() {
         </div>
       </footer>
 
-      <LightRays count={12} speed={1.5} length="80%" />
+      <LightRays count={20} speed={1} length="80%" />
     </div>
   );
 }

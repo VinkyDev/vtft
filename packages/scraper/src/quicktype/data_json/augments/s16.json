@@ -1,0 +1,3101 @@
+{
+    "tags": {},
+    "content": {
+        "author": {
+            "platform": "NA1",
+            "puuid": "ahwwITcjezvdoVLiAW92j3Chu1VFqWNNJtbPtKttpyQ1nlQ488qv_fI5itrgbDRmn1fXJMtFt0ENug",
+            "gameName": "100T Spencer",
+            "tagLine": "TFT"
+        },
+        "content": {
+            "tierList": [
+                {
+                    "content": [
+                        {
+                            "id": "TFT_Augment_HeadStart",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_RestartMission",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Controller_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_CryptoCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ForwardThinking",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_LastStand",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Suits_Liquidate",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BulkyBuddies3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_BuildingACollectionPlusPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_CypherCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_RanduinsImmovableObject",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_ThinkFast",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_MaxCap",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PatienceIsAVirtue",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_FutureSight2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SupportMining",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ShareTheSpotlight",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Divinicorp_Splash",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_CategoryFive",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Voidborne",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_BinaryAirdrop",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_DynamoCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_NoScoutNoPivot",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GoldenQuest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PocketRecombobulator",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_PandorasBench",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_PortableForge",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_LivingForge",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_LongTimeCrafting",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_RadiantRefactor",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GiantAndMighty",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_RiggedShopPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AuraFarming",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_Keepers1",
+                            "type": "augment"
+                        }
+                    ],
+                    "label": "S",
+                    "color": "#ff7e83"
+                },
+                {
+                    "content": [
+                        {
+                            "id": "TFT_Augment_FiresalePlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_Preparation",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SupportMiningPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_Commander_RollingForDays",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TitanicTitan",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_InspiringEpitaph",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_StarryNightPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_StreetDemon_Freestyling",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PiercingLotus1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_SupportCache",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PrismaticDestiny",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BeltOverflow",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_Calltochaos",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_DualPurpose",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PrismaticPipeline",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_InvestedPlusPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PiercingLotus2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ShopGlitch",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SilverDestinyPlusPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SilverDestinyPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_GoodForSomethingSilver",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_GarenCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SilverDestiny",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_CustomerIsAlwaysRight",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TraitTracker",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_MagicRoll",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_BandOfThieves1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_PandorasItems",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_IronAssets",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Kingslayer",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BadLuckProtection",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ChemtechOverdrive",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Supercharge_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_FinalReserves",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Marksman_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_ItemGrabBag1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_BigGrabBag",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_AnimaSquad_SupportSpire",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BRB",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_AnimaSquad_PowerUp",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ExotechCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarket_ScopedWeapons",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_Twins3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_BlindingSpeed",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_MarksmanCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarketBlueBattery",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_CalculatedEnhancement",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AllForOneII",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BranchingOut",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_StarryNight",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_PoppyCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HeroicGrabBagPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_CalculatedLoss",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_SecondWind1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_EyeForAnEyePlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_BardPlaybook2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_LearningFromExperience2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_WorthTheWaitGold",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_SalvageBin",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ExpectedUnexpectedness",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GuardbreakerSpirit",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_LittleBuddies",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_AllThatShimmers",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GoldDestiny",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GoldDestinyPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_StarsAreBorn",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_GachaAddict",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_Twins2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Juggernaut_Indomitable",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_Keepers2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_WaterLotus2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_MaxLevel10",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_BestFriends1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TreasureHunt",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ViCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SoloLeveling",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TwoMuchValue",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ShenCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StarGuardian_TinyTeam",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_UnlimitedPower",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_HeroicGrabBag",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_DrMundoCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_WanderingTrainer",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_BirthdayPresents",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_UpwardMobility",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StarGuardian_PowerOfFriendship",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_DuoQueue",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_LategameSpecialist",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HeroicGrabBagPlusPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BloodRage",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_CrystalRoseCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SwordOverflow",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_HighEndSector",
+                            "type": "augment"
+                        }
+                    ],
+                    "label": "A",
+                    "color": "#ffbf7f"
+                },
+                {
+                    "content": [
+                        {
+                            "id": "TFT_Augment_CraftedCrafting",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ClimbTheLadder1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_DiversifiedPortfolio2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_EyeForAnEye",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_Diversify1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_DravenSpoilsOfWar",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GlassCannonI",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PlaceboPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_HealingOrbsI",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_WealthyRehab1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Lineup",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TableScraps",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_PumpingUp",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_MissedConnections",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_BardPlaybook1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_RiskyMoves",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_SilverSpoon",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_Commander_TeamingUp1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AllThatShimmersPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BulkyBuddies2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ClockworkAccelerator",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_CloningFacility",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_CyberneticBulk2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_HealingOrbsII",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_WealthyRehab2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Thirsty_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_Commander_TeamingUp2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_QuietQuitting",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SatedSpellweaver",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HeavyIsTheCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ClimbTheLadder2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TeslaCoil",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Mentorship2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BattleAcademia_ClassPresident",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BattleAcademia_TransferStudents",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Wraith_ShadowHomunculous",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_RainingGold",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_MirroredMonetization",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_NobleSacrifice",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_Prizefighter",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_Epoch",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_TradeSector",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HeftyRolls",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SoulFighter_TournamentFavorites",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Pyromaniac",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_MightyMech_PowerUpload",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_LastSecondSave",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_EpochPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT8_Augment_SalvageBinPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StarGuardianCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SpiritLink1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ItemCollector2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_RainingGoldPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_Scapegoat",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_FullyAdapted",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SoulFighterCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ExplosiveGrowth",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_Reinfourcement",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TimeSkip",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PlotArmor",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_ScoreboardScrapper",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SpellslingerCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_JuggernautCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_NotToday",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Protector_PreemptiveProtection",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TwoTrick",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AimForTheTop",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ProdigyCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Strategist_GamePlan",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PairOfFours",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Golemify",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SoulFighter_TheGodsEyeOpens",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_CookingPot",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SentaiRanger_BeTheArms",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ChallengerCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_PandorasItems2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_Slammin",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Trifecta1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_FinalPolish",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_InvestedPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Coronation",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_OneBuffTwoBuff",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Flexible",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ImTheCarryNow",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_Commander_FinalAscension",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_FlurryOfBlows",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_RollTheDice",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Sponging",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_TiniestTitanPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AnExaltedAdventure",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_WoodlandCharm",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Manaflow2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GlassCannonII",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_Slammin_Plus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Moonlight",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Overheal",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ShojinSpirit",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Replication",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_BestFriends2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_ClutteredMind",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Mentorship1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Corrosion",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BlazingSoul",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_PumpingUp2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Manaflow1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AxiomArc3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_RhaastCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TowerDefense",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SentaiRanger_BeTheLegs",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Crossfire2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_InvestmentStrategy1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_WanderingTrainerGold",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Syndicate_KeepYourFriendsClose",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_LuckyGloves",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Bruiser_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_GragasCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_GragasCarryPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_RapidfireCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Suits_CorporateCashOut",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_ThriftShop",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_JaxCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ViCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Nitro_PolishedChrome",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_MarksmanCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Guardian_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Backup",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BranchingOutPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_OverEncumbered",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BulkyBuddies1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_CyberneticUplink2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_CyberneticImplants2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Scavenger",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BastionCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_CrownguardSpirit",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_CrownGuarded",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarketShockTreatment",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarketShockTreatmentPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_PhreakyFridayPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_PhreakyFriday",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_HighEndShopping",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_AnimaSquadCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_CyberneticImplants3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_StreetDemonCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Swift_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Cyberboss_Cower",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ArmorcladCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_AnimaSquadCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Syndicate_DummyWithAGun",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_Buildabud",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_DuelistCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Nitro_SpareParts",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_InvokerCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_SylasCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PowerUp",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AnotherOnePlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TragicalBlade",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_DeadlierCaps",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HowlingGale",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ExplosiveGrowthPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_KnowYourEnemy",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_LongDistanceRelationship2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_AFK",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ItemCollector1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Prodigy_UnboundArcana",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Bastion_RaidBoss",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BattleAcademiaCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BattleAcademia_Hero101",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Executioner_GoldenGuillotine",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SupremeCellsCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SupremeCells_AllForOne",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HomeCooking",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SupremeCells_NewContenders",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BronzeForLifeI",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_WaterLotus1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StarGuardian_Superstar",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SniperCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ProtectorCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_RingKingCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_TonsOfStats",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_MightyMech_MultiMech",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TacticiansKitchen",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ChallengerCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_HeavyweightCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StarGuardianCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_CyberneticBulk3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_EfficientShopper",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ShimmerscaleEssence",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Trifecta2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Isekai_Sorcerer",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Heavyweight_RingTheBell",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StrategistCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_CrystalRoseCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GreaterMoonlight",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_TinyButDeadly",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_PsychicForge",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Luchador_GrandSlam",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Luchador_TournamentTitans",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_CryMeARiver",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BackupDancers",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_RadiantRelics",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_WandOverflow",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_PandorasRadiantBox",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ExclusiveCustomization",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_OneTwosThree",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SliceOfLife",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BeggarsCanBeChoosers",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_Preparation2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BronzeForLife2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_ArmyBuilding",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_HedgeFund",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_LuckyGlovesPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Wraith_DeepeningShadows",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Sniper_PreciseShot",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_SunfireBoard",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Isekai_Prodigy",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ChallengerCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_FoodfightTactics",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_EvilBeyondMeasure",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Isekai_Strategist",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Dummify",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_HeavyweightCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ThornPlatedArmor",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AnotherOne",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Duelist_AdaptiveStyle",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SupremeCellsCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SupremeCellsCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_BardPlaybook3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_QualityOverQuantity",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Protagonist",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SentaiRanger_BeTheHead",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_BlazingSoul2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HardBargain",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ZacCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_MalphiteCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_ChaosEvolution",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SentaiRanger_BeTheHead_Gold",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_NeekoCarry",
+                            "type": "augment"
+                        }
+                    ],
+                    "label": "B",
+                    "color": "#ffdf80"
+                },
+                {
+                    "content": [
+                        {
+                            "id": "TFT9_Augment_RedBuff",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_FindYourCenter",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_BigFriend",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_OneTwoFive",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_AllForOneI",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_BigFriend2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_ClearMind",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Techie_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_GoldForDummies",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Divinicorp_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Superstars",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Boombots_BigBoom",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Pilfer",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Armorclad_Splash",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Boombots_SelfDestruct",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_StreetDemon_TaggingSpree",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BastionCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_AnimaSquadCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BastionCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BoomBotsCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_StrategistCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_YoungAndWildAndFree",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BoomBotsCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BruiserCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BruiserCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarketGargantuanResolve",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_SacrificialPact",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_LifeLongLearningBlackMarket",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT7_Augment_CursedCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_DivinicorpCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_OneHundredDuckSizedHorses",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ExecutionerCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ExotechCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_GoldenOxCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_GoldenOxCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_MarksmanCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Pirates3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ExecutionerCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_RapidfireCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_TechieCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_DivinicorpCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_SlayerCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_SlayerCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_StrategistCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_StreetDemonCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HallOfMirrors",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_SubscriptionService",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_SyndicateCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_SyndicateCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_TechieCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_TiniestTitan",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarketTitanicStrength",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarketUnstableEvolution",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BattleAcademiaCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_VanguardCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_VanguardCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HardCommit",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_WorthTheWaitPrismatic",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_HyperRoll",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Supercharge_Splash",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_Commander_Ascension",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_EdgelordCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Warpath",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_SlayerCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Controller_VerticalPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Techie_Splash",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_DivinicorpCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Exotech_TrialRun",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Strong_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Exotech_Cyberdeck",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_DravenSpoilsOfWar2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Immortal_Vertical",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Dhampyr",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BoomBotsCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_VanguardCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_StrategistCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BruiserCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_MobCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Immortal_SplashPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Immortal_Splash",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_BlackMarketGargantuanResolvePlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ExotechCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_TheCrew_SpaceCamp",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HighVoltage",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_DynamoCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_OopsAllRageblades",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_ExecutionerCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_GoldenOxCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Cutter_Splash",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_TechieCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Immortal_VerticalPlus",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_LudensEcho3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT14_Augment_Cyberboss_HighScore",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Incoming",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_RerollTransfer",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Underdogs",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BastionCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ProdigyCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_AtWhatCost",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_StarterKit",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_TheGoldenEgg",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_Recombobulator",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_CalledShot",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_DiversifiedPortfolio1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Placebo",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Mentor_TeachersCouncil",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_CrystalGambit_DiamondHands",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_DestroyerCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_EmpyreanCrest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Mentor_LearnFromTheBest",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Edgelord_GainTheEdge",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BastionCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_DestroyerCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TombRaider2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ProdigyCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_RingKingCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SpellslingerCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_EdgelordCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_DestroyerCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_JuggernautCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_RingKingCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StarGuardianCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_EmpyreanCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SoulFighterCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT10_Augment_GoingLong",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SniperCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ProtectorCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_JuggernautCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_HeavyweightCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_PumpingUp3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_StoryOfSeven",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SoulFighter_SoulSurge",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_CrystalRoseCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SoulFighterCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_HoldTheLine",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_UdyrCarry",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StrategistCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_EdgelordCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SpellslingerCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_SniperCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_BattleAcademiaCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_StrategistCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_ProtectorCirclet",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TrickstersGlassAugment",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT6_Augment_CyberneticUplink3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_InvestmentStrategy2",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_Sorcerer_DazzlingDisplay",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_EmpyreanCrown",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_TheCrew_EscapeVelocity",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_NineLives",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT15_Augment_KennenCarry",
+                            "type": "augment"
+                        }
+                    ],
+                    "label": "C",
+                    "color": "#feff7f"
+                },
+                {
+                    "content": [
+                        {
+                            "id": "TFT_Augment_Survivor",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_TombRaider1",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_UnleashTheBeast",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT_Augment_Dominance3",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT11_Augment_BloodBank",
+                            "type": "augment"
+                        },
+                        {
+                            "id": "TFT9_Augment_DravenSpoilsOfWar3",
+                            "type": "augment"
+                        }
+                    ],
+                    "label": "D",
+                    "color": "#bffe7f"
+                }
+            ],
+            "tierListType": "Augments",
+            "notes": {
+                "TFT6_Augment_PortableForge": "",
+                "TFT9_Augment_PandorasItems2": "",
+                "TFT9_Augment_BigGrabBag": "",
+                "TFT7_Augment_PandorasBench": "",
+                "TFT_Augment_DuoQueue": "",
+                "TFT_Augment_PiercingLotus1": "",
+                "TFT10_Augment_HeroicGrabBag": "",
+                "TFT_Augment_Overheal": "",
+                "TFT11_Augment_WanderingTrainerGold": "",
+                "TFT_Augment_WealthyRehab2": "",
+                "TFT_Augment_TowerDefense": "",
+                "TFT11_Augment_Reinfourcement": "",
+                "TFT_Augment_BranchingOut": "",
+                "TFT6_Augment_PandorasItems": "",
+                "TFT_Augment_MagicRoll": "",
+                "TFT9_Augment_PandorasRadiantBox": "",
+                "TFT11_Augment_Calltochaos": "",
+                "TFT_Augment_SatedSpellweaver": "",
+                "TFT_Augment_PrismaticPipeline": "",
+                "TFT_Augment_Manaflow2": "",
+                "TFT13_Augment_ConquerorCrest": "",
+                "TFT_Augment_ShojinSpirit": "",
+                "TFT_Augment_Coronation": "",
+                "TFT_Augment_ClockworkAccelerator": "",
+                "TFT11_Augment_RadiantRefactor": "",
+                "TFT_Augment_GuardbreakerSpirit": "",
+                "TFT6_Augment_RadiantRelics": "",
+                "TFT13_Augment_Conqueror": "",
+                "TFT_Augment_SpiritLink1": "",
+                "TFT9_Augment_SupportCache": "",
+                "TFT_Augment_PowerUp": "",
+                "TFT10_Augment_InspiringEpitaph": "",
+                "TFT_Augment_GlassCannonII": "",
+                "TFT9_Augment_AllThatShimmers": "",
+                "TFT_Augment_InvestedPlusPlus": "",
+                "TFT_Augment_CrownguardSpirit": "",
+                "TFT_Augment_PiercingLotus2": "",
+                "TFT13_Augment_ChembaronCrest": "",
+                "TFT11_Augment_RainingGoldPlus": "",
+                "TFT13_Augment_AnotherAnomaly": "",
+                "TFT_Augment_AllThatShimmersPlus": "",
+                "TFT_Augment_ShopGlitch": "",
+                "TFT9_Augment_Commander_RollingForDays": "",
+                "TFT_Augment_Replication": "",
+                "TFT9_Augment_LearningFromExperience2": "",
+                "TFT_Augment_BlazingSoul": "",
+                "TFT_Augment_FiresalePlus": "",
+                "TFT13_TeamupAugment_UnlikelyDuo": "",
+                "TFT_Augment_StarryNight": "",
+                "TFT_Augment_ForwardThinking": "",
+                "TFT6_Augment_GachaAddict": "",
+                "TFT11_Augment_RainingGold": "",
+                "TFT9_Augment_Commander_TeamingUp2": "",
+                "TFT_Augment_UnleashTheBeast": "",
+                "TFT13_Augment_AGoldenFind": "",
+                "TFT_Augment_WorthTheWaitGold": "",
+                "TFT9_Augment_RedBuff": "",
+                "TFT_Augment_InvestedPlus": "",
+                "TFT9_Augment_DravenSpoilsOfWar2": "",
+                "TFT_Augment_CookingPot": "",
+                "TFT_Augment_Pyromaniac": "",
+                "TFT6_Augment_TradeSector": "",
+                "TFT_Augment_Warpath": "",
+                "TFT13_Augment_EnforcerCrest": "",
+                "TFT6_Augment_TheGoldenEgg": "",
+                "TFT10_Augment_LittleBuddies": "",
+                "TFT_Augment_ClimbTheLadder2": "",
+                "TFT7_Augment_ClutteredMind": "",
+                "TFT8_Augment_SalvageBinPlus": "",
+                "TFT13_TeamupAugment_Mentorship": "",
+                "TFT_Augment_CloningFacility": "",
+                "TFT13_Augment_ConquerorCrown": "",
+                "TFT_Augment_Scavenger": "",
+                "TFT13_Augment_FamilyCrest": "",
+                "TFT11_Augment_EpochPlus": "",
+                "TFT_Augment_HighVoltage": "",
+                "TFT13_TeamupAugment_Sisters": "",
+                "TFT_Augment_StarryNightPlus": "",
+                "TFT_Augment_TwoTrick": "",
+                "TFT_Augment_Artifactory": "",
+                "TFT11_Augment_Epoch": "",
+                "TFT_Augment_ItemCollector2": "",
+                "TFT9_Augment_WanderingTrainer": "",
+                "TFT13_Augment_Chembaron": "",
+                "TFT_Augment_WealthyRehab1": "",
+                "TFT11_Augment_DragonSpirit": "",
+                "TFT_Augment_FlurryOfBlows": "",
+                "TFT13_Augment_ChembaronCrown": "",
+                "TFT_Augment_Dhampyr": "",
+                "TFT_Augment_RanduinsImmovableObject": "",
+                "TFT_Augment_MirroredMonetization": "",
+                "TFT_Augment_PlaceboPlus": "",
+                "TFT13_Augment_PrimeCarry": "",
+                "TFT_Augment_NobleSacrifice": "",
+                "TFT_Augment_TitanicTitan": "",
+                "TFT13_Augment_VladCarry": "",
+                "TFT9_Augment_ArmyBuilding": "",
+                "TFT7_Augment_LuckyGlovesPlus": "",
+                "TFT9_Augment_NotToday": "",
+                "TFT_Augment_BlazingSoul2": "",
+                "TFT6_Augment_ItemGrabBag1": "",
+                "TFT_Augment_PairOfFours": "",
+                "TFT9_Augment_YoungAndWildAndFree": "",
+                "TFT13_Augment_VisionaryCrest": "",
+                "TFT_Augment_ThornPlatedArmor": "",
+                "TFT_Augment_DefenseCall": "",
+                "TFT_Augment_BulkyBuddies2": "",
+                "TFT11_Augment_Slammin_Plus": "",
+                "TFT9_Augment_LongDistanceRelationship2": "",
+                "TFT13_Augment_RebelCrest": "",
+                "TFT13_Augment_CabalCrest": "",
+                "TFT13_Augment_Ambusher": "",
+                "TFT7_Augment_LategameSpecialist": "",
+                "TFT_Augment_CalculatedEnhancement": "",
+                "TFT_Augment_Pilfer": "",
+                "TFT_Augment_CategoryFive": "",
+                "TFT13_Augment_PitFighterCrest": "",
+                "TFT_Augment_Manaflow1": "",
+                "TFT13_Augment_Sniper": "",
+                "TFT9_Augment_PumpingUp2": "",
+                "TFT_Augment_HallOfMirrors": "",
+                "TFT_Augment_OneBuffTwoBuff": "",
+                "TFT11_Augment_Slammin": "",
+                "TFT13_Augment_Visionary": "",
+                "TFT13_Augment_SorcererCrest": "",
+                "TFT_Augment_Mentorship2": "",
+                "TFT9_Augment_TiniestTitanPlus": "",
+                "TFT_Augment_InvestmentStrategy1": "",
+                "TFT_Augment_ImTheCarryNow": "",
+                "TFT_Augment_TacticiansKitchen": "",
+                "TFT11_Augment_Prizefighter": "",
+                "TFT9_Augment_RollTheDice": "",
+                "TFT13_Augment_Enforcer": "",
+                "TFT_Augment_RiggedShopPlus": "",
+                "TFT_Augment_FindYourCenter": "",
+                "TFT13_Augment_ScrapCrest": "",
+                "TFT_Augment_ExpectedUnexpectedness": "",
+                "TFT13_Augment_SniperCrest": "",
+                "TFT_Augment_GlassCannonI": "",
+                "TFT_Augment_LoneHero": "",
+                "TFT7_Augment_BandOfThieves1": "",
+                "TFT13_Augment_Rebel": "",
+                "TFT13_TeamupAugment_Reunion": "",
+                "TFT6_Augment_MaxLevel10": "",
+                "TFT_Augment_SupportMiningPlus": "",
+                "TFT_Augment_TombRaider1": "",
+                "TFT_Augment_EyeForAnEyePlus": "",
+                "TFT13_Augment_AmbusherCrest": "",
+                "TFT13_Augment_WatcherCrest": "",
+                "TFT13_Augment_AutomataCrest": "",
+                "TFT_Augment_HardCommit": "",
+                "TFT_Augment_Trifecta1": "",
+                "TFT_Augment_BRB": "",
+                "TFT13_Augment_Family": "",
+                "TFT_Augment_Kingslayer": "",
+                "TFT9_Augment_Commander_TeamingUp1": "",
+                "TFT10_Augment_CrownGuarded": "",
+                "TFT_Augment_WandOverflow": "",
+                "TFT13_Augment_EnforcerCrown": "",
+                "TFT_Augment_SwordOverflow": "",
+                "TFT9_Augment_CustomerIsAlwaysRight": "",
+                "TFT_Augment_OopsAllRageblades": "",
+                "TFT9_Augment_BuildingACollectionPlusPlus": "",
+                "TFT13_Augment_Watcher": "",
+                "TFT_Augment_BronzeForLifeI": "",
+                "TFT_Augment_GreaterMoonlight": "",
+                "TFT13_Augment_SentinelCrest": "",
+                "TFT9_Augment_HedgeFund": "",
+                "TFT9_Augment_OneTwosThree": "",
+                "TFT_Augment_BeltOverflow": "",
+                "TFT10_Augment_Scapegoat": "",
+                "TFT9_Augment_WhatDoesntKillYou": "",
+                "TFT_Augment_BulkyBuddies3": "",
+                "TFT_Augment_GoldForDummies": "",
+                "TFT13_Augment_Sorcerer": "",
+                "TFT13_Augment_Automata": "",
+                "TFT13_Augment_Sentinel": "",
+                "TFT_Augment_RiggedShop": "",
+                "TFT6_Augment_ClearMind": "",
+                "TFT9_Augment_BardPlaybook2": "",
+                "TFT_Augment_Survivor": "",
+                "TFT9_Augment_SilverSpoon": "",
+                "TFT_Augment_Superstars": "",
+                "TFT_Augment_TraitTracker": "",
+                "TFT_Augment_SubscriptionService": "",
+                "TFT_Augment_Moonlight": "",
+                "TFT13_Augment_FamilyCrown": "",
+                "TFT_Augment_Corrosion": "",
+                "TFT6_Augment_SalvageBin": "",
+                "TFT6_Augment_Recombobulator": "",
+                "TFT9_Augment_BlindingSpeed": "",
+                "TFT_Augment_BeggarsCanBeChoosers": "",
+                "TFT9_Augment_PhreakyFridayPlus": "",
+                "TFT_Augment_Flexible": "",
+                "TFT13_Augment_AcademyCrest": "",
+                "TFT_Augment_Sponging": "",
+                "TFT9_Augment_DravenSpoilsOfWar": "",
+                "TFT13_Augment_DominatorCrest": "",
+                "TFT13_Augment_FirelightCrest": "",
+                "TFT_Augment_ClimbTheLadder1": "",
+                "TFT13_Augment_ArtilleristCrest": "",
+                "TFT9_Augment_LongTimeCrafting": "",
+                "TFT13_Augment_BruiserCrest": "",
+                "TFT9_Augment_MissedConnections": "",
+                "TFT11_Augment_ScoreboardScrapper": "",
+                "TFT_Augment_QualityOverQuantity": "",
+                "TFT13_Augment_Bruiser": "",
+                "TFT11_Augment_BloodBank": "",
+                "TFT_Augment_MaxCap": "",
+                "TFT13_Augment_Quickstriker": "",
+                "TFT13_Augment_Firelight": "",
+                "TFT_Augment_Lineup": "",
+                "TFT13_Augment_Formswapper": "",
+                "TFT13_Augment_PitFighterCrown": "",
+                "TFT_Augment_NoScoutNoPivot": "",
+                "TFT6_Augment_OneTwoFive": "",
+                "TFT_Augment_BulkyBuddies1": "",
+                "TFT13_Augment_RebelCrown": "",
+                "TFT13_TeamupAugment_Geniuses": "",
+                "TFT13_Augment_QuickstrikerCrest": "",
+                "TFT_Augment_TwoMuchValue": "",
+                "TFT_Augment_FinalPolish": "",
+                "TFT13_Augment_VisionaryCrown": "",
+                "TFT7_Augment_BirthdayPresents": "",
+                "TFT13_Augment_CabalCrown": "",
+                "TFT_Augment_TableScraps": "",
+                "TFT13_Augment_ChainsawCarry": "",
+                "TFT_Augment_BadLuckProtection": "",
+                "TFT13_Augment_TrundleCarry": "",
+                "TFT_Augment_BronzeForLife2": "",
+                "TFT11_Augment_Buildabud": "",
+                "TFT13_Augment_Dominator": "",
+                "TFT13_Augment_SingedCarry": "",
+                "TFT13_Augment_SorcererCrown": "",
+                "TFT_Augment_ItemCollector1": "",
+                "TFT13_Augment_IreliaCarry": "",
+                "TFT9_Augment_BardPlaybook1": "",
+                "TFT_Augment_Backup": "",
+                "TFT_Augment_TombRaider2": "",
+                "TFT9_Augment_IronAssets": "",
+                "TFT_Augment_Trifecta2": "",
+                "TFT_Augment_InvestmentStrategy2": "",
+                "TFT13_Augment_ScrapCrown": "",
+                "TFT9_Augment_DravenSpoilsOfWar3": "",
+                "TFT_Augment_Mentorship1": "",
+                "TFT13_TeamupAugment_Menaces": "",
+                "TFT_Augment_UpwardMobility": "",
+                "TFT13_Augment_SniperCrown": "",
+                "TFT13_Augment_Academy": "",
+                "TFT13_Augment_FishCarry": "",
+                "TFT_Augment_AllForOneII": "",
+                "TFT_Augment_DualPurpose": "",
+                "TFT_Augment_EyeForAnEye": "",
+                "TFT_Augment_RestartMission": "",
+                "TFT_Augment_CraftedCrafting": "",
+                "TFT13_Augment_Artillerist": "",
+                "TFT_Augment_Golemify": "",
+                "TFT_Augment_SupportMining": "",
+                "TFT_Augment_Placebo": "",
+                "TFT13_Augment_AmbusherCrown": "",
+                "TFT_Augment_PatienceIsAVirtue": "",
+                "TFT9_Augment_PumpingUp": "",
+                "TFT_Augment_Voidborne": "",
+                "TFT11_Augment_AtWhatCost": "",
+                "TFT9_Augment_RiskyMoves": "",
+                "TFT13_Augment_AutomataCrown": "",
+                "TFT13_Augment_BlueCarry": "",
+                "TFT7_Augment_LivingForge": "",
+                "TFT_Augment_WorthTheWaitPrismatic": "",
+                "TFT_Augment_ShimmerscaleEssence": "",
+                "TFT13_Augment_Scrap": "",
+                "TFT13_Augment_Cabal": "",
+                "TFT_Augment_DiversifiedPortfolio2": "",
+                "TFT_Augment_GhostOfUnitsPast": "",
+                "TFT11_Augment_OverEncumbered": "",
+                "TFT9_Augment_TiniestTitan": "",
+                "TFT_Augment_AnExaltedAdventure": "",
+                "TFT13_Augment_SentinelCrown": "",
+                "TFT13_Augment_WatcherCrown": "",
+                "TFT13_TeamupAugment_BloodBrothers": "",
+                "TFT13_Augment_Experiment": "",
+                "TFT_Augment_SuperstarsSilver": "",
+                "TFT13_Augment_AcademyCrown": "",
+                "TFT13_Augment_PitFighter": "",
+                "TFT10_Augment_GoodForSomethingSilver": "",
+                "TFT13_Augment_QuickstrikerCrown": "",
+                "TFT13_Augment_DominatorCrown": "",
+                "TFT13_Augment_FirelightCrown": "",
+                "TFT13_Augment_ArtilleristCrown": "",
+                "TFT_Augment_Contested": "",
+                "TFT_Augment_DarkAlleyDealings": "",
+                "TFT11_Augment_FineVintage": "",
+                "TFT13_Augment_BruiserCrown": "",
+                "TFT6_Augment_Traitless2": "",
+                "TFT_Augment_RerollTransfer": "",
+                "TFT9_Augment_PumpingUp3": "",
+                "TFT7_Augment_LuckyGloves": "",
+                "TFT_Augment_CalledShot": "",
+                "TFT10_Augment_GoingLong": "",
+                "TFT9_Augment_BardPlaybook3": "",
+                "TFT_Augment_DiversifiedPortfolio1": "",
+                "TFT9_Augment_HighEndSector": "",
+                "TFT_Augment_AllForOneI": "",
+                "TFT_Augment_Dummify": "",
+                "TFT_Augment_Spellsword": "",
+                "TFT9_Augment_PhreakyFriday": "",
+                "TFT13_Augment_ArtilleristPlus": "",
+                "TFT10_Augment_HelpIsOnTheWay": "",
+                "TFT6_Augment_Keepers2": "",
+                "TFT_Augment_VoidborneHR": "",
+                "TFT6_Augment_SalvageBinHR": "",
+                "TFT6_Augment_ForceOfNature": "",
+                "TFT9_Augment_BalancedBudgetPlus": "",
+                "TFT9_Augment_BalancedBudget2": "",
+                "TFT9_Augment_CombatCaster": "",
+                "TFT_Augment_TwoTanky": ""
+            },
+            "tags": {
+                "TFT6_Augment_PortableForge": "items",
+                "TFT9_Augment_PandorasItems2": "items,scaling",
+                "TFT9_Augment_BigGrabBag": "items",
+                "TFT7_Augment_PandorasBench": "econ",
+                "TFT_Augment_DuoQueue": "items,econ",
+                "TFT_Augment_PiercingLotus1": "combat",
+                "TFT10_Augment_HeroicGrabBag": "econ",
+                "TFT_Augment_Overheal": "combat",
+                "TFT11_Augment_WanderingTrainerGold": "combat,misc",
+                "TFT_Augment_WealthyRehab2": "econ,combat",
+                "TFT_Augment_TowerDefense": "combat",
+                "TFT11_Augment_Reinfourcement": "econ",
+                "TFT_Augment_BranchingOut": "misc",
+                "TFT6_Augment_PandorasItems": "items",
+                "TFT_Augment_MagicRoll": "misc",
+                "TFT9_Augment_PandorasRadiantBox": "items",
+                "TFT11_Augment_Calltochaos": "misc",
+                "TFT_Augment_SatedSpellweaver": "combat",
+                "TFT_Augment_PrismaticPipeline": "items,econ,scaling",
+                "TFT_Augment_Manaflow2": "combat",
+                "TFT13_Augment_ConquerorCrest": "trait",
+                "TFT_Augment_ShojinSpirit": "items,combat",
+                "TFT_Augment_Coronation": "combat",
+                "TFT_Augment_ClockworkAccelerator": "combat",
+                "TFT11_Augment_RadiantRefactor": "items",
+                "TFT_Augment_GuardbreakerSpirit": "items,combat",
+                "TFT6_Augment_RadiantRelics": "items",
+                "TFT13_Augment_Conqueror": "combat,trait",
+                "TFT_Augment_SpiritLink1": "combat",
+                "TFT9_Augment_SupportCache": "combat",
+                "TFT_Augment_PowerUp": "scaling,misc",
+                "TFT10_Augment_InspiringEpitaph": "combat",
+                "TFT_Augment_GlassCannonII": "combat",
+                "TFT9_Augment_AllThatShimmers": "econ",
+                "TFT_Augment_InvestedPlusPlus": "econ",
+                "TFT_Augment_CrownguardSpirit": "items,combat",
+                "TFT_Augment_PiercingLotus2": "combat",
+                "TFT13_Augment_ChembaronCrest": "trait",
+                "TFT11_Augment_RainingGoldPlus": "econ",
+                "TFT13_Augment_AnotherAnomaly": "combat,scaling",
+                "TFT_Augment_AllThatShimmersPlus": "econ",
+                "TFT_Augment_ShopGlitch": "econ,scaling",
+                "TFT9_Augment_Commander_RollingForDays": "econ",
+                "TFT_Augment_Replication": "items",
+                "TFT9_Augment_LearningFromExperience2": "econ",
+                "TFT_Augment_BlazingSoul": "combat",
+                "TFT_Augment_FiresalePlus": "econ",
+                "TFT13_TeamupAugment_UnlikelyDuo": "combat,trait,misc",
+                "TFT_Augment_StarryNight": "econ",
+                "TFT_Augment_ForwardThinking": "econ",
+                "TFT6_Augment_GachaAddict": "econ",
+                "TFT11_Augment_RainingGold": "econ",
+                "TFT9_Augment_Commander_TeamingUp2": "econ,combat",
+                "TFT_Augment_UnleashTheBeast": "items,combat",
+                "TFT13_Augment_AGoldenFind": "econ",
+                "TFT_Augment_WorthTheWaitGold": "econ,scaling,misc",
+                "TFT9_Augment_RedBuff": "combat",
+                "TFT_Augment_InvestedPlus": "econ",
+                "TFT9_Augment_DravenSpoilsOfWar2": "econ",
+                "TFT_Augment_CookingPot": "combat,scaling,misc",
+                "TFT_Augment_Pyromaniac": "items,combat",
+                "TFT6_Augment_TradeSector": "econ",
+                "TFT_Augment_Warpath": "items,econ,scaling",
+                "TFT13_Augment_EnforcerCrest": "trait",
+                "TFT6_Augment_TheGoldenEgg": "items,econ,scaling",
+                "TFT10_Augment_LittleBuddies": "combat",
+                "TFT_Augment_ClimbTheLadder2": "combat",
+                "TFT7_Augment_ClutteredMind": "econ",
+                "TFT8_Augment_SalvageBinPlus": "items",
+                "TFT13_TeamupAugment_Mentorship": "combat,trait,misc",
+                "TFT_Augment_CloningFacility": "combat",
+                "TFT13_Augment_ConquerorCrown": "trait",
+                "TFT_Augment_Scavenger": "combat",
+                "TFT13_Augment_FamilyCrest": "trait",
+                "TFT11_Augment_EpochPlus": "econ",
+                "TFT_Augment_HighVoltage": "items,combat",
+                "TFT13_TeamupAugment_Sisters": "combat,trait,misc",
+                "TFT_Augment_StarryNightPlus": "econ",
+                "TFT_Augment_TwoTrick": "econ",
+                "TFT_Augment_Artifactory": "items,misc",
+                "TFT11_Augment_Epoch": "econ",
+                "TFT_Augment_ItemCollector2": "combat",
+                "TFT9_Augment_WanderingTrainer": "combat,misc",
+                "TFT13_Augment_Chembaron": "econ",
+                "TFT_Augment_WealthyRehab1": "econ,combat",
+                "TFT11_Augment_DragonSpirit": "items,combat",
+                "TFT_Augment_FlurryOfBlows": "combat",
+                "TFT13_Augment_ChembaronCrown": "trait",
+                "TFT_Augment_Dhampyr": "combat,misc",
+                "TFT_Augment_RanduinsImmovableObject": "combat",
+                "TFT_Augment_MirroredMonetization": "econ",
+                "TFT_Augment_PlaceboPlus": "econ,combat",
+                "TFT13_Augment_PrimeCarry": "combat,misc",
+                "TFT_Augment_NobleSacrifice": "combat",
+                "TFT_Augment_TitanicTitan": "misc",
+                "TFT13_Augment_VladCarry": "combat",
+                "TFT9_Augment_ArmyBuilding": "econ",
+                "TFT7_Augment_LuckyGlovesPlus": "items",
+                "TFT9_Augment_NotToday": "items,combat",
+                "TFT_Augment_BlazingSoul2": "combat",
+                "TFT6_Augment_ItemGrabBag1": "items",
+                "TFT_Augment_PairOfFours": "combat",
+                "TFT9_Augment_YoungAndWildAndFree": "items,econ",
+                "TFT13_Augment_VisionaryCrest": "trait",
+                "TFT_Augment_ThornPlatedArmor": "items,combat",
+                "TFT_Augment_DefenseCall": "combat",
+                "TFT_Augment_BulkyBuddies2": "combat",
+                "TFT11_Augment_Slammin_Plus": "items,econ",
+                "TFT9_Augment_LongDistanceRelationship2": "combat",
+                "TFT13_Augment_RebelCrest": "scaling",
+                "TFT13_Augment_CabalCrest": "trait",
+                "TFT13_Augment_Ambusher": "items,econ",
+                "TFT7_Augment_LategameSpecialist": "econ,scaling",
+                "TFT_Augment_CalculatedEnhancement": "combat",
+                "TFT_Augment_Pilfer": "econ",
+                "TFT_Augment_CategoryFive": "items,combat",
+                "TFT13_Augment_PitFighterCrest": "trait",
+                "TFT_Augment_Manaflow1": "combat",
+                "TFT13_Augment_Sniper": "combat,trait",
+                "TFT9_Augment_PumpingUp2": "combat,scaling",
+                "TFT_Augment_HallOfMirrors": "combat,misc",
+                "TFT_Augment_OneBuffTwoBuff": "items,econ",
+                "TFT11_Augment_Slammin": "items,econ",
+                "TFT13_Augment_Visionary": "combat,trait",
+                "TFT13_Augment_SorcererCrest": "trait",
+                "TFT_Augment_Mentorship2": "combat",
+                "TFT9_Augment_TiniestTitanPlus": "econ,misc",
+                "TFT_Augment_InvestmentStrategy1": "combat,scaling",
+                "TFT_Augment_ImTheCarryNow": "combat",
+                "TFT_Augment_TacticiansKitchen": "items,combat",
+                "TFT11_Augment_Prizefighter": "items",
+                "TFT9_Augment_RollTheDice": "items",
+                "TFT13_Augment_Enforcer": "econ,combat,trait",
+                "TFT_Augment_RiggedShopPlus": "econ",
+                "TFT_Augment_FindYourCenter": "combat",
+                "TFT13_Augment_ScrapCrest": "trait",
+                "TFT_Augment_ExpectedUnexpectedness": "items,econ,misc",
+                "TFT13_Augment_SniperCrest": "trait",
+                "TFT_Augment_GlassCannonI": "combat",
+                "TFT_Augment_LoneHero": "combat",
+                "TFT7_Augment_BandOfThieves1": "items",
+                "TFT13_Augment_Rebel": "combat,scaling",
+                "TFT13_TeamupAugment_Reunion": "combat,trait,misc",
+                "TFT6_Augment_MaxLevel10": "econ",
+                "TFT_Augment_SupportMiningPlus": "combat",
+                "TFT_Augment_TombRaider1": "items,scaling",
+                "TFT_Augment_EyeForAnEyePlus": "items,scaling",
+                "TFT13_Augment_AmbusherCrest": "trait",
+                "TFT13_Augment_WatcherCrest": "trait",
+                "TFT13_Augment_AutomataCrest": "trait",
+                "TFT_Augment_HardCommit": "econ,misc",
+                "TFT_Augment_Trifecta1": "econ,combat",
+                "TFT_Augment_BRB": "items,scaling",
+                "TFT13_Augment_Family": "econ,trait",
+                "TFT_Augment_Kingslayer": "econ",
+                "TFT9_Augment_Commander_TeamingUp1": "items,econ",
+                "TFT10_Augment_CrownGuarded": "items,combat",
+                "TFT_Augment_WandOverflow": "items",
+                "TFT13_Augment_EnforcerCrown": "trait",
+                "TFT_Augment_SwordOverflow": "items",
+                "TFT9_Augment_CustomerIsAlwaysRight": "items",
+                "TFT_Augment_OopsAllRageblades": "items,combat,misc",
+                "TFT9_Augment_BuildingACollectionPlusPlus": "items",
+                "TFT13_Augment_Watcher": "combat",
+                "TFT_Augment_BronzeForLifeI": "combat",
+                "TFT_Augment_GreaterMoonlight": "combat",
+                "TFT13_Augment_SentinelCrest": "trait",
+                "TFT9_Augment_HedgeFund": "econ",
+                "TFT9_Augment_OneTwosThree": "econ",
+                "TFT_Augment_BeltOverflow": "items,combat",
+                "TFT10_Augment_Scapegoat": "econ",
+                "TFT9_Augment_WhatDoesntKillYou": "items,scaling",
+                "TFT_Augment_BulkyBuddies3": "combat",
+                "TFT_Augment_GoldForDummies": "econ",
+                "TFT13_Augment_Sorcerer": "combat,trait",
+                "TFT13_Augment_Automata": "combat,trait",
+                "TFT13_Augment_Sentinel": "combat,trait",
+                "TFT_Augment_RiggedShop": "econ",
+                "TFT6_Augment_ClearMind": "econ",
+                "TFT9_Augment_BardPlaybook2": "items,scaling",
+                "TFT_Augment_Survivor": "econ,scaling",
+                "TFT9_Augment_SilverSpoon": "econ",
+                "TFT_Augment_Superstars": "econ,combat,scaling",
+                "TFT_Augment_TraitTracker": "misc",
+                "TFT_Augment_SubscriptionService": "econ",
+                "TFT_Augment_Moonlight": "combat",
+                "TFT13_Augment_FamilyCrown": "trait",
+                "TFT_Augment_Corrosion": "combat",
+                "TFT6_Augment_SalvageBin": "items",
+                "TFT6_Augment_Recombobulator": "econ",
+                "TFT9_Augment_BlindingSpeed": "items",
+                "TFT_Augment_BeggarsCanBeChoosers": "econ,misc",
+                "TFT9_Augment_PhreakyFridayPlus": "items",
+                "TFT_Augment_Flexible": "misc",
+                "TFT13_Augment_AcademyCrest": "trait",
+                "TFT_Augment_Sponging": "combat",
+                "TFT9_Augment_DravenSpoilsOfWar": "econ",
+                "TFT13_Augment_DominatorCrest": "trait",
+                "TFT13_Augment_FirelightCrest": "trait",
+                "TFT_Augment_ClimbTheLadder1": "combat",
+                "TFT13_Augment_ArtilleristCrest": "trait",
+                "TFT9_Augment_LongTimeCrafting": "items,scaling",
+                "TFT13_Augment_BruiserCrest": "trait",
+                "TFT9_Augment_MissedConnections": "econ",
+                "TFT11_Augment_ScoreboardScrapper": "combat,scaling",
+                "TFT_Augment_QualityOverQuantity": "combat",
+                "TFT13_Augment_Bruiser": "combat,trait",
+                "TFT11_Augment_BloodBank": "econ",
+                "TFT_Augment_MaxCap": "econ,combat",
+                "TFT13_Augment_Quickstriker": "combat,trait",
+                "TFT13_Augment_Firelight": "combat,trait",
+                "TFT_Augment_Lineup": "combat",
+                "TFT13_Augment_Formswapper": "combat,trait",
+                "TFT13_Augment_PitFighterCrown": "trait",
+                "TFT_Augment_NoScoutNoPivot": "combat,scaling",
+                "TFT6_Augment_OneTwoFive": "items,econ",
+                "TFT_Augment_BulkyBuddies1": "combat",
+                "TFT13_Augment_RebelCrown": "trait",
+                "TFT13_TeamupAugment_Geniuses": "combat,trait,misc",
+                "TFT13_Augment_QuickstrikerCrest": "trait",
+                "TFT_Augment_TwoMuchValue": "econ",
+                "TFT_Augment_FinalPolish": "items",
+                "TFT13_Augment_VisionaryCrown": "trait",
+                "TFT7_Augment_BirthdayPresents": "econ",
+                "TFT13_Augment_CabalCrown": "trait",
+                "TFT_Augment_TableScraps": "items,econ,scaling",
+                "TFT13_Augment_ChainsawCarry": "combat",
+                "TFT_Augment_BadLuckProtection": "combat",
+                "TFT13_Augment_TrundleCarry": "combat",
+                "TFT_Augment_BronzeForLife2": "combat",
+                "TFT11_Augment_Buildabud": "econ,misc",
+                "TFT13_Augment_Dominator": "combat,trait",
+                "TFT13_Augment_SingedCarry": "combat",
+                "TFT13_Augment_SorcererCrown": "trait",
+                "TFT_Augment_ItemCollector1": "combat",
+                "TFT13_Augment_IreliaCarry": "combat",
+                "TFT9_Augment_BardPlaybook1": "econ",
+                "TFT_Augment_Backup": "combat",
+                "TFT_Augment_TombRaider2": "items,scaling",
+                "TFT9_Augment_IronAssets": "items,combat",
+                "TFT_Augment_Trifecta2": "econ,combat",
+                "TFT_Augment_InvestmentStrategy2": "econ,combat,scaling",
+                "TFT13_Augment_ScrapCrown": "trait",
+                "TFT9_Augment_DravenSpoilsOfWar3": "econ",
+                "TFT_Augment_Mentorship1": "combat",
+                "TFT13_TeamupAugment_Menaces": "trait,misc",
+                "TFT_Augment_UpwardMobility": "econ",
+                "TFT13_Augment_SniperCrown": "trait",
+                "TFT13_Augment_Academy": "items,trait",
+                "TFT13_Augment_FishCarry": "combat",
+                "TFT_Augment_AllForOneII": "combat",
+                "TFT_Augment_DualPurpose": "econ",
+                "TFT_Augment_EyeForAnEye": "items",
+                "TFT_Augment_RestartMission": "econ",
+                "TFT_Augment_CraftedCrafting": "econ",
+                "TFT13_Augment_Artillerist": "combat,trait",
+                "TFT_Augment_Golemify": "combat,misc",
+                "TFT_Augment_SupportMining": "combat",
+                "TFT_Augment_Placebo": "econ,combat",
+                "TFT13_Augment_AmbusherCrown": "trait",
+                "TFT_Augment_PatienceIsAVirtue": "econ",
+                "TFT9_Augment_PumpingUp": "combat,scaling",
+                "TFT_Augment_Voidborne": "combat",
+                "TFT11_Augment_AtWhatCost": "econ",
+                "TFT9_Augment_RiskyMoves": "econ",
+                "TFT13_Augment_AutomataCrown": "trait",
+                "TFT13_Augment_BlueCarry": "combat",
+                "TFT7_Augment_LivingForge": "items",
+                "TFT_Augment_WorthTheWaitPrismatic": "econ",
+                "TFT_Augment_ShimmerscaleEssence": "items,econ",
+                "TFT13_Augment_Scrap": "items,trait",
+                "TFT13_Augment_Cabal": "combat,trait",
+                "TFT_Augment_DiversifiedPortfolio2": "econ",
+                "TFT_Augment_GhostOfUnitsPast": "combat",
+                "TFT11_Augment_OverEncumbered": "econ",
+                "TFT9_Augment_TiniestTitan": "econ",
+                "TFT_Augment_AnExaltedAdventure": "misc",
+                "TFT13_Augment_SentinelCrown": "trait",
+                "TFT13_Augment_WatcherCrown": "items,trait",
+                "TFT13_TeamupAugment_BloodBrothers": "combat,trait,misc",
+                "TFT13_Augment_Experiment": "combat,trait",
+                "TFT_Augment_SuperstarsSilver": "combat",
+                "TFT13_Augment_AcademyCrown": "items,trait",
+                "TFT13_Augment_PitFighter": "combat,trait",
+                "TFT10_Augment_GoodForSomethingSilver": "econ",
+                "TFT13_Augment_QuickstrikerCrown": "trait",
+                "TFT13_Augment_DominatorCrown": "trait",
+                "TFT13_Augment_FirelightCrown": "trait",
+                "TFT13_Augment_ArtilleristCrown": "trait",
+                "TFT_Augment_Contested": "econ",
+                "TFT_Augment_DarkAlleyDealings": "items",
+                "TFT11_Augment_FineVintage": "combat",
+                "TFT13_Augment_BruiserCrown": "trait",
+                "TFT6_Augment_Traitless2": "combat",
+                "TFT_Augment_RerollTransfer": "econ",
+                "TFT9_Augment_PumpingUp3": "combat,scaling",
+                "TFT7_Augment_LuckyGloves": "items",
+                "TFT_Augment_CalledShot": "econ",
+                "TFT10_Augment_GoingLong": "misc",
+                "TFT9_Augment_BardPlaybook3": "items,scaling",
+                "TFT_Augment_DiversifiedPortfolio1": "econ",
+                "TFT9_Augment_HighEndSector": "econ",
+                "TFT_Augment_AllForOneI": "combat",
+                "TFT_Augment_Dummify": "combat,misc",
+                "TFT_Augment_Spellsword": "combat",
+                "TFT9_Augment_PhreakyFriday": "items",
+                "TFT13_Augment_ArtilleristPlus": "combat,trait",
+                "TFT10_Augment_HelpIsOnTheWay": "",
+                "TFT6_Augment_Keepers2": "combat",
+                "TFT_Augment_VoidborneHR": "combat",
+                "TFT6_Augment_SalvageBinHR": "items",
+                "TFT6_Augment_ForceOfNature": "",
+                "TFT9_Augment_BalancedBudgetPlus": "",
+                "TFT9_Augment_BalancedBudget2": "",
+                "TFT9_Augment_CombatCaster": "",
+                "TFT_Augment_TwoTanky": "",
+                "TFT13_TeamupAugment_Betrayal": "combat,trait,misc",
+                "TFT13_Augment_ExperimentCrest": "trait",
+                "TFT13_Augment_Grant6Cost_Warwick": "items,scaling,misc",
+                "TFT13_Augment_Grant6Cost_Viktor": "items,scaling,misc",
+                "TFT13_Augment_Grant6Cost_MissMage": "items,scaling,misc",
+                "TFT13_Augment_ExperimentCrown": "trait",
+                "TFT_Augment_HeadStart": "scaling,misc",
+                "TFT9_Augment_ArmyBuildingHR": "econ",
+                "TFT9_Augment_PhreakyFridayHR": "items",
+                "TFT9_Augment_PhreakyFridayPlusHR": "items",
+                "TFT9_Augment_LongTimeCraftingHR": "items",
+                "TFT14_Augment_DynamoCirclet": "trait",
+                "TFT14_Augment_SyndicateCirclet": "trait",
+                "TFT14_Augment_VanguardCirclet": "trait",
+                "TFT14_Augment_ArmorcladCrest": "trait",
+                "TFT14_Augment_Bruiser_Vertical": "combat,trait,scaling",
+                "TFT14_Augment_Divinicorp_Vertical": "combat,trait",
+                "TFT14_Augment_CypherCrown": "items,trait",
+                "TFT14_Augment_Supercharge_Vertical": "combat,trait",
+                "TFT14_Augment_Marksman_Vertical": "combat,trait",
+                "TFT14_Augment_Swift_Vertical": "econ,combat,trait",
+                "TFT14_Augment_DivinicorpCrown": "items,trait",
+                "TFT14_Augment_TechieCrest": "trait",
+                "TFT14_Augment_InvokerCrest": "trait",
+                "TFT14_Augment_DynamoCrown": "items,trait",
+                "TFT14_Augment_Immortal_Vertical": "econ,trait",
+                "TFT14_Augment_RapidfireCirclet": "trait",
+                "TFT14_Augment_AnimaSquad_PowerUp": "econ,combat,trait",
+                "TFT14_Augment_GragasCarryPlus": "combat,misc",
+                "TFT14_Augment_SlayerCrown": "items,trait",
+                "TFT14_Augment_DuelistCrest": "trait",
+                "TFT14_Augment_AnimaSquadCrest": "trait",
+                "TFT14_Augment_Syndicate_KeepYourFriendsClose": "combat,trait",
+                "TFT14_Augment_GoldenOxCrown": "items,trait",
+                "TFT14_Augment_BruiserCrown": "items,trait",
+                "TFT14_Augment_Syndicate_DummyWithAGun": "combat,trait",
+                "TFT14_Augment_StrategistCirclet": "trait",
+                "TFT14_Augment_StrategistCrown": "items,trait",
+                "TFT14_Augment_DivinicorpCirclet": "trait",
+                "TFT14_Augment_ExecutionerCrest": "trait",
+                "TFT14_Augment_Techie_Vertical": "combat,trait,scaling",
+                "TFT14_Augment_ViCarry": "combat,misc",
+                "TFT14_Augment_ExotechCirclet": "trait",
+                "TFT14_Augment_SylasCarry": "combat,misc",
+                "TFT14_Augment_Techie_Splash": "combat,trait",
+                "TFT14_Augment_StreetDemonCrest": "trait",
+                "TFT14_Augment_AnimaSquad_SupportSpire": "combat,trait",
+                "TFT14_Augment_LifeLongLearningBlackMarket": "combat,scaling",
+                "TFT14_Augment_Guardian_Vertical": "combat,trait",
+                "TFT14_Augment_Immortal_Splash": "combat,trait",
+                "TFT14_Augment_Nitro_PolishedChrome": "econ,combat,trait",
+                "TFT14_Augment_Supercharge_Splash": "combat,trait",
+                "TFT14_Augment_Cutter_Splash": "econ,trait",
+                "TFT14_Augment_Boombots_BigBoom": "combat,trait",
+                "TFT14_Augment_StreetDemonCirclet": "trait",
+                "TFT14_Augment_BruiserCrest": "trait",
+                "TFT14_Augment_MarksmanCrown": "items,trait",
+                "TFT14_Augment_BoomBotsCrown": "items,trait",
+                "TFT14_Augment_VanguardCrown": "items,trait",
+                "TFT14_Augment_TechieCrown": "items,trait",
+                "TFT14_Augment_GoldenOxCrest": "trait",
+                "TFT14_Augment_RhaastCarry": "combat,misc",
+                "TFT14_Augment_StreetDemon_TaggingSpree": "combat,trait",
+                "TFT14_Augment_DivinicorpCrest": "trait",
+                "TFT14_Augment_Strong_Vertical": "combat,trait",
+                "TFT14_Augment_CryptoCrest": "trait",
+                "TFT14_Augment_TechieCirclet": "trait",
+                "TFT14_Augment_Divinicorp_Splash": "combat,trait",
+                "TFT14_Augment_ExotechCrest": "trait",
+                "TFT14_Augment_Immortal_VerticalPlus": "econ,trait",
+                "TFT14_Augment_AnimaSquadCirclet": "trait",
+                "TFT14_Augment_BastionCirclet": "trait",
+                "TFT14_Augment_Controller_VerticalPlus": "items,econ,trait,misc",
+                "TFT14_Augment_StreetDemon_Freestyling": "econ,trait,misc",
+                "TFT14_Augment_RapidfireCrown": "items,trait",
+                "TFT14_Augment_Cyberboss_HighScore": "econ,combat,trait",
+                "TFT14_Augment_Exotech_Cyberdeck": "items,trait",
+                "TFT14_Augment_SlayerCrest": "trait",
+                "TFT14_Augment_GoldenOxCirclet": "trait",
+                "TFT14_Augment_Exotech_TrialRun": "combat,trait",
+                "TFT14_Augment_Controller_Vertical": "items,econ,trait",
+                "TFT14_Augment_StrategistCrest": "trait",
+                "TFT14_Augment_BruiserCirclet": "trait",
+                "TFT14_Augment_PoppyCarry": "combat,misc",
+                "TFT14_Augment_MarksmanCrest": "trait",
+                "TFT14_Augment_Thirsty_Vertical": "combat,trait,scaling",
+                "TFT14_Augment_Armorclad_Splash": "combat,trait",
+                "TFT14_Augment_Immortal_SplashPlus": "econ,combat,trait",
+                "TFT14_Augment_SlayerCirclet": "trait",
+                "TFT14_Augment_Suits_Liquidate": "econ,trait,misc",
+                "TFT14_Augment_Boombots_SelfDestruct": "combat,trait",
+                "TFT14_Augment_JaxCarry": "combat,misc",
+                "TFT14_Augment_StreetDemonCrown": "items,trait",
+                "TFT14_Augment_Cyberboss_Cower": "combat,trait",
+                "TFT14_Augment_SyndicateCrown": "items,trait",
+                "TFT14_Augment_Mob_Splash": "combat,trait",
+                "TFT14_Augment_VanguardCrest": "trait",
+                "TFT14_Augment_MobCrest": "trait",
+                "TFT14_Augment_BoomBotsCirclet": "trait",
+                "TFT14_Augment_ExecutionerCrown": "items,trait",
+                "TFT14_Augment_BastionCrown": "items,trait",
+                "TFT14_Augment_GragasCarry": "combat,misc",
+                "TFT14_Augment_ExotechCrown": "items,trait",
+                "TFT14_Augment_Nitro_SpareParts": "combat,trait",
+                "TFT14_Augment_BoomBotsCrest": "trait",
+                "TFT14_Augment_ExecutionerCirclet": "trait",
+                "TFT14_Augment_AnimaSquadCrown": "items,trait",
+                "TFT14_Augment_MarksmanCirclet": "trait",
+                "TFT14_Augment_Suits_CorporateCashOut": "combat,trait",
+                "TFT14_Augment_BlackMarketBlueBattery": "items,combat",
+                "TFT14_Augment_BlackMarketShockTreatment": "items,combat",
+                "TFT14_Augment_BlackMarketShockTreatmentPlus": "items,combat",
+                "TFT14_Augment_BlackMarketGargantuanResolve": "items,combat",
+                "TFT14_Augment_BlackMarketUnstableEvolution": "combat,scaling",
+                "TFT14_Augment_BlackMarketGargantuanResolvePlus": "items,combat",
+                "TFT14_Augment_BlackMarket_ScopedWeapons": "combat",
+                "TFT14_Augment_BlackMarketTitanicStrength": "combat",
+                "TFT6_Augment_TheGoldenEggHR": "econ,scaling",
+                "TFT7_Augment_LivingForgeHR": "items,scaling",
+                "TFT6_Augment_HyperRoll": "econ",
+                "TFT6_Augment_CyberneticImplants3": "combat",
+                "TFT6_Augment_LudensEcho3": "combat",
+                "TFT6_Augment_CyberneticImplants2": "combat",
+                "TFT7_Augment_LastStand": "combat,scaling",
+                "TFT6_Augment_ThriftShop": "econ",
+                "TFT9_Augment_CyberneticBulk2": "combat",
+                "TFT9_Augment_CyberneticBulk3": "combat",
+                "TFT7_Augment_BigFriend": "combat",
+                "TFT9_Augment_HealingOrbsI": "combat",
+                "TFT_Augment_Pirates3": "econ",
+                "TFT6_Augment_WoodlandCharm": "combat",
+                "TFT_Augment_BranchingOutPlus": "trait,misc",
+                "TFT_Augment_ChemtechOverdrive": "econ,combat",
+                "TFT_Augment_Dominance3": "econ",
+                "TFT7_Augment_ThinkFast": "econ,misc",
+                "TFT7_Augment_AFK": "econ",
+                "TFT_Augment_HeroicGrabBagPlus": "econ",
+                "TFT_Augment_ShareTheSpotlight": "combat",
+                "TFT7_Augment_SacrificialPact": "",
+                "TFT_Augment_HeroicGrabBagPlusPlus": "econ",
+                "TFT6_Augment_HighEndShopping": "econ",
+                "TFT9_Augment_OneHundredDuckSizedHorses": "combat,misc",
+                "TFT9_Augment_OneHundredDuckSizedHorsesPlus": "combat,misc",
+                "TFT7_Augment_Preparation2": "combat,scaling",
+                "TFT6_Augment_Diversify1": "combat,misc",
+                "TFT6_Augment_BinaryAirdrop": "items",
+                "TFT_Augment_AxiomArc3": "items,combat",
+                "TFT_Augment_FutureSight2": "combat,misc",
+                "TFT7_Augment_CursedCrown": "combat,misc",
+                "TFT7_Augment_Preparation": "combat,scaling",
+                "TFT9_Augment_Commander_Ascension": "combat",
+                "TFT9_Augment_Commander_FinalAscension": "combat",
+                "TFT6_Augment_CalculatedLoss": "econ",
+                "TFT7_Augment_BigFriend2": "combat",
+                "TFT6_Augment_Twins3": "combat,misc",
+                "TFT9_Augment_FinalReserves": "econ,scaling",
+                "TFT9_Augment_HealingOrbsII": "combat",
+                "TFT6_Augment_CyberneticUplink2": "combat",
+                "TFT6_Augment_CyberneticUplink3": "combat",
+                "TFT9_Augment_Legend_PandorasItems2": "items",
+                "TFT9_Augment_Legend_BardPlaybook2": "items,scaling",
+                "TFT15_Augment_BattleAcademia_Hero101": "combat,scaling",
+                "TFT15_Augment_EdgelordCrown": "items,trait",
+                "TFT15_Augment_ProtectorCrest": "trait",
+                "TFT15_Augment_BastionCrest": "trait",
+                "TFT15_Augment_ProdigyCrown": "items,trait",
+                "TFT15_Augment_SupremeCellsCirclet": "trait",
+                "TFT15_Augment_TheCrew_SpaceCamp": "econ,trait",
+                "TFT15_Augment_KennenCarry": "combat,misc",
+                "TFT15_Augment_DrMundoCarry": "combat,misc",
+                "TFT15_Augment_CrystalGambit_DiamondHands": "econ,trait,misc",
+                "TFT15_Augment_Executioner_GoldenGuillotine": "econ,trait",
+                "TFT15_Augment_RingKingCrest": "trait",
+                "TFT15_Augment_SentaiCirclet": "trait",
+                "TFT15_Augment_Prodigy_UnboundArcana": "trait",
+                "TFT15_Augment_BattleAcademia_ClassPresident": "combat,trait",
+                "TFT15_Augment_Heavyweight_RingTheBell": "combat,trait",
+                "TFT15_Augment_SniperCrown": "trait",
+                "TFT15_Augment_CrystalRoseCirclet": "trait",
+                "TFT15_Augment_StarGuardian_Superstar": "combat,trait",
+                "TFT15_Augment_BastionCirclet": "trait",
+                "TFT15_Augment_StarGuardianCrest": "trait",
+                "TFT15_Augment_BattleAcademiaCrown": "items,trait",
+                "TFT15_Augment_StrategistCirclet": "trait",
+                "TFT15_Augment_SpellslingerCrown": "items,trait",
+                "TFT15_Augment_MalphiteCarry": "combat,misc",
+                "TFT15_Augment_SupremeCells_AllForOne": "combat,trait",
+                "TFT15_Augment_SoulFighterCrown": "items,trait",
+                "TFT15_Augment_SoulFighter_TheGodsEyeOpens": "combat,trait",
+                "TFT15_Augment_Bastion_RaidBoss": "combat,trait",
+                "TFT15_Augment_StrategistCrown": "items,trait",
+                "TFT15_Augment_Mentor_LearnFromTheBest": "combat,trait,scaling",
+                "TFT15_Augment_DestroyerCrown": "items,trait",
+                "TFT15_Augment_JuggernautCrest": "trait",
+                "TFT15_Augment_SentaiRanger_BeTheLegs": "combat,trait,misc",
+                "TFT15_Augment_Luchador_GrandSlam": "combat,trait",
+                "TFT15_Augment_JuggernautCirclet": "trait",
+                "TFT15_Augment_SentaiCrown": "items,trait",
+                "TFT15_Augment_BattleAcademiaCirclet": "trait",
+                "TFT15_Augment_ChallengerCirclet": "trait",
+                "TFT15_Augment_StarGuardian_PowerOfFriendship": "combat,trait",
+                "TFT15_Augment_CrystalRoseCrest": "trait",
+                "TFT15_Augment_NeekoCarry": "combat,misc",
+                "TFT15_Augment_SpellslingerCrest": "trait",
+                "TFT15_Augment_HeavyweightCirclet": "trait",
+                "TFT15_Augment_HeavyweightCrown": "items,trait",
+                "TFT15_Augment_TheCrew_EscapeVelocity": "combat,trait",
+                "TFT15_Augment_Edgelord_GainTheEdge": "combat,trait",
+                "TFT15_Augment_SupremeCells_NewContenders": "combat,trait",
+                "TFT15_Augment_UdyrCarry": "combat,misc",
+                "TFT15_Augment_ChallengerCrest": "trait",
+                "TFT15_Augment_Juggernaut_Indomitable": "combat,trait",
+                "TFT15_Augment_Wraith_ShadowHomunculous": "combat,trait",
+                "TFT15_Augment_StarGuardianCrown": "items,trait",
+                "TFT15_Augment_SentaiRanger_BeTheHead": "combat,trait,misc",
+                "TFT15_Augment_MightyMech_PowerUpload": "combat,trait",
+                "TFT15_Augment_Protector_PreemptiveProtection": "combat,trait",
+                "TFT15_Augment_ZacCarry": "combat,misc",
+                "TFT15_Augment_Mentor_TeachersCouncil": "combat,trait",
+                "TFT15_Augment_EmpyreanCrest": "trait",
+                "TFT15_Augment_ProtectorCirclet": "trait",
+                "TFT15_Augment_Strategist_GamePlan": "combat,trait",
+                "TFT15_Augment_EdgelordCrest": "trait",
+                "TFT15_Augment_SniperCirclet": "trait",
+                "TFT15_Augment_Luchador_TournamentTitans": "combat,trait",
+                "TFT15_Augment_DestroyerCirclet": "trait",
+                "TFT15_Augment_BastionCrown": "items,trait",
+                "TFT15_Augment_SupremeCellsCrown": "items,trait",
+                "TFT15_Augment_EdgelordCirclet": "trait",
+                "TFT15_Augment_Sorcerer_DazzlingDisplay": "combat,trait",
+                "TFT15_Augment_EmpyreanCirclet": "trait",
+                "TFT15_Augment_RingKingCrown": "items,trait",
+                "TFT15_Augment_ProtectorCrown": "items,trait",
+                "TFT15_Augment_HeavyweightCrest": "trait",
+                "TFT15_Augment_StarGuardian_TinyTeam": "combat,trait",
+                "TFT15_Augment_ViCarry": "combat,misc",
+                "TFT15_Augment_EmpyreanCrown": "items,trait",
+                "TFT15_Augment_Wraith_DeepeningShadows": "combat,trait",
+                "TFT15_Augment_JuggernautCrown": "items,trait",
+                "TFT15_Augment_StarGuardianCirclet": "trait",
+                "TFT15_Augment_SoulFighterCirclet": "trait",
+                "TFT15_Augment_ProdigyCrest": "trait",
+                "TFT15_Augment_BattleAcademiaCrest": "trait",
+                "TFT15_Augment_ProdigyCirclet": "trait",
+                "TFT15_Augment_SoulFighter_TournamentFavorites": "econ,trait,scaling",
+                "TFT15_Augment_SentaiRanger_BeTheHead_Gold": "combat,trait,misc",
+                "TFT15_Augment_SentaiCrest": "trait",
+                "TFT15_Augment_StrategistCrest": "trait",
+                "TFT15_Augment_Duelist_AdaptiveStyle": "combat,trait",
+                "TFT15_Augment_ChallengerCrown": "items,trait",
+                "TFT15_Augment_BattleAcademia_TransferStudents": "econ,trait,scaling",
+                "TFT15_Augment_CrystalRoseCrown": "items,trait",
+                "TFT15_Augment_RingKingCirclet": "trait",
+                "TFT15_Augment_Sniper_PreciseShot": "combat,trait",
+                "TFT15_Augment_DestroyerCrest": "trait",
+                "TFT15_Augment_ShenCarry": "combat,misc",
+                "TFT15_Augment_SniperCrest": "trait",
+                "TFT15_Augment_GarenCarry": "combat,misc",
+                "TFT15_Augment_MightyMech_MultiMech": "combat,trait,misc",
+                "TFT15_Augment_SentaiRanger_BeTheArms": "combat,trait,misc",
+                "TFT15_Augment_SoulFighter_SoulSurge": "combat,trait",
+                "TFT15_Augment_SoulFighterCrest": "trait",
+                "TFT15_Augment_SpellslingerCirclet": "trait",
+                "TFT15_Augment_SupremeCellsCrest": "trait",
+                "TFT_Augment_WaterLotus1": "combat",
+                "TFT_Augment_TrickstersGlassAugment": "combat",
+                "TFT_Augment_DeadlierCaps": "items,combat",
+                "TFT_Augment_FoodfightTactics": "combat",
+                "TFT10_Augment_FullyAdapted": "items,combat",
+                "TFT_Augment_ChaosEvolution": "combat,scaling",
+                "TFT_Augment_Crossfire2": "combat",
+                "TFT_Augment_Isekai_Sorcerer": "items,combat,trait",
+                "TFT_Augment_AnotherOne": "items,econ",
+                "TFT_Augment_ExplosiveGrowthPlus": "econ",
+                "TFT_Augment_AimForTheTop": "items,econ,misc",
+                "TFT_Augment_SilverDestiny": "econ,misc",
+                "TFT_Augment_ExplosiveGrowth": "econ",
+                "TFT_Augment_PsychicForge": "items",
+                "TFT7_Augment_BestFriends2": "combat",
+                "TFT7_Augment_BestFriends1": "combat",
+                "TFT_Augment_SilverDestinyPlus": "econ,misc",
+                "TFT_Augment_HeavyIsTheCrown": "combat,misc",
+                "TFT_Augment_LastSecondSave": "combat",
+                "TFT_Augment_StoryOfSeven": "scaling,misc",
+                "TFT_Augment_HowlingGale": "combat",
+                "TFT_Augment_Isekai_Strategist": "items,combat,trait",
+                "TFT_Augment_GoldenQuest": "scaling,misc",
+                "TFT_Augment_GoldDestiny": "econ,misc",
+                "TFT_Augment_NineLives": "misc",
+                "TFT_Augment_QuietQuitting": "items,econ",
+                "TFT_Augment_HoldTheLine": "combat",
+                "TFT6_Augment_SunfireBoard": "combat",
+                "TFT_Augment_HeftyRolls": "combat,scaling",
+                "TFT_Augment_GoldDestinyPlus": "econ,misc",
+                "TFT_Augment_HardBargain": "econ,scaling,misc",
+                "TFT_Augment_BackupDancers": "combat",
+                "TFT_Augment_PlotArmor": "combat",
+                "TFT_Augment_PocketRecombobulator": "econ,misc",
+                "TFT_Augment_WaterLotus2": "combat",
+                "TFT_Augment_SoloLeveling": "items,scaling,misc",
+                "TFT_Augment_TreasureHunt": "scaling,misc",
+                "TFT6_Augment_Keepers1": "combat",
+                "TFT_Augment_BloodRage": "combat",
+                "TFT6_Augment_SecondWind1": "combat",
+                "TFT9_Augment_StarsAreBorn": "econ",
+                "TFT_Augment_HomeCooking": "econ,scaling,misc",
+                "TFT_Augment_AuraFarming": "items,scaling",
+                "TFT_Augment_TeslaCoil": "combat",
+                "TFT_Augment_Incoming": "combat",
+                "TFT_Augment_ExclusiveCustomization": "items",
+                "TFT_Augment_EfficientShopper": "econ,scaling",
+                "TFT_Augment_TimeSkip": "econ,scaling",
+                "TFT_Augment_CryMeARiver": "items,combat",
+                "TFT_Augment_SilverDestinyPlusPlus": "econ,misc",
+                "TFT_Augment_Protagonist": "items,combat,misc",
+                "TFT9_Augment_StarterKit": "econ",
+                "TFT_Augment_PrismaticDestiny": "econ,misc",
+                "TFT_Augment_UnlimitedPower": "items",
+                "TFT_Augment_EvilBeyondMeasure": "combat",
+                "TFT_Augment_Isekai_Prodigy": "items,combat,trait",
+                "TFT_Augment_SliceOfLife": "econ,scaling",
+                "TFT_Augment_AHeroArrives": "combat",
+                "TFT_Augment_AnotherOnePlus": "items",
+                "TFT9_Augment_KnowYourEnemy": "combat",
+                "TFT6_Augment_Twins2": "combat,misc",
+                "TFT9_Augment_TonsOfStats": "combat",
+                "TFT_Augment_TragicalBlade": "items,scaling",
+                "TFT9_Augment_Legend_PumpingUp2": "combat,scaling",
+                "TFT_Augment_Underdogs": "combat"
+            }
+        },
+        "created_at": "2025-07-26T23:36:19.223Z",
+        "updated_at": "2025-11-03T11:36:52.228Z",
+        "content_id": "d5baaceb"
+    },
+    "updated": 1763716933594,
+    "tft_set": "TFTSet15",
+    "queue_id": 1100
+}

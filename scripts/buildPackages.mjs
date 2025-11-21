@@ -6,7 +6,7 @@ const BUILD_LEVELS = [
   ['utils'],
   ['logger', 'bridge'],
   ['db', 'react-helper', 'api-client'],
-  ['crawler'],
+  ['crawler', 'scraper'],
 ]
 
 const SKIP_PACKAGES = ['ui', 'config']

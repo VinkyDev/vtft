@@ -1,0 +1,2008 @@
+{
+    "results": [
+        {
+            "itemName": "TFT16_Item_BilgewaterEmblemItem",
+            "places": [
+                6219,
+                3623,
+                3939,
+                4610,
+                5248,
+                5893,
+                6635,
+                5629
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_BilgeratCutlass",
+            "places": [
+                1664,
+                1874,
+                1827,
+                1936,
+                1825,
+                1637,
+                1252,
+                680
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_BlackmarketExplosives",
+            "places": [
+                1348,
+                1584,
+                1730,
+                1808,
+                1731,
+                1474,
+                1156,
+                628
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_CaptainsBrew",
+            "places": [
+                3299,
+                3729,
+                4088,
+                4486,
+                4594,
+                4321,
+                3763,
+                2412
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_DeadmansDagger",
+            "places": [
+                1659,
+                1831,
+                2008,
+                2084,
+                1940,
+                1790,
+                1418,
+                705
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_FirstMatesFlintlock",
+            "places": [
+                2163,
+                2333,
+                2525,
+                2509,
+                2376,
+                2076,
+                1561,
+                836
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_FreebootersFrock",
+            "places": [
+                2668,
+                2913,
+                2845,
+                2606,
+                2361,
+                1960,
+                1424,
+                674
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_LuckyEyepatch",
+            "places": [
+                4016,
+                4376,
+                4872,
+                5468,
+                5556,
+                5746,
+                5109,
+                3237
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_Bilgewater_PileOCitrus",
+            "places": [
+                2219,
+                2276,
+                2155,
+                2006,
+                1789,
+                1464,
+                1072,
+                521
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_BrawlerEmblemItem",
+            "places": [
+                3968,
+                3855,
+                3503,
+                3045,
+                2806,
+                2370,
+                2011,
+                1628
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_DefenderEmblemItem",
+            "places": [
+                2327,
+                2311,
+                2345,
+                2372,
+                2266,
+                2273,
+                2056,
+                1839
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_DemaciaEmblemItem",
+            "places": [
+                3750,
+                3864,
+                4023,
+                4369,
+                4332,
+                4281,
+                4466,
+                3985
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_FreljordEmblemItem",
+            "places": [
+                3261,
+                3405,
+                3546,
+                3560,
+                3491,
+                3388,
+                3246,
+                2790
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_GunslingerEmblemItem",
+            "places": [
+                1554,
+                1686,
+                1778,
+                1745,
+                1687,
+                1487,
+                1373,
+                1304
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_InvokerEmblemItem",
+            "places": [
+                2655,
+                2302,
+                2357,
+                2344,
+                2351,
+                2368,
+                2280,
+                1965
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_IoniaEmblemItem",
+            "places": [
+                4782,
+                4572,
+                4290,
+                4162,
+                4128,
+                3992,
+                3930,
+                3393
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_IxtalEmblemItem",
+            "places": [
+                1449,
+                1167,
+                1275,
+                1493,
+                1977,
+                2408,
+                2946,
+                3327
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_JuggernautEmblemItem",
+            "places": [
+                2777,
+                2731,
+                2610,
+                2648,
+                2435,
+                2241,
+                1996,
+                1708
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_LongshotEmblemItem",
+            "places": [
+                1295,
+                1472,
+                1564,
+                1686,
+                1663,
+                1668,
+                1591,
+                1398
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_MagusEmblemItem",
+            "places": [
+                1885,
+                1860,
+                1725,
+                1694,
+                1562,
+                1531,
+                1466,
+                1399
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_NoxusEmblemItem",
+            "places": [
+                5470,
+                4319,
+                4427,
+                4599,
+                4583,
+                4359,
+                3819,
+                3051
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_PiltoverEmblemItem",
+            "places": [
+                1577,
+                1726,
+                1901,
+                1980,
+                1996,
+                1964,
+                2052,
+                2054
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_RapidfireEmblemItem",
+            "places": [
+                2711,
+                3097,
+                3060,
+                3014,
+                2775,
+                2481,
+                2217,
+                1880
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_SlayerEmblemItem",
+            "places": [
+                2557,
+                2769,
+                2565,
+                2390,
+                2403,
+                2366,
+                2213,
+                1908
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_SorcererEmblemItem",
+            "places": [
+                2014,
+                2049,
+                2115,
+                2312,
+                2411,
+                2318,
+                2203,
+                2098
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_VanquisherEmblemItem",
+            "places": [
+                2542,
+                2528,
+                2529,
+                2563,
+                2505,
+                2308,
+                2231,
+                1893
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_VoidEmblemItem",
+            "places": [
+                2960,
+                3102,
+                3393,
+                3990,
+                4618,
+                5032,
+                5153,
+                4190
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_WardenEmblemItem",
+            "places": [
+                2182,
+                2204,
+                2078,
+                2112,
+                1960,
+                1747,
+                1687,
+                1476
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_YordleEmblemItem",
+            "places": [
+                3347,
+                3007,
+                3158,
+                3368,
+                3503,
+                3444,
+                3348,
+                2688
+            ]
+        },
+        {
+            "itemName": "TFT16_Item_ZaunEmblemItem",
+            "places": [
+                1854,
+                3007,
+                3548,
+                3665,
+                3296,
+                3002,
+                2600,
+                2305
+            ]
+        },
+        {
+            "itemName": "TFT16_TheDarkinAegis",
+            "places": [
+                3299,
+                2490,
+                2014,
+                1853,
+                1562,
+                1444,
+                1284,
+                937
+            ]
+        },
+        {
+            "itemName": "TFT16_TheDarkinBow",
+            "places": [
+                3790,
+                3502,
+                2822,
+                2298,
+                1931,
+                1732,
+                1409,
+                1005
+            ]
+        },
+        {
+            "itemName": "TFT16_TheDarkinScythe",
+            "places": [
+                3004,
+                2828,
+                2350,
+                2004,
+                1871,
+                1788,
+                1631,
+                1404
+            ]
+        },
+        {
+            "itemName": "TFT16_TheDarkinStaff",
+            "places": [
+                2481,
+                1998,
+                1761,
+                1541,
+                1528,
+                1387,
+                1236,
+                924
+            ]
+        },
+        {
+            "itemName": "TFT4_Item_OrnnDeathsDefiance",
+            "places": [
+                3284,
+                2668,
+                2078,
+                1603,
+                1342,
+                1156,
+                899,
+                699
+            ]
+        },
+        {
+            "itemName": "TFT4_Item_OrnnInfinityForce",
+            "places": [
+                3836,
+                3075,
+                2651,
+                2213,
+                1834,
+                1500,
+                1313,
+                764
+            ]
+        },
+        {
+            "itemName": "TFT4_Item_OrnnTheCollector",
+            "places": [
+                2306,
+                1963,
+                1492,
+                1283,
+                985,
+                832,
+                640,
+                442
+            ]
+        },
+        {
+            "itemName": "TFT4_Item_OrnnZhonyasParadox",
+            "places": [
+                2802,
+                2124,
+                1707,
+                1461,
+                1169,
+                989,
+                825,
+                530
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_AdaptiveHelmRadiant",
+            "places": [
+                298,
+                184,
+                155,
+                162,
+                145,
+                128,
+                132,
+                83
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_ArchangelsStaffRadiant",
+            "places": [
+                304,
+                256,
+                223,
+                186,
+                156,
+                166,
+                128,
+                119
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_BloodthirsterRadiant",
+            "places": [
+                900,
+                567,
+                428,
+                409,
+                365,
+                269,
+                255,
+                229
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_BlueBuffRadiant",
+            "places": [
+                626,
+                395,
+                348,
+                311,
+                351,
+                317,
+                232,
+                179
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_BrambleVestRadiant",
+            "places": [
+                194,
+                185,
+                154,
+                177,
+                133,
+                109,
+                92,
+                56
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_CrownguardRadiant",
+            "places": [
+                154,
+                106,
+                84,
+                64,
+                51,
+                54,
+                52,
+                40
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_DeathbladeRadiant",
+            "places": [
+                317,
+                265,
+                240,
+                218,
+                206,
+                160,
+                142,
+                111
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_DragonsClawRadiant",
+            "places": [
+                232,
+                183,
+                184,
+                187,
+                191,
+                185,
+                192,
+                128
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_FrozenHeartRadiant",
+            "places": [
+                201,
+                136,
+                97,
+                94,
+                100,
+                105,
+                70,
+                60
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_GargoyleStoneplateRadiant",
+            "places": [
+                506,
+                352,
+                343,
+                350,
+                353,
+                307,
+                320,
+                244
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_GiantSlayerRadiant",
+            "places": [
+                595,
+                445,
+                428,
+                402,
+                347,
+                328,
+                272,
+                192
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_GuardianAngelRadiant",
+            "places": [
+                301,
+                258,
+                217,
+                195,
+                145,
+                136,
+                135,
+                115
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_GuinsoosRagebladeRadiant",
+            "places": [
+                649,
+                519,
+                539,
+                503,
+                464,
+                480,
+                403,
+                269
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_HandOfJusticeRadiant",
+            "places": [
+                704,
+                565,
+                449,
+                420,
+                361,
+                372,
+                343,
+                270
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_HextechGunbladeRadiant",
+            "places": [
+                317,
+                234,
+                191,
+                151,
+                145,
+                128,
+                106,
+                97
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_InfinityEdgeRadiant",
+            "places": [
+                536,
+                420,
+                383,
+                348,
+                330,
+                305,
+                257,
+                234
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_IonicSparkRadiant",
+            "places": [
+                197,
+                153,
+                109,
+                94,
+                93,
+                87,
+                70,
+                59
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_JeweledGauntletRadiant",
+            "places": [
+                737,
+                459,
+                422,
+                374,
+                351,
+                374,
+                310,
+                235
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_LastWhisperRadiant",
+            "places": [
+                171,
+                137,
+                143,
+                143,
+                131,
+                114,
+                94,
+                50
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_LeviathanRadiant",
+            "places": [
+                611,
+                391,
+                296,
+                223,
+                224,
+                214,
+                192,
+                146
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_MorellonomiconRadiant",
+            "places": [
+                199,
+                130,
+                123,
+                112,
+                76,
+                76,
+                52,
+                42
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_NightHarvesterRadiant",
+            "places": [
+                272,
+                207,
+                175,
+                132,
+                162,
+                142,
+                97,
+                93
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_QuicksilverRadiant",
+            "places": [
+                208,
+                175,
+                143,
+                130,
+                127,
+                110,
+                96,
+                73
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_RabadonsDeathcapRadiant",
+            "places": [
+                418,
+                311,
+                329,
+                288,
+                276,
+                232,
+                223,
+                160
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_RapidFirecannonRadiant",
+            "places": [
+                256,
+                200,
+                167,
+                131,
+                127,
+                88,
+                81,
+                66
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_RedemptionRadiant",
+            "places": [
+                409,
+                389,
+                317,
+                275,
+                260,
+                247,
+                202,
+                158
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_RunaansHurricaneRadiant",
+            "places": [
+                338,
+                361,
+                342,
+                274,
+                258,
+                221,
+                186,
+                131
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_SpearOfShojinRadiant",
+            "places": [
+                668,
+                332,
+                329,
+                317,
+                303,
+                273,
+                241,
+                167
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_SpectralGauntletRadiant",
+            "places": [
+                204,
+                149,
+                120,
+                102,
+                106,
+                98,
+                75,
+                67
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_StatikkShivRadiant",
+            "places": [
+                300,
+                225,
+                163,
+                127,
+                160,
+                119,
+                115,
+                76
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_SteraksGageRadiant",
+            "places": [
+                566,
+                368,
+                236,
+                247,
+                221,
+                200,
+                204,
+                127
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_SunfireCapeRadiant",
+            "places": [
+                260,
+                185,
+                161,
+                165,
+                134,
+                130,
+                122,
+                73
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_ThiefsGlovesRadiant",
+            "places": [
+                3499,
+                2872,
+                2425,
+                2278,
+                1964,
+                1813,
+                1559,
+                1022
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_TitansResolveRadiant",
+            "places": [
+                571,
+                403,
+                371,
+                275,
+                259,
+                230,
+                228,
+                168
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_TrapClawRadiant",
+            "places": [
+                383,
+                274,
+                290,
+                262,
+                237,
+                187,
+                211,
+                143
+            ]
+        },
+        {
+            "itemName": "TFT5_Item_WarmogsArmorRadiant",
+            "places": [
+                509,
+                408,
+                441,
+                427,
+                408,
+                468,
+                379,
+                282
+            ]
+        },
+        {
+            "itemName": "TFT7_Item_ShimmerscaleGamblersBlade",
+            "places": [
+                1082,
+                1099,
+                1139,
+                1091,
+                1072,
+                916,
+                752,
+                609
+            ]
+        },
+        {
+            "itemName": "TFT7_Item_ShimmerscaleMogulsMail",
+            "places": [
+                1785,
+                1742,
+                1838,
+                1822,
+                1798,
+                1659,
+                1499,
+                1218
+            ]
+        },
+        {
+            "itemName": "TFT9_Item_CrownOfDemacia",
+            "places": [
+                482,
+                608,
+                640,
+                683,
+                603,
+                558,
+                486,
+                442
+            ]
+        },
+        {
+            "itemName": "TFT9_Item_OrnnHorizonFocus",
+            "places": [
+                2614,
+                2391,
+                2139,
+                1900,
+                1700,
+                1619,
+                1347,
+                870
+            ]
+        },
+        {
+            "itemName": "TFT9_Item_OrnnHullbreaker",
+            "places": [
+                2506,
+                2137,
+                1735,
+                1334,
+                1163,
+                1002,
+                829,
+                579
+            ]
+        },
+        {
+            "itemName": "TFT_Item_AdaptiveHelm",
+            "places": [
+                29401,
+                24754,
+                22683,
+                19514,
+                16488,
+                13785,
+                10866,
+                6963
+            ]
+        },
+        {
+            "itemName": "TFT_Item_ArchangelsStaff",
+            "places": [
+                25225,
+                25568,
+                25587,
+                24224,
+                21904,
+                19057,
+                15821,
+                9880
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_AegisOfDawn",
+            "places": [
+                2755,
+                2289,
+                1976,
+                1514,
+                1376,
+                1246,
+                1060,
+                738
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_AegisOfDusk",
+            "places": [
+                2519,
+                2037,
+                1702,
+                1415,
+                1307,
+                1045,
+                866,
+                612
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_BlightingJewel",
+            "places": [
+                2338,
+                1973,
+                1698,
+                1367,
+                1209,
+                1030,
+                860,
+                588
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_CappaJuice",
+            "places": [
+                282,
+                308,
+                350,
+                345,
+                295,
+                339,
+                343,
+                280
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_Dawncore",
+            "places": [
+                2886,
+                2286,
+                1990,
+                1837,
+                1689,
+                1508,
+                1336,
+                977
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_EternalPact",
+            "places": [
+                2367,
+                1835,
+                1591,
+                1287,
+                1165,
+                940,
+                723,
+                473
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_Fishbones",
+            "places": [
+                2350,
+                2129,
+                1813,
+                1515,
+                1255,
+                1118,
+                835,
+                591
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_HellfireHatchet",
+            "places": [
+                2479,
+                2249,
+                1818,
+                1513,
+                1214,
+                1100,
+                813,
+                575
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_HorizonFocus",
+            "places": [
+                2214,
+                1659,
+                1269,
+                959,
+                807,
+                645,
+                543,
+                333
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_LichBane",
+            "places": [
+                2366,
+                1935,
+                1513,
+                1281,
+                1068,
+                902,
+                687,
+                410
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_LightshieldCrest",
+            "places": [
+                2933,
+                2208,
+                1770,
+                1469,
+                1173,
+                961,
+                790,
+                484
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_LudensTempest",
+            "places": [
+                2399,
+                1897,
+                1662,
+                1468,
+                1307,
+                1093,
+                901,
+                629
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_Mittens",
+            "places": [
+                2886,
+                2332,
+                1910,
+                1470,
+                1226,
+                912,
+                844,
+                518
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_NavoriFlickerblades",
+            "places": [
+                3388,
+                3142,
+                2806,
+                2464,
+                2156,
+                1988,
+                1590,
+                1089
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_ProwlersClaw",
+            "places": [
+                2230,
+                1995,
+                1544,
+                1332,
+                1105,
+                926,
+                844,
+                588
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_RapidFirecannon",
+            "places": [
+                2438,
+                2248,
+                1835,
+                1579,
+                1293,
+                1154,
+                964,
+                643
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_SeekersArmguard",
+            "places": [
+                2915,
+                2288,
+                1772,
+                1387,
+                1147,
+                1025,
+                832,
+                578
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_ShadowPuppet",
+            "places": [
+                5473,
+                4139,
+                2963,
+                2244,
+                1922,
+                1345,
+                1104,
+                726
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_SilvermereDawn",
+            "places": [
+                2104,
+                1684,
+                1254,
+                988,
+                844,
+                708,
+                609,
+                398
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_StatikkShiv",
+            "places": [
+                2455,
+                2202,
+                1782,
+                1503,
+                1284,
+                1110,
+                890,
+                534
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_TalismanOfAscension",
+            "places": [
+                2577,
+                2110,
+                1657,
+                1364,
+                1109,
+                935,
+                719,
+                412
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_TheIndomitable",
+            "places": [
+                2937,
+                2341,
+                1958,
+                1662,
+                1316,
+                1129,
+                940,
+                604
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_TitanicHydra",
+            "places": [
+                940,
+                869,
+                707,
+                585,
+                611,
+                537,
+                468,
+                314
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_VoidGauntlet",
+            "places": [
+                2758,
+                2183,
+                1805,
+                1522,
+                1234,
+                1164,
+                913,
+                657
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Artifact_WitsEnd",
+            "places": [
+                2647,
+                2120,
+                1770,
+                1425,
+                1197,
+                1012,
+                793,
+                518
+            ]
+        },
+        {
+            "itemName": "TFT_Item_BFSword",
+            "places": [
+                3265,
+                3628,
+                4063,
+                4438,
+                4821,
+                4989,
+                6040,
+                7080
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Bloodthirster",
+            "places": [
+                67014,
+                68174,
+                64959,
+                60553,
+                56053,
+                51187,
+                44913,
+                33429
+            ]
+        },
+        {
+            "itemName": "TFT_Item_BlueBuff",
+            "places": [
+                38094,
+                35000,
+                34328,
+                32950,
+                30746,
+                28547,
+                24910,
+                17235
+            ]
+        },
+        {
+            "itemName": "TFT_Item_BrambleVest",
+            "places": [
+                26448,
+                25473,
+                24530,
+                22464,
+                19920,
+                17813,
+                14400,
+                9394
+            ]
+        },
+        {
+            "itemName": "TFT_Item_ChainVest",
+            "places": [
+                4401,
+                4675,
+                5057,
+                5295,
+                5539,
+                5926,
+                6507,
+                7534
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Crownguard",
+            "places": [
+                17446,
+                15780,
+                14531,
+                12836,
+                10545,
+                8387,
+                6425,
+                3963
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Deathblade",
+            "places": [
+                12037,
+                13880,
+                13262,
+                12186,
+                10702,
+                9316,
+                7371,
+                4747
+            ]
+        },
+        {
+            "itemName": "TFT_Item_DragonsClaw",
+            "places": [
+                29271,
+                27319,
+                27210,
+                25641,
+                23554,
+                21608,
+                18258,
+                12302
+            ]
+        },
+        {
+            "itemName": "TFT_Item_ForceOfNature",
+            "places": [
+                8843,
+                6974,
+                6395,
+                5738,
+                5038,
+                4565,
+                3837,
+                2694
+            ]
+        },
+        {
+            "itemName": "TFT_Item_FrozenHeart",
+            "places": [
+                28832,
+                26887,
+                24823,
+                22473,
+                19003,
+                16238,
+                13418,
+                8706
+            ]
+        },
+        {
+            "itemName": "TFT_Item_FryingPan",
+            "places": [
+                180,
+                181,
+                254,
+                325,
+                375,
+                476,
+                642,
+                858
+            ]
+        },
+        {
+            "itemName": "TFT_Item_GargoyleStoneplate",
+            "places": [
+                77874,
+                71328,
+                75628,
+                76460,
+                75363,
+                73140,
+                67449,
+                49931
+            ]
+        },
+        {
+            "itemName": "TFT_Item_GiantsBelt",
+            "places": [
+                6158,
+                6181,
+                7028,
+                7414,
+                8013,
+                8445,
+                9831,
+                11662
+            ]
+        },
+        {
+            "itemName": "TFT_Item_GuardianAngel",
+            "places": [
+                24673,
+                25246,
+                23176,
+                21058,
+                18588,
+                15914,
+                12681,
+                8679
+            ]
+        },
+        {
+            "itemName": "TFT_Item_GuinsoosRageblade",
+            "places": [
+                89378,
+                85337,
+                86588,
+                84384,
+                80870,
+                75518,
+                66307,
+                47413
+            ]
+        },
+        {
+            "itemName": "TFT_Item_HextechGunblade",
+            "places": [
+                21297,
+                20114,
+                18557,
+                17066,
+                15140,
+                13134,
+                10670,
+                6719
+            ]
+        },
+        {
+            "itemName": "TFT_Item_InfinityEdge",
+            "places": [
+                46109,
+                52640,
+                53845,
+                53135,
+                50187,
+                47105,
+                41650,
+                29804
+            ]
+        },
+        {
+            "itemName": "TFT_Item_IonicSpark",
+            "places": [
+                22287,
+                20540,
+                19167,
+                17595,
+                15613,
+                13237,
+                10092,
+                6192
+            ]
+        },
+        {
+            "itemName": "TFT_Item_JeweledGauntlet",
+            "places": [
+                81987,
+                72930,
+                70830,
+                68931,
+                66147,
+                62537,
+                56427,
+                40661
+            ]
+        },
+        {
+            "itemName": "TFT_Item_LastWhisper",
+            "places": [
+                16112,
+                18095,
+                17576,
+                16350,
+                14630,
+                12888,
+                10471,
+                6787
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Leviathan",
+            "places": [
+                40573,
+                32780,
+                29804,
+                27784,
+                25927,
+                23918,
+                21245,
+                15525
+            ]
+        },
+        {
+            "itemName": "TFT_Item_MadredsBloodrazor",
+            "places": [
+                46651,
+                48789,
+                46723,
+                43523,
+                39512,
+                35706,
+                29883,
+                19761
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Morellonomicon",
+            "places": [
+                19865,
+                20293,
+                18873,
+                16652,
+                14066,
+                11931,
+                9298,
+                6007
+            ]
+        },
+        {
+            "itemName": "TFT_Item_NeedlesslyLargeRod",
+            "places": [
+                4471,
+                4986,
+                5408,
+                5655,
+                6146,
+                6594,
+                7114,
+                8348
+            ]
+        },
+        {
+            "itemName": "TFT_Item_NegatronCloak",
+            "places": [
+                3441,
+                3608,
+                3978,
+                4233,
+                4507,
+                4788,
+                5491,
+                6526
+            ]
+        },
+        {
+            "itemName": "TFT_Item_NightHarvester",
+            "places": [
+                28541,
+                25343,
+                24496,
+                22644,
+                19736,
+                17169,
+                14137,
+                9224
+            ]
+        },
+        {
+            "itemName": "TFT_Item_PowerGauntlet",
+            "places": [
+                22379,
+                22207,
+                20694,
+                18631,
+                16406,
+                14161,
+                11766,
+                7714
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Quicksilver",
+            "places": [
+                15004,
+                14803,
+                13022,
+                11502,
+                9947,
+                8349,
+                6598,
+                4417
+            ]
+        },
+        {
+            "itemName": "TFT_Item_RabadonsDeathcap",
+            "places": [
+                34641,
+                31212,
+                30249,
+                29290,
+                27696,
+                25840,
+                22550,
+                15167
+            ]
+        },
+        {
+            "itemName": "TFT_Item_RapidFireCannon",
+            "places": [
+                21491,
+                19782,
+                18744,
+                16822,
+                14939,
+                13106,
+                11004,
+                7384
+            ]
+        },
+        {
+            "itemName": "TFT_Item_RecurveBow",
+            "places": [
+                3997,
+                4068,
+                4610,
+                4993,
+                5131,
+                5324,
+                6064,
+                7277
+            ]
+        },
+        {
+            "itemName": "TFT_Item_RedBuff",
+            "places": [
+                46670,
+                46415,
+                46183,
+                44002,
+                41690,
+                38114,
+                32439,
+                22365
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Redemption",
+            "places": [
+                51679,
+                50992,
+                50000,
+                46940,
+                43085,
+                38555,
+                32758,
+                21355
+            ]
+        },
+        {
+            "itemName": "TFT_Item_RunaansHurricane",
+            "places": [
+                25396,
+                29711,
+                28347,
+                25521,
+                22163,
+                18642,
+                14808,
+                9692
+            ]
+        },
+        {
+            "itemName": "TFT_Item_SparringGloves",
+            "places": [
+                2902,
+                3174,
+                3460,
+                3744,
+                3918,
+                4270,
+                4666,
+                5687
+            ]
+        },
+        {
+            "itemName": "TFT_Item_Spatula",
+            "places": [
+                500,
+                565,
+                511,
+                546,
+                585,
+                694,
+                877,
+                969
+            ]
+        },
+        {
+            "itemName": "TFT_Item_SpearOfShojin",
+            "places": [
+                76685,
+                58170,
+                56226,
+                54817,
+                52381,
+                48978,
+                43513,
+                30937
+            ]
+        },
+        {
+            "itemName": "TFT_Item_SpectralGauntlet",
+            "places": [
+                22278,
+                24241,
+                22548,
+                20736,
+                18329,
+                15642,
+                13006,
+                8496
+            ]
+        },
+        {
+            "itemName": "TFT_Item_StatikkShiv",
+            "places": [
+                26965,
+                23894,
+                21917,
+                20037,
+                18048,
+                15899,
+                13207,
+                8646
+            ]
+        },
+        {
+            "itemName": "TFT_Item_SteraksGage",
+            "places": [
+                33315,
+                34046,
+                30909,
+                27563,
+                24383,
+                21565,
+                18265,
+                13083
+            ]
+        },
+        {
+            "itemName": "TFT_Item_TacticiansRing",
+            "places": [
+                1522,
+                1389,
+                1356,
+                1429,
+                1310,
+                1216,
+                1123,
+                892
+            ]
+        },
+        {
+            "itemName": "TFT_Item_TacticiansScepter",
+            "places": [
+                1179,
+                1000,
+                1015,
+                873,
+                771,
+                649,
+                465,
+                329
+            ]
+        },
+        {
+            "itemName": "TFT_Item_TearOfTheGoddess",
+            "places": [
+                4449,
+                4756,
+                5108,
+                5174,
+                5365,
+                5738,
+                5912,
+                6836
+            ]
+        },
+        {
+            "itemName": "TFT_Item_ThiefsGloves",
+            "places": [
+                53960,
+                50295,
+                45616,
+                41583,
+                36510,
+                31111,
+                25256,
+                16305
+            ]
+        },
+        {
+            "itemName": "TFT_Item_TitansResolve",
+            "places": [
+                40630,
+                43414,
+                40923,
+                38135,
+                35338,
+                32082,
+                27701,
+                20245
+            ]
+        },
+        {
+            "itemName": "TFT_Item_UnstableConcoction",
+            "places": [
+                58623,
+                59987,
+                58084,
+                54183,
+                50367,
+                45784,
+                39673,
+                28982
+            ]
+        },
+        {
+            "itemName": "TFT_Item_WarmogsArmor",
+            "places": [
+                65023,
+                63376,
+                64632,
+                62882,
+                60109,
+                55949,
+                49039,
+                32944
+            ]
+        }
+    ],
+    "games": [
+        {
+            "patch": "16.1",
+            "b_patch_version": "",
+            "count": 186128
+        },
+        {
+            "patch": "16.1",
+            "b_patch_version": "b",
+            "count": 792024
+        }
+    ],
+    "updated": 1763716915642,
+    "tft_set": "TFTSet16",
+    "queue_id": "pbe"
+}

@@ -20,17 +20,17 @@
   },
   "dependencies": {
     "axios": "catalog:",
+    "lodash-es": "catalog:",
     "logger": "workspace:*",
     "types": "workspace:*",
     "user-agents": "^1.1.669"
   },
   "devDependencies": {
     "@rslib/core": "catalog:",
+    "@types/lodash-es": "catalog:",
     "@types/node": "catalog:",
     "@types/user-agents": "^1.0.4",
-    "@vitest/ui": "catalog:",
     "tsx": "^4.20.6",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
+    "typescript": "catalog:"
   }
 }

@@ -1,16 +1,15 @@
 import type { Comp, CompDetail, ItemStat, UnitStat } from 'types'
 import type { TierList } from './quicktype/gen/data'
+import type { fetchDataBasicParams } from './types'
 import { isNil, omitBy, pick } from 'lodash-es'
 import logger from 'logger'
 import { fetchAugments, fetchCompsData, fetchCompsDetails, fetchCompsStats, fetchItems, fetchUnits } from './meta-tft'
-import { Queue } from './types'
 import { transformCompsDetails, transformCompsStats, transformItemsStats, transformUnitsStats } from './utils'
 
 /**
  * 获取指定队列的阵容&阵容详情数据
- * @param queue 队列类型
  */
-export async function getCompsData(queue: Queue): Promise<void> {
+export async function getCompsData({ queue }: fetchDataBasicParams): Promise<void> {
   // 获取阵容数据
   const comps = await fetchCompsData({ queue })
   // 获取阵容统计数据
@@ -71,7 +70,7 @@ export async function getAugmentsData(): Promise<TierList[]> {
 /**
  * 获取装备数据
  */
-export async function getItemsData({ queue }: { queue: Queue }): Promise<ItemStat[]> {
+export async function getItemsData({ queue }: fetchDataBasicParams): Promise<ItemStat[]> {
   const items = await fetchItems({ queue })
   return transformItemsStats(items)
 }
@@ -79,9 +78,7 @@ export async function getItemsData({ queue }: { queue: Queue }): Promise<ItemSta
 /**
  * 获取单位数据
  */
-export async function getUnitsData({ queue }: { queue: Queue }): Promise<UnitStat[]> {
+export async function getUnitsData({ queue }: fetchDataBasicParams): Promise<UnitStat[]> {
   const units = await fetchUnits({ queue })
   return transformUnitsStats(units)
 }
-
-getCompsData(Queue.PBE)

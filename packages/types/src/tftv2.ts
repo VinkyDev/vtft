@@ -1,3 +1,10 @@
+export enum Queue {
+  PBE = 'PBE',
+  FORMAL = '1100',
+}
+
+export type TFTSetString = `TFTSet${number}_latest_zh_cn`
+
 export enum Levelling {
   Fast8 = 'Fast 8',
   Fast9 = 'Fast 9',

@@ -1,9 +1,4 @@
-export enum Queue {
-  PBE = 'PBE',
-  FORMAL = '1100',
-}
-
-export type TFTSetString = `TFTSet${number}_latest_zh_cn`
+import type { Queue } from 'types'
 
 export interface fetchDataBasicParams {
   queue: Queue

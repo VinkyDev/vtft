@@ -1,6 +1,7 @@
+import type { TFTSetString } from 'types'
 import type { CompsData, CompsDetails, CompsStats, Lookups } from './quicktype/gen/comps'
 import type { Augments, Items, Traits, Units } from './quicktype/gen/data'
-import type { fetchCompsDetailsParams, fetchCompsStatsParams, fetchDataBasicParams, TFTSetString } from './types'
+import type { fetchCompsDetailsParams, fetchCompsStatsParams, fetchDataBasicParams } from './types'
 import { api } from './client'
 import { Convert as CompsConvert } from './quicktype/gen/comps'
 import { Convert as DataConvert } from './quicktype/gen/data'

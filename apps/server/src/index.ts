@@ -3,15 +3,14 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
 import { swaggerUI } from '@hono/swagger-ui'
+import { OpenAPIHono } from '@hono/zod-openapi'
 import dotenv from 'dotenv'
-import { Hono } from 'hono'
 import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
 import { etag } from 'hono/etag'
 import { logger as honoLogger } from 'hono/logger'
 import { timing } from 'hono/timing'
 import { Logger } from 'logger'
-import { openapiConfig } from './config/openapi'
 import { errorHandler } from './middleware'
 import apiRoutes from './routes'
 import { taskScheduler } from './scheduler'
@@ -27,7 +26,7 @@ const _dirname
 const projectRoot = join(_dirname, '../')
 dotenv.config({ path: join(projectRoot, '.env') })
 
-const app = new Hono()
+const app = new OpenAPIHono()
 
 app.use('*', timing())
 app.use('*', honoLogger())
@@ -53,8 +52,13 @@ app.get('/health', (c) => {
 
 app.route('/api', apiRoutes)
 
-app.get('/openapi.json', (c) => {
-  return c.json(openapiConfig)
+app.doc('/openapi.json', {
+  openapi: '3.0.0',
+  info: {
+    title: 'TFT API',
+    version: '1.0.0',
+  },
+  servers: [{ url: '/' }],
 })
 app.get(
   '/docs',

@@ -64,17 +64,6 @@ class AugmentService {
       total,
     }
   }
-
-  // 保留旧方法以兼容
-  async getAllAugments(): Promise<AugmentMeta[]> {
-    const db = databaseService.getTFTDatabase()
-    return await db.augments.findAll()
-  }
-
-  async getAugmentByName(name: string): Promise<AugmentMeta | null> {
-    const db = databaseService.getTFTDatabase()
-    return await db.augments.findByName(name)
-  }
 }
 
 export const augmentService = new AugmentService()

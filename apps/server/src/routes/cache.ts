@@ -1,29 +1,54 @@
-import { Hono } from 'hono'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { clearCache, getCacheStats } from '../middleware'
 
-const cacheRoutes = new Hono()
+const cacheRoutes = new OpenAPIHono()
 
-// GET /api/cache/stats - 获取缓存统计信息
-cacheRoutes.get('/stats', (c) => {
-  const stats = getCacheStats()
-  return c.json({
-    success: true,
-    data: stats,
-  })
+const statsRoute = createRoute({
+  method: 'get',
+  path: '/stats',
+  tags: ['Cache'],
+  summary: '获取缓存统计信息',
+  responses: {
+    200: {
+      description: '成功返回缓存统计信息',
+      content: {
+        'application/json': {
+          schema: z.object({ success: z.boolean(), data: z.object({ size: z.number().int(), max: z.number().int(), calculatedSize: z.number().int().optional() }) }),
+        },
+      },
+    },
+  },
 })
 
-// POST /api/cache/clear - 清除缓存
-// 支持查询参数: pattern (正则表达式模式)
-cacheRoutes.post('/clear', (c) => {
-  const pattern = c.req.query('pattern')
-  const cleared = clearCache(pattern)
+cacheRoutes.openapi(statsRoute, (c) => {
+  const stats = getCacheStats()
+  return c.json({ success: true, data: stats })
+})
 
-  return c.json({
-    success: true,
-    message: `Cleared ${cleared} cache entries`,
-    cleared,
-    pattern: pattern || 'all',
-  })
+const clearRoute = createRoute({
+  method: 'post',
+  path: '/clear',
+  tags: ['Cache'],
+  summary: '清除缓存',
+  request: {
+    query: z.object({ pattern: z.string().optional().openapi({ description: '正则表达式模式' }) }),
+  },
+  responses: {
+    200: {
+      description: '清除结果',
+      content: {
+        'application/json': {
+          schema: z.object({ success: z.boolean(), message: z.string(), cleared: z.number().int(), pattern: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+cacheRoutes.openapi(clearRoute, (c) => {
+  const { pattern } = c.req.valid('query')
+  const cleared = clearCache(pattern)
+  return c.json({ success: true, message: `Cleared ${cleared} cache entries`, cleared, pattern: pattern || 'all' })
 })
 
 export default cacheRoutes

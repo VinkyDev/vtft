@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { OpenAPIHono } from '@hono/zod-openapi'
 import { cacheMiddleware } from '../middleware'
 import augmentRoutes from './augment'
 import cacheRoutes from './cache'
@@ -7,7 +7,7 @@ import compRoutes from './comp'
 import itemRoutes from './item'
 import schedulerRoutes from './scheduler'
 
-const apiRoutes = new Hono()
+const apiRoutes = new OpenAPIHono()
 
 apiRoutes.use('*', cacheMiddleware())
 

@@ -43,5 +43,3 @@ export function transformCompsStats(data: CompsStats): Record<string, ParsedClus
 
   return result
 }
-
-export type { ParsedCluster }

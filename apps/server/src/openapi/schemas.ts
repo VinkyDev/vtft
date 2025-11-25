@@ -49,14 +49,14 @@ export const AugmentSchema = z.object({
   matches: z.number().int().optional(),
 }).openapi('Augment')
 
-export const CompTraitSchema = z.object({
+const CompTraitSchema = z.object({
   name: z.string(),
   icon: z.string().optional(),
   activeLevel: z.number().int().optional(),
   maxLevel: z.number().int().optional(),
 })
 
-export const CompChampionSchema = z.object({
+const CompChampionSchema = z.object({
   name: z.string(),
   icon: z.string(),
   cost: z.number().int().optional(),
@@ -95,7 +95,7 @@ export const CompWithDetailsSchema = z.object({
   details: z.object({}).loose().optional(),
 }).openapi('CompWithDetails')
 
-export const SchedulerTaskSchema = z.object({
+const SchedulerTaskSchema = z.object({
   name: z.string(),
   running: z.boolean(),
   schedule: z.string().optional(),

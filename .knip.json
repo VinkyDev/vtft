@@ -45,6 +45,12 @@
       "project": ["src/**/*.{js,ts,jsx,tsx}"],
       "ignore": ["src/styles/**"]
     }
+    ,
+    "packages/scraper": {
+      "entry": ["src/index.ts", "src/starter.ts"],
+      "project": ["src/**/*.{js,ts}"],
+      "ignore": ["src/quicktype/gen/**", "src/quicktype/**/*.json"]
+    }
   },
   "ignore": [
     "**/node_modules/**",

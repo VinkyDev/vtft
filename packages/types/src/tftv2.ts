@@ -116,3 +116,17 @@ export interface CompDetail {
   /** 阵容后期选项 */
   options?: Record<string, Option[]>
 }
+
+export interface ItemStat {
+  itemName: string
+  avg: number
+  firstRate: number
+  pickRate: number
+}
+
+export interface UnitStat {
+  unit: string
+  avg: number
+  firstRate: number
+  pickRate: number
+}

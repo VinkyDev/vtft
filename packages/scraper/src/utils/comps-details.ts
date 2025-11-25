@@ -5,7 +5,8 @@ import { Trend } from 'types'
 
 export function transformCompsDetails(compsDetails: CompsDetails, compUnits: string[]): CompDetail {
   const results = compsDetails.results
-  if (!results) return {}
+  if (!results)
+    return {}
   return {
     id: results.cluster ? Number(results.cluster) : undefined,
     counters: results.counters as Counter[] | undefined,
@@ -19,7 +20,8 @@ export function transformCompsDetails(compsDetails: CompsDetails, compUnits: str
 }
 
 function transformItems(itemNames?: ItemName[]): CompItem[] | undefined {
-  if (!itemNames || itemNames.length === 0) return undefined
+  if (!itemNames || itemNames.length === 0)
+    return undefined
   return itemNames.map(item => ({
     itemNames: item.itemNames || '',
     count: item.count,
@@ -37,7 +39,8 @@ function transformItems(itemNames?: ItemName[]): CompItem[] | undefined {
 }
 
 function calculateTrend(trends?: RawTrend[]): Trend | undefined {
-  if (!trends || trends.length < 2) return undefined
+  if (!trends || trends.length < 2)
+    return undefined
   const sortedTrends = sortBy(trends, 'day')
   const recentTrends = sortedTrends.slice(-3)
   const avgChanges = []
@@ -46,20 +49,25 @@ function calculateTrend(trends?: RawTrend[]): Trend | undefined {
     const previous = recentTrends[i - 1]?.avg ?? 0
     avgChanges.push(current - previous)
   }
-  if (avgChanges.length === 0) return Trend.Steady
+  if (avgChanges.length === 0)
+    return Trend.Steady
   const avgChange = sum(avgChanges) / avgChanges.length
-  if (avgChange < -0.1) return Trend.Up
-  if (avgChange > 0.1) return Trend.Down
+  if (avgChange < -0.1)
+    return Trend.Up
+  if (avgChange > 0.1)
+    return Trend.Down
   return Trend.Steady
 }
 
 function transformPositioning(positioning?: RawPositioning, compUnits?: string[]): Positioning[] | undefined {
-  if (!positioning?.units || !compUnits || compUnits.length === 0) return undefined
+  if (!positioning?.units || !compUnits || compUnits.length === 0)
+    return undefined
   const unitPositions = compact(
     compUnits.map((unitName) => {
       const trimmedUnitName = unitName.trim()
       const unitData = positioning.units?.[trimmedUnitName]
-      if (!unitData?.positions) return null
+      if (!unitData?.positions)
+        return null
       const sortedPositions = orderBy(
         unitData.positions.map(p => ({
           position: Number(p.cell?.replace('cell_', '') || 0),
@@ -86,7 +94,8 @@ function transformPositioning(positioning?: RawPositioning, compUnits?: string[]
 }
 
 function transformEarlyOptions(earlyOptions?: Record<string, EarlyOption[]>): Record<string, Option[]> | undefined {
-  if (!earlyOptions) return undefined
+  if (!earlyOptions)
+    return undefined
   return mapValues(earlyOptions, optionArray =>
     optionArray.map(option => ({
       unit_list: option.unit_list,
@@ -97,7 +106,8 @@ function transformEarlyOptions(earlyOptions?: Record<string, EarlyOption[]>): Re
 }
 
 function transformLateOptions(lateOptions?: Record<string, CompsOption[]>): Record<string, Option[]> | undefined {
-  if (!lateOptions) return undefined
+  if (!lateOptions)
+    return undefined
   return mapValues(lateOptions, optionArray =>
     optionArray.map(option => ({
       unit_list: option.units_list,
@@ -105,4 +115,3 @@ function transformLateOptions(lateOptions?: Record<string, CompsOption[]>): Reco
       avg: option.avg,
     })))
 }
-

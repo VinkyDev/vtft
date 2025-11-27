@@ -29,7 +29,6 @@ interface NavigatorUAData {
 }
 
 const GITHUB_REPO = "VinkyDev/vtft";
-const GITHUB_MIRROR = "https://gh-proxy.com/";
 
 // 默认兜底配置：Windows Intel/AMD
 const DEFAULT_DOWNLOAD_INFO: DownloadInfo = {
@@ -116,12 +115,11 @@ export const DownloadButton = () => {
   }, []);
 
   const handleDownload = () => {
-    const githubUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/${downloadInfo.url}`;
-    const downloadUrl = `${GITHUB_MIRROR}${githubUrl}`;
+    const downloadUrl = `https://static-host-ggr87o43-vtft.sealosgzg.site/${downloadInfo.url}`;
     window.location.href = downloadUrl;
   };
 
-  const releasesUrl = `${GITHUB_MIRROR}https://github.com/${GITHUB_REPO}/releases`;
+  const releasesUrl = `https://github.com/${GITHUB_REPO}/releases`;
 
   return (
     <div className="flex flex-col items-center gap-4">

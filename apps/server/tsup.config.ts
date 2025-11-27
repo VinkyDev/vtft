@@ -34,7 +34,6 @@ export default defineConfig(() => {
     external: [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {}),
-      'playwright',
     ],
     noExternal: workspaceDeps,
     esbuildOptions(options) {

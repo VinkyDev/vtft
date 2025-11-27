@@ -1,4 +1,4 @@
-import type { CompData } from 'types'
+import type { Comp } from 'types'
 
 /**
  * 阵容评级类型
@@ -13,10 +13,10 @@ type CompCategory = 'normal' | 'low_pickrate'
 /**
  * 增强的阵容数据
  */
-export interface EnhancedCompData extends CompData {
+export interface EnhancedCompData extends Comp {
   /** 计算后的评级 */
   calculatedTier: CompTier
-  /** 阵容类型（普通/专属） */
+  /** 阵容类型（普通/低出场率） */
   category: CompCategory
   /** 综合得分 */
   score: number
@@ -129,9 +129,9 @@ function sigmoidTransform(normalizedScore: number, steepness = 10): number {
  * @param comp 阵容数据
  * @returns 综合得分（0-100）
  */
-function calculateCompScore(comp: CompData): number {
+function calculateCompScore(comp: Comp): number {
   // ========== 1. 平均排名得分（权重 40%）==========
-  const avgPlace = comp.avgPlace || 4.5
+  const avgPlace = comp.avg || 4.5
   const avgPlaceNormalized = normalize(
     avgPlace,
     NORMALIZATION_CONFIG.avgPlace.min,
@@ -149,7 +149,7 @@ function calculateCompScore(comp: CompData): number {
   )
 
   // ========== 3. 吃鸡率得分（权重 10%）==========
-  const firstPlaceRate = comp.firstPlaceRate || 0
+  const firstPlaceRate = comp.firstRate || 0
   const firstPlaceNormalized = normalize(
     firstPlaceRate,
     NORMALIZATION_CONFIG.firstPlaceRate.min,
@@ -203,7 +203,7 @@ function getCompTier(_score: number, percentile: number): CompTier {
  * @param comp 阵容数据
  * @returns 是否为低出场率阵容
  */
-function isLowPickrateComp(comp: CompData): boolean {
+function isLowPickrateComp(comp: Comp): boolean {
   const pickRate = comp.pickRate || 0
 
   // 选取率阈值：0.25%
@@ -223,10 +223,10 @@ function isLowPickrateComp(comp: CompData): boolean {
  * @param comps 原始阵容数据
  * @returns 增强后的阵容数据
  */
-function enhanceComps(comps: CompData[]): EnhancedCompData[] {
+function enhanceComps(comps: Comp[]): EnhancedCompData[] {
   // 1. 分离低出场率阵容和普通阵容
-  const lowPickrateComps: CompData[] = []
-  const normalComps: CompData[] = []
+  const lowPickrateComps: Comp[] = []
+  const normalComps: Comp[] = []
 
   comps.forEach((comp) => {
     if (isLowPickrateComp(comp)) {
@@ -318,7 +318,7 @@ function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
     // 普通阵容按得分降序
     group.normal.sort((a, b) => b.score - a.score)
     // 低出场率阵容按平均排名升序
-    group.lowPickrate.sort((a, b) => (a.avgPlace || 4.5) - (b.avgPlace || 4.5))
+    group.lowPickrate.sort((a, b) => (a.avg || 4.5) - (b.avg || 4.5))
   })
 
   // 返回有数据的分组，按 S -> A -> B -> C -> D 顺序
@@ -333,7 +333,7 @@ function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
  * @param comps 原始阵容数据
  * @returns 分组后的阵容数据
  */
-export function processComps(comps: CompData[]): GroupedComps[] {
+export function processComps(comps: Comp[]): GroupedComps[] {
   const enhanced = enhanceComps(comps)
   return groupCompsByTier(enhanced)
 }

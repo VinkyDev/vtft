@@ -3,7 +3,7 @@ import { getApiErrorRecord } from 'logger'
 import { withErrorBoundary } from 'react-helper'
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from 'ui'
 import { ErrorState } from '@/components'
-import { useConfigStore } from '@/store/dataStore'
+import { useConfigStore } from '@/store/configStore'
 import { CompDetailContent } from './content'
 
 interface CompDetailPageProps {

@@ -28,7 +28,7 @@ const triggerRoute = createRoute({
   description: '立即执行指定的爬虫任务，无需等待定时调度。任务将在后台异步执行。',
   request: {
     params: z.object({
-      taskName: z.enum(['crawler:champions', 'crawler:items', 'crawler:augments', 'crawler:comps']).openapi({ example: 'crawler:champions' }),
+      taskName: z.enum(['crawler:items', 'crawler:augments', 'crawler:units', 'crawler:comps', 'crawler:lookups', 'crawler:unit_items']).openapi({ example: 'crawler:items' }),
     }),
   },
   responses: {

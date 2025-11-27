@@ -1,4 +1,4 @@
-import type { ChampionMeta } from 'types'
+import type { UnitStat } from 'types'
 import type { ChampionSortField } from './components'
 import { compositeSortChampions } from '@/utils/compositeSort'
 
@@ -10,9 +10,9 @@ import { compositeSortChampions } from '@/utils/compositeSort'
  * @returns 排序后的英雄列表
  */
 export function sortChampions(
-  champions: ChampionMeta[],
+  champions: UnitStat[],
   sortField: ChampionSortField,
-): ChampionMeta[] {
+): UnitStat[] {
   // 综合排序
   if (sortField === 'composite') {
     return compositeSortChampions(champions)
@@ -26,24 +26,24 @@ export function sortChampions(
 
     switch (sortField) {
       case 'matches':
-        aValue = a.matches ?? 0
-        bValue = b.matches ?? 0
+        aValue = a.pickRate ?? 0
+        bValue = b.pickRate ?? 0
         break
       case 'avgPlace':
-        aValue = a.avgPlace ?? 999
-        bValue = b.avgPlace ?? 999
+        aValue = a.avg ?? 999
+        bValue = b.avg ?? 999
         break
       case 'top4Rate':
         aValue = a.top4Rate ?? 0
         bValue = b.top4Rate ?? 0
         break
       case 'firstPlaceRate':
-        aValue = a.firstPlaceRate ?? 0
-        bValue = b.firstPlaceRate ?? 0
+        aValue = a.firstRate ?? 0
+        bValue = b.firstRate ?? 0
         break
       default:
-        aValue = a.matches ?? 0
-        bValue = b.matches ?? 0
+        aValue = a.pickRate ?? 0
+        bValue = b.pickRate ?? 0
     }
 
     const comparison = aValue - bValue

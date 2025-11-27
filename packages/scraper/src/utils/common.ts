@@ -18,15 +18,15 @@ export function calcAvg(top8: number[], count: number): number {
 }
 
 export function calcFirstRate(top8: number[], count: number): number {
-  return count ? (top8[0] || 0) / count : 0
+  return count ? (top8[0] || 0) / count * 100 : 0
 }
 
 export function calcTop4Rate(top8: number[], count: number): number {
   if (!count)
     return 0
-  return top8.slice(0, 4).reduce((a, b) => a + b, 0) / count
+  return (top8.slice(0, 4).reduce((a, b) => a + b, 0) / count) * 100
 }
 
 export function calcPickRate(count: number, totalMatches: number): number {
-  return totalMatches ? (count / totalMatches) * 8 : 0
+  return totalMatches ? (count / totalMatches) * 100 : 0
 }

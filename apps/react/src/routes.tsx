@@ -3,21 +3,26 @@ import { lazy } from 'react'
 import { withErrorBoundary, withSuspense } from 'react-helper'
 import { retryLoadWithFallBack } from 'utils'
 import { ErrorState } from '@/components'
-import { useGameDataStore } from '@/store/dataStore'
-import CompRankingsPage from './pages/CompsPage'
+
+const CompRankingsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBack({ fn: () => import('@/pages/CompsPage') }))), {
+  errorBoundaryName: 'CompsPage',
+  FallbackComponent: ({ resetErrorBoundary }) => {
+    return (
+      <ErrorState
+        message="阵容数据加载失败"
+        onReload={resetErrorBoundary}
+      />
+    )
+  },
+})
 
 const ItemsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBack({ fn: () => import('@/pages/ItemsPage/index') }))), {
   errorBoundaryName: 'ItemsPage',
   FallbackComponent: ({ resetErrorBoundary }) => {
-    const { fetchItems } = useGameDataStore()
     return (
       <ErrorState
         message="装备数据加载失败"
-        onReload={() => {
-          fetchItems().then(() => {
-            resetErrorBoundary()
-          })
-        }}
+        onReload={resetErrorBoundary}
       />
     )
   },
@@ -26,15 +31,10 @@ const ItemsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBac
 const ChampionsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBack({ fn: () => import('@/pages/ChampionsPage/index') }))), {
   errorBoundaryName: 'ChampionsPage',
   FallbackComponent: ({ resetErrorBoundary }) => {
-    const { fetchChampions } = useGameDataStore()
     return (
       <ErrorState
         message="英雄数据加载失败"
-        onReload={() => {
-          fetchChampions().then(() => {
-            resetErrorBoundary()
-          })
-        }}
+        onReload={resetErrorBoundary}
       />
     )
   },
@@ -43,15 +43,10 @@ const ChampionsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFal
 const AugmentsPage = withErrorBoundary(withSuspense(lazy(() => retryLoadWithFallBack({ fn: () => import('@/pages/AugmentsPage/index') }))), {
   errorBoundaryName: 'AugmentsPage',
   FallbackComponent: ({ resetErrorBoundary }) => {
-    const { fetchAugments } = useGameDataStore()
     return (
       <ErrorState
         message="符文数据加载失败"
-        onReload={() => {
-          fetchAugments().then(() => {
-            resetErrorBoundary()
-          })
-        }}
+        onReload={resetErrorBoundary}
       />
     )
   },

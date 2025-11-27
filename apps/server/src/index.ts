@@ -17,14 +17,14 @@ import { taskScheduler } from './scheduler'
 import { createCrawlerTasks } from './scheduler/crawler-tasks'
 import { databaseService } from './services'
 
-const logger = new Logger({ namespace: 'server' })
-
 const _dirname
   = typeof __dirname !== 'undefined'
     ? __dirname
     : dirname(fileURLToPath(import.meta.url))
 const projectRoot = join(_dirname, '../')
 dotenv.config({ path: join(projectRoot, '.env') })
+
+const logger = new Logger({ namespace: 'server' })
 
 const app = new OpenAPIHono()
 
@@ -83,6 +83,8 @@ const port = Number(process.env.PORT) || 3000
 async function start() {
   try {
     await databaseService.connect()
+    // 初始化索引
+    await databaseService.getTFTDatabase().initializeIndexes()
     const crawlerTasks = createCrawlerTasks()
 
     crawlerTasks.forEach(task => taskScheduler.register(task))

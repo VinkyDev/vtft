@@ -20,8 +20,7 @@
   },
   "dependencies": {
     "axios": "catalog:",
-    "types": "workspace:*",
-    "utils": "workspace:*"
+    "types": "workspace:*"
   },
   "devDependencies": {
     "@rslib/core": "catalog:",

@@ -3,7 +3,7 @@ import { Overlay, Window } from 'bridge'
 import { memo } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui'
 import { useDraggable } from '@/hooks'
-import { useConfigStore } from '@/store/dataStore'
+import { useConfigStore } from '@/store/configStore'
 
 interface AppTab {
   value: string
@@ -107,7 +107,7 @@ export const AppTabs = memo((props: AppTabsProps) => {
                           pointerEvents: isActive ? 'auto' : 'none',
                         }}
                       >
-                        {tab.content}
+                        {isActive ? tab.content : null}
                       </div>
                     </TabsContent>
                   )
@@ -117,11 +117,14 @@ export const AppTabs = memo((props: AppTabsProps) => {
           )
         : (
             <div onMouseDown={e => e.stopPropagation()}>
-              {tabs.map(tab => (
-                <TabsContent key={tab.value} value={tab.value} className="h-full m-0 no-drag">
-                  {tab.content}
-                </TabsContent>
-              ))}
+              {tabs.map((tab) => {
+                const isActive = value === tab.value
+                return (
+                  <TabsContent key={tab.value} value={tab.value} className="h-full m-0 no-drag">
+                    {isActive ? tab.content : null}
+                  </TabsContent>
+                )
+              })}
             </div>
           )}
     </Tabs>

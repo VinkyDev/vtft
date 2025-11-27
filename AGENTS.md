@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-VTFT is a multi-platform application (React Web, Electron Desktop) with an API server backend. The project crawls and manages game data using Playwright-based scrapers and MongoDB for storage.
+VTFT is a multi-platform application (React Web, Electron Desktop) with an API server backend. The project crawls and manages game data using Axios-based scrapers and MongoDB for storage.
 
 ## Architecture
 
@@ -17,7 +17,7 @@ VTFT is a multi-platform application (React Web, Electron Desktop) with an API s
 - `packages/`: Shared libraries
   - `api-client/`: HTTP client for API communication (Axios-based)
   - `bridge/`: Electron IPC communication layer (clipboard, shortcuts, overlay, window)
-  - `crawler/`: Playwright-based web scraping (champions, items, comps, augments)
+  - `crawler/`: Axios-based web scraping (champions, items, comps, augments)
   - `db/`: MongoDB database layer
   - `logger/`: Logging utilities
   - `react-helper/`: React utilities
@@ -139,7 +139,7 @@ pnpm clean:all              # Clean everything
 - Used by server and crawler packages
 
 ### Crawler
-- Playwright-based (runs in Playwright Docker container in production)
+- Axios-based HTTP scraping
 - CLI scripts in `packages/crawler/src/cli/`
 - Can run standalone or via scheduled tasks in server
 
@@ -148,7 +148,7 @@ pnpm clean:all              # Clean everything
 ### Server Deployment
 - Automatic Docker build/push on main branch via GitHub Actions (`.github/workflows/docker-publish.yml`)
 - Docker image: `${DOCKER_USERNAME}/vtft-server`
-- Base image: `mcr.microsoft.com/playwright:v1.49.1-noble`
+- Base image: `node:22-bookworm-slim`
 - Build process:
   1. Build packages: `pnpm run build:packages`
   2. Build server: `pnpm run build:server`

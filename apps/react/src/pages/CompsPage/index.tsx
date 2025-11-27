@@ -1,25 +1,37 @@
 import type { EnhancedCompData, GroupedComps } from '@/utils/compRating'
-import { queryComps } from 'api-client'
+import { getComps } from 'api-client'
 import { useMemo, useState } from 'react'
 import { useRequest } from 'react-helper'
 import { ScrollArea } from 'ui'
 import { CompPageSkeleton } from '@/components'
-import CompDetailPage from '@/pages/CompDetailsPage'
+import { useGlobalStore } from '@/store/globalStore'
 import { processComps } from '@/utils/compRating'
+import CompDetailPage from '../CompDetailsPage'
 import { TierSection } from './components'
 
 function CompRankingsPage() {
-  const [selectedComp, setSelectedComp] = useState<EnhancedCompData | null>(null)
+  const season = useGlobalStore(s => s.curSeason)
 
   const { data, loading } = useRequest(
-    queryComps,
+    async () => {
+      const res = await getComps({ season })
+      return res.data
+    },
+    {
+      cacheKey: `comps:${season}`,
+      staleTime: 60_000,
+      refreshDeps: [season],
+      ready: Boolean(season),
+    },
   )
 
   const groupedComps = useMemo<GroupedComps[]>(() => {
-    if (!data?.data)
+    if (!data)
       return []
-    return processComps(data.data)
+    return processComps(data)
   }, [data])
+
+  const [selectedComp, setSelectedComp] = useState<EnhancedCompData | null>(null)
 
   const handleCompClick = (comp: EnhancedCompData) => {
     setSelectedComp(comp)

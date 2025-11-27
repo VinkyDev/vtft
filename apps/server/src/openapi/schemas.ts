@@ -1,11 +1,5 @@
 import { z } from '@hono/zod-openapi'
 
-export const PaginationSchema = z.object({
-  page: z.number().int().openapi({ description: '当前页码' }),
-  pageSize: z.number().int().openapi({ description: '每页数量' }),
-  totalPages: z.number().int().openapi({ description: '总页数' }),
-}).openapi('Pagination')
-
 export const ErrorSchema = z.object({
   success: z.boolean().openapi({ example: false }),
   message: z.string(),
@@ -13,87 +7,105 @@ export const ErrorSchema = z.object({
 })
   .openapi('Error')
 
-export const ChampionSchema = z.object({
-  rank: z.number().int(),
-  name: z.string(),
-  icon: z.string(),
-  traits: z.array(z.any()).optional(),
-  cost: z.number().int().optional(),
-  avgPlace: z.number().optional(),
-  top4Rate: z.number().optional(),
-  firstPlaceRate: z.number().optional(),
-  matches: z.number().int().optional(),
-}).openapi('Champion')
+export const ItemStatSchema = z.object({
+  itemName: z.string(),
+  avg: z.number(),
+  firstRate: z.number(),
+  pickRate: z.number(),
+}).openapi('ItemStat')
 
-export const ItemSchema = z.object({
-  rank: z.number().int(),
-  name: z.string(),
-  icon: z.string(),
-  components: z.array(z.string()).optional(),
-  avgPlace: z.number().optional(),
-  top4Rate: z.number().optional(),
-  firstPlaceRate: z.number().optional(),
-  matches: z.number().int().optional(),
-  recommendedFor: z.array(z.string()).optional(),
-}).openapi('Item')
+export const UnitStatSchema = z.object({
+  unit: z.string(),
+  avg: z.number(),
+  firstRate: z.number(),
+  pickRate: z.number(),
+}).openapi('UnitStat')
 
-export const AugmentSchema = z.object({
-  rank: z.number().int(),
-  name: z.string(),
-  icon: z.string(),
-  level: z.enum(['Silver', 'Gold', 'Prismatic']),
-  tier: z.string().optional(),
-  avgPlace: z.number().optional(),
-  top4Rate: z.number().optional(),
-  firstPlaceRate: z.number().optional(),
-  matches: z.number().int().optional(),
-}).openapi('Augment')
-
-const CompTraitSchema = z.object({
-  name: z.string(),
-  icon: z.string().optional(),
-  activeLevel: z.number().int().optional(),
-  maxLevel: z.number().int().optional(),
+const ContentElementSchema = z.object({
+  id: z.string().optional(),
+  type: z.enum(['augment']).optional(),
 })
 
-const CompChampionSchema = z.object({
-  name: z.string(),
-  icon: z.string(),
-  cost: z.number().int().optional(),
-  level: z.number().int().optional(),
-  items: z.array(z.string()).optional(),
+export const TierListSchema = z.object({
+  content: z.array(ContentElementSchema).optional(),
+  label: z.string().optional(),
+  color: z.string().optional(),
+}).openapi('TierList')
+
+const BuildSchema = z.object({
+  count: z.number().int().optional(),
+  avg: z.number().optional(),
+  unit: z.string().optional(),
+  buildName: z.array(z.string()).optional(),
 })
 
-export const CompSchema = z.object({
-  compId: z.string(),
-  rank: z.number().int(),
-  name: z.string(),
-  tier: z.string().optional(),
-  level: z.number().int().optional(),
-  levelType: z.string().optional(),
-  avgPlace: z.number().optional(),
-  firstPlaceRate: z.number().optional(),
-  top4Rate: z.number().optional(),
-  pickRate: z.number().optional(),
-  traits: z.array(CompTraitSchema),
-  champions: z.array(CompChampionSchema),
-}).openapi('Comp')
-
-export const CompWithDetailsSchema = z.object({
-  compId: z.string(),
-  rank: z.number().int().optional(),
+export const CompV2Schema = z.object({
+  clusterId: z.number().int(),
+  id: z.number().int(),
+  units: z.array(z.string()).optional(),
+  traits: z.array(z.string()).optional(),
   name: z.string().optional(),
-  tier: z.string().optional(),
-  level: z.number().int().optional(),
-  levelType: z.string().optional(),
-  avgPlace: z.number().optional(),
-  firstPlaceRate: z.number().optional(),
-  top4Rate: z.number().optional(),
   pickRate: z.number().optional(),
-  traits: z.array(CompTraitSchema).optional(),
-  champions: z.array(CompChampionSchema).optional(),
-  details: z.object({}).loose().optional(),
-}).openapi('CompWithDetails')
+  avg: z.number().optional(),
+  firstRate: z.number().optional(),
+  top4Rate: z.number().optional(),
+  stars: z.array(z.string()).optional(),
+  stars_4: z.array(z.string()).optional(),
+  builds: z.array(BuildSchema).optional(),
+  levelling: z.enum(['Fast 8', 'Fast 9', 'lvl 5', 'lvl 6', 'lvl 7', 'Standard']).optional(),
+}).openapi('CompV2')
+
+const CounterSchema = z.object({
+  against: z.number().optional(),
+  place_change: z.number().optional(),
+  similarity: z.number().optional(),
+})
+
+const FinalLevelSchema = z.object({
+  level: z.string().optional(),
+  count: z.number().int().optional(),
+  avg: z.number().optional(),
+})
+
+const UnitDetailSchema = z.object({
+  count: z.number().int().optional(),
+  avg: z.number().optional(),
+  units: z.string().optional(),
+  place_change: z.number().optional(),
+  unit_pick: z.number().optional(),
+  item_pick: z.number().optional(),
+})
+
+const CompItemSchema = z.object({
+  itemNames: z.string(),
+  count: z.number().int().optional(),
+  avg: z.number().optional(),
+  pcnt: z.number().optional(),
+  units: z.array(UnitDetailSchema).optional(),
+})
+
+const PositioningSchema = z.object({
+  unit: z.string().optional(),
+  position: z.number().int().optional(),
+})
+
+const OptionSchema = z.object({
+  unit_list: z.string().optional(),
+  count: z.number().int().optional(),
+  avg: z.number().optional(),
+  win: z.number().optional(),
+})
+
+export const CompDetailV2Schema = z.object({
+  id: z.number().int().optional(),
+  counters: z.array(CounterSchema).optional(),
+  final_level: z.array(FinalLevelSchema).optional(),
+  item: z.array(CompItemSchema).optional(),
+  trends: z.enum(['up', 'down', 'steady']).optional(),
+  positioning: z.array(PositioningSchema).optional(),
+  early_options: z.record(z.string(), z.array(OptionSchema)).optional(),
+  options: z.record(z.string(), z.array(OptionSchema)).optional(),
+}).openapi('CompDetailV2')
 
 const SchedulerTaskSchema = z.object({
   name: z.string(),

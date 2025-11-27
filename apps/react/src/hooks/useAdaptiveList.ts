@@ -1,9 +1,9 @@
 import { useSize } from 'ahooks'
 import { useMemo, useRef } from 'react'
 
-interface UseAdaptiveListOptions {
+interface UseAdaptiveListOptions<T = unknown> {
   /** 项目列表 */
-  items: unknown[]
+  items: T[]
   /** 每个项目的宽度（包括 gap） */
   itemWidth: number
   /** "+x" 按钮的宽度 */
@@ -38,7 +38,7 @@ interface UseAdaptiveListResult<T> {
  * ```
  */
 export function useAdaptiveList<T = unknown>(
-  options: UseAdaptiveListOptions,
+  options: UseAdaptiveListOptions<T>,
 ): UseAdaptiveListResult<T> {
   const {
     items,

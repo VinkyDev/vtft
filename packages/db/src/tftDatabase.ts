@@ -1,29 +1,31 @@
 import type { MongoDBManager } from './client'
-import {
-  AugmentRepository,
-  ChampionRepository,
-  CompDetailRepository,
-  CompRepository,
-  ItemRepository,
-} from './repositories'
+import { CompDetailRepository, CompRepository, LookupsRepository } from './repositories'
+import { AugmentTierRepository } from './repositories/augmentTierRepository'
+import { ItemStatsRepository } from './repositories/itemStatsRepository'
+import { UnitItemsProcessedRepository } from './repositories/unitItemsProcessedRepository'
+import { UnitStatsRepository } from './repositories/unitStatsRepository'
 
 /**
  * TFT 数据库服务
  * 提供所有数据访问仓储的统一入口
  */
 export class TFTDatabase {
-  public augments: AugmentRepository
-  public champions: ChampionRepository
-  public items: ItemRepository
+  public augments: AugmentTierRepository
+  public itemsStats: ItemStatsRepository
+  public unitsStats: UnitStatsRepository
+  public unitItemsProcessed: UnitItemsProcessedRepository
   public comps: CompRepository
   public compDetails: CompDetailRepository
+  public lookups: LookupsRepository
 
   constructor(dbManager: MongoDBManager) {
-    this.augments = new AugmentRepository(dbManager)
-    this.champions = new ChampionRepository(dbManager)
-    this.items = new ItemRepository(dbManager)
+    this.augments = new AugmentTierRepository(dbManager)
+    this.itemsStats = new ItemStatsRepository(dbManager)
+    this.unitsStats = new UnitStatsRepository(dbManager)
     this.comps = new CompRepository(dbManager)
     this.compDetails = new CompDetailRepository(dbManager)
+    this.lookups = new LookupsRepository(dbManager)
+    this.unitItemsProcessed = new UnitItemsProcessedRepository(dbManager)
   }
 
   /**
@@ -32,10 +34,12 @@ export class TFTDatabase {
   async initializeIndexes(): Promise<void> {
     await Promise.all([
       this.augments.createIndexes(),
-      this.champions.createIndexes(),
-      this.items.createIndexes(),
+      this.itemsStats.createIndexes(),
+      this.unitsStats.createIndexes(),
       this.comps.createIndexes(),
       this.compDetails.createIndexes(),
+      this.lookups.createIndexes(),
+      this.unitItemsProcessed.createIndexes(),
     ])
   }
 
@@ -45,10 +49,12 @@ export class TFTDatabase {
   async clearAll(): Promise<void> {
     await Promise.all([
       this.augments.deleteAll(),
-      this.champions.deleteAll(),
-      this.items.deleteAll(),
+      this.itemsStats.deleteAll(),
+      this.unitsStats.deleteAll(),
       this.comps.deleteAll(),
       this.compDetails.deleteAll(),
+      this.lookups.deleteAll(),
+      this.unitItemsProcessed.deleteAll(),
     ])
   }
 }

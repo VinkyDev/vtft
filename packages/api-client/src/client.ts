@@ -1,5 +1,5 @@
 import type { AxiosError, AxiosInstance } from 'axios'
-import type { ApiResponse } from 'types'
+import type { ApiResponse } from './types'
 import axios from 'axios'
 
 /**

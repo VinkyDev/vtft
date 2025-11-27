@@ -1,12 +1,14 @@
-import type { ChampionMeta } from 'types'
-import { memo } from 'react'
-import { Popover, PopoverContent, PopoverTrigger, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
-import { Champion } from '@/components'
+import type { UnitStat } from 'types'
+import { find } from 'lodash-es'
+import { memo, useEffect, useMemo } from 'react'
+import { Popover, PopoverContent, PopoverTrigger } from 'ui'
+import { Champion, Item, Trait } from '@/components'
+import { useGlobalStore } from '@/store/globalStore'
 import { ChampionStats } from './ChampionStats'
 
-interface ChampionDetailPopoverProps {
+interface UnitDetailPopoverProps {
   /** 英雄数据 */
-  champion: ChampionMeta
+  unit: UnitStat
   /** 触发器元素 */
   children: React.ReactNode
 }
@@ -15,7 +17,16 @@ interface ChampionDetailPopoverProps {
  * 英雄详情弹窗组件
  * 显示英雄的完整信息，包括费用、羁绊、统计数据等
  */
-export const ChampionDetailPopover = memo(({ champion, children }: ChampionDetailPopoverProps) => {
+export const UnitDetailPopover = memo(({ unit, children }: UnitDetailPopoverProps) => {
+  const { lookups, unitItemsIndex, loadUnitItems } = useGlobalStore()
+
+  useEffect(() => {
+    if (!unitItemsIndex || Object.keys(unitItemsIndex).length === 0)
+      loadUnitItems()
+  }, [unitItemsIndex, loadUnitItems])
+
+  const unitItem = useMemo(() => unitItemsIndex.unitsById?.[unit.unit], [unit.unit, unitItemsIndex])
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -28,55 +39,61 @@ export const ChampionDetailPopover = memo(({ champion, children }: ChampionDetai
       >
         <div className="flex flex-col items-center space-y-1.5">
 
-          <div className="relative mx-auto mb-1 overflow-hidden rounded border border-white/10 bg-black/20">
-            <Champion className="!size-10" championName={champion.name} showTooltip={false} />
-          </div>
-          <h3 className="font-medium text-[10px] text-white truncate">
-            {champion.name}
-          </h3>
+          <Champion
+            className="size-8"
+            id={unit.unit}
+            wrapperClassName="flex-col gap-1 w-full"
+            renderExtra={innerChampion => (
+              <>
+                <h3 className="font-medium text-[10px] text-white truncate">
+                  {innerChampion.name}
+                </h3>
 
-          {/* 羁绊信息 */}
-          {champion.traits && champion.traits.length > 0 && (
-            <div className="border-t border-white/10">
-              <div className="flex flex-wrap justify-center gap-0.5">
-                {champion.traits.map(trait => (
-                  <Tooltip key={trait.name}>
-                    <TooltipTrigger asChild>
-                      <div className="size-5 overflow-hidden rounded border border-white/10 bg-black/20">
-                        <img
-                          src={trait.icon}
-                          alt={trait.name}
-                          className="size-full object-cover"
-                          loading="lazy"
-                          draggable={false}
+                {innerChampion.traits && innerChampion.traits.length > 0 && (
+                  <div className="border-t border-white/10">
+                    <div className="flex flex-wrap justify-center gap-0.5">
+                      {innerChampion.traits.map(trait => (
+                        <Trait
+                          key={trait}
+                          id={find(lookups?.traits, { name: trait })?.apiName || ''}
+                          className="size-2"
                         />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="top"
-                      className="bg-black/90 text-white text-xs px-2 py-1 border border-white/10"
-                    >
-                      {trait.name}
-                    </TooltipContent>
-                  </Tooltip>
-                ))}
-              </div>
-            </div>
-          )}
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-          {/* 数据统计 */}
-          <div className="w-[90%] border-t border-white/10">
-            <ChampionStats
-              avgPlace={champion.avgPlace}
-              top4Rate={champion.top4Rate}
-              firstPlaceRate={champion.firstPlaceRate}
-              matches={champion.matches}
-            />
-          </div>
+                <div className="w-[90%] border-t border-white/10">
+                  <ChampionStats
+                    avgPlace={unit.avg}
+                    top4Rate={unit.top4Rate}
+                    firstPlaceRate={unit.firstRate}
+                    matches={unit.pickRate}
+                  />
+                </div>
+
+                {unitItem?.items && unitItem.items.length > 0 && (
+                  <div className="border-t border-white/10 pt-1.5">
+                    <div className="flex justify-center gap-0.5">
+                      {unitItem.items.slice(0, 5).map(item => (
+                        item.itemName && (
+                          <Item
+                            key={item.itemName}
+                            id={item.itemName}
+                            className="size-5"
+                          />
+                        )
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          />
         </div>
       </PopoverContent>
     </Popover>
   )
 })
 
-ChampionDetailPopover.displayName = 'ChampionDetailPopover'
+UnitDetailPopover.displayName = 'UnitDetailPopover'

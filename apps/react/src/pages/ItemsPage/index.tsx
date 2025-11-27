@@ -1,30 +1,55 @@
-import type { ItemCategory, ItemMeta } from 'types'
-import type { SortField } from './helper'
 import type { FilterGroup } from '@/components'
+import type { ItemCategory } from '@/utils/items'
+import { useMount } from 'ahooks'
+import { getItems } from 'api-client'
 import { useMemo, useState } from 'react'
-import { ScrollArea } from 'ui'
+import { useRequest } from 'react-helper'
+import { ScrollArea } from 'ui/components'
 import { DataSkeleton, EmptyState, FilterBar } from '@/components'
-import { useGameDataStore } from '@/store/dataStore'
+import { useGlobalStore } from '@/store/globalStore'
+import { compositeSortItems } from '@/utils/compositeSort'
+import { getItemCategory } from '@/utils/items'
 import { ItemCard } from './components'
-import { sortItems } from './helper'
+
+type SortField = 'composite' | 'matches' | 'avgPlace'
 
 function ItemsPage() {
+  const season = useGlobalStore(s => s.curSeason)
+  const { data: items, loading } = useRequest(
+    async () => {
+      const { data } = await getItems({ season })
+      return data
+    },
+    {
+      cacheKey: `items:${season}`,
+      staleTime: 60_000,
+    },
+  )
+
+  const { loadUnitItems } = useGlobalStore()
+  useMount(loadUnitItems)
+
+  const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)
   const [category, setCategory] = useState<ItemCategory>('core')
   const [sortField, setSortField] = useState<SortField>('composite')
 
-  const { items, itemsLoading: loading } = useGameDataStore()
-
-  const filteredItems = useMemo<ItemMeta[]>(() => {
-    if (!items.length)
+  const filteredItems = useMemo(() => {
+    if (!items)
       return []
+    return items.filter(i => getItemCategory(i.itemName, itemsById) === category)
+  }, [items, category, itemsById])
 
-    let filtered = items
-    if (category !== 'all') {
-      filtered = filtered.filter(item => item.category === category)
+  const sortedItems = useMemo(() => {
+    if (!filteredItems)
+      return []
+    if (sortField === 'composite') {
+      return compositeSortItems(filteredItems).map(({ compositeScore, ...rest }) => rest)
     }
-
-    return sortItems(filtered, sortField)
-  }, [items, category, sortField])
+    if (sortField === 'matches') {
+      return [...filteredItems].sort((a, b) => (b.pickRate ?? 0) - (a.pickRate ?? 0))
+    }
+    return [...filteredItems].sort((a, b) => (a.avg ?? Number.POSITIVE_INFINITY) - (b.avg ?? Number.POSITIVE_INFINITY))
+  }, [filteredItems, sortField])
 
   const filterGroups: FilterGroup[] = [
     {
@@ -59,7 +84,7 @@ function ItemsPage() {
         <div className="pb-2">
           <DataSkeleton
             loading={loading}
-            isEmpty={filteredItems.length === 0}
+            isEmpty={sortedItems.length === 0}
             empty={<EmptyState message="暂无装备数据" />}
           >
             <div
@@ -68,8 +93,8 @@ function ItemsPage() {
                 gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
               }}
             >
-              {filteredItems.map(item => (
-                <ItemCard key={`${item.rank}-${item.name}`} item={item} />
+              {sortedItems.map(item => (
+                <ItemCard key={item.itemName} item={item} />
               ))}
             </div>
           </DataSkeleton>

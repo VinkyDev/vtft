@@ -1,4 +1,4 @@
-import { Settings } from 'lucide-react'
+import { Check, Settings } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,30 +6,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Switch,
 } from 'ui'
-import { useConfigStore } from '@/store/configStore'
+import { useGlobalStore } from '@/store/globalStore'
 
 export function SettingsMenu() {
-  const { tooltipConfig, setTooltipConfig } = useConfigStore()
-
-  const handleChampionTooltipChange = (checked: boolean) => {
-    setTooltipConfig({ championTooltip: checked })
-  }
-
-  const handleItemTooltipChange = (checked: boolean) => {
-    setTooltipConfig({ itemTooltip: checked })
-  }
-
-  const handleTraitTooltipChange = (checked: boolean) => {
-    setTooltipConfig({ traitTooltip: checked })
-  }
-
-  const handleSwitchClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
+  const seasons = useGlobalStore(s => s.seasons)
+  const curSeason = useGlobalStore(s => s.curSeason)
+  const setSeason = useGlobalStore(s => s.setSeason)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -46,51 +29,26 @@ export function SettingsMenu() {
         onCloseAutoFocus={e => e.preventDefault()}
       >
         <DropdownMenuLabel className="px-2 py-1.5 text-sm font-medium text-gray-200">
-          显示设置
+          设置
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-white/10" />
 
-        <DropdownMenuItem
-          className="flex items-center justify-between px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 focus:bg-white/5 focus:text-white transition-colors"
-          onSelect={e => e.preventDefault()}
-        >
-          <span>英雄名称悬浮提示</span>
-          <div onClick={handleSwitchClick}>
-            <Switch
-              checked={tooltipConfig.championTooltip}
-              onCheckedChange={handleChampionTooltipChange}
-              className="data-[state=checked]:bg-blue-500"
-            />
-          </div>
-        </DropdownMenuItem>
+        <DropdownMenuLabel className="px-2 py-1.5 text-xs text-gray-400">
+          赛季
+        </DropdownMenuLabel>
+        {seasons.map(({ season }) => (
+          <DropdownMenuItem
+            key={season}
+            className="flex items-center justify-between px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 focus:bg-white/5 focus:text-white transition-colors"
+            onSelect={() => setSeason(season)}
+          >
+            <span className="truncate">{season}</span>
+            {curSeason === season && (
+              <Check className="h-4 w-4 text-gray-400" />
+            )}
+          </DropdownMenuItem>
+        ))}
 
-        <DropdownMenuItem
-          className="flex items-center justify-between px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 focus:bg-white/5 focus:text-white transition-colors"
-          onSelect={e => e.preventDefault()}
-        >
-          <span>装备名称悬浮提示</span>
-          <div onClick={handleSwitchClick}>
-            <Switch
-              checked={tooltipConfig.itemTooltip}
-              onCheckedChange={handleItemTooltipChange}
-              className="data-[state=checked]:bg-blue-500"
-            />
-          </div>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className="flex items-center justify-between px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 focus:bg-white/5 focus:text-white transition-colors"
-          onSelect={e => e.preventDefault()}
-        >
-          <span>羁绊名称悬浮提示</span>
-          <div onClick={handleSwitchClick}>
-            <Switch
-              checked={tooltipConfig.traitTooltip}
-              onCheckedChange={handleTraitTooltipChange}
-              className="data-[state=checked]:bg-blue-500"
-            />
-          </div>
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

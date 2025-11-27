@@ -1,13 +1,15 @@
-import type { AugmentMeta } from 'types'
-import { find } from 'lodash-es'
-import { memo, useMemo } from 'react'
-import { useGameDataStore } from '@/store/dataStore'
+import type { ReactNode } from 'react'
+import type { AugmentClass } from 'types'
+import { memo } from 'react'
+import { cn } from 'utils'
+import { useGlobalStore } from '@/store/globalStore'
+import { getLevelFromIcon } from '@/utils/getter'
 import { getAugmentLevelColor, getAugmentSizeClasses } from '@/utils/styles'
 import { WithTooltip } from '../common/WithTooltip'
 
 interface AugmentProps {
   /** 符文名称 */
-  augmentName: string
+  id: string
   /** 尺寸大小 */
   size?: 'tiny' | 'small' | 'medium' | 'large'
   /** 是否显示工具提示 */
@@ -15,54 +17,54 @@ interface AugmentProps {
   /** 额外的样式类 */
   className?: string
   /** 点击回调 */
-  onClick?: (augment: AugmentMeta) => void
+  onClick?: (augment: AugmentClass) => void
+  /** 包装类 */
+  wrapperClassName?: string
+  /** 额外的渲染内容 */
+  renderExtra?: (unit: AugmentClass) => ReactNode
+}
+
+function getIcon(icon?: string) {
+  if (!icon) {
+    return ''
+  }
+
+  const iconName = icon.match(/([^/]+?)(?:\.TFT_Set\d+)?\.tex$/)?.[1] ?? ''
+
+  return `https://cdn.metatft.com/cdn-cgi/image/width=46,height=46,format=auto/https://cdn.metatft.com/file/metatft/augments/${iconName.toLowerCase()}.png`
 }
 
 export const Augment = memo(({
-  augmentName,
+  id,
   size = 'medium',
   showTooltip = true,
   className = '',
+  wrapperClassName = '',
   onClick,
+  renderExtra,
 }: AugmentProps) => {
-  const { augments } = useGameDataStore()
+  const { lookupsIndex } = useGlobalStore()
 
-  const augment = useMemo(() => {
-    return find(augments, aug => aug.name === augmentName)
-  }, [augments, augmentName])
+  const augment = lookupsIndex.augmentsById[id]
 
   if (!augment) {
-    const sizeClasses = getAugmentSizeClasses(size)
-    return (
-      <div className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 border-gray-500 bg-black/40 ${className}`}>
-        <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-[6px] text-white/50">?</span>
-        </div>
-      </div>
-    )
+    return null
   }
 
-  const levelColors = getAugmentLevelColor(augment.level)
+  const levelColors = getAugmentLevelColor(getLevelFromIcon(augment?.icon))
   const sizeClasses = getAugmentSizeClasses(size)
 
   const augmentElement = (
     <div
-      className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 ${levelColors.border} bg-black/40 transition-all cursor-pointer ${className}`}
+      className={`relative ${sizeClasses.container} overflow-hidden rounded border-1 ${levelColors.border} bg-black/40 transition-all cursor-pointer ${className}`}
       onClick={() => onClick?.(augment)}
     >
-      {augment.icon
-        ? (
-            <img
-              src={augment.icon}
-              alt={augment.name}
-              className="h-full w-full object-cover"
-              draggable={false}
-            />
-          )
-        : (
-            <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
-          )}
+      <img
+        src={getIcon(augment.icon)}
+        alt={augment.name}
+        className="h-full w-full object-cover"
+        draggable={false}
+      />
     </div>
   )
 
@@ -72,16 +74,15 @@ export const Augment = memo(({
       content={(
         <div className="space-y-1">
           <div className="font-semibold">
-            {augment.tier}
-            {' '}
-            ·
-            {' '}
             {augment.name}
           </div>
         </div>
       )}
     >
-      {augmentElement}
+      <div className={cn('flex items-center justify-center w-full', wrapperClassName)}>
+        {augmentElement}
+        {renderExtra?.(augment)}
+      </div>
     </WithTooltip>
   )
 })

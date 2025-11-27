@@ -7,17 +7,6 @@ interface ItemStatsProps {
   matches?: number
 }
 
-/** 格式化场次数字，减少显示空间 */
-function formatMatches(matches: number): string {
-  if (matches >= 100000) {
-    return `${(matches / 10000).toFixed(0)}w`
-  }
-  if (matches >= 1000) {
-    return `${(matches / 1000).toFixed(0)}k`
-  }
-  return matches.toString()
-}
-
 /**
  * 装备数据指标组件
  */
@@ -50,8 +39,11 @@ export const ItemStats = memo(({ avgPlace, top4Rate, firstPlaceRate, matches }: 
       )}
       {matches !== undefined && (
         <div className="flex items-center justify-between">
-          <span className="text-gray-400">场次</span>
-          <span className="font-medium text-gray-300">{formatMatches(matches)}</span>
+          <span className="text-gray-400">登场</span>
+          <span className="font-medium text-gray-300">
+            {matches.toFixed(0)}
+            %
+          </span>
         </div>
       )}
     </div>

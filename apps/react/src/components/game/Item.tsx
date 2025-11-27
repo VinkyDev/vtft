@@ -1,96 +1,69 @@
-import type { ItemMeta } from 'types'
-import { find } from 'lodash-es'
+import type { ReactNode } from 'react'
+import type { Item as ItemMeta } from 'types'
 import { memo, useMemo } from 'react'
-import { useConfigStore } from '@/store/configStore'
-import { useGameDataStore } from '@/store/dataStore'
-import { getItemSizeClasses, getItemVariantClasses } from '@/utils/styles'
+import { cn } from 'utils'
+import { useGlobalStore } from '@/store/globalStore'
 import { WithTooltip } from '../common/WithTooltip'
 
 interface ItemProps {
-  /** 装备名称（使用 itemName 时会从 store 查找装备数据） */
-  itemName?: string
-  /** 直接传入装备数据（优先级高于 itemName，用于简化场景） */
-  item?: ItemMeta
-  /** 尺寸大小 */
-  size?: 'tiny' | 'small' | 'medium' | 'large' | 'xl'
-  /** 样式变体 */
-  variant?: 'default' | 'card' | 'recipe'
+  id: string
   /** 是否显示工具提示 */
   showTooltip?: boolean
-  /** 额外的样式类 */
+  /** 样式类 */
   className?: string
+  /** 包装类 */
+  wrapperClassName?: string
   /** 点击回调 */
   onClick?: (item: ItemMeta) => void
+  /** 额外的渲染内容 */
+  renderExtra?: (item: ItemMeta) => ReactNode
 }
 
+const getIcon = (apiName: string) => `https://cdn.metatft.com/cdn-cgi/image/width=48,height=48,format=auto/https://cdn.metatft.com/file/metatft/items/${apiName.toLowerCase()}.png`
+
 export const Item = memo(({
-  itemName,
-  size = 'medium',
-  variant = 'default',
+  id,
   showTooltip = true,
   className = '',
+  wrapperClassName = '',
+  renderExtra,
   onClick,
 }: ItemProps) => {
-  const { items } = useGameDataStore()
-  const { tooltipConfig } = useConfigStore()
-
-  // 优先使用直接传入的 item，否则从 store 查找
-  const item = useMemo(() => {
-    if (itemName) {
-      return find(items, it => it.name === itemName)
-    }
-    return undefined
-  }, [items, itemName])
+  const { lookupsIndex } = useGlobalStore()
+  const item = useMemo(() => lookupsIndex.itemsById[id], [lookupsIndex, id])
 
   if (!item) {
-    const sizeClasses = getItemSizeClasses(size)
-    const variantClasses = getItemVariantClasses(variant)
-    return (
-      <div className={`${sizeClasses} ${variantClasses} ${className}`}>
-        <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700 rounded" />
-      </div>
-    )
+    return <>{id}</>
   }
-
-  const sizeClasses = getItemSizeClasses(size)
-  const variantClasses = getItemVariantClasses(variant)
-
-  // 检查是否应该显示工具提示
-  const shouldShowTooltip = showTooltip && tooltipConfig.itemTooltip
 
   const itemElement = (
     <div
-      className={`${sizeClasses} ${variantClasses} object-cover transition-all hover:shadow-lg cursor-pointer shrink-0 ${className}`}
-      onClick={() => onClick?.(item)}
+      className={cn('object-cover rounded-xs border-[0.6px] border-gray-600 bg-black/60', className)}
     >
-      {item.icon
-        ? (
-            <img
-              src={item.icon}
-              alt={item.name}
-              className="h-full w-full object-cover rounded"
-              loading="lazy"
-              draggable={false}
-            />
-          )
-        : (
-            <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700 rounded" />
-          )}
+      <img
+        src={getIcon(id)}
+        className="h-full w-full object-cover rounded"
+        loading="lazy"
+        draggable={false}
+      />
     </div>
   )
 
   return (
-    <WithTooltip
-      show={shouldShowTooltip}
-      side="bottom"
-      content={(
-        <div className="space-y-1 text-xs">
-          <span className="font-semibold">{item.name}</span>
-        </div>
-      )}
-    >
-      {itemElement}
-    </WithTooltip>
+    <div className={cn('flex relative items-center justify-center w-full', wrapperClassName)} onClick={() => onClick?.(item)}>
+      <WithTooltip
+        show={showTooltip}
+        side="bottom"
+        content={(
+          <div className="space-y-1 text-xs">
+            <span className="font-semibold">{item.name}</span>
+          </div>
+        )}
+      >
+        {itemElement}
+      </WithTooltip>
+      {renderExtra?.(item)}
+    </div>
   )
 })
 

@@ -1,119 +1,53 @@
-import type { ItemCategory, RecommendedItem } from 'types'
+import type { CompItem } from 'types'
 import type { FilterGroup } from '@/components'
+import type { ItemCategory } from '@/utils/items'
 import { memo, useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
 import { Champion, EmptyState, FilterBar } from '@/components'
-import { useGameDataStore } from '@/store/dataStore'
-import { rankItems } from '@/utils/ranking'
+import { useGlobalStore } from '@/store/globalStore'
+import { compositeSortCompItems } from '@/utils/compositeSort'
+import { getItemCategory } from '@/utils/items'
 import { ItemCard } from './ItemCard'
 
 interface ItemsGridProps {
-  items: RecommendedItem[]
+  items: CompItem[]
 }
-
-type SortField = 'composite' | 'game' | 'avgRank'
 
 /**
  * 装备列表组件
  * 以单列形式展示多个装备（一行一个）
  */
+type SortField = 'composite' | 'game' | 'avgRank'
+
 export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
-  const { champions, items: allItems } = useGameDataStore()
+  const { lookupsIndex } = useGlobalStore()
   const [category, setCategory] = useState<ItemCategory>('core')
   const [sortField, setSortField] = useState<SortField>('composite')
   const [selectedChampion, setSelectedChampion] = useState<string | null>(null)
 
-  // 处理英雄点击
-  const handleChampionClick = (championName: string) => {
-    setSelectedChampion(prev => prev === championName ? null : championName)
-  }
+  const filteredByCategory = useMemo(() => {
+    return items.filter(i => getItemCategory(i.itemNames, lookupsIndex.itemsById) === category)
+  }, [items, category, lookupsIndex])
 
-  // 过滤掉没有有效推荐英雄的装备
   const filteredItems = useMemo(() => {
-    return items.filter((item) => {
-      // 检查是否有推荐英雄
-      if (!item.recommendedFor || item.recommendedFor.length === 0) {
-        return false
-      }
+    if (!selectedChampion)
+      return filteredByCategory
+    return filteredByCategory.filter(i => (i.units ?? []).slice(0, 2).some(u => u.units === selectedChampion))
+  }, [filteredByCategory, selectedChampion])
 
-      // 检查推荐英雄中是否至少有一个存在于 champions store 中
-      const hasValidChampion = item.recommendedFor.some(championName =>
-        champions.some(champ => champ.name === championName),
-      )
-
-      if (!hasValidChampion) {
-        return false
-      }
-
-      // 按选中的英雄筛选：只保留该英雄在前两个推荐位置的装备
-      if (selectedChampion) {
-        const championIndex = item.recommendedFor.indexOf(selectedChampion)
-        if (championIndex === -1 || championIndex >= 2) {
-          return false
-        }
-      }
-
-      // 按类型筛选
-      if (category !== 'all') {
-        // 通过名称从 allItems 中查找完整的装备信息
-        const fullItem = allItems.find(i => i.name === item.name)
-        if (!fullItem || fullItem.category !== category) {
-          return false
-        }
-      }
-
-      return true
-    })
-  }, [items, champions, allItems, category, selectedChampion])
-
-  // 排序装备列表
   const sortedItems = useMemo(() => {
-    let sorted = [...filteredItems]
-
-    // 如果是综合排行,先计算综合得分
-    if (sortField === 'composite') {
-      // 将 RecommendedItem 转换为 RankedItem 格式
-      const rankedItems = rankItems(
-        sorted.map(item => ({
-          matches: item.matches ?? 0,
-          impact: item.avgRank !== undefined ? item.avgRank - 4.5 : 0,
-        })),
-      )
-
-      // 将综合得分附加回原数据
-      sorted = sorted.map((item, index) => ({
-        ...item,
-        compositeScore: rankedItems[index]?.compositeScore ?? 0,
-      }))
-
-      // 按综合得分降序排序
-      sorted.sort((a, b) => {
-        const aScore = (a as any).compositeScore ?? 0
-        const bScore = (b as any).compositeScore ?? 0
-        return bScore - aScore
-      })
-    }
-    else {
-      sorted.sort((a, b) => {
-        if (sortField === 'game') {
-          // 场次降序（多到少）
-          const aValue = a.matches ?? 0
-          const bValue = b.matches ?? 0
-          return bValue - aValue
-        }
-        else {
-          // avgRank 升序（小到大，排名越小越好）
-          const aValue = a.avgRank ?? Number.MAX_SAFE_INTEGER
-          const bValue = b.avgRank ?? Number.MAX_SAFE_INTEGER
-          return aValue - bValue
-        }
-      })
-    }
-
-    return sorted
+    const arr = [...filteredItems]
+    if (sortField === 'game')
+      return arr.sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+    if (sortField === 'avgRank')
+      return arr.sort((a, b) => (a.avg ?? Number.POSITIVE_INFINITY) - (b.avg ?? Number.POSITIVE_INFINITY))
+    return compositeSortCompItems(arr).map(({ compositeScore, ...rest }) => rest)
   }, [filteredItems, sortField])
 
-  // FilterBar 配置
+  const handleChampionClick = (championName: string) => {
+    setSelectedChampion(championName)
+  }
+
   const filterGroups: FilterGroup[] = [
     {
       value: category,
@@ -146,14 +80,7 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
       {selectedChampion && (
         <div className="py-1.5 px-2 mx-1 my-1 bg-blue-500/5 rounded-lg border border-blue-500/20 flex items-center gap-2">
           <span className="text-blue-300 text-xs">筛选英雄:</span>
-          <Champion
-            championName={selectedChampion}
-            size="tiny"
-            showPriority={false}
-            showTooltip={true}
-            className="w-4! h-4!"
-          />
-          <span className="text-white text-xs font-medium flex-1">{selectedChampion}</span>
+          <Champion id={selectedChampion} showTooltip={true} className="size-4" renderExtra={data => <span className="ml-2 text-white text-xs font-medium flex-1">{data.name}</span>} />
           <button
             type="button"
             onClick={() => setSelectedChampion(null)}
@@ -174,7 +101,7 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
               <div className="flex flex-col gap-1.5 p-1">
                 {sortedItems.map(item => (
                   <ItemCard
-                    key={`${item.name}`}
+                    key={`${item.itemNames}`}
                     item={item}
                     onChampionClick={handleChampionClick}
                   />

@@ -1,5 +1,5 @@
 import type { BulkWriteResult, Collection, DeleteResult, UpdateResult, WithId } from 'mongodb'
-import type { CompData, CompDetails } from 'types'
+import type { CompDetail } from 'types'
 import type { MongoDBManager } from '../client'
 import type { CompDetailDocument } from '../models/compDetail'
 import { COLLECTION_NAME } from '../models/compDetail'
@@ -16,24 +16,13 @@ export class CompDetailRepository {
   async createIndexes(): Promise<void> {
     const collection = this.getCollection()
     await collection.createIndex({ compId: 1 }, { unique: true })
+    await collection.createIndex({ queue: 1 })
     await collection.createIndex({ updatedAt: -1 })
   }
 
-  /** 生成阵容 ID */
-  private generateCompId(comp: CompData): string {
-    return `${comp.name}_${comp.champions.length}_${comp.rank}`
-      .toLowerCase()
-      .replace(/\s+/g, '_')
-  }
-
   /** 插入或更新阵容详情 */
-  async upsert(comp: CompData): Promise<UpdateResult<CompDetailDocument> | null> {
-    if (!comp.details) {
-      return null
-    }
-
+  async upsert(compId: string, details: CompDetail, queue: string): Promise<UpdateResult<CompDetailDocument> | null> {
     const collection = this.getCollection()
-    const compId = this.generateCompId(comp)
     const now = new Date()
 
     return await collection.updateOne(
@@ -41,7 +30,8 @@ export class CompDetailRepository {
       {
         $set: {
           compId,
-          details: comp.details,
+          queue,
+          details,
           updatedAt: now,
         },
         $setOnInsert: {
@@ -53,32 +43,20 @@ export class CompDetailRepository {
   }
 
   /** 批量插入或更新阵容详情 */
-  async upsertMany(comps: CompData[]): Promise<BulkWriteResult | undefined> {
+  async upsertMany(detailsList: Array<{ compId: string, details: CompDetail, queue: string }>): Promise<BulkWriteResult | undefined> {
     const collection = this.getCollection()
     const now = new Date()
 
-    const operations = comps
-      .filter(comp => comp.details)
-      .map((comp) => {
-        const compId = this.generateCompId(comp)
-
-        return {
-          updateOne: {
-            filter: { compId },
-            update: {
-              $set: {
-                compId,
-                details: comp.details,
-                updatedAt: now,
-              },
-              $setOnInsert: {
-                createdAt: now,
-              },
-            },
-            upsert: true,
-          },
-        }
-      })
+    const operations = detailsList.map(({ compId, details, queue }) => ({
+      updateOne: {
+        filter: { compId },
+        update: {
+          $set: { compId, queue, details, updatedAt: now },
+          $setOnInsert: { createdAt: now },
+        },
+        upsert: true,
+      },
+    }))
 
     if (operations.length > 0) {
       return await collection.bulkWrite(operations)
@@ -91,7 +69,7 @@ export class CompDetailRepository {
   }
 
   /** 获取详情内容 */
-  async getDetails(compId: string): Promise<CompDetails | null> {
+  async getDetails(compId: string): Promise<CompDetail | null> {
     const doc = await this.findByCompId(compId)
     return doc?.details || null
   }
@@ -99,5 +77,10 @@ export class CompDetailRepository {
   /** 删除所有数据 */
   async deleteAll(): Promise<DeleteResult> {
     return await this.getCollection().deleteMany({})
+  }
+
+  async deleteOlderThan(days: number): Promise<DeleteResult> {
+    const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+    return await this.getCollection().deleteMany({ updatedAt: { $lt: cutoff } })
   }
 }

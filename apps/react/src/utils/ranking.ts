@@ -48,21 +48,17 @@ const SHRINKAGE_STRENGTH = 1.0
  */
 const SAMPLE_RATIO_STRENGTH = 1.0
 
+const MANDATORY_BLEND_STRENGTH = 0.6
+const NECESSITY_THRESHOLD = 0.8
+const NECESSITY_POWER = 0.7
+
 // ====================================================
-/**
- * 全局统计量
- */
 interface GlobalStats {
-  /** 全局先验均值 mean(-impact) */
   mu0: number
-  /** 场次中位数 */
-  medianMatches: number
-  /** 场次75分位数 */
-  p75Matches: number
-  /** 场次90分位数 */
-  p90Matches: number
-  /** 场次的ECDF函数 (经验累积分布函数) */
-  ecdf: (n: number) => number
+  medianPickRate: number
+  p75PickRate: number
+  p90PickRate: number
+  ecdf: (r: number) => number
 }
 
 /**
@@ -82,36 +78,23 @@ function percentile(sorted: number[], p: number): number {
   return (sorted[lower] ?? 0) * (1 - weight) + (sorted[upper] ?? 0) * weight
 }
 
-/**
- * 构建优化的ECDF函数 (使用二分查找，对数尺度)
- * @param matches 所有场次数组
- * @returns ECDF函数
- */
-function buildECDF(matches: number[]): (n: number) => number {
-  // 对场次取对数，缓解长尾分布
-  const logMatches = matches.map(m => Math.log10(m + 1)).sort((a, b) => a - b)
-  const totalCount = logMatches.length
+function buildECDF(values: number[]): (x: number) => number {
+  const sorted = values.slice().sort((a, b) => a - b)
+  const total = sorted.length
 
-  return (n: number) => {
-    const logN = Math.log10(n + 1)
+  return (x: number) => {
+    let l = 0
+    let r = sorted.length
 
-    // 二分查找
-    let left = 0
-    let right = logMatches.length
-
-    while (left < right) {
-      const mid = Math.floor((left + right) / 2)
-      const midLogMatches = logMatches[mid] ?? 0
-
-      if (midLogMatches <= logN) {
-        left = mid + 1
-      }
-      else {
-        right = mid
-      }
+    while (l < r) {
+      const m = Math.floor((l + r) / 2)
+      const mv = sorted[m] ?? 0
+      if (mv <= x)
+        l = m + 1
+      else r = m
     }
 
-    return left / totalCount
+    return total === 0 ? 0 : l / total
   }
 }
 
@@ -121,20 +104,20 @@ function buildECDF(matches: number[]): (n: number) => number {
  * @returns 全局统计量
  */
 function calculateGlobalStats(
-  items: Array<{ matches?: number, avgPlace?: number, avgRank?: number }>,
+  items: Array<{ pickRate?: number, avgPlace?: number, avgRank?: number }>,
 ): GlobalStats {
   // 过滤掉没有必要数据的项
   const validItems = items.filter(
-    item => (item.matches !== undefined && item.matches > 0)
+    item => (item.pickRate !== undefined && item.pickRate > 0)
       && (item.avgPlace !== undefined || item.avgRank !== undefined),
   )
 
   if (validItems.length === 0) {
     return {
       mu0: 0,
-      medianMatches: 100,
-      p75Matches: 200,
-      p90Matches: 500,
+      medianPickRate: 50,
+      p75PickRate: 75,
+      p90PickRate: 90,
       ecdf: () => 0.5,
     }
   }
@@ -146,63 +129,59 @@ function calculateGlobalStats(
   })
   const mu0 = impacts.reduce((sum, val) => sum + val, 0) / impacts.length
 
-  // 2. 提取所有场次并排序
-  const allMatches = validItems
-    .map(item => item.matches!)
+  // 2. 提取所有 pickRate 并排序
+  const allPickRates = validItems
+    .map(item => item.pickRate!)
     .sort((a, b) => a - b)
 
   // 3. 计算分位数
-  const medianMatches = percentile(allMatches, 50)
-  const p75Matches = percentile(allMatches, 75)
-  const p90Matches = percentile(allMatches, 90)
+  const medianPickRate = percentile(allPickRates, 50)
+  const p75PickRate = percentile(allPickRates, 75)
+  const p90PickRate = percentile(allPickRates, 90)
 
   // 4. 构建ECDF函数 (优化版)
-  const ecdf = buildECDF(allMatches)
+  const ecdf = buildECDF(allPickRates)
 
-  return { mu0, medianMatches, p75Matches, p90Matches, ecdf }
+  return { mu0, medianPickRate, p75PickRate, p90PickRate, ecdf }
 }
 
 /**
  * 计算综合得分
- * @param matches 场次数
+ * @param pickRate 装备/英雄的 pickRate
  * @param avgRank 平均排名 (或 avgPlace)
  * @param globalStats 全局统计量
  * @returns 综合得分 (0-100+)
  */
 function calculateCompositeScore(
-  matches: number,
+  pickRate: number,
   avgRank: number,
   globalStats: GlobalStats,
-
 ): number {
-  const n = matches
-  const { mu0, medianMatches, ecdf } = globalStats
+  const r = pickRate
+  const { mu0, medianPickRate, ecdf } = globalStats
 
   // 1. 基础效用转换
   const impact = avgRank - 4.5
   const uRaw = -impact
 
   // 2. 贝叶斯收缩 (k = medianMatches × SHRINKAGE_STRENGTH)
-  const k = Math.max(1, medianMatches * SHRINKAGE_STRENGTH)
-  const uShrink = (k * mu0 + n * uRaw) / (k + n)
+  const k = Math.max(1, medianPickRate * SHRINKAGE_STRENGTH)
+  const uShrink = (k * mu0 + r * uRaw) / (k + r)
 
-  // 3. 质量得分 (0-100)
-  const qualityScore = Math.max(0, Math.min(100, 50 + uShrink * 25))
-
-  // 4. 置信度系数 (分别对ECDF和样本比使用幂次调整)
-  const confEcdf = ecdf(n)
-  const kConf = Math.max(1, medianMatches * SAMPLE_RATIO_STRENGTH / 2)
-  const confCount = n / (n + kConf)
-
-  // 分别调整ECDF和Count的权重
+  const confEcdf = ecdf(r)
+  const kConf = Math.max(1, medianPickRate * SAMPLE_RATIO_STRENGTH / 2)
+  const confCount = r / (r + kConf)
   const adjustedEcdf = confEcdf ** CONFIDENCE_ECDF_POWER
   const adjustedCount = confCount ** CONFIDENCE_COUNT_POWER
   const confidence = adjustedEcdf * adjustedCount
 
-  // 5. 流行度加成 (ECDF × cap)
-  const popBonus = POPULARITY_CAP * confEcdf
+  const necessityRaw = Math.max(0, (confEcdf - NECESSITY_THRESHOLD) / (1 - NECESSITY_THRESHOLD))
+  const necessity = necessityRaw ** NECESSITY_POWER
+  const necessityWeight = necessity * adjustedCount
+  const uAdjusted = (1 - necessityWeight * MANDATORY_BLEND_STRENGTH) * uShrink + necessityWeight * MANDATORY_BLEND_STRENGTH * mu0
 
-  // 6. 综合得分
+  const qualityScore = Math.max(0, Math.min(100, 50 + uAdjusted * 25))
+  const popBonus = POPULARITY_CAP * confEcdf
   const composite = qualityScore * confidence + popBonus
 
   return composite
@@ -213,13 +192,13 @@ function calculateCompositeScore(
  * @param items 数据项数组
  * @returns 带有综合得分的数据项数组
  */
-export function rankItems<T extends { matches: number, impact: number }>(
+export function rankItems<T extends { pickRate: number, impact: number }>(
   items: T[],
 ): (T & { compositeScore: number })[] {
   // 计算全局统计量
   const globalStats = calculateGlobalStats(
     items.map(item => ({
-      matches: item.matches,
+      pickRate: item.pickRate,
       avgRank: item.impact + 4.5,
     })),
   )
@@ -228,7 +207,7 @@ export function rankItems<T extends { matches: number, impact: number }>(
   return items.map((item) => {
     const avgRank = item.impact + 4.5
     const compositeScore = calculateCompositeScore(
-      item.matches,
+      item.pickRate,
       avgRank,
       globalStats,
     )

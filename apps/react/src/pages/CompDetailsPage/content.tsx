@@ -4,14 +4,12 @@ import { useMemo, useState } from 'react'
 import { useRequest } from 'react-helper'
 import {
   AppTabs,
-  AugmentsGridSkeleton,
-  ChampionEnhancementsGridSkeleton,
   EmptyState,
   FormationBoardSkeleton,
   ItemsGridSkeleton,
 } from '@/components'
-import { useConfigStore } from '@/store/dataStore'
-import { AugmentsGrid, ChampionEnhancementsGrid, FormationBoard, ItemsGrid } from './components'
+import { useConfigStore } from '@/store/configStore'
+import { FormationBoard, ItemsGrid } from './components'
 
 interface CompDetailContentProps {
   comp: EnhancedCompData | null
@@ -45,16 +43,6 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
       label: '装备',
       content: <ItemsGridSkeleton />,
     },
-    {
-      value: 'augments',
-      label: '符文',
-      content: <AugmentsGridSkeleton />,
-    },
-    {
-      value: 'championEnhancements',
-      label: '果实',
-      content: <ChampionEnhancementsGridSkeleton />,
-    },
   ], [])
 
   const tabs = useMemo(() => {
@@ -65,9 +53,9 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
       {
         value: 'overview',
         label: '概览',
-        content: compDetails.data.formation
+        content: compDetails.data
           ? (
-              <FormationBoard formation={compDetails.data.formation} traits={comp?.traits} />
+              <FormationBoard data={compDetails.data} builds={comp?.builds} traits={comp?.traits} />
             )
           : (
               <EmptyState message="暂无阵容信息" />
@@ -76,38 +64,16 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
       {
         value: 'items',
         label: '装备',
-        content: compDetails.data.items && compDetails.data.items.length > 0
+        content: compDetails.data.item && compDetails.data.item.length > 0
           ? (
-              <ItemsGrid items={compDetails.data.items} />
+              <ItemsGrid items={compDetails.data.item} />
             )
           : (
               <EmptyState message="暂无装备信息" />
             ),
       },
-      {
-        value: 'augments',
-        label: '符文',
-        content: compDetails.data.augments && compDetails.data.augments.length > 0
-          ? (
-              <AugmentsGrid augments={compDetails.data.augments} />
-            )
-          : (
-              <EmptyState message="暂无符文信息" />
-            ),
-      },
-      {
-        value: 'championEnhancements',
-        label: '果实',
-        content: compDetails.data.championEnhancements && compDetails.data.championEnhancements.length > 0
-          ? (
-              <ChampionEnhancementsGrid championEnhancements={compDetails.data.championEnhancements} />
-            )
-          : (
-              <EmptyState message="暂无果实信息" />
-            ),
-      },
     ]
-  }, [compDetails, comp?.traits])
+  }, [compDetails, comp])
 
   return (
     <div className={`flex-1 overflow-hidden ${windowMode === 'floating' ? 'pointer-events-none' : ''}`}>

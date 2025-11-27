@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.49.1-noble
+FROM node:22-bookworm-slim
 
 RUN npm install -g pnpm@10
 

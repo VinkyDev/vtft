@@ -1,7 +1,9 @@
 import type { EnhancedCompData } from '@/utils/compRating'
+import { find } from 'lodash-es'
 import { memo } from 'react'
 import { Badge } from 'ui'
 import { Champion, Trait } from '@/components'
+import { useGlobalStore } from '@/store/globalStore'
 import { CompStats } from './CompStats'
 import { TierBadge } from './TierBadge'
 
@@ -11,6 +13,7 @@ interface CompCardProps {
 }
 
 export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
+  const { lookupsIndex } = useGlobalStore()
   const handleClick = () => {
     if (onClick) {
       onClick(comp)
@@ -23,23 +26,28 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
       onClick={handleClick}
     >
       <div className="flex items-start gap-2.5">
-        {/* 左侧: 评级徽章 */}
         <div className="flex flex-col items-center gap-1 pt-0.5">
           <TierBadge tier={comp.calculatedTier} />
         </div>
 
-        {/* 中间: 阵容信息 */}
         <div className="min-w-0 flex-1 space-y-1.5">
-          {/* 阵容名称和标签 */}
           <div className="flex items-center gap-1.5">
             <h3 className="truncate text-sm font-semibold text-white">
-              {comp.name}
+              {Array.isArray(comp.name) && comp.name.length > 0
+                ? comp.name
+                    .map((n) => {
+                      if (!n?.name)
+                        return null
+                      if (n.type === 'unit')
+                        return lookupsIndex.unitsById[n.name]?.name || lookupsIndex.unitsById[n.name]?.en_name || n.name
+                      if (n.type === 'trait')
+                        return lookupsIndex.traitsById[n.name]?.name || lookupsIndex.traitsById[n.name]?.en_name || n.name
+                      return n.name
+                    })
+                    .filter(Boolean)
+                    .join(' ')
+                : ''}
             </h3>
-            {comp.level && (
-              <Badge variant="outline" className="h-4 border-purple-500/30 bg-purple-500/10 px-1 text-[10px] text-purple-300">
-                {comp.level}
-              </Badge>
-            )}
             {comp.category === 'low_pickrate' && (
               <Badge variant="outline" className="h-4 border-amber-500/30 bg-amber-500/10 px-1 text-[10px] text-amber-300">
                 低出场
@@ -47,28 +55,22 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
             )}
           </div>
 
-          {/* 羁绊图标 */}
           {comp.traits && comp.traits.length > 0 && (
             <div className="flex flex-wrap gap-0.5">
               {comp.traits.map(trait => (
-                <Trait key={trait.name} trait={trait} />
+                <Trait key={trait} id={trait} />
               ))}
             </div>
           )}
 
-          {/* 英雄图标 */}
-          {comp.champions && comp.champions.length > 0 && (
-            <div className="flex flex-wrap gap-0.5">
-              {comp.champions.slice(0, 9).map(champion => (
+          {comp.units && comp.units.length > 0 && (
+            <div className="flex flex-wrap gap-x-1 gap-y-2.5">
+              {comp.units.slice(0, 9).map(unit => (
                 <Champion
-                  key={champion.name}
-                  championName={champion.name}
-                  size="medium"
-                  showPriority
-                  priority={champion.priority}
-                  showTooltip
-                  items={champion.items}
-                  itemSize="small"
+                  className="sm:size-10 size-7.5"
+                  key={unit}
+                  id={unit}
+                  items={find(comp.builds, { unit })?.buildName || []}
                   showName
                 />
               ))}
@@ -76,16 +78,14 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
           )}
         </div>
 
-        {/* 右侧: 数据指标 */}
         <CompStats
-          avgPlace={comp.avgPlace}
+          avgPlace={comp.avg}
           top4Rate={comp.top4Rate}
-          firstPlaceRate={comp.firstPlaceRate}
+          firstPlaceRate={comp.firstRate}
           pickRate={comp.pickRate}
         />
       </div>
 
-      {/* Hover 高光效果 */}
       <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100">
         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent" />
       </div>

@@ -89,12 +89,6 @@ async function preparePackage() {
       }
     }
 
-    // 添加 playwright (tsup external 依赖)
-    if (!pkg.dependencies.playwright) {
-      pkg.dependencies.playwright = '1.49.1'
-      success('添加 playwright 依赖')
-    }
-
     // 替换 catalog: 依赖为实际版本
     let catalogCount = 0
     for (const depType of ['dependencies', 'devDependencies']) {

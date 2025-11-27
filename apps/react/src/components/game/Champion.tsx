@@ -1,96 +1,92 @@
-import type { ChampionMeta, Item as ItemType } from 'types'
-import { find } from 'lodash-es'
+import type { ReactNode } from 'react'
+import type { LookupsUnit } from 'types'
 import { memo, useMemo } from 'react'
-import { useConfigStore } from '@/store/configStore'
-import { useGameDataStore } from '@/store/dataStore'
-import { getChampionCostColor, getChampionSizeClasses } from '@/utils/styles'
+
+import { cn } from 'utils'
+import { useGlobalStore } from '@/store/globalStore'
+import { getChampionCostColor } from '@/utils/styles'
 import { WithTooltip } from '../common/WithTooltip'
 import { Item } from './Item'
 
+const genIcon = (id: string) => `https://cdn.metatft.com/cdn-cgi/image/width=48,height=48,format=auto/https://cdn.metatft.com/file/metatft/champions/${id.toLowerCase().trim()}.png`
+
 interface ChampionProps {
-  /** 英雄名称 */
-  championName: string
-  /** 尺寸大小 */
-  size?: 'tiny' | 'small' | 'medium' | 'large'
-  /** 是否显示优先级标识 */
-  showPriority?: boolean
-  /** 自定义优先级文本（如果不提供，使用 rank） */
-  priority?: string
+  id: string
   /** 是否显示工具提示 */
   showTooltip?: boolean
   /** 额外的样式类 */
   className?: string
-  /** 点击回调 */
-  onClick?: (champion: ChampionMeta) => void
+  /** 额外的样式 */
+  style?: React.CSSProperties
   /** 装备列表（可选，用于显示英雄携带的装备） */
-  items?: ItemType[]
-  /** 装备尺寸 */
-  itemSize?: 'tiny' | 'small' | 'medium' | 'large' | 'xl'
-  /** 装备显示位置 */
-  itemsPosition?: 'bottom' | 'right'
+  items?: string[]
   /** 是否显示英雄名称（开启后无 hover 效果） */
   showName?: boolean
+  /** 包装类 */
+  wrapperClassName?: string
+  /** 额外的渲染内容 */
+  renderExtra?: (unit: LookupsUnit) => ReactNode
 }
 
 export const Champion = memo(({
-  championName,
-  size = 'medium',
-  showPriority = true,
-  priority,
-  showTooltip = true,
+  id,
+  showTooltip = false,
   className = '',
-  onClick,
+  style,
   items,
-  itemSize = 'small',
-  itemsPosition = 'bottom',
   showName = false,
+  wrapperClassName,
+  renderExtra,
 }: ChampionProps) => {
-  const { champions } = useGameDataStore()
-  const { tooltipConfig } = useConfigStore()
+  const { lookupsIndex } = useGlobalStore()
 
   const champion = useMemo(() => {
-    return find(champions, champ => champ.name === championName)
-  }, [champions, championName])
+    return lookupsIndex.unitsById[id]
+  }, [lookupsIndex, id])
 
   if (!champion) {
-    return null
+    return <>{id}</>
   }
 
   const costColors = getChampionCostColor(champion.cost || 1)
-  const sizeClasses = getChampionSizeClasses(size)
 
-  // 检查是否应该显示工具提示
-  const shouldShowTooltip = showTooltip && tooltipConfig.championTooltip && !showName
+  const shouldShowTooltip = showTooltip && !showName
 
   const championElement = (
     <div
-      className={`relative ${sizeClasses.container} overflow-hidden rounded border-2 ${costColors.border} bg-black/40 transition-all ${showName ? '' : 'hover:shadow-lg cursor-pointer'} ${className}`}
-      onClick={() => onClick?.(champion)}
-    >
-      {champion.icon
-        ? (
-            <img
-              src={champion.icon}
-              alt={champion.name}
-              className="h-full w-full object-cover"
-              draggable={false}
-            />
-          )
-        : (
-            <div className="h-full w-full bg-linear-to-br from-gray-600 to-gray-700" />
-          )}
-
-      {showPriority && priority && (
-        <div className={`absolute left-0 top-0 ${costColors.bg} ${sizeClasses.priority} font-bold leading-none text-white`}>
-          {priority}
-        </div>
+      className={cn(
+        'relative overflow-hidden rounded border-2 bg-black/40 transition-all',
+        costColors.border,
+        showName ? '' : 'hover:shadow-lg cursor-pointer',
+        className,
       )}
+      style={style}
+    >
+      <img
+        src={genIcon(id)}
+        alt={champion.name}
+        className="h-full w-full object-cover"
+        draggable={false}
+      />
+    </div>
+  )
 
-      {/* 英雄名称 - 中间偏下 */}
+  const championWithTooltip = (
+    <>
+      <WithTooltip
+        show={shouldShowTooltip}
+        content={(
+          <div className="space-y-1">
+            <span className="font-semibold">{champion.name}</span>
+          </div>
+        )}
+      >
+        {championElement}
+      </WithTooltip>
       {showName && (
-        <div className="absolute bottom-px left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-10">
           <div
-            className="text-white text-[7px] font-bold px-1 whitespace-nowrap"
+            className="text-white text-[6px] px-1 whitespace-nowrap"
             style={{
               textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
             }}
@@ -99,47 +95,36 @@ export const Champion = memo(({
           </div>
         </div>
       )}
-    </div>
+    </>
+
   )
 
-  const championWithTooltip = (
-    <WithTooltip
-      show={shouldShowTooltip}
-      content={(
-        <div className="space-y-1">
-          <span className="font-semibold">{champion.name}</span>
-        </div>
-      )}
-    >
-      {championElement}
-    </WithTooltip>
-  )
-
-  // 如果没有装备，直接返回英雄组件
   if (!items || items.length === 0) {
-    return championWithTooltip
+    return (
+      <div className={cn('flex relative items-center justify-center', wrapperClassName)}>
+        {championWithTooltip}
+        {renderExtra?.(champion)}
+      </div>
+    )
   }
 
-  // 根据位置参数决定布局方向
-  const containerClass = itemsPosition === 'right' ? 'flex-row gap-1' : 'flex-col gap-0.5'
-  const itemsClass = itemsPosition === 'right' ? 'flex-col gap-0.5' : 'flex-row gap-0.5'
-
   return (
-    <div className={`flex items-center ${containerClass}`}>
-      {championWithTooltip}
-
-      {items.length > 0 && (
-        <div className={`flex ${itemsClass}`}>
+    <div className={cn('relative', wrapperClassName)}>
+      <div className="relative w-full h-full">
+        {championWithTooltip}
+        <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 flex">
           {items.slice(0, 3).map(item => (
             <Item
-              key={item.name}
-              itemName={item.name}
-              size={itemSize}
+              className="sm:size-3.5 size-2.5"
+              id={item}
+              key={item}
               showTooltip={showTooltip}
             />
           ))}
         </div>
-      )}
+      </div>
+
+      {renderExtra?.(champion)}
     </div>
   )
 })

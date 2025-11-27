@@ -1,242 +1,169 @@
-/**
- * TFT（云顶之弈）游戏数据类型定义
- * 这些类型被 crawler、db、api 和前端共享使用
- */
-
-/** 爬虫配置选项 */
-export interface CrawlOptions {
-  /** 是否使用无头模式 */
-  headless?: boolean
-  /** 是否启用调试模式 */
-  debug?: boolean
-  /** 是否保存截图 */
-  screenshot?: boolean
+export enum Queue {
+  PBE = 'PBE',
+  FORMAL = '1100',
 }
 
-/** 基础装备信息 */
-export interface Item {
-  name: string
-  icon: string
+export type TFTSetString = `TFTSet${number}_latest_zh_cn`
+
+export enum Levelling {
+  Fast8 = 'Fast 8',
+  Fast9 = 'Fast 9',
+  Lvl5 = 'lvl 5',
+  Lvl6 = 'lvl 6',
+  Lvl7 = 'lvl 7',
+  Standard = 'Standard',
 }
 
-/** 英雄信息 */
-export interface Champion {
-  /** 英雄名称 */
-  name: string
-  /** 星级 (1-3) */
-  stars: number
-  /** 优先级 (1st, 2nd, 3rd 等) */
-  priority?: string
-  /** 装备列表 */
-  items?: Item[]
-  /** 费用 (1-5) */
-  cost: number
-  /** 图标 URL */
-  icon: string
+export enum Trend {
+  Up = 'up',
+  Down = 'down',
+  Steady = 'steady',
 }
 
-/** 英雄元数据（统计信息） */
-export interface ChampionMeta {
-  /** 排名 */
-  rank: number
-  /** 英雄名称 */
-  name: string
-  /** 英雄图标 URL */
-  icon: string
-  /** 羁绊列表 */
-  traits?: Trait[]
-  /** 费用（1-5） */
-  cost?: number
-  /** 平均排名 */
-  avgPlace?: number
-  /** 前四名率（百分比） */
-  top4Rate?: number
-  /** 第一名率（百分比） */
-  firstPlaceRate?: number
-  /** 比赛数量 */
-  matches?: number
-}
-
-/** 羁绊信息 */
-export interface Trait {
-  /** 羁绊名称 */
-  name: string
-  /** 图标 URL */
-  icon: string
-  /** 羁绊等级/层级 */
-  level?: number
-  /** 羁绊数量 */
+export interface Build {
+  /** 阵容构建匹配次数 */
   count?: number
+  /** 阵容构建平均排名 */
+  avg?: number
+  /** 阵容构建单位 */
+  unit?: string
+  /** 阵容构建装备 */
+  buildName?: string[]
 }
 
-/** 强化符文级别 */
-export type AugmentLevel = 'Silver' | 'Gold' | 'Prismatic'
-
-/** 强化符文信息 */
-export interface Augment {
-  /** 符文名称 */
-  name: string
-  /** 图标 URL */
-  icon: string
-  /** 描述 */
-  description?: string
-  /** 等级 (银色/金色/棱彩) */
-  tier?: string
+export enum NameType {
+  Trait = 'trait',
+  Unit = 'unit',
 }
 
-/** 强化符文元数据 */
-export interface AugmentMeta {
-  /** 强化符文名称 */
-  name: string
-  /** 强化符文图标 URL */
-  icon: string
-  /** 级别（银色/金色/棱彩） */
-  level: AugmentLevel
-  /** 段位（OP/S/A/B/C/D等） */
-  tier?: string
-  /** 类型（经济/战斗等） */
-  type?: string
+export interface Name {
+  name?: string
+  type?: NameType
+  score?: number
 }
 
-/** 装备分类 */
-export type ItemCategory = 'all' | 'radiant' | 'artifact' | 'core' | 'emblem' | 'component'
-
-/** 装备元数据 */
-export interface ItemMeta {
-  /** 排名 */
-  rank: number
-  /** 装备名称 */
-  name: string
-  /** 装备图标 */
-  icon: string
-  /** 装备分类 */
-  category: ItemCategory
-  /** 合成配方（两个基础装备） */
-  components?: string[]
-  /** 平均名次 */
-  avgPlace?: number
-  /** 前四名率 (%) */
-  top4Rate?: number
-  /** 第一名率 (%) */
-  firstPlaceRate?: number
-  /** 比赛场次 */
-  matches?: number
-  /** 推荐给哪些英雄 */
-  recommendedFor?: string[]
-}
-
-/** 推荐道具信息 */
-export interface RecommendedItem {
-  /** 道具名称 */
-  name: string
-  /** 图标 URL */
-  icon: string
-  /** 推荐给哪些英雄 */
-  recommendedFor?: string[]
-  /** 平均排名 */
-  avgRank?: number
-  /** 前四率 (%) */
-  top4Rate?: number
-  /** 第一名率 (%) */
-  firstPlaceRate?: number
-  /** 比赛场次 */
-  matches?: number
-  /** 优先级 */
-  priority?: number
-}
-
-/** 强化信息 */
-export interface Enhancement {
-  /** 强化名称 */
-  name: string
-  /** 段位/评级 (S, A, B, C, D) */
-  tier?: string
-  /** 权重 */
-  weight?: number
-  /** 标签 (Common, Weird, Trait, Multiple 等) */
-  tags?: string[]
-}
-
-/** 英雄强化推荐 */
-export interface ChampionEnhancement {
-  /** 英雄名称 */
-  championName: string
-  /** 英雄图标 */
-  championIcon?: string
-  /** 推荐的强化列表 */
-  enhancements: Enhancement[]
-}
-
-/** 站位上的英雄信息 */
-export interface PositionChampion {
-  /** 英雄名称 */
-  name: string
-  /** 英雄图标 */
-  icon: string
-  /** 星级 (1-5) */
-  stars: number
-  /** 装备列表 */
-  items: Item[]
-}
-
-/** 战场位置信息 */
-export interface Position {
-  /** 行索引 (0-3) */
-  row: number
-  /** 列索引 (0-6) */
-  col: number
-  /** 该位置上的英雄，null 表示空位 */
-  champion: PositionChampion | null
-}
-
-/** 站位信息（4行7列的战场布局） */
-export interface Formation {
-  /** 所有位置的信息 */
-  positions: Position[]
-}
-
-/** 阵容详细信息 */
-export interface CompDetails {
-  /** 推荐强化符文列表 */
-  augments: Augment[]
-  /** 推荐道具列表 */
-  items: RecommendedItem[]
-  /** 英雄强化推荐列表 (每个核心英雄对应一个强化列表) */
-  championEnhancements: ChampionEnhancement[]
-  /** 站位信息 */
-  formation?: Formation
-}
-
-/** 阵容数据 */
-export interface CompData {
+export interface Comp {
   /** 阵容ID */
-  compId: string
-  /** 排名 */
-  rank: number
+  compId?: string
+  /** 阵容所属集群ID */
+  clusterId: number
+  /** 阵容ID */
+  id: number
+  /** 阵容单位 */
+  units?: string[]
+  /** 阵容羁绊 */
+  traits?: string[]
   /** 阵容名称 */
-  name: string
-  /** 评级 (S, A, B, C, D) */
-  tier?: string
-  /** 等级 (如 5, 8) */
-  level?: number
-  /** 等级类型 (reroll 或 standard) */
-  levelType?: string
-  /** 难度 (Easy, Hard, Medium) */
-  difficulty?: string
-  /** 流行度 (Popular, Trending) */
-  popularity?: string
-  /** 平均名次 */
-  avgPlace?: number
-  /** 第一名率 (%) */
-  firstPlaceRate?: number
-  /** 前四名率 (%) */
-  top4Rate?: number
-  /** 挑选率 (%) */
+  name?: Name[]
+
+  /** 阵容选取率 */
   pickRate?: number
-  /** 羁绊列表 */
-  traits: Trait[]
-  /** 英雄列表 */
-  champions: Champion[]
-  /** 详细信息 (点击展开后获取) */
-  details?: CompDetails
+  /** 阵容平均排名 */
+  avg?: number
+  /** 阵容第一率 */
+  firstRate?: number
+  /** 阵容前四率 */
+  top4Rate?: number
+
+  /** 阵容3星单位 */
+  stars?: string[]
+  /** 阵容4星单位 */
+  stars_4?: string[]
+
+  /** 阵容构建 */
+  builds?: Build[]
+
+  /** 阵容等级 */
+  levelling?: Levelling
+}
+
+export interface Counter {
+  against?: number
+  place_change?: number
+  similarity?: number
+}
+
+export interface FinalLevel {
+  level?: string
+  count?: number
+  avg?: number
+}
+
+export interface Unit {
+  count?: number
+  avg?: number
+  units?: string
+  place_change?: number
+  unit_pick?: number
+  item_pick?: number
+}
+
+export interface CompItem {
+  itemNames: string
+  count?: number
+  avg?: number
+  pcnt?: number
+  units?: Unit[]
+}
+
+export interface Positioning {
+  unit?: string
+  position?: number
+}
+
+export interface Option {
+  unit_list?: string
+  count?: number
+  avg?: number
+  win?: number
+}
+
+export interface CompDetail {
+  /** 阵容ID */
+  id?: number
+  /** 克制关系 */
+  counters?: Counter[]
+  /** 阵容最终等级 */
+  final_level?: FinalLevel[]
+  /** 阵容装备 */
+  item?: CompItem[]
+  /** 阵容趋势 */
+  trends?: Trend
+  /** 阵容站位 */
+  positioning?: Positioning[]
+  /** 阵容早期选项 */
+  early_options?: Record<string, Option[]>
+  /** 阵容后期选项 */
+  options?: Record<string, Option[]>
+}
+
+export interface ItemStat {
+  itemName: string
+  avg: number
+  firstRate: number
+  pickRate: number
+  top4Rate: number
+}
+
+export interface UnitStat {
+  unit: string
+  avg: number
+  firstRate: number
+  pickRate: number
+  top4Rate: number
+}
+
+export interface TierList {
+  content?: ContentElement[]
+  label?: string
+  color?: string
+}
+
+export interface ContentElement {
+  id?: string
+  type?: Type
+}
+
+export enum Type {
+  Augment = 'augment',
 }

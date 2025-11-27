@@ -3,7 +3,7 @@
  * 用于英雄、装备等数据的综合得分排序
  */
 
-import type { ChampionMeta, ItemMeta } from 'types'
+import type { CompItem, ItemStat, UnitStat } from 'types'
 import { rankItems } from './ranking'
 
 /**
@@ -17,12 +17,12 @@ type WithCompositeScore<T> = T & { compositeScore: number }
  * @returns 排序后的英雄列表(包含临时 compositeScore 字段)
  */
 export function compositeSortChampions(
-  items: ChampionMeta[],
-): WithCompositeScore<ChampionMeta>[] {
+  items: UnitStat[],
+): WithCompositeScore<UnitStat>[] {
   const rankedData = rankItems(
     items.map(item => ({
-      matches: item.matches ?? 0,
-      impact: item.avgPlace !== undefined ? item.avgPlace - 4.5 : 0,
+      pickRate: item.pickRate ?? 0,
+      impact: item.avg !== undefined ? item.avg - 4.5 : 0,
     })),
   )
 
@@ -42,12 +42,12 @@ export function compositeSortChampions(
  * @returns 排序后的装备列表(包含临时 compositeScore 字段)
  */
 export function compositeSortItems(
-  items: ItemMeta[],
-): WithCompositeScore<ItemMeta>[] {
+  items: ItemStat[],
+): WithCompositeScore<ItemStat>[] {
   const rankedData = rankItems(
     items.map(item => ({
-      matches: item.matches ?? 0,
-      impact: item.avgPlace !== undefined ? item.avgPlace - 4.5 : 0,
+      pickRate: item.pickRate ?? 0,
+      impact: item.avg !== undefined ? item.avg - 4.5 : 0,
     })),
   )
 
@@ -58,5 +58,23 @@ export function compositeSortItems(
   }))
 
   // 按综合得分降序排序
+  return itemsWithScore.sort((a, b) => b.compositeScore - a.compositeScore)
+}
+
+export function compositeSortCompItems(
+  items: CompItem[],
+): (CompItem & { compositeScore: number })[] {
+  const rankedData = rankItems(
+    items.map(item => ({
+      pickRate: item.pcnt !== undefined ? item.pcnt * 100 : 0,
+      impact: item.avg !== undefined ? item.avg - 4.5 : 0,
+    })),
+  )
+
+  const itemsWithScore = items.map((item, index) => ({
+    ...item,
+    compositeScore: rankedData[index]?.compositeScore ?? 0,
+  }))
+
   return itemsWithScore.sort((a, b) => b.compositeScore - a.compositeScore)
 }

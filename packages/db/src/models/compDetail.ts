@@ -1,4 +1,4 @@
-import type { CompDetails } from 'types'
+import type { CompDetail } from 'types'
 
 /**
  * 阵容详细信息文档
@@ -6,8 +6,10 @@ import type { CompDetails } from 'types'
 export interface CompDetailDocument {
   /** 关联的阵容 ID */
   compId: string
+  /** 队列（赛季） */
+  queue: string
   /** 详细信息 */
-  details: CompDetails
+  details: CompDetail
   /** 创建时间 */
   createdAt: Date
   /** 更新时间 */

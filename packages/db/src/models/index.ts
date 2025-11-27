@@ -1,5 +1,5 @@
-export type { AugmentDocument } from './augment'
-export type { ChampionDocument } from './champion'
+export type { AugmentTierDocument } from './augmentTier'
 export type { CompDocument } from './comp'
 export type { CompDetailDocument } from './compDetail'
-export type { ItemDocument } from './item'
+export type { ItemStatsDocument } from './itemStats'
+export type { UnitStatsDocument } from './unitStats'

@@ -1,11 +1,12 @@
-import type { RecommendedItem } from 'types'
-import { memo } from 'react'
+import type { CompItem, Unit } from 'types'
+import { memo, useEffect, useMemo } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from 'ui'
-import { Champion, Impact } from '@/components'
-import { useAdaptiveList, useItemByName } from '@/hooks'
+import { Champion, Impact, Item } from '@/components'
+import { useAdaptiveList } from '@/hooks'
+import { useGlobalStore } from '@/store/globalStore'
 
 interface ItemCardProps {
-  item: RecommendedItem
+  item: CompItem
   onChampionClick?: (championName: string) => void
 }
 
@@ -14,18 +15,20 @@ interface ItemCardProps {
  * 展示单个装备的详细信息（横向一行布局）
  */
 export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
-  // 获取完整的装备信息（包含合成组件）
-  const fullItemData = useItemByName(item.name)
+  const { lookupsIndex, unitItemsIndex, loadUnitItems } = useGlobalStore()
 
-  // 获取合成组件的装备信息
-  const component1 = useItemByName(fullItemData?.components?.[0])
-  const component2 = useItemByName(fullItemData?.components?.[1])
+  useEffect(() => {
+    if (!unitItemsIndex || Object.keys(unitItemsIndex.itemNamesById).length === 0)
+      loadUnitItems()
+  }, [unitItemsIndex, loadUnitItems])
 
-  const champions = item.recommendedFor || []
+  const itemMeta = useMemo(() => lookupsIndex.itemsById[item.itemNames], [lookupsIndex, item.itemNames])
+  const components = itemMeta?.composition ?? []
 
-  // 自适应适配
-  const { containerRef, visibleItems, remainingCount, showMore } = useAdaptiveList<string>({
-    items: champions,
+  const recommendedUnits = item?.units ?? []
+
+  const { containerRef, visibleItems, remainingCount, showMore } = useAdaptiveList<Unit>({
+    items: recommendedUnits,
     itemWidth: 16,
     moreButtonWidth: 16,
     minVisible: 1,
@@ -33,70 +36,56 @@ export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
 
   return (
     <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-md p-1.5 border border-white/10 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20">
-      <div className="grid grid-cols-[25px_minmax(60px,10%)_minmax(60px,10%)_1fr] sm:grid-cols-[minmax(160px,25%)_minmax(80px,25%)_minmax(70px,25%)_1fr] gap-2 items-center">
-        <div className="flex items-center gap-2 min-w-0">
-          <img
-            src={item.icon}
-            alt={item.name}
-            className="w-6 h-6 rounded border border-white/20 shrink-0"
-            loading="lazy"
-            draggable={false}
-          />
-          <h3 className="hidden sm:block text-white font-medium text-xs line-clamp-1 min-w-0 flex-1">
-            {item.name}
-          </h3>
-        </div>
+      <div className="grid grid-cols-[30px_2fr_2fr_3fr] sm:grid-cols-[180px_2fr_4fr_3fr] gap-2 items-center pl-2">
+        <Item
+          id={item.itemNames}
+          className="size-6"
+          showTooltip={false}
+          wrapperClassName="flex justify-start items-center gap-2"
+          renderExtra={data => (
+            <span className="hidden sm:block text-[10px] sm:text-xs text-gray-400">
+              {data?.name}
+            </span>
+          )}
+        />
 
         <div className="flex items-center gap-1 justify-center">
-          {component1 && (
-            <img
-              src={component1.icon}
-              alt={component1.name}
-              title={component1.name}
-              className="w-4 h-4 sm:w-5 sm:h-5 rounded border border-white/20"
-              loading="lazy"
-              draggable={false}
-            />
+          {components[0] && (
+            <Item id={components[0]} className="size-4 sm:size-5" showTooltip={false} />
           )}
-          {component1 && component2 && (
+          {components[0] && components[1] && (
             <span className="text-gray-500 text-xs">+</span>
           )}
-          {component2 && (
-            <img
-              src={component2.icon}
-              alt={component2.name}
-              title={component2.name}
-              className="w-4 h-4 sm:w-5 sm:h-5 rounded border border-white/20"
-              loading="lazy"
-              draggable={false}
-            />
+          {components[1] && (
+            <Item id={components[1]} className="size-4 sm:size-5" showTooltip={false} />
           )}
         </div>
 
-        <div className="flex items-center gap-1 justify-center">
-          {item.avgRank !== undefined && (
+        <div className="flex items-center gap-1 justify-self-center">
+          {item.avg !== undefined && (
             <>
               <span className="text-gray-400 text-[10px] sm:text-xs">影响</span>
-              <Impact avgRank={item.avgRank} className="text-[10px] sm:text-xs" />
+              <Impact avgRank={item.avg!} className="text-[10px] sm:text-xs" />
             </>
           )}
         </div>
 
         <div ref={containerRef} className="flex items-center gap-1 min-w-0 justify-end">
-          {visibleItems.map(champion => (
-            <div
-              key={champion}
-              onClick={() => onChampionClick?.(champion)}
-              className="cursor-pointer hover:scale-110 transition-transform"
-            >
-              <Champion
-                championName={champion}
-                size="tiny"
-                showPriority={false}
-                showTooltip={true}
-                className="!w-4 !h-4 sm:!w-5 sm:!h-5"
-              />
-            </div>
+          {visibleItems.map(item => (
+            item.units && (
+              <div
+                key={item.units}
+                onClick={() => onChampionClick?.(item.units!)}
+                className="cursor-pointer hover:scale-110 transition-transform"
+              >
+                <Champion
+                  id={item.units}
+                  showTooltip={true}
+                  className="size-4 sm:size-5"
+                />
+              </div>
+            )
+
           ))}
           {showMore && (
             <Tooltip>
@@ -111,19 +100,20 @@ export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
                 className="bg-black/90 text-white border-white/10"
               >
                 <div className="flex flex-wrap gap-1 max-w-[200px]">
-                  {champions.slice(visibleItems.length).map(champion => (
-                    <div
-                      key={champion}
-                      onClick={() => onChampionClick?.(champion)}
-                      className="cursor-pointer hover:scale-110 transition-transform"
-                    >
-                      <Champion
-                        championName={champion}
-                        className="w-4! h-4!"
-                        showPriority={false}
-                        showTooltip={false}
-                      />
-                    </div>
+                  {recommendedUnits.slice(visibleItems.length).map(item => (
+                    item.units && (
+                      <div
+                        key={item.units}
+                        onClick={() => onChampionClick?.(item.units!)}
+                        className="cursor-pointer hover:scale-110 transition-transform"
+                      >
+                        <Champion
+                          id={item.units}
+                          className="size-4"
+                          showTooltip={false}
+                        />
+                      </div>
+                    )
                   ))}
                 </div>
               </TooltipContent>

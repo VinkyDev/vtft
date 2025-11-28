@@ -48,3 +48,15 @@ export function getAugmentSizeClasses(size: Exclude<Size, 'xl'>) {
       }
   }
 }
+
+/** 获取羁绊效果 style 颜色 */
+export function getTraitStyleColor(style?: number) {
+  switch (style) {
+    case 1: return { border: 'border-amber-600', bg: 'bg-amber-600', glow: 'shadow-amber-600/50' } // 青铜
+    case 3: return { border: 'border-gray-400', bg: 'bg-gray-400', glow: 'shadow-gray-400/50' } // 白银
+    case 4: return { border: 'border-blue-400', bg: 'bg-blue-400', glow: 'shadow-blue-400/50' } // 独特
+    case 5: return { border: 'border-yellow-400', bg: 'bg-yellow-400', glow: 'shadow-yellow-400/50' } // 黄金
+    case 6: return { border: 'border-purple-400', bg: 'bg-purple-400', glow: 'shadow-purple-400/50' } // 棱彩
+    default: return { border: 'border-white/10', bg: 'bg-black/30', glow: 'shadow-white/30' }
+  }
+}

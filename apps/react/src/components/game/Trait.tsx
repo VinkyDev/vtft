@@ -1,6 +1,7 @@
 import type { Trait as TraitMeta } from 'types'
 import { memo, useMemo } from 'react'
 import { useGlobalStore } from '@/store/globalStore'
+import { getTraitStyleColor } from '@/utils/styles'
 import { WithTooltip } from '../common/WithTooltip'
 
 interface TraitProps {
@@ -19,8 +20,8 @@ const genIcon = (apiName: string) => `https://cdn.metatft.com/file/metatft/trait
 
 type Parse<T extends string>
   = T extends `${infer ApiName}_${infer N extends number}`
-    ? { apiName: ApiName, traitName: string, count: N }
-    : { apiName: T, traitName: string, count?: number }
+    ? { apiName: ApiName, traitName: string, level: N }
+    : { apiName: T, traitName: string, level?: number }
 
 function parse<T extends string>(str: T): Parse<T> {
   const parts = str.split('_')
@@ -29,8 +30,8 @@ function parse<T extends string>(str: T): Parse<T> {
   const apiName = hasCount ? parts.slice(0, -1).join('_') : str
   const apiParts = apiName.split('_')
   const traitName = apiParts[apiParts.length - 1]
-  const count = hasCount ? Number(last) : undefined
-  return { apiName, traitName, count } as Parse<T>
+  const level = hasCount ? Number(last) : undefined
+  return { apiName, traitName, level } as Parse<T>
 }
 
 export const Trait = memo(({
@@ -41,8 +42,23 @@ export const Trait = memo(({
   onClick,
 }: TraitProps) => {
   const { lookupsIndex } = useGlobalStore()
-  const { apiName, traitName, count } = useMemo(() => parse(id), [id])
+  const { apiName, traitName, level } = useMemo(() => parse(id), [id])
   const trait = useMemo(() => lookupsIndex.traitsById[apiName], [apiName, lookupsIndex])
+  const styleColor = useMemo(() => {
+    if (!trait)
+      return { border: 'border-white/10', bg: 'bg-black/30', glow: 'shadow-white/30' }
+    if (level == null)
+      return { border: 'border-white/10', bg: 'bg-black/30', glow: 'shadow-white/30' }
+    const idx = Math.max(0, Math.min((trait.effects?.length ?? 0) - 1, level - 1))
+    const style = trait.effects?.[idx]?.style
+    return getTraitStyleColor(style)
+  }, [trait, level])
+  const minUnits = useMemo(() => {
+    if (!trait || level == null)
+      return undefined
+    const idx = Math.max(0, Math.min((trait.effects?.length ?? 0) - 1, level - 1))
+    return trait.effects?.[idx]?.minUnits ?? undefined
+  }, [trait, level])
 
   if (!trait) {
     return <>{id}</>
@@ -57,9 +73,9 @@ export const Trait = memo(({
         draggable={false}
         className="h-full w-full object-contain"
       />
-      {count != null && (
+      {minUnits != null && (
         <div className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-sm text-[8px] font-bold text-white shadow-lg">
-          {count}
+          {minUnits}
         </div>
       )}
     </>
@@ -69,7 +85,7 @@ export const Trait = memo(({
   if (variant === 'icon-only') {
     const traitElement = (
       <div
-        className={`relative h-5 w-5 overflow-hidden rounded border border-white/10 bg-black/30 p-0.5 transition-all hover:border-white/30 hover:shadow-lg ${onClick ? 'cursor-pointer' : ''} ${className}`}
+        className={`relative h-5 w-5 overflow-hidden rounded border ${styleColor.border} bg-black/30 p-0.5 transition-all hover:shadow-lg ${styleColor.glow} ${onClick ? 'cursor-pointer' : ''} ${className}`}
         onClick={() => onClick?.(trait)}
       >
         {iconElement}
@@ -107,7 +123,7 @@ export const Trait = memo(({
         )}
       >
         <div
-          className={`sm:hidden relative h-5 w-5 overflow-hidden rounded border border-white/10 bg-black/30 p-0.5 transition-all hover:border-white/30 hover:shadow-lg ${onClick ? 'cursor-pointer' : ''} ${className}`}
+          className={`sm:hidden relative h-5 w-5 overflow-hidden rounded border ${styleColor.border} bg-black/30 p-0.5 transition-all hover:shadow-lg ${styleColor.glow} ${onClick ? 'cursor-pointer' : ''} ${className}`}
           onClick={() => onClick?.(trait)}
         >
           {iconElement}
@@ -115,16 +131,16 @@ export const Trait = memo(({
       </WithTooltip>
 
       <div
-        className={`hidden sm:flex items-center gap-1.5 rounded border border-white/10 bg-black/30 px-2 py-1 transition-all hover:border-white/30 hover:shadow-lg shrink-0 ${onClick ? 'cursor-pointer' : ''} ${className}`}
+        className={`hidden sm:flex items-center gap-1.5 rounded border ${styleColor.border} bg-black/30 px-2 py-1 transition-all hover:shadow-lg ${styleColor.glow} shrink-0 ${onClick ? 'cursor-pointer' : ''} ${className}`}
         onClick={() => onClick?.(trait)}
       >
         <div className="relative h-5 w-5 overflow-hidden rounded shrink-0">
           {iconElement}
         </div>
         <span className="text-xs font-medium text-white/90 whitespace-nowrap">{trait.name}</span>
-        {count != null && (
+        {minUnits != null && (
           <span className="text-xs font-bold text-white whitespace-nowrap">
-            {count}
+            {minUnits}
           </span>
         )}
       </div>

@@ -9,7 +9,7 @@ import {
   ItemsGridSkeleton,
 } from '@/components'
 import { useConfigStore } from '@/store/configStore'
-import { FormationBoard, ItemsGrid } from './components'
+import { Builds, FormationBoard, ItemsGrid } from './components'
 
 interface CompDetailContentProps {
   comp: EnhancedCompData | null
@@ -43,6 +43,11 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
       label: '装备',
       content: <ItemsGridSkeleton />,
     },
+    {
+      value: 'builds',
+      label: '阵容',
+      content: <Builds />,
+    },
   ], [])
 
   const tabs = useMemo(() => {
@@ -71,6 +76,11 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
           : (
               <EmptyState message="暂无装备信息" />
             ),
+      },
+      {
+        value: 'builds',
+        label: '阵容',
+        content: <Builds earlyOptions={compDetails.data.early_options} options={compDetails.data.options} />,
       },
     ]
   }, [compDetails, comp])

@@ -174,7 +174,7 @@ export interface Trait {
 export interface Effect {
   maxUnits?: number
   minUnits?: number
-  style?: number
+  style?: number // 1青铜 3白银 4独特 5黄金 6棱彩
   variables?: { [key: string]: number | null }
   variable_matches?: VariableMatch[]
 }

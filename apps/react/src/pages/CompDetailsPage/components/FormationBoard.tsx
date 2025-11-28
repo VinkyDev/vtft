@@ -1,8 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import type { Build, CompDetail } from 'types'
 import { find } from 'lodash-es'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Trait } from '@/components'
+import { useGlobalStore } from '@/store/globalStore'
 import { FormationCell } from './FormationCell'
 
 interface FormationBoardProps {
@@ -29,9 +30,8 @@ function getRowCol(n: number) {
  * 展示 7x4 的云顶之弈六边形棋盘布局
  */
 export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProps) => {
-  // 当前 hover 的羁绊名称
-  // const [hoveredTrait, setHoveredTrait] = useState<string | null>(null)
-  // const { champions } = useGlobalStore()
+  const { lookupsIndex } = useGlobalStore()
+  const [hoveredTrait, setHoveredTrait] = useState<string | null>(null)
 
   const positioning = useMemo(() => data?.positioning || [], [data])
 
@@ -53,21 +53,6 @@ export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProp
     return grid
   }, [positioning])
 
-  // 计算当前 hover 羁绊对应的高亮英雄名称集合
-  // const highlightedChampions = useMemo(() => {
-  //   if (!hoveredTrait)
-  //     return new Set<string>()
-
-  //   // 找出拥有该羁绊的英雄
-  //   const championNames = new Set<string>()
-  //   champions.forEach((champion) => {
-  //     if (champion.traits?.some(t => t.name === hoveredTrait)) {
-  //       championNames.add(champion.name)
-  //     }
-  //   })
-  //   return championNames
-  // }, [hoveredTrait, champions])
-
   return (
     <div className="flex flex-col items-center justify-center h-full w-full p-4 gap-1">
       <div className="flex items-center justify-center">
@@ -82,15 +67,23 @@ export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProp
                   marginLeft: rowIndex % 2 === 1 ? 'calc(min(4.5vw, 2.25rem))' : '0',
                 }}
               >
-                {row.map((position, colIndex) => (
-                  <FormationCell
-                    key={`${rowIndex}-${colIndex}`}
-                    champion={position?.unit}
-                    items={find(builds || [], { unit: position?.unit })?.buildName || []}
-                    // isHighlighted={position?.unit ? highlightedChampions.has(position.unit) : false}
-                    // isDimmed={hoveredTrait !== null && position?.unit ? !highlightedChampions.has(position.unit) : false}
-                  />
-                ))}
+                {row.map((position, colIndex) => {
+                  const unitId = position?.unit || ''
+                  const unitMeta = lookupsIndex.unitsById[unitId]
+                  const hoveredTraitName = hoveredTrait ? lookupsIndex.traitsById[hoveredTrait]?.name : undefined
+                  const hasTrait = hoveredTraitName ? unitMeta?.traits?.includes(hoveredTraitName) : false
+                  const isHighlighted = !!hoveredTrait && !!position?.unit && !!hasTrait
+                  const isDimmed = !!hoveredTrait && !!position?.unit && !hasTrait
+                  return (
+                    <FormationCell
+                      key={`${rowIndex}-${colIndex}`}
+                      champion={position?.unit}
+                      items={find(builds || [], { unit: position?.unit })?.buildName || []}
+                      isHighlighted={isHighlighted}
+                      isDimmed={isDimmed}
+                    />
+                  )
+                })}
               </div>
             ))}
           </div>
@@ -101,13 +94,18 @@ export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProp
       {traits && traits?.length > 0 && (
         <div className="w-full px-2">
           <div className="flex flex-wrap gap-0.5 sm:gap-2 items-center justify-center">
-            {traits?.map(trait => (
+            {traits?.map(traitId => (
               <div
-                key={trait}
-                // onMouseEnter={() => setHoveredTrait(trait)}
-                // onMouseLeave={() => setHoveredTrait(null)}
+                key={traitId}
+                onMouseEnter={() => {
+                  const parts = traitId.split('_')
+                  const last = parts[parts.length - 1]
+                  const apiName = /^\d+$/.test(last ?? '') ? parts.slice(0, -1).join('_') : traitId
+                  setHoveredTrait(apiName)
+                }}
+                onMouseLeave={() => setHoveredTrait(null)}
               >
-                <Trait id={trait} variant="with-label" />
+                <Trait id={traitId} variant="with-label" />
               </div>
             ))}
           </div>

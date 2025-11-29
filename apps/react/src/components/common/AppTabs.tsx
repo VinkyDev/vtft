@@ -107,7 +107,7 @@ export const AppTabs = memo((props: AppTabsProps) => {
                           pointerEvents: isActive ? 'auto' : 'none',
                         }}
                       >
-                        {isActive ? tab.content : null}
+                        {tab.content}
                       </div>
                     </TabsContent>
                   )
@@ -120,8 +120,20 @@ export const AppTabs = memo((props: AppTabsProps) => {
               {tabs.map((tab) => {
                 const isActive = value === tab.value
                 return (
-                  <TabsContent key={tab.value} value={tab.value} className="h-full m-0 no-drag">
-                    {isActive ? tab.content : null}
+                  <TabsContent
+                    key={tab.value}
+                    value={tab.value}
+                    className="h-full m-0 no-drag"
+                    forceMount
+                    {...(!isActive && { inert: true })}
+                  >
+                    <div
+                      style={{
+                        display: isActive ? 'block' : 'none',
+                      }}
+                    >
+                      {tab.content}
+                    </div>
                   </TabsContent>
                 )
               })}

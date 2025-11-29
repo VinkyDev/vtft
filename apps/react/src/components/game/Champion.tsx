@@ -22,6 +22,10 @@ interface ChampionProps {
   items?: string[]
   /** 是否显示英雄名称（开启后无 hover 效果） */
   showName?: boolean
+  /** 英雄名称样式类 */
+  nameClassName?: string
+  /** 装备样式类 */
+  itemClassName?: string
   /** 包装类 */
   wrapperClassName?: string
   /** 额外的渲染内容 */
@@ -36,6 +40,8 @@ export const Champion = memo(({
   items,
   showName = false,
   wrapperClassName,
+  nameClassName,
+  itemClassName,
   renderExtra,
 }: ChampionProps) => {
   const { lookupsIndex } = useGlobalStore()
@@ -45,7 +51,7 @@ export const Champion = memo(({
   }, [lookupsIndex, id])
 
   if (!champion) {
-    return <>{id}</>
+    return null
   }
 
   const costColors = getChampionCostColor(champion.cost || 1)
@@ -84,9 +90,9 @@ export const Champion = memo(({
         {championElement}
       </WithTooltip>
       {showName && (
-        <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-10">
+        <div className={cn('absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-10 text-[7px] sm:text-[9px]', nameClassName)}>
           <div
-            className="text-white text-[6px] px-1 whitespace-nowrap"
+            className="text-white whitespace-nowrap"
             style={{
               textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
             }}
@@ -115,7 +121,7 @@ export const Champion = memo(({
         <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 flex">
           {items.slice(0, 3).map(item => (
             <Item
-              className="sm:size-3.5 size-2.5"
+              className={cn('sm:size-3.5 size-2.5', itemClassName)}
               id={item}
               key={item}
               showTooltip={showTooltip}

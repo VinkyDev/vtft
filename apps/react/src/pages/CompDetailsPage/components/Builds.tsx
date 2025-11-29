@@ -1,7 +1,9 @@
 import type { Option } from 'types'
+import { ChevronRightIcon } from 'lucide-react'
 import { memo, useMemo } from 'react'
-import { ScrollArea } from 'ui'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, ScrollArea, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { Champion, EmptyState } from '@/components'
+import { useUnitsUtils } from '@/hooks'
 
 interface BuildsProps {
   earlyOptions?: Record<string, Option[]>
@@ -20,30 +22,94 @@ function formatAvg(avg?: number): string {
   return Number.isFinite(avg) ? avg.toFixed(2) : '-'
 }
 
+// 找出多个配置中都有的英雄（交集）
+function findCommonUnits(builds: Array<{ units: string[] }>): string[] {
+  if (builds.length === 0)
+    return []
+  if (builds.length === 1)
+    return builds[0]!.units
+
+  const unitSets = builds.map(build => new Set(build.units))
+  const firstSet = unitSets[0]!
+
+  return Array.from(firstSet).filter(unit =>
+    unitSets.every(set => set.has(unit)),
+  )
+}
+
+// 对齐显示：将英雄列表对齐到统一顺序
+function alignUnits(units: string[], commonUnits: string[]): { common: (string | null)[], others: string[] } {
+  const unitSet = new Set(units)
+  const commonAligned = commonUnits.map(u => unitSet.has(u) ? u : null)
+  const others = units.filter(u => !commonUnits.includes(u))
+  return { common: commonAligned, others }
+}
+
 export const Builds = memo(({ earlyOptions, options }: BuildsProps) => {
+  const { sortUnitsByCost } = useUnitsUtils()
   const earlyEntries = useMemo(() => Object.entries(earlyOptions || {}), [earlyOptions])
   const lateEntries = useMemo(() => Object.entries(options || {}).sort((a, b) => Number(a[0]) - Number(b[0])), [options])
 
-  const aggregate = (opts: Option[]) => {
-    const list = opts || []
-    const weights = list.map(o => o.count ?? 1)
-    const totalWeight = weights.reduce((a, b) => a + b, 0) || 1
-    const unitWeight: Record<string, number> = {}
-    list.forEach((o, i) => {
-      parseUnitList(o.unit_list).forEach((u) => { unitWeight[u] = (unitWeight[u] ?? 0) + weights[i]! })
-    })
-    const entries = Object.entries(unitWeight).sort((a, b) => b[1] - a[1])
-    const ratios = entries.map(([u, w]) => [u, w / totalWeight] as const)
-    const requiredThreshold = 0.6
-    const required = ratios.filter(([, r]) => r >= requiredThreshold).map(([u]) => u)
-    const optional = ratios.filter(([, r]) => r < requiredThreshold).map(([u]) => u)
-    const sumCount = list.reduce((s, o) => s + (o.count ?? 0), 0)
-    const sumAvgWeight = list.reduce((s, o) => s + ((o.avg ?? 0) * (o.count ?? 0)), 0)
-    const sumWinWeight = list.reduce((s, o) => s + ((o.win ?? 0) * (o.count ?? 0)), 0)
-    const weightedAvg = sumCount > 0 ? sumAvgWeight / sumCount : undefined
-    const weightedWin = sumCount > 0 ? sumWinWeight / sumCount : undefined
-    return { required, optional, count: sumCount, avg: weightedAvg, win: weightedWin }
-  }
+  // 检查后期阵容是否有7级
+  const hasLateLevel7 = useMemo(() => {
+    return lateEntries.some(([lvl]) => lvl === '7')
+  }, [lateEntries])
+
+  // 处理早期阵容：每个等级只显示场次最多的配置，其他作为可选项
+  const processedEarlyEntries = useMemo(() => {
+    return earlyEntries
+      .filter(([key]) => !hasLateLevel7 || key !== '7') // 如果后期阵容有7级，则过滤掉早期阵容的7级
+      .map(([key, opts]) => {
+        // 按场次排序
+        const sorted = [...opts].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+        const primary = sorted[0]
+        const alternatives = sorted.slice(1)
+
+        return {
+          key,
+          primary: primary
+            ? {
+                units: sortUnitsByCost(parseUnitList(primary.unit_list)),
+                count: primary.count ?? 0,
+                avg: primary.avg,
+                win: primary.win,
+              }
+            : null,
+          alternatives: alternatives.map(opt => ({
+            units: sortUnitsByCost(parseUnitList(opt.unit_list)),
+            count: opt.count ?? 0,
+            avg: opt.avg,
+            win: opt.win,
+          })),
+        }
+      })
+  }, [earlyEntries, hasLateLevel7, sortUnitsByCost])
+
+  // 处理后期阵容：按场次排序，每个等级只保留前5个配置
+  const processedLateEntries = useMemo(() => {
+    return lateEntries
+      .filter(([lvl]) => lvl !== '11') // 过滤掉11级
+      .filter(([, opts]) => opts.length > 0) // 过滤掉空配置
+      .map(([lvl, opts]) => {
+        // 按场次排序，只保留前5个
+        const sorted = [...opts].sort((a, b) => (b.count ?? 0) - (a.count ?? 0)).slice(0, 5)
+        const builds = sorted.map(opt => ({
+          units: sortUnitsByCost(parseUnitList(opt.unit_list)),
+          count: opt.count ?? 0,
+          avg: opt.avg,
+          win: opt.win,
+        }))
+
+        // 找出所有配置中都有的英雄
+        const commonUnits = sortUnitsByCost(findCommonUnits(builds))
+
+        return {
+          lvl,
+          builds,
+          commonUnits,
+        }
+      })
+  }, [lateEntries, sortUnitsByCost])
 
   const hasContent = useMemo(() => {
     const earlyCount = earlyEntries.reduce((sum, [, list]) => sum + (list?.length || 0), 0)
@@ -57,103 +123,168 @@ export const Builds = memo(({ earlyOptions, options }: BuildsProps) => {
 
   return (
     <div className="flex flex-col h-full">
-      <ScrollArea className="h-[calc(100vh-100px)] sm:h-[calc(100vh-110px)]">
-        <div className="flex flex-col gap-3 p-2">
-          {earlyEntries.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h3 className="text-white text-sm font-semibold">早期阵容</h3>
-              </div>
-              {earlyEntries.map(([key, opts]) => (
-                <div key={key} className="space-y-1">
-                  <div className="text-xs text-gray-300">{key}</div>
-                  <div className="flex flex-col gap-1">
-                    {opts.slice(0, 3).map((opt, idx) => {
-                      const units = parseUnitList(opt.unit_list)
-                      return (
-                        <div key={`${key}-${idx}`} className="flex items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/40 px-2 py-1.5">
-                          <div className="flex flex-wrap gap-1.5">
-                            {units.map(u => (
-                              <Champion key={u} id={u} className="sm:size-7.5 size-6" showTooltip />
-                            ))}
-                          </div>
-                          <div className="flex items-center gap-2 text-[10px] text-gray-300">
-                            <span>
-                              场次
-                              {opt.count ?? 0}
-                            </span>
-                            <span>
-                              平均
-                              {formatAvg(opt.avg)}
-                            </span>
-                            {opt.win !== undefined && (
-                              <span>
-                                胜率
-                                {(opt.win * 100).toFixed(1)}
-                                %
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+      <ScrollArea className="h-[calc(100vh-55px)] sm:h-[calc(100vh-80px)]">
+        <div className="flex flex-col gap-3 p-2 px-4">
+          {processedEarlyEntries.length > 0 && (
+            <div className="space-y-1.5">
+              {processedEarlyEntries.map(({ key, primary, alternatives }) => {
+                if (!primary)
+                  return null
 
-          {lateEntries.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h3 className="text-white text-sm font-semibold">后期阵容</h3>
-              </div>
-              {lateEntries.map(([lvl, opts]) => {
-                const agg = aggregate(opts)
-                const levelSize = Number.isFinite(Number(lvl)) ? Number(lvl) : 8
-                const optionalShown = agg.optional.slice(0, Math.max(0, Math.min(6, levelSize - agg.required.length + 2)))
                 return (
-                  <div key={lvl} className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <div className="text-xs text-gray-300">
-                        等级
-                        {lvl}
-                      </div>
-                      <div className="flex items-center gap-2 text-[10px] text-gray-300">
-                        <span>
-                          场次
-                          {agg.count ?? 0}
-                        </span>
-                        <span>
-                          平均
-                          {formatAvg(agg.avg)}
-                        </span>
-                        {agg.win !== undefined && (
-                          <span>
-                            胜率
-                            {((agg.win ?? 0) * 100).toFixed(1)}
-                            %
-                          </span>
+                  <div key={key} className="rounded-md bg-white/5 border border-white/5 px-3 py-2 flex items-center justify-between gap-2 transition-all hover:bg-white/8 hover:border-white/10">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <span className="text-xs text-gray-400 shrink-0 w-6 text-left font-medium">{key}</span>
+                      <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
+                        {primary.units.map(unit => (
+                          <Champion key={`${key}-${unit}`} id={unit} className="sm:size-7.5 size-6" showTooltip />
+                        ))}
+                        {alternatives.length > 0 && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="flex items-center gap-1 ml-1 pl-1.5 border-l border-white/10">
+                                <div className="text-[10px] text-gray-400 font-medium">
+                                  +
+                                  {Math.min(alternatives.length, 3)}
+                                </div>
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent
+                              side="top"
+                              className="bg-black/95 text-white border-white/10 p-2 max-w-[300px]"
+                            >
+                              <div className="space-y-2">
+                                {alternatives.slice(0, 3).map((alt) => {
+                                  const altKey = `${key}-alt-${alt.count}-${alt.units.join('-')}`
+                                  return (
+                                    <div key={altKey} className="space-y-1">
+                                      <div className="flex items-center gap-1 flex-wrap">
+                                        {alt.units.map(unit => (
+                                          <Champion key={`${altKey}-${unit}`} id={unit} className="size-5" showTooltip />
+                                        ))}
+                                      </div>
+                                      <div className="text-[10px] text-gray-400 flex gap-2">
+                                        {alt.avg !== undefined && (
+                                          <span>
+                                            平均:
+                                            {formatAvg(alt.avg)}
+                                          </span>
+                                        )}
+                                        {alt.count !== undefined && (
+                                          <span>
+                                            场次:
+                                            {alt.count}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            </TooltipContent>
+                          </Tooltip>
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-black/40 px-2 py-1.5">
-                      <span className="text-[10px] text-emerald-300">必备</span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {agg.required.map(u => (
-                          <Champion key={`req-${u}`} id={u} className="sm:size-7.5 size-6" showTooltip />
-                        ))}
+                    {primary.avg !== undefined && (
+                      <div className="hidden sm:flex items-center text-[10px] text-gray-400 shrink-0">
+                        <span>{formatAvg(primary.avg)}</span>
                       </div>
-                      <span className="text-[10px] text-gray-300">可选</span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {optionalShown.map(u => (
-                          <Champion key={`opt-${u}`} id={u} className="sm:size-7.5 size-6 opacity-70" showTooltip />
-                        ))}
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )
               })}
+            </div>
+          )}
+
+          {processedEarlyEntries.length > 0 && processedLateEntries.length > 0 && (
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/10" />
+              </div>
+            </div>
+          )}
+
+          {processedLateEntries.length > 0 && (
+            <div className="space-y-1.5">
+              {processedLateEntries.map(({ lvl, builds, commonUnits }) => (
+                <Accordion key={lvl} type="single" collapsible className="w-full">
+                  <AccordionItem value={lvl} className="border-0">
+                    <AccordionTrigger className="group rounded-md bg-white/5 border border-white/5 px-3 py-2 transition-all hover:bg-white/8 hover:border-white/10 hover:no-underline">
+                      <div className="flex items-center justify-between w-full gap-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <span className="text-xs text-gray-400 shrink-0 w-6 text-left font-medium">{lvl}</span>
+                          {builds[0] && (() => {
+                            const aligned = alignUnits(builds[0].units, commonUnits)
+                            return (
+                              <>
+                                <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
+                                  {aligned.common.map((unit, idx) => {
+                                    const unitKey = unit || `empty-${commonUnits[idx]}`
+                                    return unit
+                                      ? (
+                                          <Champion key={`${lvl}-first-common-${unit}`} id={unit} className="sm:size-7.5 size-6" showTooltip />
+                                        )
+                                      : (
+                                          <div key={`${lvl}-first-empty-${unitKey}`} className="sm:size-7.5 size-6" />
+                                        )
+                                  })}
+                                  {aligned.others.map(unit => (
+                                    <Champion key={`${lvl}-first-other-${unit}`} id={unit} className="sm:size-7.5 size-6" showTooltip />
+                                  ))}
+                                </div>
+                              </>
+                            )
+                          })()}
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0 ml-2">
+                          <ChevronRightIcon className="size-4 text-gray-400 transition-transform duration-200 group-data-[state=open]:rotate-90" />
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-1.5 pt-1.5 pb-0">
+                      {builds.map((build) => {
+                        const buildKey = `${lvl}-build-${build.count}-${build.units.join('-')}`
+                        const aligned = alignUnits(build.units, commonUnits)
+                        return (
+                          <div key={buildKey} className="rounded-md bg-white/5 border border-white/5 px-3 py-2 flex items-center justify-between gap-2 transition-all hover:bg-white/8 hover:border-white/10">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <div className="w-6 shrink-0" />
+                              <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
+                                {aligned.common.map((unit, idx) => {
+                                  const unitKey = unit || `empty-${commonUnits[idx]}`
+                                  return unit
+                                    ? (
+                                        <Champion key={`${buildKey}-common-${unit}`} id={unit} className="sm:size-7.5 size-6" showTooltip />
+                                      )
+                                    : (
+                                        <div key={`${buildKey}-empty-${unitKey}`} className="sm:size-7.5 size-6" />
+                                      )
+                                })}
+                                {aligned.others.length > 0 && (
+                                  <>
+                                    {aligned.common.some(Boolean) && (
+                                      <div className="w-px h-4 bg-white/10 mx-0.5" />
+                                    )}
+                                    {aligned.others.map(unit => (
+                                      <Champion key={`${buildKey}-other-${unit}`} id={unit} className="sm:size-7.5 size-6" showTooltip />
+                                    ))}
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                            {build.avg !== undefined && (
+                              <div className="hidden sm:flex items-center text-[10px] text-gray-400 shrink-0">
+                                <span>{formatAvg(build.avg)}</span>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              ))}
             </div>
           )}
         </div>

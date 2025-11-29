@@ -33,7 +33,7 @@ export const UnitDetailPopover = memo(({ unit, children }: UnitDetailPopoverProp
         {children}
       </PopoverTrigger>
       <PopoverContent
-        className="w-36 p-2 bg-black/95 border-white/10 text-white"
+        className="w-30 p-2 bg-black/95 border-white/10 text-white"
         side="right"
         align="start"
       >
@@ -50,20 +50,19 @@ export const UnitDetailPopover = memo(({ unit, children }: UnitDetailPopoverProp
                 </h3>
 
                 {innerChampion.traits && innerChampion.traits.length > 0 && (
-                  <div className="border-t border-white/10">
-                    <div className="flex flex-wrap justify-center gap-0.5">
-                      {innerChampion.traits.map(trait => (
-                        <Trait
-                          key={trait}
-                          id={find(lookups?.traits, { name: trait })?.apiName || ''}
-                          className="size-2"
-                        />
-                      ))}
-                    </div>
+                  // <div className="border-t border-white/10">
+                  <div className="flex justify-center items-center gap-2">
+                    {innerChampion.traits.map(trait => (
+                      <Trait
+                        key={trait}
+                        id={find(lookups?.traits, { name: trait })?.apiName || ''}
+                      />
+                    ))}
                   </div>
+                  // </div>
                 )}
 
-                <div className="w-[90%] border-t border-white/10">
+                <div className="w-[95%]">
                   <ChampionStats
                     avgPlace={unit.avg}
                     top4Rate={unit.top4Rate}
@@ -73,7 +72,7 @@ export const UnitDetailPopover = memo(({ unit, children }: UnitDetailPopoverProp
                 </div>
 
                 {unitItem?.items && unitItem.items.length > 0 && (
-                  <div className="border-t border-white/10 pt-1.5">
+                  <div className="pt-1.5">
                     <div className="flex justify-center gap-0.5">
                       {unitItem.items.slice(0, 5).map(item => (
                         item.itemName && (

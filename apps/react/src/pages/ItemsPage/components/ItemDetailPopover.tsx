@@ -28,7 +28,7 @@ export const ItemDetailPopover = memo(({ item, children }: ItemDetailPopoverProp
         {children}
       </PopoverTrigger>
       <PopoverContent
-        className="w-32 p-2 bg-black/95 border-white/10 text-white"
+        className="w-30 p-2 bg-black/95 border-white/10 text-white"
         side="right"
         align="start"
       >
@@ -70,7 +70,7 @@ export const ItemDetailPopover = memo(({ item, children }: ItemDetailPopoverProp
           </div>
 
           {/* 数据统计 */}
-          <div className="w-[90%] border-t border-white/10 pt-1.5">
+          <div className="w-[95%] pt-1.5">
             <ItemStats
               avgPlace={item.avg}
               top4Rate={item.top4Rate}
@@ -80,7 +80,7 @@ export const ItemDetailPopover = memo(({ item, children }: ItemDetailPopoverProp
           </div>
 
           {unitItem?.units && unitItem.units.length > 0 && (
-            <div className="border-t border-white/10 pt-1.5">
+            <div className="pt-1.5">
               <div className="flex justify-center gap-0.5">
                 {unitItem.units.slice(0, 5).map(unit => (
                   unit.unit && (

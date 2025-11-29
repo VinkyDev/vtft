@@ -1,8 +1,10 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { find } from 'lodash-es'
-import { memo } from 'react'
-import { Badge } from 'ui'
+import { Copy } from 'lucide-react'
+import { memo, useMemo } from 'react'
+import { Badge, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { Champion, Trait } from '@/components'
+import { useUnitsUtils } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
 import { CompStats } from './CompStats'
 import { TierBadge } from './TierBadge'
@@ -14,15 +16,42 @@ interface CompCardProps {
 
 export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
   const { lookupsIndex } = useGlobalStore()
+  const { sortUnitsByCost, generateCompCode } = useUnitsUtils()
+
+  const sortedUnits = useMemo(() => {
+    if (!comp.units || comp.units.length === 0)
+      return []
+    return sortUnitsByCost(comp.units)
+  }, [comp.units, sortUnitsByCost])
+
+  const compCode = useMemo(() => {
+    if (!comp.units || comp.units.length === 0)
+      return ''
+    return generateCompCode(comp.units)
+  }, [comp.units, generateCompCode])
+
   const handleClick = () => {
     if (onClick) {
       onClick(comp)
     }
   }
 
+  const handleCopyCode = async (e: React.MouseEvent) => {
+    e.stopPropagation() // 阻止事件冒泡，避免触发卡片的 onClick
+    if (compCode) {
+      try {
+        await navigator.clipboard.writeText(compCode)
+      }
+      catch (err) {
+        // 如果复制失败，可以在这里处理错误
+        console.error('Failed to copy code:', err)
+      }
+    }
+  }
+
   return (
     <div
-      className="group relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/2 p-2.5 transition-all hover:border-white/10 hover:from-white/12 hover:to-white/5 hover:shadow-lg hover:shadow-black/20 cursor-pointer"
+      className="group relative w-full overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/2 p-2.5 transition-all hover:border-white/10 hover:from-white/12 hover:to-white/5 hover:shadow-lg hover:shadow-black/20 cursor-pointer"
       onClick={handleClick}
     >
       <div className="flex items-start gap-2.5">
@@ -53,6 +82,26 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
                 低出场
               </Badge>
             )}
+            {compCode && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={handleCopyCode}
+                    className="ml-auto shrink-0 p-1 rounded hover:bg-white/10 transition-colors opacity-0 group-hover:opacity-100"
+                    aria-label="复制阵容代码"
+                  >
+                    <Copy className="size-3.5 text-gray-400 hover:text-gray-200" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="bg-black/95 text-white border-white/10 text-xs"
+                >
+                  复制阵容代码
+                </TooltipContent>
+              </Tooltip>
+            )}
           </div>
 
           {comp.traits && comp.traits.length > 0 && (
@@ -63,9 +112,9 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
             </div>
           )}
 
-          {comp.units && comp.units.length > 0 && (
-            <div className="flex flex-wrap gap-x-1 gap-y-2.5">
-              {comp.units.slice(0, 9).map(unit => (
+          {sortedUnits.length > 0 && (
+            <div className="flex flex-wrap gap-x-1 gap-y-3 pb-1">
+              {sortedUnits.slice(0, 9).map(unit => (
                 <Champion
                   className="sm:size-10 size-7.5"
                   key={unit}

@@ -1,7 +1,7 @@
 {
   "name": "server",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "build": "tsup",
     "dev": "tsx watch src/index.ts",

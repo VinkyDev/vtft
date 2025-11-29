@@ -2,6 +2,9 @@ import { BrowserWindow, ipcMain } from 'electron'
 import { IPC_EVENTS } from 'utils'
 import { windowService } from '../services/windowService'
 
+// 最小 setBounds 调用间隔（ms），限制窗口位置更新频率
+const MIN_UPDATE_INTERVAL = 8
+
 // 存储拖动时的初始窗口位置、大小和累积偏移量
 const dragStateMap = new WeakMap<BrowserWindow, {
   initialX: number
@@ -10,7 +13,8 @@ const dragStateMap = new WeakMap<BrowserWindow, {
   initialHeight: number
   totalDx: number
   totalDy: number
-  pendingUpdateTimer: NodeJS.Timeout | null
+  lastUpdateTime: number
+  updateScheduled: boolean
   lastAppliedX: number
   lastAppliedY: number
 }>()
@@ -72,7 +76,7 @@ export async function setupWindowHandlers() {
     },
   )
 
-  // 拖动窗口 - 使用 setBounds 明确保持窗口大小不变，并使用节流优化性能
+  // 拖动窗口 - 使用 setBounds 明确保持窗口大小不变，并使用时间戳节流优化性能
   ipcMain.on(
     IPC_EVENTS.WINDOW.DRAG,
     (event, { dx, dy }: { dx: number, dy: number }) => {
@@ -91,7 +95,8 @@ export async function setupWindowHandlers() {
           initialHeight: bounds.height,
           totalDx: 0,
           totalDy: 0,
-          pendingUpdateTimer: null,
+          lastUpdateTime: 0,
+          updateScheduled: false,
           lastAppliedX: bounds.x,
           lastAppliedY: bounds.y,
         }
@@ -102,35 +107,52 @@ export async function setupWindowHandlers() {
       dragState.totalDx += dx
       dragState.totalDy += dy
 
-      // 使用 setTimeout(0) 节流，批量处理更新
-      // 这样可以避免每次 IPC 事件都立即调用 setBounds，减少系统调用
-      // 使用 0ms 延迟等同于 setImmediate，但类型支持更好
-      if (dragState.pendingUpdateTimer === null) {
-        dragState.pendingUpdateTimer = setTimeout(() => {
-          if (!window.isDestroyed()) {
-            const newX = Math.round(dragState.initialX + dragState.totalDx)
-            const newY = Math.round(dragState.initialY + dragState.totalDy)
+      const now = Date.now()
+      const elapsed = now - dragState.lastUpdateTime
 
-            // 只在位置真正改变时才调用 setBounds，避免不必要的更新
-            if (newX !== dragState.lastAppliedX || newY !== dragState.lastAppliedY) {
-              window.setBounds(
-                {
-                  x: newX,
-                  y: newY,
-                  width: dragState.initialWidth,
-                  height: dragState.initialHeight,
-                },
-                false, // animate = false，禁用动画提升性能
-              )
-              dragState.lastAppliedX = newX
-              dragState.lastAppliedY = newY
-            }
+      // 基于时间戳的节流：如果距离上次更新足够长，立即更新
+      if (elapsed >= MIN_UPDATE_INTERVAL) {
+        applyWindowBounds(window, dragState)
+        dragState.lastUpdateTime = now
+      }
+      else if (!dragState.updateScheduled) {
+        // 否则安排一个延迟更新，确保不会丢失最后的位置变化
+        dragState.updateScheduled = true
+        const delay = MIN_UPDATE_INTERVAL - elapsed
+        setTimeout(() => {
+          if (!window.isDestroyed()) {
+            applyWindowBounds(window, dragState)
+            dragState.lastUpdateTime = Date.now()
           }
-          dragState.pendingUpdateTimer = null
-        }, 0)
+          dragState.updateScheduled = false
+        }, delay)
       }
     },
   )
+
+  // 应用窗口位置的辅助函数
+  function applyWindowBounds(
+    window: BrowserWindow,
+    dragState: NonNullable<ReturnType<typeof dragStateMap.get>>,
+  ) {
+    const newX = Math.round(dragState.initialX + dragState.totalDx)
+    const newY = Math.round(dragState.initialY + dragState.totalDy)
+
+    // 只在位置真正改变时才调用 setBounds，避免不必要的更新
+    if (newX !== dragState.lastAppliedX || newY !== dragState.lastAppliedY) {
+      window.setBounds(
+        {
+          x: newX,
+          y: newY,
+          width: dragState.initialWidth,
+          height: dragState.initialHeight,
+        },
+        false, // animate = false，禁用动画提升性能
+      )
+      dragState.lastAppliedX = newX
+      dragState.lastAppliedY = newY
+    }
+  }
 
   // 开始拖动 - 记录初始位置和大小
   ipcMain.handle(
@@ -139,12 +161,6 @@ export async function setupWindowHandlers() {
       const window = BrowserWindow.fromWebContents(event.sender)
       if (!window) {
         return await windowService.startDrag()
-      }
-
-      // 清理之前的定时器（如果存在）
-      const existingState = dragStateMap.get(window)
-      if (existingState?.pendingUpdateTimer) {
-        clearTimeout(existingState.pendingUpdateTimer)
       }
 
       // 记录拖动开始时的窗口位置和大小
@@ -156,7 +172,8 @@ export async function setupWindowHandlers() {
         initialHeight: bounds.height,
         totalDx: 0,
         totalDy: 0,
-        pendingUpdateTimer: null,
+        lastUpdateTime: 0,
+        updateScheduled: false,
         lastAppliedX: bounds.x,
         lastAppliedY: bounds.y,
       })
@@ -177,26 +194,8 @@ export async function setupWindowHandlers() {
       // 立即应用任何待处理的更新
       const dragState = dragStateMap.get(window)
       if (dragState) {
-        // 清理待处理的定时器
-        if (dragState.pendingUpdateTimer) {
-          clearTimeout(dragState.pendingUpdateTimer)
-          dragState.pendingUpdateTimer = null
-        }
-
-        // 应用最终位置
-        const finalX = Math.round(dragState.initialX + dragState.totalDx)
-        const finalY = Math.round(dragState.initialY + dragState.totalDy)
-        if (finalX !== dragState.lastAppliedX || finalY !== dragState.lastAppliedY) {
-          window.setBounds(
-            {
-              x: finalX,
-              y: finalY,
-              width: dragState.initialWidth,
-              height: dragState.initialHeight,
-            },
-            false,
-          )
-        }
+        // 应用最终位置（确保不会丢失任何累积的偏移量）
+        applyWindowBounds(window, dragState)
 
         // 清理拖动状态
         dragStateMap.delete(window)

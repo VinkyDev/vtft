@@ -66,6 +66,9 @@ interface UseDraggableReturn {
 export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
   const { onDrag, onDragStart, onDragEnd, threshold = 2, enabled = true } = options
 
+  // 最小 IPC 调用间隔（ms），防止高刷新率显示器上过于频繁的调用
+  const MIN_DRAG_INTERVAL = 8
+
   const dragStateRef = useRef({
     isDragging: false,
     startX: 0,
@@ -75,6 +78,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     pendingDx: 0,
     pendingDy: 0,
     rafId: null as number | null,
+    lastDragTime: 0,
   })
 
   useEffect(() => {
@@ -106,15 +110,38 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
         dragStateRef.current.startX = e.screenX
         dragStateRef.current.startY = e.screenY
 
-        // 使用 requestAnimationFrame 节流，限制更新频率到约 60fps
-        // 这样可以减少 IPC 通信次数，提升性能
+        // 使用 requestAnimationFrame 节流，并添加最小时间间隔检查
+        // 这样即使在高刷新率显示器上也能保持稳定的 IPC 调用频率
         if (dragStateRef.current.rafId === null) {
           dragStateRef.current.rafId = requestAnimationFrame(() => {
+            const now = performance.now()
+            const elapsed = now - dragStateRef.current.lastDragTime
             const { pendingDx, pendingDy } = dragStateRef.current
+
+            // 如果距离上次调用时间太短，跳过本次更新，等待下一帧
+            if (elapsed < MIN_DRAG_INTERVAL) {
+              dragStateRef.current.rafId = null
+              // 安排下一帧继续检查
+              if (pendingDx !== 0 || pendingDy !== 0) {
+                dragStateRef.current.rafId = requestAnimationFrame(() => {
+                  const { pendingDx: dx, pendingDy: dy } = dragStateRef.current
+                  if (dx !== 0 || dy !== 0) {
+                    onDrag(dx, dy)
+                    dragStateRef.current.pendingDx = 0
+                    dragStateRef.current.pendingDy = 0
+                    dragStateRef.current.lastDragTime = performance.now()
+                  }
+                  dragStateRef.current.rafId = null
+                })
+              }
+              return
+            }
+
             if (pendingDx !== 0 || pendingDy !== 0) {
               onDrag(pendingDx, pendingDy)
               dragStateRef.current.pendingDx = 0
               dragStateRef.current.pendingDy = 0
+              dragStateRef.current.lastDragTime = now
             }
             dragStateRef.current.rafId = null
           })
@@ -175,6 +202,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
       pendingDx: 0,
       pendingDy: 0,
       rafId: null,
+      lastDragTime: 0,
     }
   }, [enabled])
 

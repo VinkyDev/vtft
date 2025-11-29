@@ -20,14 +20,14 @@ interface ItemsGridProps {
 type SortField = 'composite' | 'game' | 'avgRank'
 
 export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
-  const { lookupsIndex } = useGlobalStore()
+  const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)
   const [category, setCategory] = useState<ItemCategory>('core')
   const [sortField, setSortField] = useState<SortField>('composite')
   const [selectedChampion, setSelectedChampion] = useState<string | null>(null)
 
   const filteredByCategory = useMemo(() => {
-    return items.filter(i => getItemCategory(i.itemNames, lookupsIndex.itemsById) === category)
-  }, [items, category, lookupsIndex])
+    return items.filter(i => getItemCategory(i.itemNames, itemsById) === category)
+  }, [items, category, itemsById])
 
   const filteredItems = useMemo(() => {
     if (!selectedChampion)

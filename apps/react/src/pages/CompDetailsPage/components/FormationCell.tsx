@@ -19,8 +19,8 @@ const hexagonClipPath = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0
  * 展示单个位置上的英雄及其装备
  */
 export const FormationCell = memo(({ champion, items, isHighlighted = false, isDimmed = false }: FormationCellProps) => {
-  const { lookupsIndex } = useGlobalStore()
-  const championMeta = lookupsIndex.unitsById[champion || '']
+  const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
+  const championMeta = unitsById[champion || '']
 
   // 空格子
   if (!champion) {

@@ -15,7 +15,8 @@ interface CompCardProps {
 }
 
 export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
-  const { lookupsIndex } = useGlobalStore()
+  const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
+  const traitsById = useGlobalStore(s => s.lookupsIndex.traitsById)
   const { sortUnitsByCost, generateCompCode } = useUnitsUtils()
 
   const sortedUnits = useMemo(() => {
@@ -68,9 +69,9 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
                       if (!n?.name)
                         return null
                       if (n.type === 'unit')
-                        return lookupsIndex.unitsById[n.name]?.name || lookupsIndex.unitsById[n.name]?.en_name || n.name
+                        return unitsById[n.name]?.name || unitsById[n.name]?.en_name || n.name
                       if (n.type === 'trait')
-                        return lookupsIndex.traitsById[n.name]?.name || lookupsIndex.traitsById[n.name]?.en_name || n.name
+                        return traitsById[n.name]?.name || traitsById[n.name]?.en_name || n.name
                       return n.name
                     })
                     .filter(Boolean)

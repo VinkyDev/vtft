@@ -15,14 +15,16 @@ interface ItemCardProps {
  * 展示单个装备的详细信息（横向一行布局）
  */
 export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
-  const { lookupsIndex, unitItemsIndex, loadUnitItems } = useGlobalStore()
+  const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)
+  const unitItemsIndex = useGlobalStore(s => s.unitItemsIndex)
+  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
 
   useEffect(() => {
     if (!unitItemsIndex || Object.keys(unitItemsIndex.itemNamesById).length === 0)
       loadUnitItems()
   }, [unitItemsIndex, loadUnitItems])
 
-  const itemMeta = useMemo(() => lookupsIndex.itemsById[item.itemNames], [lookupsIndex, item.itemNames])
+  const itemMeta = useMemo(() => itemsById[item.itemNames], [itemsById, item.itemNames])
   const components = itemMeta?.composition ?? []
 
   const recommendedUnits = item?.units ?? []

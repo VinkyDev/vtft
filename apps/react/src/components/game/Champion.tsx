@@ -44,11 +44,11 @@ export const Champion = memo(({
   itemClassName,
   renderExtra,
 }: ChampionProps) => {
-  const { lookupsIndex } = useGlobalStore()
+  const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
 
   const champion = useMemo(() => {
-    return lookupsIndex.unitsById[id]
-  }, [lookupsIndex, id])
+    return unitsById[id]
+  }, [unitsById, id])
 
   if (!champion) {
     return null
@@ -72,6 +72,7 @@ export const Champion = memo(({
         src={genIcon(id)}
         alt={champion.name}
         className="h-full w-full object-cover"
+        loading="lazy"
         draggable={false}
       />
     </div>

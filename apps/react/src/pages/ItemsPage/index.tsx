@@ -26,7 +26,7 @@ function ItemsPage() {
     },
   )
 
-  const { loadUnitItems } = useGlobalStore()
+  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
   useMount(loadUnitItems)
 
   const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)

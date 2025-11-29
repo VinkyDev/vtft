@@ -5,52 +5,19 @@
  * 最后把质量分乘以置信度并加上基于 ECDF 的流行度加成。
  */
 
-// ==================== 可调优常量 ====================
+import { DEFAULT_AVG_PLACE, RANKING_CONFIG } from './constants'
 
-/**
- * 流行度加成上限
- * - 控制高场次装备的额外加分上限
- * - 值越大: 必备装备(高场次但影响一般)的排名越高
- * - 值越小: 更倾向于高质量装备
- * - 建议范围: 3-8
- * - 推荐值: 5 (平衡质量和流行度)
- */
-const POPULARITY_CAP = 5
-
-/**
- * 基础置信度的幂次调整
- * - confidence = (confEcdf^CONFIDENCE_ECDF_POWER) × (confCount^CONFIDENCE_COUNT_POWER)
- * - ECDF幂次越小: 对场次分布的敏感度越低,质量差异更明显
- * - Count幂次越小: 对绝对场次的敏感度越低,质量差异更明显
- * - 建议范围: 0.1-1.0
- * - 推荐值: 0.3-0.5
- */
-const CONFIDENCE_ECDF_POWER = 0.3
-const CONFIDENCE_COUNT_POWER = 0.5
-
-/**
- * 贝叶斯收缩的强度系数
- * - k = medianMatches × SHRINKAGE_STRENGTH
- * - 值越大: 对小样本的收缩越强,越保守
- * - 值越小: 对小样本的收缩越弱,越激进
- * - 建议范围: 0.5-2.0
- * - 推荐值: 1.0 (直接使用中位数)
- */
-const SHRINKAGE_STRENGTH = 1.0
-
-/**
- * 样本比调整的强度系数
- * - kConf = medianMatches × SAMPLE_RATIO_STRENGTH / 2
- * - 值越大: 对中低场次的惩罚越轻
- * - 值越小: 对中低场次的惩罚越重
- * - 建议范围: 0.5-2.0
- * - 推荐值: 1.0
- */
-const SAMPLE_RATIO_STRENGTH = 1.0
-
-const MANDATORY_BLEND_STRENGTH = 0.6
-const NECESSITY_THRESHOLD = 0.8
-const NECESSITY_POWER = 0.7
+// 解构常量以保持代码简洁
+const {
+  POPULARITY_CAP,
+  CONFIDENCE_ECDF_POWER,
+  CONFIDENCE_COUNT_POWER,
+  SHRINKAGE_STRENGTH,
+  SAMPLE_RATIO_STRENGTH,
+  MANDATORY_BLEND_STRENGTH,
+  NECESSITY_THRESHOLD,
+  NECESSITY_POWER,
+} = RANKING_CONFIG
 
 // ====================================================
 interface GlobalStats {
@@ -124,8 +91,8 @@ function calculateGlobalStats(
 
   // 1. 计算全局先验均值
   const impacts = validItems.map((item) => {
-    const avgRank = item.avgRank ?? item.avgPlace ?? 4.5
-    return -(avgRank - 4.5) // u_raw = -impact
+    const avgRank = item.avgRank ?? item.avgPlace ?? DEFAULT_AVG_PLACE
+    return -(avgRank - DEFAULT_AVG_PLACE) // u_raw = -impact
   })
   const mu0 = impacts.reduce((sum, val) => sum + val, 0) / impacts.length
 
@@ -161,7 +128,7 @@ function calculateCompositeScore(
   const { mu0, medianPickRate, ecdf } = globalStats
 
   // 1. 基础效用转换
-  const impact = avgRank - 4.5
+  const impact = avgRank - DEFAULT_AVG_PLACE
   const uRaw = -impact
 
   // 2. 贝叶斯收缩 (k = medianMatches × SHRINKAGE_STRENGTH)
@@ -199,13 +166,13 @@ export function rankItems<T extends { pickRate: number, impact: number }>(
   const globalStats = calculateGlobalStats(
     items.map(item => ({
       pickRate: item.pickRate,
-      avgRank: item.impact + 4.5,
+      avgRank: item.impact + DEFAULT_AVG_PLACE,
     })),
   )
 
   // 为每个项计算综合得分
   return items.map((item) => {
-    const avgRank = item.impact + 4.5
+    const avgRank = item.impact + DEFAULT_AVG_PLACE
     const compositeScore = calculateCompositeScore(
       item.pickRate,
       avgRank,

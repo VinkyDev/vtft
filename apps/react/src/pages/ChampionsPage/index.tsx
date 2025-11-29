@@ -12,7 +12,7 @@ import { sortChampions } from './helper'
 function ChampionsPage() {
   const [costFilter, setCostFilter] = useState<ChampionCostFilter>('all')
   const [sortField, setSortField] = useState<ChampionSortField>('composite')
-  const { loadUnitItems } = useGlobalStore()
+  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
   useMount(loadUnitItems)
   const season = useGlobalStore(s => s.curSeason)
   const { data: units, loading } = useRequest(

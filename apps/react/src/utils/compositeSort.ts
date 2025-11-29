@@ -4,6 +4,7 @@
  */
 
 import type { CompItem, ItemStat, UnitStat } from 'types'
+import { DEFAULT_AVG_PLACE } from './constants'
 import { rankItems } from './ranking'
 
 /**
@@ -22,7 +23,7 @@ export function compositeSortChampions(
   const rankedData = rankItems(
     items.map(item => ({
       pickRate: item.pickRate ?? 0,
-      impact: item.avg !== undefined ? item.avg - 4.5 : 0,
+      impact: item.avg !== undefined ? item.avg - DEFAULT_AVG_PLACE : 0,
     })),
   )
 
@@ -47,7 +48,7 @@ export function compositeSortItems(
   const rankedData = rankItems(
     items.map(item => ({
       pickRate: item.pickRate ?? 0,
-      impact: item.avg !== undefined ? item.avg - 4.5 : 0,
+      impact: item.avg !== undefined ? item.avg - DEFAULT_AVG_PLACE : 0,
     })),
   )
 
@@ -67,7 +68,7 @@ export function compositeSortCompItems(
   const rankedData = rankItems(
     items.map(item => ({
       pickRate: item.pcnt !== undefined ? item.pcnt * 100 : 0,
-      impact: item.avg !== undefined ? item.avg - 4.5 : 0,
+      impact: item.avg !== undefined ? item.avg - DEFAULT_AVG_PLACE : 0,
     })),
   )
 

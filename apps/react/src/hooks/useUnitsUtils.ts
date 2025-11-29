@@ -15,7 +15,8 @@ import { useGlobalStore } from '@/store/globalStore'
  * ```
  */
 export function useUnitsUtils() {
-  const { lookupsIndex, curSeason } = useGlobalStore()
+  const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
+  const curSeason = useGlobalStore(s => s.curSeason)
 
   // 从赛季字符串提取TFTSet标识（如 "s15" -> "TFTSet15"）
   const tftSetIdentifier = useMemo(() => {
@@ -39,8 +40,8 @@ export function useUnitsUtils() {
       return []
 
     return [...units].sort((a, b) => {
-      const unitA = lookupsIndex.unitsById[a]
-      const unitB = lookupsIndex.unitsById[b]
+      const unitA = unitsById[a]
+      const unitB = unitsById[b]
 
       const costA = unitA?.cost ?? 999
       const costB = unitB?.cost ?? 999
@@ -52,7 +53,7 @@ export function useUnitsUtils() {
       // cost相同则按ID字母顺序排序
       return a.localeCompare(b)
     })
-  }, [lookupsIndex])
+  }, [unitsById])
 
   /**
    * 生成阵容代码
@@ -72,7 +73,7 @@ export function useUnitsUtils() {
     // 收集所有英雄的code
     const codes: string[] = []
     for (const unitId of units) {
-      const unit = lookupsIndex.unitsById[unitId]
+      const unit = unitsById[unitId]
       if (unit?.code) {
         codes.push(unit.code)
       }
@@ -86,7 +87,7 @@ export function useUnitsUtils() {
 
     // 组合：02 + codes + TFTSet标识
     return `02${paddedCodes}${tftSetIdentifier}`
-  }, [lookupsIndex, tftSetIdentifier])
+  }, [unitsById, tftSetIdentifier])
 
   return {
     sortUnitsByCost,

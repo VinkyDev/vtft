@@ -29,8 +29,8 @@ export const Item = memo(({
   renderExtra,
   onClick,
 }: ItemProps) => {
-  const { lookupsIndex } = useGlobalStore()
-  const item = useMemo(() => lookupsIndex.itemsById[id], [lookupsIndex, id])
+  const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)
+  const item = useMemo(() => itemsById[id], [itemsById, id])
 
   if (!item) {
     return <>{id}</>
@@ -42,6 +42,7 @@ export const Item = memo(({
     >
       <img
         src={getIcon(id)}
+        alt=""
         className="h-full w-full object-cover rounded"
         loading="lazy"
         draggable={false}

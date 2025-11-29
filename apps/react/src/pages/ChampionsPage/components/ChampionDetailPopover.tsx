@@ -18,7 +18,9 @@ interface UnitDetailPopoverProps {
  * 显示英雄的完整信息，包括费用、羁绊、统计数据等
  */
 export const UnitDetailPopover = memo(({ unit, children }: UnitDetailPopoverProps) => {
-  const { lookups, unitItemsIndex, loadUnitItems } = useGlobalStore()
+  const traits = useGlobalStore(s => s.lookups?.traits)
+  const unitItemsIndex = useGlobalStore(s => s.unitItemsIndex)
+  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
 
   useEffect(() => {
     if (!unitItemsIndex || Object.keys(unitItemsIndex).length === 0)
@@ -55,7 +57,7 @@ export const UnitDetailPopover = memo(({ unit, children }: UnitDetailPopoverProp
                     {innerChampion.traits.map(trait => (
                       <Trait
                         key={trait}
-                        id={find(lookups?.traits, { name: trait })?.apiName || ''}
+                        id={find(traits, { name: trait })?.apiName || ''}
                       />
                     ))}
                   </div>

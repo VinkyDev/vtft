@@ -75,7 +75,8 @@ function getRowCol(n: number) {
  * 展示 7x4 的云顶之弈六边形棋盘布局
  */
 export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProps) => {
-  const { lookupsIndex } = useGlobalStore()
+  const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
+  const traitsById = useGlobalStore(s => s.lookupsIndex.traitsById)
   const [hoveredTrait, setHoveredTrait] = useState<string | null>(null)
 
   const positioning = useMemo(() => data?.positioning || [], [data])
@@ -118,8 +119,8 @@ export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProp
               >
                 {row.map((position, colIndex) => {
                   const unitId = position?.unit || ''
-                  const unitMeta = lookupsIndex.unitsById[unitId]
-                  const hoveredTraitName = hoveredTrait ? lookupsIndex.traitsById[hoveredTrait]?.name : undefined
+                  const unitMeta = unitsById[unitId]
+                  const hoveredTraitName = hoveredTrait ? traitsById[hoveredTrait]?.name : undefined
                   const hasTrait = hoveredTraitName ? unitMeta?.traits?.includes(hoveredTraitName) : false
                   const isHighlighted = !!hoveredTrait && !!position?.unit && !!hasTrait
                   const isDimmed = !!hoveredTrait && !!position?.unit && !hasTrait

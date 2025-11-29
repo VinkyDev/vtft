@@ -74,6 +74,7 @@ function IconBox({ className, isActive, styleColor, traitName, name }: IconBoxPr
             <img
               src={iconUrl}
               alt={name}
+              loading="lazy"
               draggable={false}
               className="relative h-[70%] w-[70%] object-contain transition-all opacity-40 grayscale"
             />
@@ -89,9 +90,9 @@ export const Trait = memo(({
   className = '',
   onClick,
 }: TraitProps) => {
-  const { lookupsIndex } = useGlobalStore()
+  const traitsById = useGlobalStore(s => s.lookupsIndex.traitsById)
   const { apiName, traitName, level } = useMemo(() => parse(id), [id])
-  const trait = useMemo(() => lookupsIndex.traitsById[apiName], [apiName, lookupsIndex])
+  const trait = useMemo(() => traitsById[apiName], [apiName, traitsById])
 
   const styleColor = useMemo(() => {
     if (!trait)

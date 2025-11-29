@@ -18,7 +18,7 @@ interface ItemDetailPopoverProps {
  * 显示装备的完整信息，包括配方、推荐英雄、统计数据等
  */
 export const ItemDetailPopover = memo(({ item, children }: ItemDetailPopoverProps) => {
-  const { unitItemsIndex } = useGlobalStore()
+  const unitItemsIndex = useGlobalStore(s => s.unitItemsIndex)
 
   const unitItem = useMemo(() => item.itemName ? unitItemsIndex?.itemNamesById?.[item.itemName] : undefined, [item.itemName, unitItemsIndex])
 

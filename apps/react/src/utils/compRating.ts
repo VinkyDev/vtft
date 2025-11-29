@@ -1,4 +1,11 @@
 import type { Comp } from 'types'
+import {
+  DEFAULT_AVG_PLACE,
+  LOW_PICK_RATE_THRESHOLD,
+  METRIC_WEIGHTS,
+  NORMALIZATION_CONFIG,
+  TIER_PERCENTILES,
+} from './constants'
 
 /**
  * 阵容评级类型
@@ -30,42 +37,6 @@ export interface GroupedComps {
   normal: EnhancedCompData[]
   lowPickrate: EnhancedCompData[]
 }
-
-/**
- * 评级百分位阈值
- * 基于排名百分位来分配评级，确保每个评级都有合理的阵容分布
- */
-const TIER_PERCENTILES = {
-  S: 0.10, // 前 10%
-  A: 0.30, // 前 10%-30%
-  B: 0.55, // 前 30%-55%
-  C: 0.80, // 前 55%-80%
-  D: 1.00, // 后 20%
-}
-
-/**
- * 标准化配置
- */
-const NORMALIZATION_CONFIG = {
-  // 平均排名范围
-  avgPlace: { min: 1.5, max: 8.0 },
-  // 前四率范围（百分比）
-  top4Rate: { min: 0.01, max: 95 },
-  // 吃鸡率范围（百分比）
-  firstPlaceRate: { min: 0.01, max: 70 },
-  // 选取率范围（百分比）
-  pickRate: { min: 0.01, max: 10 },
-} as const
-
-/**
- * 指标权重配置
- */
-const METRIC_WEIGHTS = {
-  avgPlace: 0.40,
-  top4Rate: 0.20,
-  firstPlaceRate: 0.10,
-  pickRate: 0.30,
-} as const
 
 /**
  * 通用归一化函数
@@ -131,7 +102,7 @@ function sigmoidTransform(normalizedScore: number, steepness = 10): number {
  */
 function calculateCompScore(comp: Comp): number {
   // ========== 1. 平均排名得分（权重 40%）==========
-  const avgPlace = comp.avg || 4.5
+  const avgPlace = comp.avg || DEFAULT_AVG_PLACE
   const avgPlaceNormalized = normalize(
     avgPlace,
     NORMALIZATION_CONFIG.avgPlace.min,
@@ -205,11 +176,7 @@ function getCompTier(_score: number, percentile: number): CompTier {
  */
 function isLowPickrateComp(comp: Comp): boolean {
   const pickRate = comp.pickRate || 0
-
-  // 选取率阈值：0.25%
-  const isLowPickRate = pickRate < 0.25
-
-  return isLowPickRate
+  return pickRate < LOW_PICK_RATE_THRESHOLD
 }
 
 /**
@@ -318,7 +285,7 @@ function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
     // 普通阵容按得分降序
     group.normal.sort((a, b) => b.score - a.score)
     // 低出场率阵容按平均排名升序
-    group.lowPickrate.sort((a, b) => (a.avg || 4.5) - (b.avg || 4.5))
+    group.lowPickrate.sort((a, b) => (a.avg || DEFAULT_AVG_PLACE) - (b.avg || DEFAULT_AVG_PLACE))
   })
 
   // 返回有数据的分组，按 S -> A -> B -> C -> D 顺序

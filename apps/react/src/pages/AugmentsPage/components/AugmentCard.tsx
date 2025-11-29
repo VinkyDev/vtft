@@ -12,13 +12,13 @@ interface AugmentCardProps {
  * 只显示符文图标和名称
  */
 export const AugmentCard = memo(({ id }: AugmentCardProps) => {
-  const { lookupsIndex } = useGlobalStore()
+  const augmentsById = useGlobalStore(s => s.lookupsIndex.augmentsById)
 
   if (!id) {
     return null
   }
 
-  const augment = lookupsIndex.augmentsById[id]
+  const augment = augmentsById[id]
 
   if (!augment) {
     return null

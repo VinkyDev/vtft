@@ -43,9 +43,9 @@ export const Augment = memo(({
   onClick,
   renderExtra,
 }: AugmentProps) => {
-  const { lookupsIndex } = useGlobalStore()
+  const augmentsById = useGlobalStore(s => s.lookupsIndex.augmentsById)
 
-  const augment = lookupsIndex.augmentsById[id]
+  const augment = augmentsById[id]
 
   if (!augment) {
     return null
@@ -63,6 +63,7 @@ export const Augment = memo(({
         src={getIcon(augment.icon)}
         alt={augment.name}
         className="h-full w-full object-cover"
+        loading="lazy"
         draggable={false}
       />
     </div>

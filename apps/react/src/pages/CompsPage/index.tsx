@@ -11,6 +11,7 @@ import { TierSection } from './components'
 
 function CompRankingsPage() {
   const season = useGlobalStore(s => s.curSeason)
+  const globalLoading = useGlobalStore(s => s.loading)
 
   const { data, loading } = useRequest(
     async () => {
@@ -44,7 +45,7 @@ function CompRankingsPage() {
   return (
     <>
       <ScrollArea className="h-[calc(100vh-58px)] sm:h-[calc(100vh-68px)]" type="scroll">
-        {loading
+        {loading || globalLoading
           ? (
               <CompPageSkeleton />
             )

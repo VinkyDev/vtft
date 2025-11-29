@@ -5,14 +5,11 @@ import App from './App'
 import { GlobalErrorBoundary } from './components'
 
 export function Layout() {
-  const { initGlobalStore, loading } = useGlobalStore()
+  const { initGlobalStore } = useGlobalStore()
 
   useEffect(() => {
     initGlobalStore()
   }, [initGlobalStore])
-
-  if (loading)
-    return <></>
 
   return (
     <GlobalErrorBoundary>

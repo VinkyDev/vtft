@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { memo } from 'react'
+import { SkeletonBase } from './SkeletonBase'
 
 interface FormationBoardSkeletonProps {
   /** 容器类名 */
@@ -14,16 +15,25 @@ export const FormationBoardSkeleton = memo(({ className = '' }: FormationBoardSk
   const hexagonClipPath = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
 
   return (
-    <div className={`flex flex-col items-center justify-center h-full w-full p-4 gap-1 ${className}`}>
+    <div className={`flex flex-col items-center justify-center h-full w-full p-1 sm:p-4 gap-1 ${className}`}>
+      {/* 等级分布骨架屏 */}
+      <div className="flex items-center gap-2 text-xs">
+        <SkeletonBase className="h-4 w-16 rounded" shimmer={false} />
+        <div className="flex items-center gap-1.5">
+          {Array.from({ length: 3 }).map((_, idx) => (
+            <SkeletonBase key={idx} className="h-5 w-12 rounded" shimmer={false} />
+          ))}
+        </div>
+      </div>
       <div className="flex items-center justify-center">
-        <div className="p-3 sm:p-5">
-          <div className="flex flex-col gap-1.5 sm:gap-2">
+        <div className="p-1 sm:p-5">
+          <div className="flex flex-col gap-1 sm:gap-2">
             {Array.from({ length: ROWS }).map((_, rowIndex) => (
               <div
                 key={rowIndex}
-                className="flex gap-1.5 sm:gap-2"
+                className="flex gap-1 sm:gap-2"
                 style={{
-                  marginLeft: rowIndex % 2 === 1 ? 'calc(min(4.5vw, 2.25rem))' : '0',
+                  marginLeft: rowIndex % 2 === 1 ? 'calc(min(4.25vw, 2rem))' : '0',
                 }}
               >
                 {Array.from({ length: COLS }).map((_, colIndex) => (
@@ -31,8 +41,8 @@ export const FormationBoardSkeleton = memo(({ className = '' }: FormationBoardSk
                     key={`${rowIndex}-${colIndex}`}
                     className="relative"
                     style={{
-                      width: 'min(9vw, 4.5rem)',
-                      height: 'min(10.5vw, 5.25rem)',
+                      width: 'min(8.5vw, 4rem)',
+                      height: 'min(9.8vw, 4.6rem)',
                     }}
                   >
                     {/* 六边形背景 */}
@@ -48,7 +58,7 @@ export const FormationBoardSkeleton = memo(({ className = '' }: FormationBoardSk
                       style={{ clipPath: hexagonClipPath }}
                     >
                       <div
-                        className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/30 to-transparent blur-sm"
+                        className="absolute inset-0 -translate-x-full animate-shimmer bg-linear-to-r from-transparent via-white/30 to-transparent blur-sm"
                         style={{ animationDelay: `${(rowIndex * COLS + colIndex) * 0.05}s` }}
                       />
                     </div>

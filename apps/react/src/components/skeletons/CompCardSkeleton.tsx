@@ -16,7 +16,7 @@ export const CompCardSkeleton = memo(({ count = 5, className = '' }: CompCardSke
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/[0.02] p-2.5"
+          className="relative overflow-hidden rounded-lg border border-white/5 bg-linear-to-br from-white/[0.07] to-white/2 p-2.5"
         >
           <div className="flex items-start gap-2.5">
             {/* 左侧: Tier 徽章骨架 */}
@@ -36,7 +36,6 @@ export const CompCardSkeleton = memo(({ count = 5, className = '' }: CompCardSke
               <div className="flex flex-wrap gap-0.5">
                 {Array.from({ length: 3 }).map((_, j) => (
                   <div
-
                     key={j}
                     className="relative overflow-hidden h-5 w-5 rounded border border-white/10 bg-black/30"
                   >
@@ -46,18 +45,10 @@ export const CompCardSkeleton = memo(({ count = 5, className = '' }: CompCardSke
               </div>
 
               {/* 英雄图标 */}
-              <div className="flex flex-wrap gap-0.5">
+              <div className="flex flex-wrap gap-x-1 gap-y-3 pb-1">
                 {Array.from({ length: 6 }).map((_, j) => (
-
-                  <div key={j} className="flex flex-col items-center gap-0.5">
-                    <div className="relative overflow-hidden h-7 w-9 rounded border-2 border-white/20 bg-linear-to-br from-gray-700/50 to-gray-800/50">
-                      <div className="absolute inset-0 animate-skeleton-pulse bg-white/15" />
-                    </div>
-                    <div className="flex gap-0.5">
-                      <SkeletonBase className="h-3 w-3 rounded" shimmer={false} />
-                      <SkeletonBase className="h-3 w-3 rounded" shimmer={false} />
-                      <SkeletonBase className="h-3 w-3 rounded" shimmer={false} />
-                    </div>
+                  <div key={j} className="relative overflow-hidden sm:h-10 sm:w-10 h-7.5 w-7.5 rounded border-2 border-white/20 bg-linear-to-br from-gray-700/50 to-gray-800/50">
+                    <div className="absolute inset-0 animate-skeleton-pulse bg-white/15" />
                   </div>
                 ))}
               </div>
@@ -66,10 +57,9 @@ export const CompCardSkeleton = memo(({ count = 5, className = '' }: CompCardSke
             {/* 右侧: 数据指标骨架 */}
             <div className="flex shrink-0 flex-col gap-1 text-right self-center">
               {Array.from({ length: 4 }).map((_, j) => (
-
                 <div key={j} className="flex items-center gap-2 justify-end">
-                  <SkeletonBase className="h-3 w-8 rounded" />
-                  <SkeletonBase className="h-3 w-10 rounded" />
+                  <SkeletonBase className="h-3 w-8 rounded" shimmer={false} />
+                  <SkeletonBase className="h-3 w-10 rounded" shimmer={false} />
                 </div>
               ))}
             </div>

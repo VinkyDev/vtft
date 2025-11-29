@@ -4,6 +4,10 @@ body {
   background: transparent;
 }
 
+[data-radix-scroll-area-viewport] > div {
+  display: block !important;
+}
+
 .drag {
   -webkit-app-region: drag;
 }

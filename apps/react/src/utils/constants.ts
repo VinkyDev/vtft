@@ -72,4 +72,3 @@ export const RANKING_CONFIG = {
   /** 必要性幂次 */
   NECESSITY_POWER: 0.7,
 } as const
-

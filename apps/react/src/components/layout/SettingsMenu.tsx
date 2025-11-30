@@ -1,4 +1,5 @@
-import { Check, Settings } from 'lucide-react'
+import { Check, RefreshCw, Settings } from 'lucide-react'
+import { useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,19 @@ export function SettingsMenu() {
   const seasons = useGlobalStore(s => s.seasons)
   const curSeason = useGlobalStore(s => s.curSeason)
   const setSeason = useGlobalStore(s => s.setSeason)
+  const refreshData = useGlobalStore(s => s.refreshData)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    try {
+      await refreshData()
+    }
+    finally {
+      setIsRefreshing(false)
+    }
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -48,6 +62,16 @@ export function SettingsMenu() {
             )}
           </DropdownMenuItem>
         ))}
+
+        <DropdownMenuSeparator className="bg-white/10" />
+        <DropdownMenuItem
+          className="flex items-center gap-2 px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 focus:bg-white/5 focus:text-white transition-colors"
+          onSelect={handleRefresh}
+          disabled={isRefreshing}
+        >
+          <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <span>{isRefreshing ? '刷新中...' : '刷新数据'}</span>
+        </DropdownMenuItem>
 
       </DropdownMenuContent>
     </DropdownMenu>

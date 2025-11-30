@@ -12,7 +12,7 @@ export function SkeletonBase({ className, shimmer = true, ...props }: SkeletonBa
         className={cn(
           'relative overflow-hidden rounded-md bg-white/10',
           'before:absolute before:inset-0 before:-translate-x-full before:animate-shimmer',
-          'before:bg-linear-to-r before:from-transparent before:via-white/30 before:to-transparent',   
+          'before:bg-linear-to-r before:from-transparent before:via-white/30 before:to-transparent',
           'before:blur-sm',
           className,
         )}

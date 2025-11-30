@@ -1,7 +1,6 @@
 import type { ScheduledTask } from '../index'
 import process from 'node:process'
 import { Logger } from 'logger'
-import pLimit from 'p-limit'
 import { generateCompId } from 'utils'
 import { getQueueEnums } from '../../config/seasons'
 import { clearCache } from '../../middleware'
@@ -19,6 +18,8 @@ export function createCompsTask(): ScheduledTask {
     task: async () => {
       const db = databaseService.getTFTDatabase()
       const { getAllCompsData, getCompDetails } = await import('scraper')
+      const pLimitModule = await import('p-limit')
+      const pLimit = pLimitModule.default || pLimitModule
       const concurrency = Number(process.env.CRAWLER_DETAILS_CONCURRENCY || 5)
       const limit = pLimit(concurrency)
 

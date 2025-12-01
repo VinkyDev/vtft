@@ -36,7 +36,7 @@ compRoutes.openapi(listCompsRoute, async (c) => {
     throw new HTTPException(400, { message: `Invalid season: ${season}` })
   }
   const data = await compService.list(queue ?? undefined)
-  return c.json({ success: true, data }) as unknown as RouteConfigToTypedResponse<typeof listCompsRoute>
+  return c.json({ success: true, data }) as RouteConfigToTypedResponse<typeof listCompsRoute>
 })
 
 const getCompRoute = createRoute({
@@ -61,7 +61,7 @@ compRoutes.openapi(getCompRoute, async (c) => {
   if (!details) {
     throw new HTTPException(404, { message: `Details for comp '${compId}' not found` })
   }
-  return c.json({ success: true, data: details }) as unknown as RouteConfigToTypedResponse<typeof getCompRoute>
+  return c.json({ success: true, data: details }) as RouteConfigToTypedResponse<typeof getCompRoute>
 })
 
 export default compRoutes

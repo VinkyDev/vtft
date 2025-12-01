@@ -33,7 +33,7 @@ export function getQueueEnums(): Queue[] {
       return Queue.FORMAL
     if (q === Queue.PBE)
       return Queue.PBE
-    return q as unknown as Queue
+    return q as Queue
   })
 }
 

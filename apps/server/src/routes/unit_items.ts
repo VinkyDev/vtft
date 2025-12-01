@@ -21,7 +21,7 @@ const getRoute = createRoute({
 
 unitItemsRoutes.openapi(getRoute, async (c) => {
   const data = await unitItemsService.get()
-  return c.json({ success: true, data }) as unknown as RouteConfigToTypedResponse<typeof getRoute>
+  return c.json({ success: true, data }) as RouteConfigToTypedResponse<typeof getRoute>
 })
 
 export default unitItemsRoutes

@@ -75,7 +75,14 @@ pnpm dev:server
 
 ```env
 # 服务端环境变量
-MONGODB_URI=mongodb://localhost:27017/vtft # 数据库链接
+MONGODB_URI=mongodb://xxx:xxx@xxx.xxx:xxx
+MONGODB_DB_NAME=vtft
+CRAWLER_BASIC_DATA_ENABLED=true
+CRAWLER_BASIC_DATA_SCHEDULE=0 */4 * * *
+CRAWLER_COMPS_ENABLED=true
+CRAWLER_COMPS_SCHEDULE=5 */4 * * *
+CRAWLER_DETAILS_CONCURRENCY=5
+SEASONS=S15:1100,S16:PBE
 
 # 桌面端环境变量
 VITE_APTABASE_CODE=xxx # 用于 Aptabase 埋点

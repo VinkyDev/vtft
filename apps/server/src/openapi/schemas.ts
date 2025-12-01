@@ -53,6 +53,7 @@ export const CompV2Schema = z.object({
   stars_4: z.array(z.string()).optional(),
   builds: z.array(BuildSchema).optional(),
   levelling: z.enum(['Fast 8', 'Fast 9', 'lvl 5', 'lvl 6', 'lvl 7', 'Standard']).optional(),
+  updatedAt: z.string().optional(),
 }).openapi('CompV2')
 
 const CounterSchema = z.object({

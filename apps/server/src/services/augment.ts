@@ -5,7 +5,7 @@ class AugmentService {
   async list(): Promise<TierList[]> {
     const db = databaseService.getTFTDatabase()
     const all = await db.augments.find()
-    return all as unknown as TierList[]
+    return all as TierList[]
   }
 }
 

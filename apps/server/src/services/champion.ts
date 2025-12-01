@@ -7,7 +7,7 @@ class UnitService {
     const data = queue
       ? await db.unitsStats.find({ queue }, { sort: { pickRate: -1 } })
       : await db.unitsStats.findAll()
-    return data as unknown as UnitStat[]
+    return data as UnitStat[]
   }
 }
 

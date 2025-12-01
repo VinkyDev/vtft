@@ -31,7 +31,7 @@ lookupsRoutes.openapi(getRoute, async (c) => {
     throw new HTTPException(400, { message: `Invalid season: ${season}` })
   }
   const data = await lookupsService.get(season)
-  return c.json({ success: true, data }) as unknown as RouteConfigToTypedResponse<typeof getRoute>
+  return c.json({ success: true, data }) as RouteConfigToTypedResponse<typeof getRoute>
 })
 
 export default lookupsRoutes

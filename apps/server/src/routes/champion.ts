@@ -36,7 +36,7 @@ championRoutes.openapi(listUnitsRoute, async (c) => {
     throw new HTTPException(400, { message: `Invalid season: ${season}` })
   }
   const data = await championService.list(queue ?? undefined)
-  return c.json({ success: true, data }) as unknown as RouteConfigToTypedResponse<typeof listUnitsRoute>
+  return c.json({ success: true, data }) as RouteConfigToTypedResponse<typeof listUnitsRoute>
 })
 
 export default championRoutes

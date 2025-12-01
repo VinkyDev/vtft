@@ -1,16 +1,20 @@
 import type { ScheduledTask } from '../index'
-import process from 'node:process'
 import { Logger } from 'logger'
 import { generateCompId } from 'utils'
 import { getQueueEnums } from '../../config/seasons'
 import { clearCache } from '../../middleware'
 import { databaseService } from '../../services'
-import { getTaskConfig } from './common'
+import { getRequiredEnv, getTaskConfig } from './common'
 
 const logger = new Logger({ namespace: 'scheduler', scope: 'comps' })
 
+/**
+ * 创建阵容数据抓取任务
+ */
 export function createCompsTask(): ScheduledTask {
-  const cfg = getTaskConfig('comps', '30 4,10,16,22 * * *')
+  const cfg = getTaskConfig('comps')
+  const concurrency = Number(getRequiredEnv('CRAWLER_DETAILS_CONCURRENCY'))
+
   return {
     name: 'crawler:comps',
     schedule: cfg.schedule,
@@ -20,7 +24,6 @@ export function createCompsTask(): ScheduledTask {
       const { getAllCompsData, getCompDetails } = await import('scraper')
       const pLimitModule = await import('p-limit')
       const pLimit = pLimitModule.default || pLimitModule
-      const concurrency = Number(process.env.CRAWLER_DETAILS_CONCURRENCY || 5)
       const limit = pLimit(concurrency)
 
       for (const q of getQueueEnums()) {

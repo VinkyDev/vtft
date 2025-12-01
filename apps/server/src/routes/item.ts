@@ -36,7 +36,7 @@ itemRoutes.openapi(listItemsRoute, async (c) => {
     throw new HTTPException(400, { message: `Invalid season: ${season}` })
   }
   const data = await itemService.list(queue ?? undefined)
-  return c.json({ success: true, data }) as unknown as RouteConfigToTypedResponse<typeof listItemsRoute>
+  return c.json({ success: true, data }) as RouteConfigToTypedResponse<typeof listItemsRoute>
 })
 
 export default itemRoutes

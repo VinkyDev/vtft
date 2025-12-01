@@ -45,7 +45,7 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
     },
     {
       value: 'builds',
-      label: '阵容',
+      label: '构建',
       content: <Builds />,
     },
   ], [])
@@ -79,7 +79,7 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
       },
       {
         value: 'builds',
-        label: '阵容',
+        label: '构建',
         content: <Builds earlyOptions={compDetails.data.early_options} options={compDetails.data.options} />,
       },
     ]

@@ -7,7 +7,7 @@ class ItemService {
     const data = queue
       ? await db.itemsStats.find({ queue }, { sort: { pickRate: -1 } })
       : await db.itemsStats.findAll()
-    return data as unknown as ItemStat[]
+    return data as ItemStat[]
   }
 }
 

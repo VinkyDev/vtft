@@ -1,9 +1,9 @@
 import type { Comp } from 'types'
 
 /**
- * 阵容基本信息文档（不含 details），来源于 tftv2 Comp
+ * 阵容基本信息文档
  */
-export interface CompDocument extends Comp {
+export interface CompDocument extends Omit<Comp, 'updatedAt'> {
   /** 唯一标识符，用于关联 details */
   compId: string
   /** 队列（赛季） */

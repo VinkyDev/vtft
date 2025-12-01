@@ -1,5 +1,5 @@
 import type { AugmentClass, Item, ItemName, Lookups, LookupsUnit, Queue, Trait, UnitValue } from 'types'
-import { getLookups, getSeasons, getUnitItems } from 'api-client'
+import { getComps, getLookups, getSeasons, getUnitItems } from 'api-client'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -14,6 +14,8 @@ interface GlobalState {
   curSeason: string | undefined
   seasons: { season: string, queue: Queue }[]
   loading: boolean
+  /** 阵容数据更新时间 */
+  compsUpdatedAt: Date | null
   /** 初始化全局状态 */
   initGlobalStore: () => Promise<void>
   /** 强制刷新数据（清除缓存后重新加载） */
@@ -40,6 +42,7 @@ export const useGlobalStore = create<GlobalState>()(
         augmentsById: {},
       },
       loading: true,
+      compsUpdatedAt: null,
       unitItemsByName: {},
       unitItemsIndex: {
         itemNamesById: {},
@@ -59,15 +62,19 @@ export const useGlobalStore = create<GlobalState>()(
         if (!season)
           return
         const queue = seasons.find(s => s.season === season)?.queue
-        const { data: lookups = null } = await getLookups({ season, queue })
+        const [{ data: lookups = null }, { data: comps = [] }] = await Promise.all([
+          getLookups({ season, queue }),
+          getComps({ season }),
+        ])
         const itemsById = Object.fromEntries((lookups?.items ?? []).filter(i => i.apiName).map(i => [String(i.apiName), i]))
         const unitsById = Object.fromEntries((lookups?.units ?? []).filter(u => u.apiName).map(u => [String(u.apiName), u]))
         const traitsById = Object.fromEntries((lookups?.traits ?? []).filter(t => t.apiName).map(t => [String(t.apiName), t]))
         const augmentsById = Object.fromEntries((lookups?.augments ?? []).filter(a => a.apiName).map(a => [String(a.apiName), a]))
-        set({ lookups, lookupsIndex: { itemsById, unitsById, traitsById, augmentsById }, loading: false })
+        const compsUpdatedAt = comps[0]?.updatedAt ?? null
+        set({ lookups, lookupsIndex: { itemsById, unitsById, traitsById, augmentsById }, compsUpdatedAt, loading: false })
       },
       refreshData: async () => {
-        set({ unitItemsByName: {}, unitItemsIndex: { itemNamesById: {}, unitsById: {} } })
+        set({ unitItemsByName: {}, unitItemsIndex: { itemNamesById: {}, unitsById: {} }, compsUpdatedAt: null })
         await get().initGlobalStore()
       },
       setSeason: async (season: string) => {
@@ -75,12 +82,16 @@ export const useGlobalStore = create<GlobalState>()(
           return
         set({ curSeason: season, loading: true })
         const queue = get().seasons.find(s => s.season === season)?.queue
-        const { data: lookups = null } = await getLookups({ season, queue })
+        const [{ data: lookups = null }, { data: comps = [] }] = await Promise.all([
+          getLookups({ season, queue }),
+          getComps({ season }),
+        ])
         const itemsById = Object.fromEntries((lookups?.items ?? []).filter(i => i.apiName).map(i => [String(i.apiName), i]))
         const unitsById = Object.fromEntries((lookups?.units ?? []).filter(u => u.apiName).map(u => [String(u.apiName), u]))
         const traitsById = Object.fromEntries((lookups?.traits ?? []).filter(t => t.apiName).map(t => [String(t.apiName), t]))
         const augmentsById = Object.fromEntries((lookups?.augments ?? []).filter(a => a.apiName).map(a => [String(a.apiName), a]))
-        set({ lookups, lookupsIndex: { itemsById, unitsById, traitsById, augmentsById }, loading: false })
+        const compsUpdatedAt = comps[0]?.updatedAt ?? null
+        set({ lookups, lookupsIndex: { itemsById, unitsById, traitsById, augmentsById }, compsUpdatedAt, loading: false })
       },
       loadUnitItems: async () => {
         if (Object.keys(get().unitItemsByName).length > 0)

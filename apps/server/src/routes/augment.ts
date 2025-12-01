@@ -25,7 +25,7 @@ const listAugmentsRoute = createRoute({
 
 augmentRoutes.openapi(listAugmentsRoute, async (c) => {
   const data = await augmentService.list()
-  return c.json({ success: true, data }) as unknown as RouteConfigToTypedResponse<typeof listAugmentsRoute>
+  return c.json({ success: true, data }) as RouteConfigToTypedResponse<typeof listAugmentsRoute>
 })
 
 export default augmentRoutes

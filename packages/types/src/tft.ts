@@ -75,6 +75,9 @@ export interface Comp {
 
   /** 阵容等级 */
   levelling?: Levelling
+
+  /** 更新时间 */
+  updatedAt?: Date
 }
 
 export interface Counter {

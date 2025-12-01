@@ -1,4 +1,4 @@
-import { Check, RefreshCw, Settings } from 'lucide-react'
+import { Check, Clock, RefreshCw, Settings } from 'lucide-react'
 import { useState } from 'react'
 import {
   DropdownMenu,
@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'ui'
+import { formatRelativeTime } from 'utils'
 import { useGlobalStore } from '@/store/globalStore'
 
 export function SettingsMenu() {
@@ -15,6 +16,7 @@ export function SettingsMenu() {
   const curSeason = useGlobalStore(s => s.curSeason)
   const setSeason = useGlobalStore(s => s.setSeason)
   const refreshData = useGlobalStore(s => s.refreshData)
+  const compsUpdatedAt = useGlobalStore(s => s.compsUpdatedAt)
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   const handleRefresh = async () => {
@@ -64,6 +66,17 @@ export function SettingsMenu() {
         ))}
 
         <DropdownMenuSeparator className="bg-white/10" />
+
+        {compsUpdatedAt && (
+          <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-gray-500">
+            <Clock className="h-3 w-3" />
+            <span>
+              数据更新于
+              {formatRelativeTime(compsUpdatedAt)}
+            </span>
+          </div>
+        )}
+
         <DropdownMenuItem
           className="flex items-center gap-2 px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 focus:bg-white/5 focus:text-white transition-colors"
           onSelect={handleRefresh}

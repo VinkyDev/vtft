@@ -158,10 +158,10 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
 
           {sortedUnits.length > 0 && (
             <div className="flex flex-wrap gap-x-1 gap-y-3 pb-1">
-              {sortedUnits.slice(0, 9).map(unit => (
+              {sortedUnits.slice(0, 9).map((unit, index) => (
                 <Champion
                   className="sm:size-10 size-7.5"
-                  key={unit}
+                  key={`${unit}-${index}`}
                   id={unit}
                   items={find(comp.builds, { unit })?.buildName || []}
                   showName

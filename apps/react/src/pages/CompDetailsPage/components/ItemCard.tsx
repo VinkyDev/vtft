@@ -73,10 +73,10 @@ export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
         </div>
 
         <div ref={containerRef} className="flex items-center gap-1 min-w-0 justify-end">
-          {visibleItems.map(item => (
+          {visibleItems.map((item, index) => (
             item.units && (
               <div
-                key={item.units}
+                key={`${item.units}-${index}`}
                 onClick={() => onChampionClick?.(item.units!)}
                 className="cursor-pointer hover:scale-110 transition-transform"
               >
@@ -102,10 +102,10 @@ export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
                 className="bg-black/90 text-white border-white/10"
               >
                 <div className="flex flex-wrap gap-1 max-w-[200px]">
-                  {recommendedUnits.slice(visibleItems.length).map(item => (
+                  {recommendedUnits.slice(visibleItems.length).map((item, index) => (
                     item.units && (
                       <div
-                        key={item.units}
+                        key={`${item.units}-${visibleItems.length + index}`}
                         onClick={() => onChampionClick?.(item.units!)}
                         className="cursor-pointer hover:scale-110 transition-transform"
                       >

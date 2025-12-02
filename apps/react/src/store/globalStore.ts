@@ -49,7 +49,6 @@ export const useGlobalStore = create<GlobalState>()(
         unitsById: {},
       },
       initGlobalStore: async () => {
-        await useGlobalStore.persist.rehydrate()
         set({ loading: true })
         // 获取所有赛季
         const { data: seasons = [] } = await getSeasons()

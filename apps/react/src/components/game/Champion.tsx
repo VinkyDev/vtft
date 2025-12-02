@@ -120,11 +120,11 @@ export const Champion = memo(({
       <div className="relative w-full h-full">
         {championWithTooltip}
         <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 flex">
-          {items.slice(0, 3).map(item => (
+          {items.slice(0, 3).map((item, index) => (
             <Item
               className={cn('sm:size-3.5 size-2.5', itemClassName)}
               id={item}
-              key={item}
+              key={`${item}-${index}`}
               showTooltip={showTooltip}
             />
           ))}

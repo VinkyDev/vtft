@@ -63,7 +63,7 @@ export const FilterBar = memo(({
                 }
               }}
             >
-              <TabsList className="h-6 sm:h-8 bg-black/20 border-white/5 p-0.5">
+              <TabsList className="h-6 sm:h-8 bg-black/20 border-white/5 p-0.5 rounded-lg">
                 {group.options.map(({ value, label }) => (
                   <TabsTrigger
                     key={String(value)}

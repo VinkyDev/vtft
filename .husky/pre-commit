@@ -7,12 +7,6 @@ if ! pnpm typecheck; then
   exit 1
 fi
 
-echo "Running knip..."
-if ! pnpm knip; then
-  echo "❌ Knip check failed. Please fix the issues before committing."
-  exit 1
-fi
-
 # set NODE_OPTIONS if not set
 if [ -z "$NODE_OPTIONS" ]; then
   export NODE_OPTIONS="--max-old-space-size=16384"

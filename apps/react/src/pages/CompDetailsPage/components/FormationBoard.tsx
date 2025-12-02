@@ -1,8 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import type { Build, CompDetail, FinalLevel } from 'types'
 import { find, orderBy, take } from 'lodash-es'
+import logger from 'logger'
+import { Copy } from 'lucide-react'
 import { memo, useMemo, useState } from 'react'
 import { Trait } from '@/components'
+import { useUnitsUtils } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
 import { FormationCell } from './FormationCell'
 
@@ -78,8 +81,38 @@ export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProp
   const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
   const traitsById = useGlobalStore(s => s.lookupsIndex.traitsById)
   const [hoveredTrait, setHoveredTrait] = useState<string | null>(null)
+  const { generateCompCode } = useUnitsUtils()
 
   const positioning = useMemo(() => data?.positioning || [], [data])
+
+  // 根据站位信息生成阵容代码（使用棋盘上的单位顺序）
+  const compCode = useMemo(() => {
+    if (!positioning || positioning.length === 0)
+      return ''
+
+    const unitIds: string[] = []
+    positioning.forEach((pos) => {
+      if (pos.unit && !unitIds.includes(pos.unit)) {
+        unitIds.push(pos.unit)
+      }
+    })
+
+    if (unitIds.length === 0)
+      return ''
+
+    return generateCompCode(unitIds)
+  }, [positioning, generateCompCode])
+
+  const handleCopyCode = async () => {
+    if (!compCode)
+      return
+    try {
+      await navigator.clipboard.writeText(compCode)
+    }
+    catch (err) {
+      logger.error('Failed to copy comp code:', err as Error)
+    }
+  }
 
   const board = useMemo(() => {
     const grid: Array<Array<typeof positioning[0] | null>> = Array.from(
@@ -103,7 +136,19 @@ export const FormationBoard = memo(({ data, builds, traits }: FormationBoardProp
     <div className="flex flex-col items-center justify-center h-full w-full p-1 sm:p-4 gap-1">
       {/* 等级分布 */}
       {data?.final_level && data.final_level.length > 0 && (
-        <LevelIndicator levels={data.final_level} />
+        <div className="flex items-center justify-between w-full max-w-xl px-2">
+          <LevelIndicator levels={data.final_level} />
+          {compCode && (
+            <button
+              type="button"
+              onClick={handleCopyCode}
+              className="inline-flex items-center gap-1 rounded bg-white/5 px-2 py-1 text-[11px] text-zinc-200 hover:bg-white/10 transition-colors"
+            >
+              <Copy className="size-3.5 text-zinc-300" />
+              代码
+            </button>
+          )}
+        </div>
       )}
       <div className="flex items-center justify-center">
         <div className="p-1 sm:p-5">

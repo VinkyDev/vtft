@@ -1,17 +1,17 @@
 import type { AugmentLevelFilter } from './components'
 import { getAugments } from 'api-client'
-import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useRequest } from 'react-helper'
 import { ScrollArea } from 'ui/components'
 import { filterByPinyinSearch } from 'utils'
-import { DataSkeleton, EmptyState } from '@/components'
+import { DataSkeleton, EmptyState, SearchInput } from '@/components'
 import { useGlobalStore } from '@/store/globalStore'
 import { getLevelFromIcon } from '@/utils/getter'
 import { getTierTextColor } from '@/utils/tier'
 import { AugmentCard, AugmentFilter } from './components'
 
 function AugmentsPage() {
+  // 搜索关键字（已通过 SearchInput 内部的 useDeferredValue 处理）
   const [searchQuery, setSearchQuery] = useState('')
   const [levelFilter, setLevelFilter] = useState<AugmentLevelFilter>('all')
 
@@ -49,16 +49,10 @@ function AugmentsPage() {
     <div className="flex flex-col gap-1.5 px-2">
       <div className="py-1.5 px-2 mb-1 bg-white/5 rounded-lg border border-white/10">
         <div className="flex gap-2 items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400" />
-            <input
-              type="text"
-              placeholder="搜索符文..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="w-full h-6 sm:h-8 pl-7 pr-2 bg-black/20 border border-white/5 rounded text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20"
-            />
-          </div>
+          <SearchInput
+            placeholder="搜索符文..."
+            onSearchChange={setSearchQuery}
+          />
           <AugmentFilter
             levelFilter={levelFilter}
             onLevelFilterChange={setLevelFilter}

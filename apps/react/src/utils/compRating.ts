@@ -254,13 +254,58 @@ function enhanceComps(comps: Comp[]): EnhancedCompData[] {
   return [...enhancedNormalComps, ...enhancedLowPickrateComps]
 }
 
+type CompSortField = 'composite' | 'rank' | 'matches'
+
 /**
  * 按评级分组阵容
  *
  * @param comps 增强后的阵容数据
+ * @param sortField 排序字段
  * @returns 分组后的阵容数据
  */
-function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
+function groupCompsByTier(comps: EnhancedCompData[], sortField: CompSortField = 'composite'): GroupedComps[] {
+  const getSortFn = (field: CompSortField) => {
+    switch (field) {
+      case 'rank':
+        return (a: EnhancedCompData, b: EnhancedCompData) =>
+          (a.avg ?? DEFAULT_AVG_PLACE) - (b.avg ?? DEFAULT_AVG_PLACE)
+      case 'matches':
+        return (a: EnhancedCompData, b: EnhancedCompData) =>
+          (b.pickRate ?? 0) - (a.pickRate ?? 0)
+      default:
+        return (a: EnhancedCompData, b: EnhancedCompData) => b.score - a.score
+    }
+  }
+
+  const sortFn = getSortFn(sortField)
+
+  // ========== 特殊处理：按排名排序时，所有阵容一起排序 ==========
+  if (sortField === 'rank') {
+    // 全局排序
+    const sorted = [...comps].sort(sortFn)
+
+    const normal: EnhancedCompData[] = []
+    const lowPickrate: EnhancedCompData[] = []
+
+    sorted.forEach((comp) => {
+      if (comp.category === 'low_pickrate') {
+        lowPickrate.push(comp)
+      }
+      else {
+        normal.push(comp)
+      }
+    })
+
+    const group: GroupedComps = {
+      tier: 'S', // 这里只是占位，前端实际按卡片上的 tier 徽章展示
+      normal,
+      lowPickrate,
+    }
+
+    return group.normal.length > 0 || group.lowPickrate.length > 0 ? [group] : []
+  }
+
+  // ========== 默认行为：先按 tier 分组，再在组内排序 ==========
   const groups: Record<CompTier, GroupedComps> = {
     S: { tier: 'S', normal: [], lowPickrate: [] },
     A: { tier: 'A', normal: [], lowPickrate: [] },
@@ -280,12 +325,9 @@ function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
     }
   })
 
-  // 每个分组内排序
   Object.values(groups).forEach((group) => {
-    // 普通阵容按得分降序
-    group.normal.sort((a, b) => b.score - a.score)
-    // 低出场率阵容按平均排名升序
-    group.lowPickrate.sort((a, b) => (a.avg || DEFAULT_AVG_PLACE) - (b.avg || DEFAULT_AVG_PLACE))
+    group.normal.sort(sortFn)
+    group.lowPickrate.sort(sortFn)
   })
 
   // 返回有数据的分组，按 S -> A -> B -> C -> D 顺序
@@ -298,9 +340,10 @@ function groupCompsByTier(comps: EnhancedCompData[]): GroupedComps[] {
  * 处理阵容数据（增强 + 分组）
  *
  * @param comps 原始阵容数据
+ * @param sortField 排序字段
  * @returns 分组后的阵容数据
  */
-export function processComps(comps: Comp[]): GroupedComps[] {
+export function processComps(comps: Comp[], sortField: CompSortField = 'composite'): GroupedComps[] {
   const enhanced = enhanceComps(comps)
-  return groupCompsByTier(enhanced)
+  return groupCompsByTier(enhanced, sortField)
 }

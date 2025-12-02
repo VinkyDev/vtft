@@ -2,9 +2,9 @@ import type { EnhancedCompData } from '@/utils/compRating'
 import { find } from 'lodash-es'
 import { Copy } from 'lucide-react'
 import { memo, useMemo } from 'react'
-import { Badge, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
+import { Badge, Popover, PopoverContent, PopoverTrigger, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { Champion, Trait } from '@/components'
-import { useUnitsUtils } from '@/hooks'
+import { useAdaptiveList, useUnitsUtils } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
 import { CompStats } from './CompStats'
 import { TierBadge } from './TierBadge'
@@ -18,6 +18,24 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
   const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
   const traitsById = useGlobalStore(s => s.lookupsIndex.traitsById)
   const { sortUnitsByCost, generateCompCode } = useUnitsUtils()
+
+  // 羁绊列表自适应：最多一行，多余折叠为「+x」
+  const {
+    containerRef: traitsContainerRef,
+    visibleItems: visibleTraits,
+    remainingCount: remainingTraitsCount,
+    showMore: showMoreTraits,
+  } = useAdaptiveList<string>({
+    items: comp.traits ?? [],
+    itemWidth: 22,
+    moreButtonWidth: 28,
+    minVisible: 1,
+  })
+
+  const hiddenTraits = useMemo(
+    () => (comp.traits ?? []).slice(visibleTraits.length),
+    [comp.traits, visibleTraits.length],
+  )
 
   const sortedUnits = useMemo(() => {
     if (!comp.units || comp.units.length === 0)
@@ -95,10 +113,7 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
                     <Copy className="size-3.5 text-gray-400 hover:text-gray-200" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent
-                  side="top"
-                  className="bg-black/95 text-white border-white/10 text-xs"
-                >
+                <TooltipContent side="top" sideOffset={4}>
                   复制阵容代码
                 </TooltipContent>
               </Tooltip>
@@ -106,10 +121,38 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
           </div>
 
           {comp.traits && comp.traits.length > 0 && (
-            <div className="flex flex-wrap gap-0.5">
-              {comp.traits.map(trait => (
+            <div
+              ref={traitsContainerRef}
+              className="flex flex-nowrap items-center gap-0.5"
+            >
+              {visibleTraits.map(trait => (
                 <Trait key={trait} id={trait} />
               ))}
+
+              {showMoreTraits && remainingTraitsCount > 0 && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      className="ml-0 inline-flex h-5 items-center rounded-full bg-white/5 px-1.5 text-[10px] text-gray-200 hover:bg-white/10"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      +
+                      {remainingTraitsCount}
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    side="top"
+                    className="max-w-xs bg-black/95 text-white border-white/10 text-xs w-auto px-2 py-1"
+                  >
+                    <div className="flex flex-wrap gap-0.5">
+                      {hiddenTraits.map(trait => (
+                        <Trait key={trait} id={trait} showTooltip />
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )}
             </div>
           )}
 

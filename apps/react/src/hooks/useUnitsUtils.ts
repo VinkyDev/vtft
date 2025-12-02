@@ -70,9 +70,19 @@ export function useUnitsUtils() {
     if (!units || units.length === 0)
       return ''
 
-    // 收集所有英雄的code
+    // 需要屏蔽的英雄ID列表（apiName / id）
+    // 这些英雄不会参与阵容代码的计算
+    const BLOCKED_UNIT_IDS = new Set<string>([
+      'TFT16_AnnieTibbers',
+    ])
+
+    // 收集所有英雄的code（排除屏蔽列表中的英雄）
     const codes: string[] = []
     for (const unitId of units) {
+      // 跳过需要屏蔽的英雄
+      if (BLOCKED_UNIT_IDS.has(unitId))
+        continue
+
       const unit = unitsById[unitId]
       if (unit?.code) {
         codes.push(unit.code)

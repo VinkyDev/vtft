@@ -21,6 +21,8 @@ function ItemsPage() {
       return data
     },
     {
+      refreshDeps: [season],
+      ready: Boolean(season),
       cacheKey: `items:${season}`,
       staleTime: 60_000,
     },

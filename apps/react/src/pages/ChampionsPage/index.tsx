@@ -33,10 +33,20 @@ function ChampionsPage() {
     if (!units?.length)
       return []
 
-    let filtered = units
-    if (costFilter !== 'all') {
+    let filtered: typeof units = []
+
+    // 只保留在全局索引中存在的英雄
+    if (costFilter === 'all') {
+      filtered = units.filter(unit => Boolean(unitsById[unit.unit]))
+    }
+    else {
       const targetCost = Number(costFilter)
-      filtered = filtered.filter(unit => (unitsById[unit.unit]?.cost ?? -1) === targetCost)
+      filtered = units.filter((unit) => {
+        const lookupUnit = unitsById[unit.unit]
+        if (!lookupUnit)
+          return false
+        return (lookupUnit.cost ?? -1) === targetCost
+      })
     }
 
     return sortChampions(filtered, sortField)

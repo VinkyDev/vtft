@@ -58,7 +58,7 @@ export const AugmentCard = memo(({ id }: AugmentCardProps) => {
     })
     d = d.replace(/%i:[^%]+%/g, '')
     d = d.replace(/<br\s*\/?>/gi, '\n')
-    d = d.replace(/<rules>([\s\S]*?)<\/rules>/gi, '$1')
+    d = d.replace(/<([a-z][a-z0-9]*)\b[^>]*>([\s\S]*?)<\/\1>/gi, '$2')
     d = d.replace(/\([^)]*@TFTUnitProperty[^)]*\)/g, '')
     d = d.replace(/(^|\n)[^\n]*@TFTUnitProperty[^@]*@.*(?=\n|$)/g, '')
     d = d.replace(/@TFTUnitProperty[^@]*@/g, '')

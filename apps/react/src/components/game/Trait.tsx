@@ -41,15 +41,24 @@ interface IconBoxProps {
   styleColor: { bg: string, border?: string, glow?: string }
   traitName: string
   name: string
+  showBackground?: boolean
 }
 
-function IconBox({ className, isActive, styleColor, traitName, name }: IconBoxProps) {
+function IconBox({
+  className,
+  isActive,
+  styleColor,
+  traitName,
+  name,
+  showBackground = true,
+}: IconBoxProps) {
   const iconUrl = genIcon(traitName)
 
   return (
     <div
       className={cn(
-        'relative flex shrink-0 items-center justify-center overflow-hidden transition-all bg-zinc-900/80',
+        'relative flex shrink-0 items-center justify-center overflow-hidden transition-all',
+        showBackground ? 'bg-zinc-900/80' : '',
         isActive ? styleColor.glow : 'shadow-none',
         className || 'h-6 w-6 rounded',
       )}
@@ -147,7 +156,7 @@ export const Trait = memo(({
           />
 
           {minUnits != null && (
-            <div className="absolute -bottom-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-zinc-900 ring-1 ring-black text-[8px] font-bold text-zinc-400 shadow z-10 scale-90">
+            <div className="absolute -bottom-1 right-0 z-10 text-[8px] font-bold text-zinc-300">
               {minUnits}
             </div>
           )}
@@ -183,9 +192,10 @@ export const Trait = memo(({
             styleColor={styleColor}
             traitName={traitName || ''}
             name={trait.name || ''}
+            showBackground={false}
           />
           {minUnits != null && (
-            <div className="absolute -bottom-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-zinc-900 ring-1 ring-black text-[8px] font-bold text-zinc-400 shadow z-10 scale-90">
+            <div className="absolute -bottom-1 right-0 z-10 text-[8px] font-bold text-zinc-300">
               {minUnits}
             </div>
           )}
@@ -211,7 +221,7 @@ export const Trait = memo(({
           {trait.name}
         </span>
         {minUnits != null && (
-          <span className="ml-auto text-[10px] font-bold text-zinc-500 bg-black/20 px-1 rounded min-w-[16px] text-center">
+          <span className="ml-auto text-[10px] font-bold text-zinc-500 min-w-[16px] text-center">
             {minUnits}
           </span>
         )}

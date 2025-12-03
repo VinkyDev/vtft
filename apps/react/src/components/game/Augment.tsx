@@ -28,10 +28,8 @@ function getIcon(icon?: string) {
   if (!icon) {
     return ''
   }
-
-  const iconName = icon.match(/([^/]+?)(?:\.TFT_Set\d+)?\.tex$/)?.[1] ?? ''
-
-  return `https://cdn.metatft.com/cdn-cgi/image/width=46,height=46,format=auto/https://cdn.metatft.com/file/metatft/augments/${iconName.toLowerCase()}.png`
+  const iconName = icon.match(/([^/]+?)(?:\.TFT_Set\d+_ChampionAugments)?(?:\.TFT_Set\d+)?\.tex$/i)?.[1] ?? ''
+  return `https://cdn.metatft.com/file/metatft/augments/${iconName.toLowerCase()}.png`
 }
 
 export const Augment = memo(({
@@ -56,7 +54,7 @@ export const Augment = memo(({
 
   const augmentElement = (
     <div
-      className={`relative ${sizeClasses.container} overflow-hidden rounded border-1 ${levelColors.border} bg-black/40 transition-all cursor-pointer ${className}`}
+      className={`relative ${sizeClasses.container} overflow-hidden rounded border ${levelColors.border} bg-black/40 transition-all cursor-pointer ${className}`}
       onClick={() => onClick?.(augment)}
     >
       <img

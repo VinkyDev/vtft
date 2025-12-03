@@ -1,8 +1,9 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { find } from 'lodash-es'
-import { Copy } from 'lucide-react'
+import { ArrowUpRight, Copy, RefreshCw } from 'lucide-react'
 import { memo, useMemo } from 'react'
 import { Badge, Popover, PopoverContent, PopoverTrigger, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
+import { cn } from 'utils'
 import { Champion, Trait } from '@/components'
 import { useAdaptiveList, useUnitsUtils } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
@@ -12,6 +13,18 @@ import { TierBadge } from './TierBadge'
 interface CompCardProps {
   comp: EnhancedCompData
   onClick?: (comp: EnhancedCompData) => void
+}
+
+// levelling 展示配置：类型 + 等级
+const LEVELLING_CONFIG: Record<
+  string,
+  { type: 'fast' | 'reroll', level: number }
+> = {
+  'Fast 8': { type: 'fast', level: 8 },
+  'Fast 9': { type: 'fast', level: 9 },
+  'lvl 5': { type: 'reroll', level: 5 },
+  'lvl 6': { type: 'reroll', level: 6 },
+  'lvl 7': { type: 'reroll', level: 7 },
 }
 
 export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
@@ -96,6 +109,33 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
                     .join(' ')
                 : ''}
             </h3>
+            {/* levelling 标签：Standard 等未配置的直接隐藏 */}
+            {(() => {
+              if (!comp.levelling)
+                return null
+              const cfg = LEVELLING_CONFIG[comp.levelling]
+              if (!cfg)
+                return null
+              return (
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    'inline-flex h-4 items-center gap-0.5 px-1.5 text-[10px]',
+                    cfg.type === 'fast'
+                      ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-200'
+                      : 'border-indigo-400/40 bg-indigo-500/15 text-indigo-100',
+                  )}
+                >
+                  {cfg.type === 'fast'
+                    ? <ArrowUpRight className="size-2.5! shrink-0" />
+                    : <RefreshCw className="size-2.5! shrink-0 mr-0.5" />}
+                  <span className="leading-none tracking-wider">
+                    {cfg.level}
+                    级
+                  </span>
+                </Badge>
+              )
+            })()}
             {comp.category === 'low_pickrate' && (
               <Badge variant="outline" className="h-4 border-amber-500/30 bg-amber-500/10 px-1 text-[10px] text-amber-300">
                 低出场
@@ -158,15 +198,21 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
 
           {sortedUnits.length > 0 && (
             <div className="flex flex-wrap gap-x-1 gap-y-3 pb-1">
-              {sortedUnits.slice(0, 9).map((unit, index) => (
-                <Champion
-                  className="sm:size-10 size-7.5"
-                  key={`${unit}-${index}`}
-                  id={unit}
-                  items={find(comp.builds, { unit })?.buildName || []}
-                  showName
-                />
-              ))}
+              {sortedUnits.slice(0, 9).map((unit, index) => {
+                const isThreeStar = (comp.stars ?? []).includes(unit)
+                const isFourStar = (comp.stars_4 ?? []).includes(unit)
+
+                return (
+                  <Champion
+                    className="sm:size-10 size-7.5"
+                    key={`${unit}-${index}`}
+                    id={unit}
+                    items={find(comp.builds, { unit })?.buildName || []}
+                    showName
+                    starTier={isFourStar ? 4 : isThreeStar ? 3 : undefined}
+                  />
+                )
+              })}
             </div>
           )}
         </div>

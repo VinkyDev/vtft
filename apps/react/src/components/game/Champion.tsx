@@ -30,6 +30,8 @@ interface ChampionProps {
   wrapperClassName?: string
   /** 额外的渲染内容 */
   renderExtra?: (unit: LookupsUnit) => ReactNode
+  /** 星级标记：3 星或 4 星，在头像顶部展示一张星级图片 */
+  starTier?: 3 | 4
 }
 
 export const Champion = memo(({
@@ -43,6 +45,7 @@ export const Champion = memo(({
   nameClassName,
   itemClassName,
   renderExtra,
+  starTier,
 }: ChampionProps) => {
   const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
 
@@ -61,7 +64,7 @@ export const Champion = memo(({
   const championElement = (
     <div
       className={cn(
-        'relative overflow-hidden rounded border-2 bg-black/40 transition-all',
+        'relative rounded border-2 bg-black/40 transition-all',
         costColors.border,
         showName ? '' : 'hover:shadow-lg cursor-pointer',
         className,
@@ -75,6 +78,17 @@ export const Champion = memo(({
         loading="lazy"
         draggable={false}
       />
+
+      {/* 星级标记：在头像顶部居中显示一张小图 */}
+      {starTier && (
+        <img
+          src={`https://cdn.metatft.com/cdn-cgi/image/height=12,format=auto/https://cdn.metatft.com/file/metatft/tiers/${starTier}.png`}
+          alt={`${starTier}星`}
+          className="pointer-events-none absolute -top-1.5 left-1/2 w-[90%] h-auto -translate-x-1/2"
+          loading="lazy"
+          draggable={false}
+        />
+      )}
     </div>
   )
 

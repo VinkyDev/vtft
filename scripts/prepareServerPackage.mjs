@@ -3,7 +3,7 @@
 /**
  * 准备 server 的 package.json 用于 Docker 构建
  * 1. 使用 pnpm deploy 部署 server 子包
- * 2. 移除 workspace 依赖
+ * 2. 移除 workspace 依赖（这些依赖已被 rslib 打包进 dist/index.js，无需在运行时安装）
  * 3. 替换 catalog 依赖为实际版本
  */
 

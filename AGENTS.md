@@ -32,7 +32,7 @@ VTFT is a multi-platform application (React Web, Electron Desktop) with an API s
 4. `db`, `react-helper`, `api-client` (parallel)
 5. `crawler`
 
-Packages are built with `rslib` (db, crawler, bridge, react-helper, api-client) or `tsup` (server). The `ui` and `config` packages skip build steps.
+Packages are built with `rslib` (db, crawler, bridge, react-helper, api-client, server). The `ui` and `config` packages skip build steps.
 
 ## Common Commands
 
@@ -55,7 +55,7 @@ pnpm dev:website            # Website (Next.js dev server)
 pnpm build:packages         # Build all workspace packages in correct order
 pnpm build:react            # Build React web app
 pnpm build:electron         # Build Electron app
-pnpm build:server           # Build API server (tsup)
+pnpm build:server           # Build API server (rslib)
 pnpm build:website          # Build website (Next.js static export)
 
 # Desktop builds (runs prebuild automatically)
@@ -154,7 +154,7 @@ pnpm clean:all              # Clean everything
   2. Build server: `pnpm run build:server`
   3. Prepare server package: `node scripts/prepareServerPackage.mjs prepare`
   4. Docker build from `apps/server/Dockerfile`
-- Server runs as `node dist/index.cjs` on port 3000
+- Server runs as `node dist/index.js` on port 3000
 
 ### Desktop Deployment
 - GitHub Actions can be added for desktop app releases

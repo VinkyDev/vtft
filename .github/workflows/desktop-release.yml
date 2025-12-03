@@ -40,22 +40,13 @@ jobs:
           VITE_APTABASE_CODE: ${{ secrets.APTABASE_CODE }}
           VITE_API_BASE_URL: ${{ secrets.API_BASE_URL }}
 
-      - name: 重命名 Windows x64 安装包
-        run: |
-          cd apps/electron/dist
-          if [ -f "vtft-x64-setup.exe" ]; then
-            cp vtft-x64-setup.exe vtft-setup.exe
-            cp vtft-x64-setup.exe.blockmap vtft-setup.exe.blockmap
-          fi
-        shell: bash
-
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: |
-            apps/electron/dist/vtft-setup.exe
-            apps/electron/dist/vtft-setup.exe.blockmap
+            apps/electron/dist/vtft-x64-setup.exe
+            apps/electron/dist/vtft-x64-setup.exe.blockmap
             apps/electron/dist/vtft-arm64-setup.exe
             apps/electron/dist/vtft-arm64-setup.exe.blockmap
             apps/electron/dist/latest.yml
@@ -135,23 +126,35 @@ jobs:
       - name: 生成安装说明
         id: release-notes
         run: |
-          cat << 'EOF' > release-body.md
+          TAG_NAME="${GITHUB_REF_NAME}"
+          cat << EOF > release-body.md
+          ## 📥 下载
+
+          | 平台 | 架构 | 下载链接 |
+          |:---:|:---:|:---:|
+          | **Windows** | Intel / AMD | [⬇️ vtft-x64-setup.exe](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-x64-setup.exe) |
+          | **Windows** | ARM | [⬇️ vtft-arm64-setup.exe](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-arm64-setup.exe) |
+          | **macOS** | Intel | [⬇️ vtft-x64.dmg](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-x64.dmg) |
+          | **macOS** | Apple Silicon | [⬇️ vtft-arm64.dmg](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-arm64.dmg) |
+
+          ---
+
           ## 📦 安装说明
 
-          ### Windows 用户
-          - **Intel/AMD 处理器**: 下载 `vtft-setup.exe`
-          - **ARM 处理器**: 下载 `vtft-arm64-setup.exe`
+          ### Windows
+          下载对应架构的安装包，双击运行即可安装。
 
-          ### macOS 用户
-          - **Intel 芯片 (x64)**: 下载 `vtft-x64.dmg`
-          - **Apple 芯片 (M1/M2/M3)**: 下载 `vtft-arm64.dmg`
+          > ⚠️ 由于软件未签名，Windows SmartScreen 可能会拦截安装：
+          > 1. 点击 **「更多信息」**
+          > 2. 点击 **「仍要运行」**
 
-          双击打开 DMG 文件，将 VTFT 图标拖拽到 Applications 文件夹。
+          ### macOS
+          下载 DMG 文件后，双击打开并将 VTFT 拖入 Applications 文件夹。
 
-          首次打开时，如果系统提示"vtft.app"已损坏，请在终端运行：
-          ```bash
-          sudo xattr -r -d com.apple.quarantine /Applications/vtft.app
-          ```
+          > ⚠️ 首次打开提示"已损坏"？在终端运行：
+          > \`\`\`bash
+          > sudo xattr -r -d com.apple.quarantine /Applications/vtft.app
+          > \`\`\`
 
           ---
 

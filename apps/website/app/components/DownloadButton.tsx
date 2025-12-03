@@ -35,7 +35,7 @@ const DEFAULT_DOWNLOAD_INFO: DownloadInfo = {
   platform: "Windows",
   icon: <Grid2x2 />,
   label: "Windows",
-  url: "vtft-setup.exe",
+  url: "vtft-x64-setup.exe",
 };
 
 async function detectPlatform(): Promise<DownloadInfo> {
@@ -62,7 +62,7 @@ async function detectPlatform(): Promise<DownloadInfo> {
           platform: "Windows",
           icon: <Grid2x2 />,
           label: isARM ? "Windows ARM" : "Windows",
-          url: isARM ? "vtft-arm64-setup.exe" : "vtft-setup.exe",
+          url: isARM ? "vtft-arm64-setup.exe" : "vtft-x64-setup.exe",
         };
       }
     }
@@ -96,7 +96,7 @@ async function detectPlatform(): Promise<DownloadInfo> {
         platform: "Windows",
         icon: <Grid2x2 />,
         label: isARM ? "Windows ARM" : "Windows",
-        url: isARM ? "vtft-arm64-setup.exe" : "vtft-setup.exe",
+        url: isARM ? "vtft-arm64-setup.exe" : "vtft-x64-setup.exe",
       };
     }
   } catch (error) {
@@ -105,6 +105,53 @@ async function detectPlatform(): Promise<DownloadInfo> {
 
   // 最终兜底：返回 Windows Intel/AMD
   return DEFAULT_DOWNLOAD_INFO;
+}
+
+// 安装提示组件
+function InstallTip({ platform }: { platform: "Windows" | "macOS" }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  if (platform === "Windows") {
+    return (
+      <div className="text-center">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-xs text-slate-500 hover:text-slate-400 transition-colors flex items-center gap-1 mx-auto"
+        >
+          <span>⚠️ 无法安装？</span>
+          <span className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+        {isExpanded && (
+          <div className="mt-2 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50 text-xs text-slate-400 max-w-xs mx-auto">
+            <p className="mb-1">由于软件未签名，Windows 可能会拦截：</p>
+            <p>1. 点击 <span className="text-slate-300">「更多信息」</span></p>
+            <p>2. 点击 <span className="text-slate-300">「仍要运行」</span></p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // macOS
+  return (
+    <div className="text-center">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="text-xs text-slate-500 hover:text-slate-400 transition-colors flex items-center gap-1 mx-auto"
+      >
+        <span>⚠️ 打开时提示「已损坏」？</span>
+        <span className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+      </button>
+      {isExpanded && (
+        <div className="mt-2 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50 text-xs text-slate-400 max-w-xs mx-auto">
+          <p className="mb-2">在终端运行以下命令：</p>
+          <code className="block p-2 rounded bg-slate-900/50 text-slate-300 text-[10px] break-all">
+            sudo xattr -r -d com.apple.quarantine /Applications/vtft.app
+          </code>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export const DownloadButton = () => {
@@ -138,6 +185,7 @@ export const DownloadButton = () => {
       >
         查看所有版本 →
       </a>
+      <InstallTip platform={downloadInfo.platform} />
     </div>
   );
 }

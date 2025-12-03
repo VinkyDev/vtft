@@ -204,7 +204,7 @@ export function InteractiveDemo() {
   const rightThird = (containerWidth * 2) / 3;
 
   return (
-    <div className="w-full">
+    <div className="hidden md:block w-full">
       {/* 标题 */}
       <div className="mb-8 text-center">
         <h2 className="text-4xl font-bold bg-linear-to-r from-white via-slate-100 to-white bg-clip-text text-transparent mb-4">智能窗口模式</h2>

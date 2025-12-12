@@ -55,20 +55,12 @@ export const NORMALIZATION_CONFIG = {
  * 综合排序算法常量
  */
 export const RANKING_CONFIG = {
-  /** 流行度加成上限 */
-  POPULARITY_CAP: 5,
-  /** ECDF 幂次调整 */
-  CONFIDENCE_ECDF_POWER: 0.3,
-  /** Count 幂次调整 */
-  CONFIDENCE_COUNT_POWER: 0.5,
-  /** 贝叶斯收缩强度系数 */
-  SHRINKAGE_STRENGTH: 1.0,
-  /** 样本比调整强度系数 */
-  SAMPLE_RATIO_STRENGTH: 1.0,
-  /** 必要性混合强度 */
-  MANDATORY_BLEND_STRENGTH: 0.6,
-  /** 必要性阈值 */
-  NECESSITY_THRESHOLD: 0.8,
-  /** 必要性幂次 */
-  NECESSITY_POWER: 0.7,
+  /** 低样本时向中性值收缩的强度，数值越大收缩越多 */
+  SHRINKAGE_K: 20,
+  /** 选取率平滑系数，数值越大越不敏感 */
+  PICK_SOFTNESS: 5,
+  /** 流行度权重 (0-1)，控制选取率的加成 */
+  POP_WEIGHT: 0.2,
+  /** 低样本置信度下限（0-1），抬高小样本的最低置信度 */
+  LOW_SAMPLE_FLOOR: 0.2,
 } as const

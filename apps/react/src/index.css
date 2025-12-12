@@ -1,7 +1,22 @@
 @import 'tailwindcss';
 
+html,
 body {
   background: transparent;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+[data-radix-scroll-area-viewport] {
+  scrollbar-width: none;
+}
+
+[data-radix-scroll-area-viewport]::-webkit-scrollbar {
+  display: none;
 }
 
 [data-radix-scroll-area-viewport] > div {

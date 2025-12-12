@@ -1,6 +1,6 @@
 import type { UnitStat } from 'types'
 import { find } from 'lodash-es'
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from 'ui'
 import { Champion, Item, Trait } from '@/components'
 import { useGlobalStore } from '@/store/globalStore'
@@ -20,12 +20,6 @@ interface UnitDetailPopoverProps {
 export const UnitDetailPopover = memo(({ unit, children }: UnitDetailPopoverProps) => {
   const traits = useGlobalStore(s => s.lookups?.traits)
   const unitItemsIndex = useGlobalStore(s => s.unitItemsIndex)
-  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
-
-  useEffect(() => {
-    if (!unitItemsIndex || Object.keys(unitItemsIndex).length === 0)
-      loadUnitItems()
-  }, [unitItemsIndex, loadUnitItems])
 
   const unitItem = useMemo(() => unitItemsIndex.unitsById?.[unit.unit], [unit.unit, unitItemsIndex])
 

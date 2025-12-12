@@ -1,5 +1,4 @@
 import type { ChampionCostFilter, ChampionSortField } from './components'
-import { useMount } from 'ahooks'
 import { getUnits } from 'api-client'
 import { useMemo, useState } from 'react'
 import { useRequest } from 'react-helper'
@@ -12,8 +11,6 @@ import { sortChampions } from './helper'
 function ChampionsPage() {
   const [costFilter, setCostFilter] = useState<ChampionCostFilter>('all')
   const [sortField, setSortField] = useState<ChampionSortField>('composite')
-  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
-  useMount(loadUnitItems)
   const season = useGlobalStore(s => s.curSeason)
   const { data: units, loading } = useRequest(
     async () => {

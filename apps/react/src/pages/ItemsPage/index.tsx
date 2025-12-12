@@ -1,6 +1,5 @@
 import type { FilterGroup } from '@/components'
 import type { ItemCategory } from '@/utils/items'
-import { useMount } from 'ahooks'
 import { getItems } from 'api-client'
 import { useMemo, useState } from 'react'
 import { useRequest } from 'react-helper'
@@ -27,9 +26,6 @@ function ItemsPage() {
       staleTime: 60_000,
     },
   )
-
-  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
-  useMount(loadUnitItems)
 
   const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)
   const [category, setCategory] = useState<ItemCategory>('core')

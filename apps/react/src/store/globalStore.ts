@@ -3,6 +3,44 @@ import { getComps, getLookups, getSeasons, getUnitItems } from 'api-client'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+async function buildSeasonData(season: string, queue?: Queue) {
+  const [{ data: lookups = null }, { data: comps = [] }, { data: unitItems = null }] = await Promise.all([
+    getLookups({ season, queue }),
+    getComps({ season }),
+    getUnitItems(),
+  ])
+
+  const itemNames = unitItems?.itemNames ?? {}
+  const units = unitItems?.units ?? {}
+
+  const itemNamesById: Record<string, ItemName> = Object.fromEntries(
+    Object.entries(itemNames).map(([key, value]) => [String(value?.itemName ?? key), value]),
+  )
+  const unitsByIdFromItems: Record<string, UnitValue> = Object.fromEntries(
+    Object.entries(units).map(([key, value]) => [String(value?.unit ?? key), value]),
+  )
+  const itemsById = Object.fromEntries((lookups?.items ?? []).filter(i => i.apiName).map(i => [String(i.apiName), i]))
+  const unitsById = Object.fromEntries((lookups?.units ?? []).filter(u => u.apiName).map(u => [String(u.apiName), u]))
+  const traitsById = Object.fromEntries((lookups?.traits ?? []).filter(t => t.apiName).map(t => [String(t.apiName), t]))
+  const augmentsById = Object.fromEntries((lookups?.augments ?? []).filter(a => a.apiName).map(a => [String(a.apiName), a]))
+  const compsUpdatedAt = comps[0]?.updatedAt ?? null
+
+  return {
+    lookups,
+    lookupsIndex: { itemsById, unitsById, traitsById, augmentsById },
+    unitItemsByName: itemNames,
+    unitItemsIndex: { itemNamesById, unitsById: unitsByIdFromItems },
+    compsUpdatedAt,
+  }
+}
+
+function resolveSeason(seasons: { season: string, queue: Queue }[], persisted?: string) {
+  const isValidSeason = persisted && seasons.some(s => s.season === persisted)
+  const season = isValidSeason ? persisted : seasons[0]?.season
+  const queue = seasons.find(s => s.season === season)?.queue
+  return { season, queue }
+}
+
 interface GlobalState {
   lookups: Lookups | null
   lookupsIndex: {
@@ -22,7 +60,6 @@ interface GlobalState {
   refreshData: () => Promise<void>
   setSeason: (season: string) => Promise<void>
   unitItemsByName: Record<string, ItemName>
-  loadUnitItems: () => Promise<void>
   unitItemsIndex: {
     itemNamesById: Record<string, ItemName>
     unitsById: Record<string, UnitValue>
@@ -53,24 +90,12 @@ export const useGlobalStore = create<GlobalState>()(
         // 获取所有赛季
         const { data: seasons = [] } = await getSeasons()
         set({ seasons })
-        // 如果持久化的赛季不在列表中，降级到第一个赛季
-        const persistedSeason = get().curSeason
-        const isValidSeason = persistedSeason && seasons.some(s => s.season === persistedSeason)
-        const season = isValidSeason ? persistedSeason : seasons[0]?.season
+        const { season, queue } = resolveSeason(seasons, get().curSeason)
         set({ curSeason: season })
         if (!season)
           return
-        const queue = seasons.find(s => s.season === season)?.queue
-        const [{ data: lookups = null }, { data: comps = [] }] = await Promise.all([
-          getLookups({ season, queue }),
-          getComps({ season }),
-        ])
-        const itemsById = Object.fromEntries((lookups?.items ?? []).filter(i => i.apiName).map(i => [String(i.apiName), i]))
-        const unitsById = Object.fromEntries((lookups?.units ?? []).filter(u => u.apiName).map(u => [String(u.apiName), u]))
-        const traitsById = Object.fromEntries((lookups?.traits ?? []).filter(t => t.apiName).map(t => [String(t.apiName), t]))
-        const augmentsById = Object.fromEntries((lookups?.augments ?? []).filter(a => a.apiName).map(a => [String(a.apiName), a]))
-        const compsUpdatedAt = comps[0]?.updatedAt ?? null
-        set({ lookups, lookupsIndex: { itemsById, unitsById, traitsById, augmentsById }, compsUpdatedAt, loading: false })
+        const seasonData = await buildSeasonData(season, queue)
+        set({ ...seasonData, loading: false })
       },
       refreshData: async () => {
         set({ unitItemsByName: {}, unitItemsIndex: { itemNamesById: {}, unitsById: {} }, compsUpdatedAt: null })
@@ -81,30 +106,8 @@ export const useGlobalStore = create<GlobalState>()(
           return
         set({ curSeason: season, loading: true })
         const queue = get().seasons.find(s => s.season === season)?.queue
-        const [{ data: lookups = null }, { data: comps = [] }] = await Promise.all([
-          getLookups({ season, queue }),
-          getComps({ season }),
-        ])
-        const itemsById = Object.fromEntries((lookups?.items ?? []).filter(i => i.apiName).map(i => [String(i.apiName), i]))
-        const unitsById = Object.fromEntries((lookups?.units ?? []).filter(u => u.apiName).map(u => [String(u.apiName), u]))
-        const traitsById = Object.fromEntries((lookups?.traits ?? []).filter(t => t.apiName).map(t => [String(t.apiName), t]))
-        const augmentsById = Object.fromEntries((lookups?.augments ?? []).filter(a => a.apiName).map(a => [String(a.apiName), a]))
-        const compsUpdatedAt = comps[0]?.updatedAt ?? null
-        set({ lookups, lookupsIndex: { itemsById, unitsById, traitsById, augmentsById }, compsUpdatedAt, loading: false })
-      },
-      loadUnitItems: async () => {
-        if (Object.keys(get().unitItemsByName).length > 0)
-          return
-        const { data } = await getUnitItems()
-        const itemNames = data?.itemNames ?? {}
-        const units = data?.units ?? {}
-        const itemNamesById: Record<string, ItemName> = Object.fromEntries(
-          Object.entries(itemNames).map(([key, value]) => [String(value?.itemName ?? key), value]),
-        )
-        const unitsById: Record<string, UnitValue> = Object.fromEntries(
-          Object.entries(units).map(([key, value]) => [String(value?.unit ?? key), value]),
-        )
-        set({ unitItemsByName: itemNames, unitItemsIndex: { itemNamesById, unitsById } })
+        const seasonData = await buildSeasonData(season, queue)
+        set({ ...seasonData, loading: false })
       },
     }),
     {

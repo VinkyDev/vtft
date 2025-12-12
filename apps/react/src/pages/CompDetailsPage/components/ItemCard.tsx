@@ -1,5 +1,5 @@
 import type { CompItem, Unit } from 'types'
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { Champion, Impact, Item } from '@/components'
 import { useAdaptiveList } from '@/hooks'
@@ -16,13 +16,6 @@ interface ItemCardProps {
  */
 export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
   const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)
-  const unitItemsIndex = useGlobalStore(s => s.unitItemsIndex)
-  const loadUnitItems = useGlobalStore(s => s.loadUnitItems)
-
-  useEffect(() => {
-    if (!unitItemsIndex || Object.keys(unitItemsIndex.itemNamesById).length === 0)
-      loadUnitItems()
-  }, [unitItemsIndex, loadUnitItems])
 
   const itemMeta = useMemo(() => itemsById[item.itemNames], [itemsById, item.itemNames])
   const components = itemMeta?.composition ?? []

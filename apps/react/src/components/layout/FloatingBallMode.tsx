@@ -33,11 +33,15 @@ export function FloatingBallMode() {
     }
 
     setIsSwitching(true)
-    const result = await Window.switchToStandardAndCenter()
-    if (result.success && result.data) {
-      setWindowMode(result.data)
+    try {
+      const result = await Window.switchToStandardAndCenter()
+      if (result.success && result.data) {
+        setWindowMode(result.data)
+      }
     }
-    setIsSwitching(false)
+    finally {
+      setIsSwitching(false)
+    }
   }
 
   return (

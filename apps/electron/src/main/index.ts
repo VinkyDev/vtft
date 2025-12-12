@@ -5,6 +5,7 @@ import logger from 'logger'
 import { ipcInit } from './ipc/index'
 import { createWindow } from './mainWIndow'
 import { createTray } from './tray'
+import { checkForUpdate } from './update'
 import { markReportedToday, shouldReportToday } from './utils/dailyReport'
 
 const aptabaseCode = import.meta.env.VITE_APTABASE_CODE || ''
@@ -32,7 +33,8 @@ app.whenReady().then(() => {
   ipcInit()
 
   createWindow()
-  createTray() // 创建系统托盘
+  createTray()
+  checkForUpdate()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0)

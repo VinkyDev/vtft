@@ -31,7 +31,7 @@ win:
 nsis:
   installerIcon: resources/icons/win/icon.ico
   uninstallerIcon: resources/icons/win/icon.ico
-  artifactName: ${productName}-${arch}-setup.${ext}
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
@@ -42,7 +42,7 @@ mac:
   icon: resources/icons/mac/icon.icns
   notarize: false
   identity: null
-  artifactName: ${productName}-${arch}.${ext}
+  artifactName: ${productName}-${version}-${arch}.${ext}
   extendInfo:
     LSUIElement: true
   target:
@@ -55,7 +55,7 @@ mac:
         - x64
         - arm64
 linux:
-  artifactName: ${productName}-${arch}.${ext}
+  artifactName: ${productName}-${version}-${arch}.${ext}
   target:
     - target: AppImage
       arch:

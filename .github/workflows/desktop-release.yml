@@ -45,10 +45,10 @@ jobs:
         with:
           name: windows-build
           path: |
-            apps/electron/dist/vtft-x64-setup.exe
-            apps/electron/dist/vtft-x64-setup.exe.blockmap
-            apps/electron/dist/vtft-arm64-setup.exe
-            apps/electron/dist/vtft-arm64-setup.exe.blockmap
+            apps/electron/dist/vtft-*-x64-setup.exe
+            apps/electron/dist/vtft-*-x64-setup.exe.blockmap
+            apps/electron/dist/vtft-*-arm64-setup.exe
+            apps/electron/dist/vtft-*-arm64-setup.exe.blockmap
             apps/electron/dist/latest.yml
           retention-days: 7
 
@@ -90,14 +90,14 @@ jobs:
         with:
           name: macos-build
           path: |
-            apps/electron/dist/vtft-x64.dmg
-            apps/electron/dist/vtft-x64.dmg.blockmap
-            apps/electron/dist/vtft-x64.zip
-            apps/electron/dist/vtft-x64.zip.blockmap
-            apps/electron/dist/vtft-arm64.dmg
-            apps/electron/dist/vtft-arm64.dmg.blockmap
-            apps/electron/dist/vtft-arm64.zip
-            apps/electron/dist/vtft-arm64.zip.blockmap
+            apps/electron/dist/vtft-*-x64.dmg
+            apps/electron/dist/vtft-*-x64.dmg.blockmap
+            apps/electron/dist/vtft-*-x64.zip
+            apps/electron/dist/vtft-*-x64.zip.blockmap
+            apps/electron/dist/vtft-*-arm64.dmg
+            apps/electron/dist/vtft-*-arm64.dmg.blockmap
+            apps/electron/dist/vtft-*-arm64.zip
+            apps/electron/dist/vtft-*-arm64.zip.blockmap
             apps/electron/dist/latest-mac.yml
           retention-days: 7
 
@@ -127,15 +127,16 @@ jobs:
         id: release-notes
         run: |
           TAG_NAME="${GITHUB_REF_NAME}"
+          VERSION="${TAG_NAME#v}"
           cat << EOF > release-body.md
           ## 📥 下载
 
           | 平台 | 架构 | 下载链接 |
           |:---:|:---:|:---:|
-          | **Windows** | Intel / AMD | [⬇️ vtft-x64-setup.exe](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-x64-setup.exe) |
-          | **Windows** | ARM | [⬇️ vtft-arm64-setup.exe](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-arm64-setup.exe) |
-          | **macOS** | Intel | [⬇️ vtft-x64.dmg](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-x64.dmg) |
-          | **macOS** | Apple Silicon | [⬇️ vtft-arm64.dmg](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-arm64.dmg) |
+          | **Windows** | Intel / AMD | [⬇️ vtft-${VERSION}-x64-setup.exe](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-${VERSION}-x64-setup.exe) |
+          | **Windows** | ARM | [⬇️ vtft-${VERSION}-arm64-setup.exe](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-${VERSION}-arm64-setup.exe) |
+          | **macOS** | Intel | [⬇️ vtft-${VERSION}-x64.dmg](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-${VERSION}-x64.dmg) |
+          | **macOS** | Apple Silicon | [⬇️ vtft-${VERSION}-arm64.dmg](https://github.com/VinkyDev/vtft/releases/download/${TAG_NAME}/vtft-${VERSION}-arm64.dmg) |
 
           ---
 

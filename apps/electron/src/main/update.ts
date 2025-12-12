@@ -14,7 +14,7 @@ interface LatestJson {
   files?: Partial<Record<PlatformKey, Partial<Record<ArchKey, LatestFile>>>>
 }
 
-export const LATEST_URL = 'https://static-host-ggr87o43-vtft.sealosgzg.site/latest.json'
+const LATEST_URL = 'https://static-host-ggr87o43-vtft.sealosgzg.site/latest.json'
 
 function parseVersion(version: string): number[] {
   return version

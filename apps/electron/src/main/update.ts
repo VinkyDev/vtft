@@ -38,7 +38,6 @@ function isRemoteNewer(remote: string, local: string): boolean {
   return false
 }
 
-
 export async function checkForUpdate() {
   try {
     const res = await fetch(LATEST_URL, { cache: 'no-store' })
@@ -50,7 +49,7 @@ export async function checkForUpdate() {
     if (!isRemoteNewer(latest.version, localVersion))
       return
 
-    const targetUrl = 'https://vinkydev.github.io/vtft/'
+    const targetUrl = 'https://tft.vinky.cn/'
 
     const notes = latest.notes?.trim()
     const detail = notes

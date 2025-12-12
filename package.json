@@ -53,7 +53,7 @@
   "bugs": {
     "url": "https://github.com/VinkyDev/vtft/issues"
   },
-  "homepage": "https://vinkydev.github.io/vtft",
+  "homepage": "https://tft.vinky.cn",
   "engines": {
     "npm": "only-allow-pnpm",
     "yarn": "only-allow-pnpm",

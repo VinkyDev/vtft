@@ -4,6 +4,7 @@ import type { ItemCategory } from '@/utils/items'
 import { memo, useMemo, useState } from 'react'
 import { ScrollArea } from 'ui'
 import { Champion, EmptyState, FilterBar } from '@/components'
+import { useMediaQuery } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
 import { compositeSortCompItems } from '@/utils/compositeSort'
 import { getItemCategory } from '@/utils/items'
@@ -24,15 +25,34 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
   const [category, setCategory] = useState<ItemCategory>('core')
   const [sortField, setSortField] = useState<SortField>('composite')
   const [selectedChampion, setSelectedChampion] = useState<string | null>(null)
+  const isSmUp = useMediaQuery('(min-width: 640px)', true)
+  const effectiveCategory = useMemo(
+    () => (!isSmUp && category === 'other' ? 'core' : category),
+    [isSmUp, category],
+  )
 
   const filteredByCategory = useMemo(() => {
-    return items.filter(i => getItemCategory(i.itemNames, itemsById) === category)
-  }, [items, category, itemsById])
+    return items.filter((i) => {
+      const itemCategory = getItemCategory(i.itemNames, itemsById) ?? 'other'
+      return itemCategory === effectiveCategory
+    })
+  }, [items, effectiveCategory, itemsById])
 
   const filteredItems = useMemo(() => {
     if (!selectedChampion)
       return filteredByCategory
-    return filteredByCategory.filter(i => (i.units ?? []).slice(0, 2).some(u => u.units === selectedChampion))
+
+    let lastHit: typeof filteredByCategory = []
+    for (let limit = 2; limit <= 5; limit += 1) {
+      const hit = filteredByCategory.filter((i) => {
+        const topUnits = (i.units ?? []).slice(0, limit)
+        return topUnits.some(u => u.units === selectedChampion)
+      })
+      if (hit.length >= 3)
+        return hit
+      lastHit = hit
+    }
+    return lastHit
   }, [filteredByCategory, selectedChampion])
 
   const sortedItems = useMemo(() => {
@@ -48,15 +68,23 @@ export const ItemsGrid = memo(({ items }: ItemsGridProps) => {
     setSelectedChampion(championName)
   }
 
+  const categoryOptions = useMemo(() => {
+    const base = [
+      { value: 'core', label: '核心' },
+      { value: 'radiant', label: '光明' },
+      { value: 'artifact', label: '神器' },
+      { value: 'emblem', label: '转职' },
+      { value: 'other', label: '其他' },
+    ]
+    if (isSmUp)
+      return base
+    return base.filter(opt => opt.value !== 'other')
+  }, [isSmUp])
+
   const filterGroups: FilterGroup[] = [
     {
-      value: category,
-      options: [
-        { value: 'core', label: '核心' },
-        { value: 'radiant', label: '光明' },
-        { value: 'artifact', label: '神器' },
-        { value: 'emblem', label: '转职' },
-      ],
+      value: effectiveCategory,
+      options: categoryOptions,
       onChange: (value) => {
         setCategory(value as ItemCategory)
       },

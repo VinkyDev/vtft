@@ -1,7 +1,7 @@
 import type { Item } from 'types'
 import { ItemTag } from 'types'
 
-export type ItemCategory = 'core' | 'radiant' | 'artifact' | 'emblem'
+export type ItemCategory = 'core' | 'radiant' | 'artifact' | 'emblem' | 'other'
 
 export function getItemCategory(id: string, lookupsIndex: Record<string, Item>): ItemCategory | undefined {
   const meta = lookupsIndex[id]
@@ -17,5 +17,5 @@ export function getItemCategory(id: string, lookupsIndex: Record<string, Item>):
     return 'emblem'
   if ((meta.composition ?? []).length === 2)
     return 'core'
-  return undefined
+  return 'other'
 }

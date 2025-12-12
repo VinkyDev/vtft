@@ -38,7 +38,10 @@ function ItemsPage() {
   const filteredItems = useMemo(() => {
     if (!items)
       return []
-    return items.filter(i => getItemCategory(i.itemName, itemsById) === category)
+    return items.filter((i) => {
+      const itemCategory = getItemCategory(i.itemName, itemsById) ?? 'other'
+      return itemCategory === category
+    })
   }, [items, category, itemsById])
 
   const sortedItems = useMemo(() => {
@@ -61,6 +64,7 @@ function ItemsPage() {
         { value: 'radiant', label: '光明' },
         { value: 'artifact', label: '神器' },
         { value: 'emblem', label: '转职' },
+        { value: 'other', label: '其他' },
       ],
       onChange: (value) => {
         setCategory(value as ItemCategory)

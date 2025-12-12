@@ -24,10 +24,10 @@ interface CacheEntry {
 
 /** 全局 LRU 缓存实例 */
 const cache = new LRUCache<string, CacheEntry>({
-  max: 50, // 最多缓存 50 个条目
-  ttl: 1000 * 60 * 10, // 默认 10 分钟
-  updateAgeOnGet: true, // 获取时更新年龄，实现真正的 LRU
-  updateAgeOnHas: false, // has() 操作不更新年龄
+  max: 100,
+  ttl: 1000 * 60 * 10,
+  updateAgeOnGet: true,
+  updateAgeOnHas: false
 })
 
 /** 默认缓存键生成器 */

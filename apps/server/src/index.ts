@@ -29,7 +29,12 @@ const logger = new Logger({ namespace: 'server' })
 const app = new OpenAPIHono()
 
 app.use('*', timing())
-app.use('*', honoLogger())
+app.use('*', honoLogger((message) => {
+  logger.info({
+    message,
+    scope: 'honoLogger',
+  })
+}))
 app.use('*', cors())
 app.use('*', compress())
 app.use('*', etag())

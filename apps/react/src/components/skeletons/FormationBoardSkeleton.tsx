@@ -17,13 +17,23 @@ export const FormationBoardSkeleton = memo(({ className = '' }: FormationBoardSk
   return (
     <div className={`flex flex-col items-center justify-center h-full w-full p-1 sm:p-4 gap-1 ${className}`}>
       {/* 等级分布骨架屏 */}
-      <div className="flex items-center gap-2 text-xs">
-        <SkeletonBase className="h-4 w-16 rounded" shimmer={false} />
-        <div className="flex items-center gap-1.5">
-          {Array.from({ length: 3 }).map((_, idx) => (
-            <SkeletonBase key={idx} className="h-5 w-12 rounded" shimmer={false} />
-          ))}
+      <div className="flex items-center justify-between w-full max-w-xl px-2">
+        <div className="flex items-center gap-2 text-xs text-zinc-400">
+          <SkeletonBase className="hidden sm:block h-4 w-16 rounded" shimmer={false} />
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <SkeletonBase
+                key={idx}
+                className={`h-5 rounded px-1.5 py-0.5 ${
+                  idx === 0 ? 'w-14' : 'w-12'
+                }`}
+                shimmer={false}
+              />
+            ))}
+          </div>
         </div>
+        {/* 复制代码按钮骨架屏 */}
+        <SkeletonBase className="h-6 w-12 rounded" shimmer={false} />
       </div>
       <div className="flex items-center justify-center">
         <div className="p-1 sm:p-5">

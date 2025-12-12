@@ -1,7 +1,7 @@
 {
   "name": "ui",
   "type": "module",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "exports": {
     "./globals.css": "./src/styles/globals.css",
     "./postcss.config": "./postcss.config.mjs",

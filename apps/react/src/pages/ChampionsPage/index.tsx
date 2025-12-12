@@ -45,7 +45,10 @@ function ChampionsPage() {
         const lookupUnit = unitsById[unit.unit]
         if (!lookupUnit)
           return false
-        return (lookupUnit.cost ?? -1) === targetCost
+        const cost = lookupUnit.cost ?? -1
+        if (costFilter === '5')
+          return cost >= 5
+        return cost === targetCost
       })
     }
 

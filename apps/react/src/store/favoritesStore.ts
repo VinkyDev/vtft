@@ -54,4 +54,3 @@ export const useFavoritesStore = create<FavoritesState>()(
     },
   ),
 )
-

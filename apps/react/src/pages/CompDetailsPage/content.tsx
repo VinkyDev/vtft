@@ -1,3 +1,4 @@
+import type { BuildsTabProps, HeroesTabProps, ItemsTabProps, OverviewTabProps } from './components'
 import type { EnhancedCompData } from '@/utils/compRating'
 import { getCompDetails } from 'api-client'
 import { useMemo, useState } from 'react'
@@ -9,15 +10,51 @@ import {
   ItemsGridSkeleton,
 } from '@/components'
 import { useConfigStore } from '@/store/configStore'
-import { Builds, FormationBoard, ItemsGrid } from './components'
+import { BuildsTab, HeroesTab, ItemsTab, LazyTabContent, OverviewTab } from './components'
 
 interface CompDetailContentProps {
   comp: EnhancedCompData | null
 }
 
+const skeletonTabs = [
+  {
+    value: 'overview',
+    label: '概览',
+    content: <FormationBoardSkeleton />,
+  },
+  {
+    value: 'heroes',
+    label: '英雄',
+    content: <ItemsGridSkeleton />,
+  },
+  {
+    value: 'items',
+    label: '装备',
+    content: <ItemsGridSkeleton />,
+  },
+  {
+    value: 'builds',
+    label: '构建',
+    content: <ItemsGridSkeleton />,
+  },
+]
+
 export function CompDetailContent({ comp }: CompDetailContentProps) {
   const [activeTab, setActiveTab] = useState('overview')
   const { windowMode } = useConfigStore()
+
+  const [activatedTabs, setActivatedTabs] = useState<Set<string>>(() => new Set(['overview']))
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab)
+    setActivatedTabs((prev) => {
+      if (prev.has(tab))
+        return prev
+      const next = new Set(prev)
+      next.add(tab)
+      return next
+    })
+  }
 
   const { data: compDetails, loading } = useRequest(
     async () => {
@@ -32,46 +69,56 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
     },
   )
 
-  const skeletonTabs = useMemo(() => [
-    {
-      value: 'overview',
-      label: '概览',
-      content: <FormationBoardSkeleton />,
-    },
-    {
-      value: 'items',
-      label: '装备',
-      content: <ItemsGridSkeleton />,
-    },
-    {
-      value: 'builds',
-      label: '构建',
-      content: <Builds />,
-    },
-  ], [])
-
   const tabs = useMemo(() => {
     if (!compDetails?.data)
       return []
+
+    const data = compDetails.data
 
     return [
       {
         value: 'overview',
         label: '概览',
-        content: compDetails.data
+        content: data
           ? (
-              <FormationBoard data={compDetails.data} builds={comp?.builds} traits={comp?.traits} />
+              <LazyTabContent<OverviewTabProps>
+                shouldRender={activatedTabs.has('overview')}
+                component={OverviewTab}
+                props={{ data, builds: comp?.builds, traits: comp?.traits }}
+                fallback={<FormationBoardSkeleton />}
+              />
             )
           : (
               <EmptyState message="暂无阵容信息" />
             ),
       },
       {
+        value: 'heroes',
+        label: '英雄',
+        content: data.item && data.item.length > 0
+          ? (
+              <LazyTabContent<HeroesTabProps>
+                shouldRender={activatedTabs.has('heroes')}
+                component={HeroesTab}
+                props={{ items: data.item }}
+                fallback={<ItemsGridSkeleton />}
+              />
+            )
+          : (
+              <EmptyState message="暂无英雄装备数据" />
+            ),
+      },
+      {
         value: 'items',
         label: '装备',
-        content: compDetails.data.item && compDetails.data.item.length > 0
+        content: data.item && data.item.length > 0
           ? (
-              <ItemsGrid items={compDetails.data.item} />
+              <LazyTabContent<ItemsTabProps>
+                shouldRender={activatedTabs.has('items')}
+                component={ItemsTab}
+                props={{ items: data.item }}
+                fallback={<ItemsGridSkeleton />}
+              />
             )
           : (
               <EmptyState message="暂无装备信息" />
@@ -80,10 +127,17 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
       {
         value: 'builds',
         label: '构建',
-        content: <Builds earlyOptions={compDetails.data.early_options} options={compDetails.data.options} />,
+        content: (
+          <LazyTabContent<BuildsTabProps>
+            shouldRender={activatedTabs.has('builds')}
+            component={BuildsTab}
+            props={{ earlyOptions: data.early_options, options: data.options }}
+            fallback={<ItemsGridSkeleton />}
+          />
+        ),
       },
     ]
-  }, [compDetails, comp])
+  }, [compDetails, comp, activatedTabs])
 
   return (
     <div className={`flex-1 overflow-hidden ${windowMode === 'floating' ? 'pointer-events-none' : ''}`}>
@@ -91,7 +145,7 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
         <div className="flex flex-col h-full p-2">
           <AppTabs
             value={activeTab}
-            onValueChange={setActiveTab}
+            onValueChange={handleTabChange}
             tabs={skeletonTabs}
             enableAnimation={true}
           />
@@ -102,7 +156,7 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
         <div className="flex flex-col h-full p-2">
           <AppTabs
             value={activeTab}
-            onValueChange={setActiveTab}
+            onValueChange={handleTabChange}
             tabs={tabs}
             enableAnimation={true}
           />

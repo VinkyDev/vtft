@@ -4,63 +4,26 @@ import { memo, useMemo } from 'react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, ScrollArea, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { Champion, EmptyState } from '@/components'
 import { useUnitsUtils } from '@/hooks'
+import { alignUnits, findCommonUnits, formatAvg, parseUnitList } from './helpers'
 
-interface BuildsProps {
+export interface BuildsTabProps {
   earlyOptions?: Record<string, Option[]>
   options?: Record<string, Option[]>
 }
 
-function parseUnitList(str?: string): string[] {
-  if (!str)
-    return []
-  return str.split('&').map(s => s.trim()).filter(Boolean)
-}
-
-function formatAvg(avg?: number): string {
-  if (avg === undefined || avg === null)
-    return '-'
-  return Number.isFinite(avg) ? avg.toFixed(2) : '-'
-}
-
-// 找出多个配置中都有的英雄（交集）
-function findCommonUnits(builds: Array<{ units: string[] }>): string[] {
-  if (builds.length === 0)
-    return []
-  if (builds.length === 1)
-    return builds[0]!.units
-
-  const unitSets = builds.map(build => new Set(build.units))
-  const firstSet = unitSets[0]!
-
-  return Array.from(firstSet).filter(unit =>
-    unitSets.every(set => set.has(unit)),
-  )
-}
-
-// 对齐显示：将英雄列表对齐到统一顺序
-function alignUnits(units: string[], commonUnits: string[]): { common: (string | null)[], others: string[] } {
-  const unitSet = new Set(units)
-  const commonAligned = commonUnits.map(u => unitSet.has(u) ? u : null)
-  const others = units.filter(u => !commonUnits.includes(u))
-  return { common: commonAligned, others }
-}
-
-export const Builds = memo(({ earlyOptions, options }: BuildsProps) => {
+export const BuildsTab = memo(({ earlyOptions, options }: BuildsTabProps) => {
   const { sortUnitsByCost } = useUnitsUtils()
   const earlyEntries = useMemo(() => Object.entries(earlyOptions || {}), [earlyOptions])
   const lateEntries = useMemo(() => Object.entries(options || {}).sort((a, b) => Number(a[0]) - Number(b[0])), [options])
 
-  // 检查后期阵容是否有7级
   const hasLateLevel7 = useMemo(() => {
     return lateEntries.some(([lvl]) => lvl === '7')
   }, [lateEntries])
 
-  // 处理早期阵容：每个等级只显示场次最多的配置，其他作为可选项
   const processedEarlyEntries = useMemo(() => {
     return earlyEntries
-      .filter(([key]) => !hasLateLevel7 || key !== '7') // 如果后期阵容有7级，则过滤掉早期阵容的7级
+      .filter(([key]) => !hasLateLevel7 || key !== '7')
       .map(([key, opts]) => {
-        // 按场次排序
         const sorted = [...opts].sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
         const primary = sorted[0]
         const alternatives = sorted.slice(1)
@@ -85,13 +48,11 @@ export const Builds = memo(({ earlyOptions, options }: BuildsProps) => {
       })
   }, [earlyEntries, hasLateLevel7, sortUnitsByCost])
 
-  // 处理后期阵容：按场次排序，每个等级只保留前5个配置
   const processedLateEntries = useMemo(() => {
     return lateEntries
-      .filter(([lvl]) => lvl !== '11') // 过滤掉11级
-      .filter(([, opts]) => opts.length > 0) // 过滤掉空配置
+      .filter(([lvl]) => lvl !== '11')
+      .filter(([, opts]) => opts.length > 0)
       .map(([lvl, opts]) => {
-        // 按场次排序，只保留前5个
         const sorted = [...opts].sort((a, b) => (b.count ?? 0) - (a.count ?? 0)).slice(0, 5)
         const builds = sorted.map(opt => ({
           units: sortUnitsByCost(parseUnitList(opt.unit_list)),
@@ -100,7 +61,6 @@ export const Builds = memo(({ earlyOptions, options }: BuildsProps) => {
           win: opt.win,
         }))
 
-        // 找出所有配置中都有的英雄
         const commonUnits = sortUnitsByCost(findCommonUnits(builds))
 
         return {
@@ -293,4 +253,4 @@ export const Builds = memo(({ earlyOptions, options }: BuildsProps) => {
   )
 })
 
-Builds.displayName = 'Builds'
+BuildsTab.displayName = 'BuildsTab'

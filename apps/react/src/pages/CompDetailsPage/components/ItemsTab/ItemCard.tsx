@@ -7,14 +7,9 @@ import { useGlobalStore } from '@/store/globalStore'
 
 interface ItemCardProps {
   item: CompItem
-  onChampionClick?: (championName: string) => void
 }
 
-/**
- * 装备卡片组件
- * 展示单个装备的详细信息（横向一行布局）
- */
-export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
+export const ItemCard = memo(({ item }: ItemCardProps) => {
   const itemsById = useGlobalStore(s => s.lookupsIndex.itemsById)
 
   const itemMeta = useMemo(() => itemsById[item.itemNames], [itemsById, item.itemNames])
@@ -66,21 +61,15 @@ export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
         </div>
 
         <div ref={containerRef} className="flex items-center gap-1 min-w-0 justify-end">
-          {visibleItems.map((item, index) => (
-            item.units && (
-              <div
-                key={`${item.units}-${index}`}
-                onClick={() => onChampionClick?.(item.units!)}
-                className="cursor-pointer hover:scale-110 transition-transform"
-              >
-                <Champion
-                  id={item.units}
-                  showTooltip={true}
-                  className="size-4 sm:size-5"
-                />
-              </div>
+          {visibleItems.map((unit, index) => (
+            unit.units && (
+              <Champion
+                key={`${unit.units}-${index}`}
+                id={unit.units}
+                showTooltip
+                className="size-4 sm:size-5"
+              />
             )
-
           ))}
           {showMore && (
             <Tooltip>
@@ -95,19 +84,14 @@ export const ItemCard = memo(({ item, onChampionClick }: ItemCardProps) => {
                 className="bg-black/90 text-white border-white/10"
               >
                 <div className="flex flex-wrap gap-1 max-w-[200px]">
-                  {recommendedUnits.slice(visibleItems.length).map((item, index) => (
-                    item.units && (
-                      <div
-                        key={`${item.units}-${visibleItems.length + index}`}
-                        onClick={() => onChampionClick?.(item.units!)}
-                        className="cursor-pointer hover:scale-110 transition-transform"
-                      >
-                        <Champion
-                          id={item.units}
-                          className="size-4"
-                          showTooltip={false}
-                        />
-                      </div>
+                  {recommendedUnits.slice(visibleItems.length).map((unit, index) => (
+                    unit.units && (
+                      <Champion
+                        key={`${unit.units}-${visibleItems.length + index}`}
+                        id={unit.units}
+                        className="size-4"
+                        showTooltip={false}
+                      />
                     )
                   ))}
                 </div>

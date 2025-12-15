@@ -1,4 +1,5 @@
 export * from './useAdaptiveList'
 export * from './useDraggable'
 export * from './useMediaQuery'
+export * from './useScrolling'
 export * from './useUnitsUtils'

@@ -3,15 +3,50 @@ import type { EnhancedCompData, GroupedComps } from '@/utils/compRating'
 import { getComps } from 'api-client'
 import { useMemo, useState } from 'react'
 import { useRequest } from 'react-helper'
-import { ScrollArea } from 'ui'
-import { matchPinyinSearch } from 'utils'
+import { cn, matchPinyinSearch } from 'utils'
+import { VList } from 'virtua'
 import { CompPageSkeleton, FilterBar, SearchInput } from '@/components'
 import { useGlobalStore } from '@/store/globalStore'
 import { processComps } from '@/utils/compRating'
 import CompDetailPage from '../CompDetailsPage'
-import { TierSection } from './components'
+import { CompCard, LowPickrateAccordion } from './components'
 
 type SortField = 'composite' | 'rank' | 'matches'
+
+/**
+ * 虚拟列表项类型
+ * - comp: 普通阵容卡片
+ * - accordion: 低出场率阵容折叠面板
+ */
+type VirtualItem
+  = | { type: 'comp', comp: EnhancedCompData }
+    | { type: 'accordion', comps: EnhancedCompData[], tier: string }
+
+/**
+ * 将分组数据扁平化为虚拟列表项
+ * 保持原有的 UI 结构：普通阵容直接渲染，低出场率阵容在折叠面板中
+ */
+function flattenGroupsToVirtualItems(groups: GroupedComps[]): VirtualItem[] {
+  const items: VirtualItem[] = []
+
+  for (const group of groups) {
+    // 添加普通阵容
+    for (const comp of group.normal) {
+      items.push({ type: 'comp', comp })
+    }
+
+    // 添加低出场率阵容折叠面板（作为一个整体项）
+    if (group.lowPickrate.length > 0) {
+      items.push({
+        type: 'accordion',
+        comps: group.lowPickrate,
+        tier: group.tier,
+      })
+    }
+  }
+
+  return items
+}
 
 function CompRankingsPage() {
   const season = useGlobalStore(s => s.curSeason)
@@ -66,7 +101,14 @@ function CompRankingsPage() {
       .filter(group => group.normal.length > 0 || group.lowPickrate.length > 0)
   }, [groupedComps, searchQuery, unitsById, traitsById])
 
+  // 将分组数据扁平化为虚拟列表项
+  const virtualItems = useMemo(
+    () => flattenGroupsToVirtualItems(filteredGroupedComps),
+    [filteredGroupedComps],
+  )
+
   const [selectedComp, setSelectedComp] = useState<EnhancedCompData | null>(null)
+  const [isScrolling, setIsScrolling] = useState(false)
 
   const handleCompClick = (comp: EnhancedCompData) => {
     setSelectedComp(comp)
@@ -90,9 +132,9 @@ function CompRankingsPage() {
 
   return (
     <>
-      <div className="flex flex-col gap-1.5 px-2">
-        <div className="py-1.5 px-2 mb-1 bg-white/5 rounded-lg border border-white/10">
-          <div className="flex gap-2 items-center">
+      <div className="flex h-full flex-col gap-1.5 px-2">
+        <div className="mb-1 shrink-0 rounded-lg border border-white/10 bg-white/5 px-2 py-1.5">
+          <div className="flex items-center gap-2">
             <SearchInput
               placeholder="搜索英雄/羁绊..."
               onSearchChange={setSearchQuery}
@@ -101,19 +143,32 @@ function CompRankingsPage() {
           </div>
         </div>
 
-        <ScrollArea className="h-[calc(100vh-110px)] sm:h-[calc(100vh-120px)]" type="scroll">
-          {loading || globalLoading
-            ? (
-                <CompPageSkeleton />
-              )
-            : (
-                <div className="flex flex-col gap-1.5">
-                  {filteredGroupedComps.map(group => (
-                    <TierSection key={group.tier} group={group} onCompClick={handleCompClick} />
-                  ))}
-                </div>
-              )}
-        </ScrollArea>
+        {loading || globalLoading
+          ? (
+              <CompPageSkeleton />
+            )
+          : (
+              <VList
+                className={cn(
+                  'virtual-scrollbar min-h-0 flex-1',
+                  isScrolling && 'is-scrolling',
+                )}
+                onScroll={() => setIsScrolling(true)}
+                onScrollEnd={() => setIsScrolling(false)}
+              >
+                {virtualItems.map((item, index) => (
+                  <div key={item.type === 'comp' ? item.comp.id : `accordion-${item.tier}-${index}`} className="pb-1.5">
+                    {item.type === 'comp'
+                      ? (
+                          <CompCard comp={item.comp} onClick={handleCompClick} />
+                        )
+                      : (
+                          <LowPickrateAccordion comps={item.comps} onCompClick={handleCompClick} />
+                        )}
+                  </div>
+                ))}
+              </VList>
+            )}
       </div>
 
       <CompDetailPage key={selectedComp?.compId} comp={selectedComp} onClose={handleCloseDetail} />

@@ -63,3 +63,40 @@ body::-webkit-scrollbar {
 .animate-skeleton-pulse {
   animation: skeleton-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+.virtual-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s ease;
+}
+
+.virtual-scrollbar:hover,
+.virtual-scrollbar:active,
+.virtual-scrollbar.is-scrolling {
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.virtual-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.virtual-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.virtual-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.virtual-scrollbar:hover::-webkit-scrollbar-thumb,
+.virtual-scrollbar:active::-webkit-scrollbar-thumb,
+.virtual-scrollbar.is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.virtual-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}

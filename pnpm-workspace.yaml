@@ -22,7 +22,7 @@ catalog:
   query-string: ^9.3.1
   lodash-es: ^4.17.21
   '@types/lodash-es': ^4.17.12
-  '@rslib/core': ^0.18.4
+  '@rslib/core': ^0.17.2
   '@rsbuild/plugin-react': ^1.4.2
   react-error-boundary: ^6.0.0
   axios: ^1.13.2

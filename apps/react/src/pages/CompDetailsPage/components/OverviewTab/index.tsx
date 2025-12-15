@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import type { Build, CompDetail } from 'types'
 import { find } from 'lodash-es'
 import { memo, useMemo, useState } from 'react'

@@ -1,6 +1,6 @@
 import type { LookupsUnit, Option, Trait } from 'types'
 
-export function parseUnitList(str?: string): string[] {
+function parseUnitList(str?: string): string[] {
   if (!str)
     return []
   return str.split('&').map(s => s.trim()).filter(Boolean)
@@ -18,16 +18,16 @@ export interface ParsedBuild {
   avg: number
 }
 
-export interface LevelBuilds {
+interface LevelBuilds {
   level: string
   builds: ParsedBuild[]
 }
 
-export interface FlexSlot {
+interface FlexSlot {
   options: Array<{ unit: string, count: number, avgRank: number }>
 }
 
-export interface FinalCompAnalysis {
+interface FinalCompAnalysis {
   coreUnits: string[]
   flexSlots: FlexSlot[]
   topBuilds: ParsedBuild[]

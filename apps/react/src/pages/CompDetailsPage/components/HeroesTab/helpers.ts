@@ -11,7 +11,7 @@ export const BASE_ITEMS = [
   'TFT_Item_TearOfTheGoddess',
 ]
 
-export const IMPORTANCE_THRESHOLD = 0.35
+const IMPORTANCE_THRESHOLD = 0.35
 
 export function calcRelativeScores(items: ChampionItemEntry[]): ChampionItemEntry[] {
   if (items.length === 0)

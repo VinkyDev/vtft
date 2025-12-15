@@ -1,6 +1,6 @@
 import type { Option } from 'types'
 
-export function parseUnitList(str?: string): string[] {
+function parseUnitList(str?: string): string[] {
   if (!str)
     return []
   return str.split('&').map(s => s.trim()).filter(Boolean)
@@ -12,13 +12,13 @@ export function formatAvg(avg?: number): string {
   return Number.isFinite(avg) ? avg.toFixed(2) : '-'
 }
 
-export interface ParsedBuild {
+interface ParsedBuild {
   units: string[]
   count: number
   avg: number
 }
 
-export interface LevelBuilds {
+interface LevelBuilds {
   level: string
   builds: ParsedBuild[]
 }

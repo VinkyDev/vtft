@@ -2,7 +2,7 @@ import { Check, Copy } from 'lucide-react'
 import { memo, useCallback, useState } from 'react'
 import { cn } from 'utils'
 
-export interface CopyButtonProps {
+interface CopyButtonProps {
   /** 要复制的文本 */
   text: string
   /** 额外的 className */

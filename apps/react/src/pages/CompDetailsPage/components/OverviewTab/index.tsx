@@ -1,10 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import type { Build, CompDetail } from 'types'
 import { find } from 'lodash-es'
-import logger from 'logger'
-import { Copy } from 'lucide-react'
 import { memo, useMemo, useState } from 'react'
-import { Trait } from '@/components'
+import { CopyButton, Trait } from '@/components'
 import { useUnitsUtils } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
 import { FormationCell } from './FormationCell'
@@ -42,17 +40,6 @@ export const OverviewTab = memo(({ data, builds, traits }: OverviewTabProps) => 
     return generateCompCode(unitIds)
   }, [positioning, generateCompCode])
 
-  const handleCopyCode = async () => {
-    if (!compCode)
-      return
-    try {
-      await navigator.clipboard.writeText(compCode)
-    }
-    catch (err) {
-      logger.error('Failed to copy comp code:', err as Error)
-    }
-  }
-
   const board = useMemo(() => {
     const grid: Array<Array<typeof positioning[0] | null>> = Array.from(
       { length: ROWS },
@@ -77,14 +64,12 @@ export const OverviewTab = memo(({ data, builds, traits }: OverviewTabProps) => 
         <div className="flex items-center justify-between w-full max-w-xl px-2">
           <LevelIndicator levels={data.final_level} />
           {compCode && (
-            <button
-              type="button"
-              onClick={handleCopyCode}
-              className="inline-flex items-center gap-1 rounded bg-white/5 px-2 py-1 text-[11px] text-zinc-200 hover:bg-white/10 transition-colors"
-            >
-              <Copy className="size-3.5 text-zinc-300" />
-              代码
-            </button>
+            <CopyButton
+              text={compCode}
+              label="代码"
+              className="rounded bg-white/5 px-2 py-1 text-[11px] text-zinc-300 hover:bg-white/10"
+              iconClassName="size-3.5"
+            />
           )}
         </div>
       )}

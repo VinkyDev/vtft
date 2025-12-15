@@ -1,10 +1,10 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { find } from 'lodash-es'
-import { ArrowUpRight, Copy, RefreshCw, Star } from 'lucide-react'
+import { ArrowUpRight, RefreshCw, Star } from 'lucide-react'
 import { memo, useMemo } from 'react'
 import { Badge, Popover, PopoverContent, PopoverTrigger } from 'ui'
 import { cn } from 'utils'
-import { Champion, Trait } from '@/components'
+import { Champion, CopyButton, Trait } from '@/components'
 import { useAdaptiveList, useUnitsUtils } from '@/hooks'
 import { useFavoritesStore } from '@/store/favoritesStore'
 import { useGlobalStore } from '@/store/globalStore'
@@ -66,13 +66,6 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
   const handleClick = () => {
     if (onClick) {
       onClick(comp)
-    }
-  }
-
-  const handleCopyCode = async (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (compCode) {
-      await navigator.clipboard.writeText(compCode).catch(() => {})
     }
   }
 
@@ -143,13 +136,12 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
             )}
             <div className="ml-auto flex shrink-0 items-center gap-0.5">
               {compCode && (
-                <button
-                  type="button"
-                  onClick={handleCopyCode}
-                  className="p-1 rounded hover:bg-white/10 transition-colors opacity-0 group-hover:opacity-100"
-                >
-                  <Copy className="size-3.5 text-gray-400 hover:text-gray-200" />
-                </button>
+                <CopyButton
+                  text={compCode}
+                  stopPropagation
+                  className="p-1 rounded hover:bg-white/10 opacity-0 group-hover:opacity-100"
+                  iconClassName="size-3.5 text-gray-400 hover:text-gray-200"
+                />
               )}
               <button
                 type="button"

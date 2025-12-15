@@ -1,5 +1,6 @@
 export * from '../skeletons'
 export * from './AppTabs'
+export * from './CopyButton'
 export * from './DataSkeleton'
 export * from './EmptyState'
 export * from './ErrorState'

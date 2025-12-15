@@ -27,7 +27,7 @@ const cache = new LRUCache<string, CacheEntry>({
   max: 100,
   ttl: 1000 * 60 * 10,
   updateAgeOnGet: true,
-  updateAgeOnHas: false
+  updateAgeOnHas: false,
 })
 
 /** 默认缓存键生成器 */

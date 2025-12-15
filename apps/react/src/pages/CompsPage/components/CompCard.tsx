@@ -1,11 +1,12 @@
 import type { EnhancedCompData } from '@/utils/compRating'
 import { find } from 'lodash-es'
-import { ArrowUpRight, Copy, RefreshCw } from 'lucide-react'
+import { ArrowUpRight, Copy, RefreshCw, Star } from 'lucide-react'
 import { memo, useMemo } from 'react'
-import { Badge, Popover, PopoverContent, PopoverTrigger, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
+import { Badge, Popover, PopoverContent, PopoverTrigger } from 'ui'
 import { cn } from 'utils'
 import { Champion, Trait } from '@/components'
 import { useAdaptiveList, useUnitsUtils } from '@/hooks'
+import { useFavoritesStore } from '@/store/favoritesStore'
 import { useGlobalStore } from '@/store/globalStore'
 import { CompStats } from './CompStats'
 import { TierBadge } from './TierBadge'
@@ -15,7 +16,6 @@ interface CompCardProps {
   onClick?: (comp: EnhancedCompData) => void
 }
 
-// levelling 展示配置：类型 + 等级
 const LEVELLING_CONFIG: Record<
   string,
   { type: 'fast' | 'reroll', level: number }
@@ -31,8 +31,9 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
   const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
   const traitsById = useGlobalStore(s => s.lookupsIndex.traitsById)
   const { sortUnitsByCost, generateCompCode } = useUnitsUtils()
+  const toggleFavorite = useFavoritesStore(s => s.toggle)
+  const isFavorite = useFavoritesStore(s => comp.compId ? s.favorites.has(comp.compId) : false)
 
-  // 羁绊列表自适应：最多一行，多余折叠为「+x」
   const {
     containerRef: traitsContainerRef,
     visibleItems: visibleTraits,
@@ -69,16 +70,16 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
   }
 
   const handleCopyCode = async (e: React.MouseEvent) => {
-    e.stopPropagation() // 阻止事件冒泡，避免触发卡片的 onClick
+    e.stopPropagation()
     if (compCode) {
-      try {
-        await navigator.clipboard.writeText(compCode)
-      }
-      catch (err) {
-        // 如果复制失败，可以在这里处理错误
-        console.error('Failed to copy code:', err)
-      }
+      await navigator.clipboard.writeText(compCode).catch(() => {})
     }
+  }
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (comp.compId)
+      toggleFavorite(comp.compId)
   }
 
   return (
@@ -109,7 +110,6 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
                     .join(' ')
                 : ''}
             </h3>
-            {/* levelling 标签：Standard 等未配置的直接隐藏 */}
             {(() => {
               if (!comp.levelling)
                 return null
@@ -141,23 +141,32 @@ export const CompCard = memo(({ comp, onClick }: CompCardProps) => {
                 低出场
               </Badge>
             )}
-            {compCode && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={handleCopyCode}
-                    className="ml-auto shrink-0 p-1 rounded hover:bg-white/10 transition-colors opacity-0 group-hover:opacity-100"
-                    aria-label="复制阵容代码"
-                  >
-                    <Copy className="size-3.5 text-gray-400 hover:text-gray-200" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top" sideOffset={4}>
-                  复制阵容代码
-                </TooltipContent>
-              </Tooltip>
-            )}
+            <div className="ml-auto flex shrink-0 items-center gap-0.5">
+              {compCode && (
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  className="p-1 rounded hover:bg-white/10 transition-colors opacity-0 group-hover:opacity-100"
+                >
+                  <Copy className="size-3.5 text-gray-400 hover:text-gray-200" />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleToggleFavorite}
+                className={cn(
+                  'p-1 rounded transition-colors',
+                  isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 hover:bg-white/10',
+                )}
+              >
+                <Star
+                  className={cn(
+                    'size-3.5 transition-colors',
+                    isFavorite ? 'fill-amber-400 text-amber-400' : 'text-gray-400 hover:text-gray-200',
+                  )}
+                />
+              </button>
+            </div>
           </div>
 
           {comp.traits && comp.traits.length > 0 && (

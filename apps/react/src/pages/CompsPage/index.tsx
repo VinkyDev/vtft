@@ -1,59 +1,46 @@
 import type { FilterGroup } from '@/components'
 import type { EnhancedCompData, GroupedComps } from '@/utils/compRating'
 import { getComps } from 'api-client'
+import { Star } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useRequest } from 'react-helper'
+import { Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { cn, matchPinyinSearch } from 'utils'
 import { VList } from 'virtua'
 import { CompPageSkeleton, FilterBar, SearchInput } from '@/components'
+import { useFavoritesStore } from '@/store/favoritesStore'
 import { useGlobalStore } from '@/store/globalStore'
 import { processComps } from '@/utils/compRating'
 import CompDetailPage from '../CompDetailsPage'
 import { CompCard, LowPickrateAccordion } from './components'
 
 type SortField = 'composite' | 'rank' | 'matches'
-
-/**
- * 虚拟列表项类型
- * - comp: 普通阵容卡片
- * - accordion: 低出场率阵容折叠面板
- */
 type VirtualItem
   = | { type: 'comp', comp: EnhancedCompData }
     | { type: 'accordion', comps: EnhancedCompData[], tier: string }
 
-/**
- * 将分组数据扁平化为虚拟列表项
- * 保持原有的 UI 结构：普通阵容直接渲染，低出场率阵容在折叠面板中
- */
 function flattenGroupsToVirtualItems(groups: GroupedComps[]): VirtualItem[] {
   const items: VirtualItem[] = []
-
   for (const group of groups) {
-    // 添加普通阵容
     for (const comp of group.normal) {
       items.push({ type: 'comp', comp })
     }
-
-    // 添加低出场率阵容折叠面板（作为一个整体项）
     if (group.lowPickrate.length > 0) {
-      items.push({
-        type: 'accordion',
-        comps: group.lowPickrate,
-        tier: group.tier,
-      })
+      items.push({ type: 'accordion', comps: group.lowPickrate, tier: group.tier })
     }
   }
-
   return items
 }
 
 function CompRankingsPage() {
   const season = useGlobalStore(s => s.curSeason)
   const globalLoading = useGlobalStore(s => s.loading)
+  const favorites = useFavoritesStore(s => s.favorites)
 
   const [searchQuery, setSearchQuery] = useState('')
   const [sortField, setSortField] = useState<SortField>('composite')
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
+  const effectiveShowFavoritesOnly = showFavoritesOnly && favorites.size > 0
 
   const { data, loading } = useRequest(
     async () => {
@@ -79,10 +66,12 @@ function CompRankingsPage() {
 
   const filteredGroupedComps = useMemo<GroupedComps[]>(() => {
     const query = searchQuery.trim()
-    if (!query)
-      return groupedComps
 
     const matchComp = (comp: EnhancedCompData) => {
+      if (effectiveShowFavoritesOnly && (!comp.compId || !favorites.has(comp.compId)))
+        return false
+      if (!query)
+        return true
       const unitNames = (comp.units ?? []).map(u => unitsById[u]?.name ?? '')
       const traitNames = (comp.traits ?? []).map((t) => {
         const traitKey = t.replace(/_\d+$/, '')
@@ -99,9 +88,8 @@ function CompRankingsPage() {
         lowPickrate: group.lowPickrate.filter(matchComp),
       }))
       .filter(group => group.normal.length > 0 || group.lowPickrate.length > 0)
-  }, [groupedComps, searchQuery, unitsById, traitsById])
+  }, [groupedComps, searchQuery, unitsById, traitsById, effectiveShowFavoritesOnly, favorites])
 
-  // 将分组数据扁平化为虚拟列表项
   const virtualItems = useMemo(
     () => flattenGroupsToVirtualItems(filteredGroupedComps),
     [filteredGroupedComps],
@@ -140,6 +128,27 @@ function CompRankingsPage() {
               onSearchChange={setSearchQuery}
             />
             <FilterBar groups={filterGroups} showContainer={false} />
+            {favorites.size > 0 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                    className={cn(
+                      'shrink-0 rounded-md p-1 sm:p-1.5 transition-colors',
+                      showFavoritesOnly
+                        ? 'bg-amber-500/20 text-amber-400'
+                        : 'text-gray-400 hover:bg-white/10 hover:text-gray-200',
+                    )}
+                  >
+                    <Star className={cn('size-3.5 sm:size-4', showFavoritesOnly && 'fill-current')} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={4}>
+                  {showFavoritesOnly ? '显示全部阵容' : '仅显示收藏'}
+                </TooltipContent>
+              </Tooltip>
+            )}
           </div>
         </div>
 

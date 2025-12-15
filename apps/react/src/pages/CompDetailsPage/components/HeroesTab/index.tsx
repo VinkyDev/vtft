@@ -1,8 +1,8 @@
 import type { CompItem } from 'types'
 import type { ChampionData, ChampionItemEntry } from './types'
 import { memo, useMemo, useState } from 'react'
-import { ScrollArea } from 'ui'
 import { cn } from 'utils'
+import { VList } from 'virtua'
 import { EmptyState, Item } from '@/components'
 import { useMediaQuery } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
@@ -139,18 +139,13 @@ export const HeroesTab = memo(({ items }: HeroesTabProps) => {
         </div>
       </div>
 
-      <ScrollArea className="h-[calc(100vh-130px)] sm:h-[calc(100vh-145px)]">
-        <div className="flex flex-col gap-1">
-          {championsData.map(champion => (
-            <HeroRow
-              key={champion.championId}
-              data={champion}
-              isSmUp={isSmUp}
-              selectedBase={selectedBase}
-            />
-          ))}
-        </div>
-      </ScrollArea>
+      <VList className="virtual-scrollbar min-h-0 flex-1">
+        {championsData.map(champion => (
+          <div key={champion.championId} className="pb-1">
+            <HeroRow data={champion} isSmUp={isSmUp} selectedBase={selectedBase} />
+          </div>
+        ))}
+      </VList>
     </div>
   )
 })

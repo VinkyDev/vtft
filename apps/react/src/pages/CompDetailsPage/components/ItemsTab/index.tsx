@@ -2,7 +2,7 @@ import type { CompItem } from 'types'
 import type { FilterGroup } from '@/components'
 import type { ItemCategory } from '@/utils/items'
 import { memo, useMemo, useState } from 'react'
-import { ScrollArea } from 'ui'
+import { VList } from 'virtua'
 import { EmptyState, FilterBar } from '@/components'
 import { useMediaQuery } from '@/hooks'
 import { useGlobalStore } from '@/store/globalStore'
@@ -84,13 +84,13 @@ export const ItemsTab = memo(({ items }: ItemsTabProps) => {
             <EmptyState message="暂无装备推荐" />
           )
         : (
-            <ScrollArea className="h-[calc(100vh-100px)] sm:h-[calc(100vh-110px)]">
-              <div className="flex flex-col gap-1.5 p-1">
-                {sortedItems.map(item => (
-                  <ItemCard key={item.itemNames} item={item} />
-                ))}
-              </div>
-            </ScrollArea>
+            <VList className="virtual-scrollbar min-h-0 flex-1 px-1">
+              {sortedItems.map(item => (
+                <div key={item.itemNames} className="pb-1.5">
+                  <ItemCard item={item} />
+                </div>
+              ))}
+            </VList>
           )}
     </div>
   )

@@ -22,7 +22,7 @@ export const HeroRow = memo(({ data, isSmUp, selectedBase }: HeroRowProps) => {
         <div className="flex flex-col items-center justify-center overflow-hidden">
           <Champion
             id={data.championId}
-            showTooltip
+            showTooltip={false}
             className="size-6 sm:size-7 shrink-0"
           />
           <ChampionName id={data.championId} />

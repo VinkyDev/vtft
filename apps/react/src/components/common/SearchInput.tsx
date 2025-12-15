@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react'
-import { useDeferredValue, useEffect, useState } from 'react'
+import { useDeferredValue, useEffect, useRef, useState } from 'react'
 
 interface SearchInputProps {
   /** 占位文案 */
@@ -26,11 +26,14 @@ export function SearchInput({
 }: SearchInputProps) {
   const [inputValue, setInputValue] = useState(defaultValue)
   const deferredValue = useDeferredValue(inputValue)
+  // 使用 ref 存储最新的回调函数，避免在依赖项中包含它
+  const onSearchChangeRef = useRef(onSearchChange)
+  onSearchChangeRef.current = onSearchChange
 
   useEffect(() => {
     const value = deferredValue.trim()
-    onSearchChange?.(value)
-  }, [deferredValue, onSearchChange])
+    onSearchChangeRef.current?.(value)
+  }, [deferredValue])
 
   return (
     <div className="relative flex-1">

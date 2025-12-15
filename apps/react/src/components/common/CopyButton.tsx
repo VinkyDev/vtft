@@ -1,5 +1,6 @@
+import { useMemoizedFn } from 'ahooks'
 import { Check, Copy } from 'lucide-react'
-import { memo, useCallback, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { cn } from 'utils'
 
 interface CopyButtonProps {
@@ -30,8 +31,19 @@ export const CopyButton = memo(({
   stopPropagation = false,
 }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const handleCopy = useCallback(async (e: React.MouseEvent) => {
+  // 清理定时器
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
+    }
+  }, [])
+
+  const handleCopy = useMemoizedFn(async (e: React.MouseEvent) => {
     if (stopPropagation) {
       e.stopPropagation()
     }
@@ -39,20 +51,27 @@ export const CopyButton = memo(({
     if (!text)
       return
 
+    // 清理之前的定时器
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
       onCopied?.()
 
       // 2秒后恢复
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setCopied(false)
+        timeoutRef.current = null
       }, 2000)
     }
     catch {
       // 失败时静默处理
     }
-  }, [text, onCopied, stopPropagation])
+  })
 
   return (
     <button

@@ -81,6 +81,10 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     lastDragTime: 0,
   })
 
+  // 使用 ref 存储最新的回调函数，避免频繁重新绑定事件监听器
+  const callbacksRef = useRef({ onDrag, onDragStart, onDragEnd, threshold })
+  callbacksRef.current = { onDrag, onDragStart, onDragEnd, threshold }
+
   useEffect(() => {
     if (!enabled)
       return
@@ -89,16 +93,17 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
       if (!dragStateRef.current.isDragging)
         return
 
+      const { threshold: currentThreshold } = callbacksRef.current
       const dx = e.screenX - dragStateRef.current.startX
       const dy = e.screenY - dragStateRef.current.startY
       const distance = Math.sqrt(dx * dx + dy * dy)
 
       // 如果移动距离超过阈值，标记为已移动
-      if (distance > threshold) {
+      if (distance > currentThreshold) {
         // 第一次移动时调用 onDragStart
         if (!dragStateRef.current.dragStartCalled) {
           dragStateRef.current.dragStartCalled = true
-          onDragStart?.()
+          callbacksRef.current.onDragStart?.()
         }
 
         dragStateRef.current.hasMoved = true
@@ -126,7 +131,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
                 dragStateRef.current.rafId = requestAnimationFrame(() => {
                   const { pendingDx: dx, pendingDy: dy } = dragStateRef.current
                   if (dx !== 0 || dy !== 0) {
-                    onDrag(dx, dy)
+                    callbacksRef.current.onDrag(dx, dy)
                     dragStateRef.current.pendingDx = 0
                     dragStateRef.current.pendingDy = 0
                     dragStateRef.current.lastDragTime = performance.now()
@@ -138,7 +143,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
             }
 
             if (pendingDx !== 0 || pendingDy !== 0) {
-              onDrag(pendingDx, pendingDy)
+              callbacksRef.current.onDrag(pendingDx, pendingDy)
               dragStateRef.current.pendingDx = 0
               dragStateRef.current.pendingDy = 0
               dragStateRef.current.lastDragTime = now
@@ -158,13 +163,13 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
 
       // 如果有待处理的更新，立即执行
       if (dragStateRef.current.pendingDx !== 0 || dragStateRef.current.pendingDy !== 0) {
-        onDrag(dragStateRef.current.pendingDx, dragStateRef.current.pendingDy)
+        callbacksRef.current.onDrag(dragStateRef.current.pendingDx, dragStateRef.current.pendingDy)
         dragStateRef.current.pendingDx = 0
         dragStateRef.current.pendingDy = 0
       }
 
       if (dragStateRef.current.isDragging && dragStateRef.current.dragStartCalled) {
-        onDragEnd?.(e.screenX, e.screenY)
+        callbacksRef.current.onDragEnd?.(e.screenX, e.screenY)
       }
       dragStateRef.current.isDragging = false
       dragStateRef.current.dragStartCalled = false
@@ -182,7 +187,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [onDrag, onDragStart, onDragEnd, threshold, enabled])
+  }, [enabled])
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!enabled || e.button !== 0)

@@ -1,3 +1,4 @@
+import { useMemoizedFn } from 'ahooks'
 import { Overlay, Window } from 'bridge'
 import { useState } from 'react'
 
@@ -9,19 +10,27 @@ export function FloatingBallMode() {
   const { setWindowMode } = useConfigStore()
   const [isSwitching, setIsSwitching] = useState(false)
 
+  const handleDrag = useMemoizedFn((dx: number, dy: number) => {
+    Window.drag(dx, dy)
+  })
+
+  const handleDragStart = useMemoizedFn(async () => {
+    await Window.startDrag()
+    await Overlay.show()
+  })
+
+  const handleDragEnd = useMemoizedFn(async (mouseX: number, mouseY: number) => {
+    const result = await Window.endDrag(mouseX, mouseY)
+    if (result.success && result.data) {
+      setWindowMode(result.data)
+    }
+    await Overlay.hide()
+  })
+
   const { onMouseDown, checkIfMoved } = useDraggable({
-    onDrag: (dx, dy) => Window.drag(dx, dy),
-    onDragStart: async () => {
-      await Window.startDrag()
-      await Overlay.show()
-    },
-    onDragEnd: async (mouseX, mouseY) => {
-      const result = await Window.endDrag(mouseX, mouseY)
-      if (result.success && result.data) {
-        setWindowMode(result.data)
-      }
-      await Overlay.hide()
-    },
+    onDrag: handleDrag,
+    onDragStart: handleDragStart,
+    onDragEnd: handleDragEnd,
   })
 
   const handleClick = async (e: React.MouseEvent) => {

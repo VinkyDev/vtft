@@ -58,7 +58,7 @@ export const CompStats = memo(({ avgPlace, top4Rate, firstPlaceRate, pickRate }:
 
       {/* 选率 */}
       <div className="flex items-center gap-2">
-        <span className="text-[12px] text-gray-500">选率</span>
+        <span className="text-[12px] text-gray-500">登场</span>
         <span className="text-xs text-gray-400">
           {formatPickRate(pickRate)}
         </span>

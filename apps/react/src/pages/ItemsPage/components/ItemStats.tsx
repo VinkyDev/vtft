@@ -15,7 +15,7 @@ export const ItemStats = memo(({ avgPlace, top4Rate, firstPlaceRate, matches }: 
     <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[9px]">
       {avgPlace !== undefined && (
         <div className="flex items-center justify-between">
-          <span className="text-gray-400">平均</span>
+          <span className="text-gray-400">排名</span>
           <span className="font-semibold text-blue-300">{avgPlace.toFixed(1)}</span>
         </div>
       )}

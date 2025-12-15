@@ -15,7 +15,7 @@ export const ChampionStats = memo(({ avgPlace, top4Rate, firstPlaceRate, matches
     <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[9px]">
       {avgPlace !== undefined && (
         <div className="flex items-center justify-between">
-          <span className="text-gray-400">平均</span>
+          <span className="text-gray-400">排名</span>
           <span className="font-semibold text-emerald-300">{avgPlace.toFixed(1)}</span>
         </div>
       )}
@@ -39,7 +39,7 @@ export const ChampionStats = memo(({ avgPlace, top4Rate, firstPlaceRate, matches
       )}
       {matches !== undefined && (
         <div className="flex items-center justify-between">
-          <span className="text-gray-400">场次</span>
+          <span className="text-gray-400">登场</span>
           <span className="font-medium text-gray-300">
             {matches.toFixed(0)}
             %

@@ -112,7 +112,7 @@ function CompRankingsPage() {
       options: [
         { value: 'composite', label: '综合' },
         { value: 'rank', label: '排名' },
-        { value: 'matches', label: '场次' },
+        { value: 'matches', label: '登场' },
       ],
       onChange: value => setSortField(value as SortField),
     },

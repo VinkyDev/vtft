@@ -70,7 +70,7 @@ function ItemsPage() {
       value: sortField,
       options: [
         { value: 'composite', label: '综合' },
-        { value: 'matches', label: '场次' },
+        { value: 'matches', label: '登场' },
         { value: 'avgPlace', label: '影响' },
       ],
       onChange: (value) => {

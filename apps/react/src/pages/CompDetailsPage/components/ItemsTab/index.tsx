@@ -67,7 +67,7 @@ export const ItemsTab = memo(({ items }: ItemsTabProps) => {
       value: sortField,
       options: [
         { value: 'composite', label: '综合' },
-        { value: 'game', label: '场次' },
+        { value: 'game', label: '登场' },
         { value: 'avgRank', label: '影响' },
       ],
       onChange: (value) => {

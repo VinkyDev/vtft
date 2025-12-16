@@ -3,10 +3,15 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import dotenv from 'dotenv'
 import * as Minio from 'minio'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const distDir = path.resolve(__dirname, '..', 'apps/electron/dist')
+const projectRoot = path.resolve(__dirname, '..')
+
+dotenv.config({ path: path.join(projectRoot, '.env') })
+
+const distDir = path.resolve(projectRoot, 'apps/electron/dist')
 
 const config = {
   endpoint: process.env.MINIO_ENDPOINT,
@@ -101,7 +106,6 @@ async function main() {
     process.exit(1)
   }
 
-  // 分离 latest.yml 文件，确保最后上传
   const latestFiles = allFiles.filter(f => f.startsWith('latest'))
   const releaseFiles = allFiles.filter(f => !f.startsWith('latest'))
 
@@ -129,10 +133,8 @@ async function main() {
   const createTask = ({ file, localPath, size }) => () =>
     uploadWithRetry(client, config.bucket, `${config.releaseDir}/${file}`, localPath, file, size)
 
-  // 先上传安装包文件
   const releaseResults = await runWithConcurrency(releaseInfos.map(createTask), CONCURRENCY)
 
-  // 检查安装包是否全部成功
   const releaseFailed = releaseResults.filter(r => r.status === 'rejected')
   if (releaseFailed.length > 0) {
     console.error(`\n❌ ${releaseFailed.length} 个文件上传失败，跳过 latest.yml 上传`)
@@ -140,7 +142,6 @@ async function main() {
     process.exit(1)
   }
 
-  // 安装包全部成功后，上传 latest.yml
   console.log(`\n📋 上传版本清单文件...`)
   const latestResults = await runWithConcurrency(latestInfos.map(createTask), CONCURRENCY)
 

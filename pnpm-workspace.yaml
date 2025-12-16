@@ -7,7 +7,7 @@ catalog:
   '@hono/swagger-ui': ^0.5.2
   '@hono/zod-openapi': ^1.1.5
   '@types/node-cron': ^3.0.11
-  dotenv: ^17.2.3
+  dotenv: 17.2.3
   lru-cache: ^11.2.2
   mongodb: ^6.12.0
   node-cron: ^4.2.1
@@ -43,11 +43,11 @@ catalog:
   '@eslint-react/eslint-plugin': ^2.3.13
   eslint-plugin-react-hooks: ^7.0.1
   eslint-plugin-react-refresh: ^0.4.25
-  'pinyin-pro': ^3.27.0
-  'clsx': ^2.1.1
-  'tailwind-merge': ^3.3.1
-  'axios-retry': ^4.5.0
-  'user-agents': ^1.1.669
+  pinyin-pro: ^3.27.0
+  clsx: ^2.1.1
+  tailwind-merge: ^3.3.1
+  axios-retry: ^4.5.0
+  user-agents: ^1.1.669
   '@types/user-agents': ^1.0.4
   zustand: ^5.0.9
 

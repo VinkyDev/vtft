@@ -187,6 +187,18 @@ function rollbackGit(commitHash, tagName) {
   }
 }
 
+async function buildAndUpload() {
+  await section('构建 Windows 应用', async () => {
+    exec('pnpm run clean:dist')
+    exec('pnpm run build:packages')
+    exec('pnpm run build:win')
+  })
+
+  await section('上传到 MinIO', async () => {
+    exec('pnpm run upload:release')
+  })
+}
+
 /**
  * 主函数
  */
@@ -296,12 +308,15 @@ async function main() {
       exec(`git commit -m "chore: release v${version}"`)
     })
 
-    // 8. 创建 Git tag
+    // 8. 构建并上传到 MinIO
+    await buildAndUpload()
+
+    // 9. 创建 Git tag
     await section('创建 Git Tag', async () => {
       exec(`git tag -a ${tag} -m "Release v${version}"`)
     })
 
-    // 9. 推送到远程
+    // 10. 推送到远程
     await section('推送到远程仓库', async () => {
       exec('git push')
       exec('git push --tags')

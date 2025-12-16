@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import { useState, useEffect } from "react";
 import { Grid2x2, Airplay } from "lucide-react";
 import { ShimmerButton } from "ui/components";
-import logger from "logger";
 
 type Platform = "Windows" | "macOS";
 type Arch = "x64" | "arm64";
@@ -69,19 +68,23 @@ async function detectPlatform(): Promise<DownloadInfo> {
   return DEFAULT_DOWNLOAD_INFO;
 }
 
-async function getDownloadUrl(info: DownloadInfo): Promise<string> {
+async function getDownloadUrl(info: DownloadInfo): Promise<string | null> {
   const ymlFile = info.platform === "Windows" ? "latest.yml" : "latest-mac.yml";
-  const res = await fetch(`${MINIO_BASE}/${ymlFile}`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`获取 ${ymlFile} 失败`);
 
-  const yml = await res.text();
-  const versionMatch = yml.match(/^version:\s*(.+)$/m);
-  if (!versionMatch?.[1]) throw new Error("无法解析版本号");
+  try {
+    const res = await fetch(`${MINIO_BASE}/${ymlFile}`, { cache: "no-store" });
+    if (!res.ok) return null;
 
-  const version = versionMatch[1].trim();
-  const ext = info.platform === "Windows" ? "setup.exe" : "dmg";
+    const yml = await res.text();
+    const versionMatch = yml.match(/^version:\s*(.+)$/m);
+    if (!versionMatch?.[1]) return null;
 
-  return `${MINIO_BASE}/vtft-${version}-${info.arch}-${ext}`;
+    const version = versionMatch[1].trim();
+    const ext = info.platform === "Windows" ? "setup.exe" : "dmg";
+    return `${MINIO_BASE}/vtft-${version}-${info.arch}-${ext}`;
+  } catch {
+    return null;
+  }
 }
 
 function InstallTip({ platform }: { platform: Platform }) {
@@ -145,10 +148,7 @@ export const DownloadButton = () => {
     setIsLoading(true);
     try {
       const url = await getDownloadUrl(downloadInfo);
-      window.location.href = url;
-    } catch (error) {
-      logger.error("获取下载链接失败", error as Error);
-      window.location.href = GITHUB_RELEASES;
+      window.location.href = url ?? GITHUB_RELEASES;
     } finally {
       setIsLoading(false);
     }

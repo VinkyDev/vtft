@@ -101,53 +101,8 @@ jobs:
             apps/electron/dist/latest-mac.yml
           retention-days: 7
 
-  upload-to-minio:
-    needs: [build-windows, build-macos]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-
-      - name: 安装 pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.12.4
-
-      - name: 安装 Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-
-      - name: 安装依赖
-        run: pnpm install --frozen-lockfile
-
-      - name: 下载 Windows 构建产物
-        uses: actions/download-artifact@v4
-        with:
-          name: windows-build
-          path: ./apps/electron/dist
-
-      - name: 下载 macOS 构建产物
-        uses: actions/download-artifact@v4
-        with:
-          name: macos-build
-          path: ./apps/electron/dist
-
-      - name: 显示下载的文件
-        run: ls -la ./apps/electron/dist
-
-      - name: 上传到 MinIO
-        run: node scripts/upload-release.mjs
-        env:
-          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
-          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
-          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-          MINIO_BUCKET: ${{ secrets.MINIO_BUCKET }}
-
   create-release:
-    needs: [build-windows, build-macos, upload-to-minio]
+    needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
     permissions:
       contents: write

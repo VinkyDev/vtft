@@ -1,4 +1,5 @@
 import type { ProgressInfo, UpdateDownloadedEvent, UpdateInfo } from 'electron-updater'
+import process from 'node:process'
 import { ipcMain } from 'electron'
 import electronUpdater from 'electron-updater'
 import logger from 'logger'
@@ -59,6 +60,11 @@ export function setupAutoUpdater() {
 export async function checkForUpdate() {
   try {
     logger.info('正在检查更新...')
+
+    if (process.platform === 'darwin') {
+      autoUpdater.setFeedURL({ provider: 'github', owner: 'VinkyDev', repo: 'vtft' })
+    }
+
     await autoUpdater.checkForUpdatesAndNotify({
       title: 'VTFT 更新就绪',
       body: '新版本已下载完成，重启应用后生效',

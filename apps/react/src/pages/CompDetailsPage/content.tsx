@@ -16,13 +16,15 @@ interface CompDetailContentProps {
   comp: EnhancedCompData | null
 }
 
-const skeletonTabs = [
-  { value: 'overview', label: '概览', content: <FormationBoardSkeleton /> },
-  { value: 'heroes', label: '英雄', content: <ItemsGridSkeleton /> },
-  { value: 'items', label: '装备', content: <ItemsGridSkeleton /> },
-  { value: 'transition', label: '过渡', content: <ItemsGridSkeleton /> },
-  { value: 'final', label: '变阵', content: <ItemsGridSkeleton /> },
-]
+function getSkeletonTabs(traitsCount?: number) {
+  return [
+    { value: 'overview', label: '概览', content: <FormationBoardSkeleton traitsCount={traitsCount} /> },
+    { value: 'heroes', label: '英雄', content: <ItemsGridSkeleton /> },
+    { value: 'items', label: '装备', content: <ItemsGridSkeleton /> },
+    { value: 'transition', label: '过渡', content: <ItemsGridSkeleton /> },
+    { value: 'final', label: '变阵', content: <ItemsGridSkeleton /> },
+  ]
+}
 
 export function CompDetailContent({ comp }: CompDetailContentProps) {
   const [activeTab, setActiveTab] = useState('overview')
@@ -69,7 +71,7 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
                 shouldRender={activatedTabs.has('overview')}
                 component={OverviewTab}
                 props={{ data, builds: comp?.builds, traits: comp?.traits }}
-                fallback={<FormationBoardSkeleton />}
+                fallback={<FormationBoardSkeleton traitsCount={comp?.traits?.length} />}
               />
             )
           : <EmptyState message="暂无阵容信息" />,
@@ -128,6 +130,8 @@ export function CompDetailContent({ comp }: CompDetailContentProps) {
       },
     ]
   }, [compDetails, comp, activatedTabs])
+
+  const skeletonTabs = useMemo(() => getSkeletonTabs(comp?.traits?.length), [comp?.traits?.length])
 
   return (
     <div className={`flex-1 overflow-hidden ${windowMode === 'floating' ? 'pointer-events-none' : ''}`}>

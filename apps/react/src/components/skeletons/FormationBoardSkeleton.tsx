@@ -4,13 +4,15 @@ import { SkeletonBase } from './SkeletonBase'
 interface FormationBoardSkeletonProps {
   /** 容器类名 */
   className?: string
+  /** 羁绊数量，用于显示对应数量的骨架屏 */
+  traitsCount?: number
 }
 
 /** 阵容站位棋盘骨架屏 */
-export const FormationBoardSkeleton = memo(({ className = '' }: FormationBoardSkeletonProps) => {
+export const FormationBoardSkeleton = memo(({ className = '', traitsCount = 6 }: FormationBoardSkeletonProps) => {
   const ROWS = 4
   const COLS = 7
-  const TRAITS_COUNT = 5 // 羁绊数量骨架屏
+  const TRAITS_COUNT = traitsCount
   const hexagonClipPath = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
 
   return (

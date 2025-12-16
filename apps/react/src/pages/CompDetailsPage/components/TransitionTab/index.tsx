@@ -1,10 +1,11 @@
 import type { Option } from 'types'
-import type { TransitionAnalysis } from './helpers'
-import { memo, useMemo } from 'react'
+import type { TransitionAnalysis, UnitAnalysis } from './helpers'
+import { memo, useCallback, useMemo } from 'react'
 import { ScrollArea, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
 import { Champion, EmptyState } from '@/components'
 import { useUnitsUtils } from '@/hooks'
-import { analyzeTransitions, formatAvg, parseOptions } from './helpers'
+import { useGlobalStore } from '@/store/globalStore'
+import { analyzeTransitions, parseOptions } from './helpers'
 
 export interface TransitionTabProps {
   earlyOptions?: Record<string, Option[]>
@@ -29,59 +30,83 @@ function extractCoreUnits(builds: Array<{ units: string[], count: number }>): st
     .map(([unit]) => unit)
 }
 
-const TransitionLevelRow = memo(({
-  transition,
-  coreUnits: _coreUnits,
-}: {
-  transition: TransitionAnalysis
-  coreUnits: string[]
-}) => {
-  const { level, unitPool, topBuilds } = transition
+const CATEGORY_STYLES = {
+  core: { color: '#fbbf24', label: '核心', opacity: 1 },
+  recommended: { color: '#60a5fa', label: '推荐', opacity: 0.7 },
+  optional: { color: '#6b7280', label: '备选', opacity: 0.45 },
+}
+
+const UnitWithRate = memo(({ item }: { item: UnitAnalysis }) => {
+  const ratePercent = Math.round(item.rate * 100)
+  const style = CATEGORY_STYLES[item.category]
 
   return (
-    <div className="rounded-lg bg-white/5 border border-white/5 p-3">
-      <div className="flex items-start gap-3">
-        <div className="shrink-0 w-8 h-8 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center text-sm font-bold text-gray-300">
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="relative" style={{ opacity: style.opacity }}>
+          <Champion id={item.unit} className="size-7 sm:size-8" showTooltip={false} />
+          <div
+            className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-1 rounded-full"
+            style={{
+              width: `${Math.max(ratePercent * 0.8, 20)}%`,
+              backgroundColor: style.color,
+            }}
+          />
+        </div>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="text-xs">
+        <div className="font-medium" style={{ color: style.color }}>{style.label}</div>
+        <div className="text-gray-400">
+          {ratePercent}
+          % ·
+          {' '}
+          {item.count}
+          场
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  )
+})
+
+UnitWithRate.displayName = 'UnitWithRate'
+
+const UnitGroup = memo(({ units }: { units: UnitAnalysis[] }) => (
+  <div className="flex flex-wrap gap-1">
+    {units.map(item => <UnitWithRate key={item.unit} item={item} />)}
+  </div>
+))
+
+UnitGroup.displayName = 'UnitGroup'
+
+const TransitionLevelRow = memo(({ transition }: { transition: TransitionAnalysis }) => {
+  const { level, core, recommended, optional } = transition
+  const hasContent = core.length > 0 || recommended.length > 0 || optional.length > 0
+
+  if (!hasContent)
+    return null
+
+  const groups = [core, recommended, optional].filter(g => g.length > 0)
+
+  return (
+    <div className="rounded-lg bg-white/5 border border-white/5 p-2 sm:p-2.5">
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className="shrink-0 size-7 sm:size-8 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center text-sm font-bold text-gray-300">
           {level}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap gap-1.5">
-            {unitPool.slice(0, 12).map((item) => {
-              const isFlex = !item.isCore && !item.isTransition
-              const opacity = item.isCore ? 1 : item.isTransition ? 0.55 : 0.35
+        {/* 小屏：换行 */}
+        <div className="flex flex-col gap-2.5 sm:hidden">
+          {groups.map((g, i) => <UnitGroup key={i} units={g} />)}
+        </div>
 
-              return (
-                <Tooltip key={item.unit}>
-                  <TooltipTrigger asChild>
-                    <div className="relative" style={{ opacity }}>
-                      <Champion id={item.unit} className="size-6 sm:size-7" showTooltip={false} />
-                      {isFlex && (
-                        <div className="absolute -bottom-0.5 -right-0.5 size-1.5 rounded-full bg-blue-400" />
-                      )}
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="text-xs">
-                    <div>{item.isCore ? '核心' : item.isTransition ? '过渡' : '灵活'}</div>
-                    <div className="text-gray-400">
-                      {item.count}
-                      {' '}
-                      场
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              )
-            })}
-          </div>
-
-          {topBuilds.length > 1 && (
-            <div className="mt-2 pt-2 border-t border-white/5 text-[10px] text-gray-500">
-              {topBuilds.length}
-              {' '}
-              种组合 · 最佳
-              {formatAvg(topBuilds[0]?.avg)}
+        {/* 大屏：分割线 */}
+        <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-1">
+          {groups.map((g, i) => (
+            <div key={i} className="flex items-center gap-1">
+              {i > 0 && <div className="w-px h-6 bg-white/10 mx-1" />}
+              {g.map(item => <UnitWithRate key={item.unit} item={item} />)}
             </div>
-          )}
+          ))}
         </div>
       </div>
     </div>
@@ -92,6 +117,11 @@ TransitionLevelRow.displayName = 'TransitionLevelRow'
 
 export const TransitionTab = memo(({ earlyOptions, options }: TransitionTabProps) => {
   const { sortUnitsByCost } = useUnitsUtils()
+  const unitsById = useGlobalStore(s => s.lookupsIndex.unitsById)
+
+  const getUnitCost = useCallback((unitId: string): number => {
+    return unitsById[unitId]?.cost ?? 5
+  }, [unitsById])
 
   const earlyBuilds = useMemo(
     () => parseOptions(earlyOptions ?? {}, sortUnitsByCost),
@@ -103,7 +133,7 @@ export const TransitionTab = memo(({ earlyOptions, options }: TransitionTabProps
     [options, sortUnitsByCost],
   )
 
-  const { transitions, coreUnits } = useMemo(() => {
+  const transitions = useMemo(() => {
     const levelMap = new Map<string, typeof earlyBuilds[0]>()
     for (const lb of earlyBuilds)
       levelMap.set(lb.level, lb)
@@ -112,15 +142,14 @@ export const TransitionTab = memo(({ earlyOptions, options }: TransitionTabProps
 
     const allLevelBuilds = Array.from(levelMap.values()).sort((a, b) => Number(a.level) - Number(b.level))
     if (allLevelBuilds.length === 0)
-      return { transitions: [], coreUnits: [] }
+      return []
 
     const lastLevel = allLevelBuilds[allLevelBuilds.length - 1]!
     const coreUnits = extractCoreUnits(lastLevel.builds)
     const transitionLevels = allLevelBuilds.slice(0, -1)
-    const transitions = analyzeTransitions(transitionLevels, coreUnits, allLevelBuilds)
 
-    return { transitions, coreUnits }
-  }, [earlyBuilds, lateBuilds])
+    return analyzeTransitions(transitionLevels, coreUnits, getUnitCost)
+  }, [earlyBuilds, lateBuilds, getUnitCost])
 
   if (transitions.length === 0) {
     return <EmptyState message="暂无过渡阵容" />
@@ -129,29 +158,10 @@ export const TransitionTab = memo(({ earlyOptions, options }: TransitionTabProps
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="h-[calc(100vh-55px)] sm:h-[calc(100vh-80px)]">
-        <div className="flex flex-col gap-3 p-2 px-3">
-          <div className="flex items-center gap-4 px-1 text-[10px] text-gray-500">
-            <div className="flex items-center gap-1.5">
-              <div className="size-4 rounded bg-zinc-600" />
-              <span>核心</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="size-4 rounded bg-zinc-600 opacity-50" />
-              <span>过渡</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="relative size-4 rounded bg-zinc-600 opacity-30">
-                <div className="absolute -bottom-0.5 -right-0.5 size-1.5 rounded-full bg-blue-400" />
-              </div>
-              <span>灵活</span>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            {transitions.map(trans => (
-              <TransitionLevelRow key={trans.level} transition={trans} coreUnits={coreUnits} />
-            ))}
-          </div>
+        <div className="flex flex-col gap-2 p-2 px-3">
+          {transitions.map(trans => (
+            <TransitionLevelRow key={trans.level} transition={trans} />
+          ))}
         </div>
       </ScrollArea>
     </div>

@@ -12,26 +12,39 @@ export function formatAvg(avg?: number): string {
   return Number.isFinite(avg) ? avg.toFixed(2) : '-'
 }
 
+// 根据等级获取允许的最大棋子费用
+function getMaxCostForLevel(level: number): number {
+  if (level < 5)
+    return 3
+  if (level < 7)
+    return 4
+  return 5
+}
+
 interface ParsedBuild {
   units: string[]
   count: number
   avg: number
 }
 
-interface LevelBuilds {
+export interface LevelBuilds {
   level: string
   builds: ParsedBuild[]
 }
 
+export interface UnitAnalysis {
+  unit: string
+  count: number
+  rate: number
+  category: 'core' | 'recommended' | 'optional'
+}
+
 export interface TransitionAnalysis {
   level: string
-  unitPool: Array<{
-    unit: string
-    count: number
-    isCore: boolean
-    isTransition: boolean
-  }>
-  topBuilds: ParsedBuild[]
+  totalGames: number
+  core: UnitAnalysis[]
+  recommended: UnitAnalysis[]
+  optional: UnitAnalysis[]
 }
 
 export function parseOptions(
@@ -55,47 +68,63 @@ export function parseOptions(
     .sort((a, b) => Number(a.level) - Number(b.level))
 }
 
+const RECOMMENDED_THRESHOLD = 0.25
+const OPTIONAL_THRESHOLD = 0.08
+
 export function analyzeTransitions(
   transitionLevels: LevelBuilds[],
   finalCoreUnits: string[],
-  allLevelBuilds: LevelBuilds[],
+  getUnitCost: (unitId: string) => number,
 ): TransitionAnalysis[] {
-  const finalUnits = new Set<string>(finalCoreUnits)
-  const lastLevel = allLevelBuilds[allLevelBuilds.length - 1]
-  if (lastLevel) {
-    for (const build of lastLevel.builds.slice(0, 5)) {
-      for (const unit of build.units) {
-        finalUnits.add(unit)
-      }
-    }
-  }
-
   return transitionLevels.map((levelBuild) => {
+    const level = Number(levelBuild.level)
+    const maxCost = getMaxCostForLevel(level)
     const unitStats = new Map<string, number>()
 
+    let totalGames = 0
     for (const build of levelBuild.builds) {
+      totalGames += build.count
       for (const unit of build.units) {
-        unitStats.set(unit, (unitStats.get(unit) ?? 0) + build.count)
+        const cost = getUnitCost(unit)
+        if (cost <= maxCost) {
+          unitStats.set(unit, (unitStats.get(unit) ?? 0) + build.count)
+        }
       }
     }
 
-    const unitPool = Array.from(unitStats.entries())
-      .map(([unit, count]) => ({
-        unit,
-        count,
-        isCore: finalCoreUnits.includes(unit),
-        isTransition: !finalUnits.has(unit),
-      }))
-      .sort((a, b) => {
-        if (a.isCore !== b.isCore)
-          return a.isCore ? -1 : 1
-        return b.count - a.count
+    const allUnits = Array.from(unitStats.entries())
+      .map(([unit, count]) => {
+        const rate = totalGames > 0 ? count / totalGames : 0
+        const cost = getUnitCost(unit)
+        const isCoreFinal = finalCoreUnits.includes(unit)
+        // 8级及以下，5费卡不作为核心（9级才大量找5费）
+        const canBeCore = isCoreFinal && (level >= 9 || cost < 5)
+
+        let category: 'core' | 'recommended' | 'optional'
+        if (canBeCore) {
+          category = 'core'
+        }
+        else if (rate >= RECOMMENDED_THRESHOLD) {
+          category = 'recommended'
+        }
+        else {
+          category = 'optional'
+        }
+        return { unit, count, rate, category }
       })
+      .filter(u => u.rate >= OPTIONAL_THRESHOLD)
+      .sort((a, b) => b.rate - a.rate)
+
+    const core = allUnits.filter(u => u.category === 'core')
+    const recommended = allUnits.filter(u => u.category === 'recommended')
+    const optional = allUnits.filter(u => u.category === 'optional')
 
     return {
       level: levelBuild.level,
-      unitPool,
-      topBuilds: levelBuild.builds.slice(0, 3),
+      totalGames,
+      core,
+      recommended,
+      optional,
     }
   })
 }

@@ -20,16 +20,16 @@
   },
   "dependencies": {
     "axios": "catalog:",
-    "axios-retry": "^4.5.0",
+    "axios-retry": "catalog:",
     "lodash-es": "catalog:",
     "types": "workspace:*",
-    "user-agents": "^1.1.669"
+    "user-agents": "catalog:"
   },
   "devDependencies": {
     "@rslib/core": "catalog:",
     "@types/lodash-es": "catalog:",
     "@types/node": "catalog:",
-    "@types/user-agents": "^1.0.4",
+    "@types/user-agents": "catalog:",
     "typescript": "catalog:"
   }
 }

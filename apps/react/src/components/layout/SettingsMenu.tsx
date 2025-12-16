@@ -1,5 +1,6 @@
-import { Check, Clock, RefreshCw, Settings } from 'lucide-react'
-import { useState } from 'react'
+import { App, Update } from 'bridge'
+import { Check, Clock, Download, RefreshCw, Settings } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,16 @@ export function SettingsMenu() {
   const refreshData = useGlobalStore(s => s.refreshData)
   const compsUpdatedAt = useGlobalStore(s => s.compsUpdatedAt)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [version, setVersion] = useState('')
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(false)
+
+  const isElectron = typeof window.electron !== 'undefined'
+
+  useEffect(() => {
+    if (!isElectron)
+      return
+    App.getVersion().then(setVersion)
+  }, [isElectron])
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
@@ -27,6 +38,12 @@ export function SettingsMenu() {
     finally {
       setIsRefreshing(false)
     }
+  }
+
+  const handleCheckUpdate = () => {
+    setIsCheckingUpdate(true)
+    Update.check()
+    setTimeout(() => setIsCheckingUpdate(false), 3000)
   }
 
   return (
@@ -85,6 +102,28 @@ export function SettingsMenu() {
           <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           <span>{isRefreshing ? '刷新中...' : '刷新数据'}</span>
         </DropdownMenuItem>
+
+        {isElectron && (
+          <>
+            <DropdownMenuSeparator className="bg-white/10" />
+
+            <div className="flex items-center justify-between px-2 py-1.5 text-xs text-gray-500">
+              <span>
+                版本 v
+                {version}
+              </span>
+            </div>
+
+            <DropdownMenuItem
+              className="flex items-center gap-2 px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 focus:bg-white/5 focus:text-white transition-colors"
+              onSelect={handleCheckUpdate}
+              disabled={isCheckingUpdate}
+            >
+              <Download className={`h-4 w-4 ${isCheckingUpdate ? 'animate-pulse' : ''}`} />
+              <span>{isCheckingUpdate ? '检查中...' : '检查更新'}</span>
+            </DropdownMenuItem>
+          </>
+        )}
 
       </DropdownMenuContent>
     </DropdownMenu>

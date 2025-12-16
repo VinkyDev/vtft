@@ -7,6 +7,11 @@ import { windowService } from './services/windowService'
 
 let mainWindow: BrowserWindow | null = null
 let isQuitting = false
+let onReadyCallback: (() => void) | null = null
+
+export function onWindowReady(callback: () => void) {
+  onReadyCallback = callback
+}
 
 /**
  * 获取主窗口
@@ -63,12 +68,16 @@ export function createWindow(): void {
 
   mainWindow?.on('ready-to-show', async () => {
     if (mainWindow) {
-      // 确保窗口是标准模式并居中
       await windowService.switchToStandardAndCenter(mainWindow)
-
       mainWindow.show()
-      // 设置为最高层级，确保能覆盖游戏窗口
       mainWindow.setAlwaysOnTop(true, 'screen-saver')
+    }
+  })
+
+  mainWindow?.webContents.on('did-finish-load', () => {
+    if (onReadyCallback) {
+      onReadyCallback()
+      onReadyCallback = null
     }
   })
 

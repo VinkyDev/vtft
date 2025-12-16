@@ -21,10 +21,10 @@
     "test": "vitest"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "pinyin-pro": "^3.27.0",
+    "clsx": "catalog:",
+    "pinyin-pro": "catalog:",
     "query-string": "catalog:",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "catalog:"
   },
   "devDependencies": {
     "@rslib/core": "catalog:",

@@ -23,8 +23,8 @@
     "react-helper": "workspace:*",
     "ui": "workspace:*",
     "utils": "workspace:*",
-    "virtua": "^0.48.2",
-    "zustand": "^5.0.8"
+    "virtua": "catalog:",
+    "zustand": "catalog:"
   },
   "devDependencies": {
     "@eslint-react/eslint-plugin": "catalog:",

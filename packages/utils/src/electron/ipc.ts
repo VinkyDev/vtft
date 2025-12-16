@@ -25,4 +25,16 @@ export const IPC_EVENTS = {
     SHOW: 'overlay-show',
     HIDE: 'overlay-hide',
   },
+  UPDATE: {
+    AVAILABLE: 'update-available',
+    NOT_AVAILABLE: 'update-not-available',
+    PROGRESS: 'update-progress',
+    DOWNLOADED: 'update-downloaded',
+    ERROR: 'update-error',
+    INSTALL: 'update-install',
+    CHECK: 'update-check',
+  },
+  APP: {
+    GET_VERSION: 'app-get-version',
+  },
 } as const

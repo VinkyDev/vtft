@@ -4,6 +4,6 @@ export default antfu(
   {
     typescript: true,
     formatters: true,
-    ignores: ['out', '**/*.d.ts'],
+    ignores: ['out', '**/*.d.ts', 'package.json'],
   },
 )

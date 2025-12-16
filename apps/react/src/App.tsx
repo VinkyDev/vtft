@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AppTabs, FloatingBallMode, SettingsMenu } from '@/components'
+import { AppTabs, FloatingBallMode, SettingsMenu, UpdateNotification } from '@/components'
 import { routes } from '@/routes'
 import { useConfigStore } from '@/store/configStore'
 
@@ -31,6 +31,7 @@ function App() {
           />
         </div>
       </div>
+      <UpdateNotification />
     </div>
   )
 }

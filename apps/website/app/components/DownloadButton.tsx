@@ -16,29 +16,13 @@ interface DownloadInfo {
   label: string;
 }
 
-interface LatestFile {
-  url: string;
-  sha256?: string;
-  size?: number;
-}
-
-interface LatestJson {
-  version: string;
-  notes?: string;
-  files: {
-    windows?: Record<Arch, LatestFile>;
-    macos?: Record<Arch, LatestFile>;
-  };
-}
-
 interface NavigatorUAData {
   platform: string;
   getHighEntropyValues(hints: string[]): Promise<{ architecture?: string }>;
 }
 
-const GITHUB_REPO = "VinkyDev/vtft";
-const LATEST_URL = "https://static-host-ggr87o43-vtft.sealosgzg.site/latest.json";
-const releasesUrl = `https://github.com/${GITHUB_REPO}/releases`;
+const MINIO_BASE = "https://objectstorageapi.gzg.sealos.run/ggr87o43-vtft/releases";
+const GITHUB_RELEASES = "https://github.com/VinkyDev/vtft/releases";
 
 const PLATFORM_META: Record<Platform, { icon: ReactNode; label: (arch: Arch) => string }> = {
   Windows: {
@@ -53,18 +37,12 @@ const PLATFORM_META: Record<Platform, { icon: ReactNode; label: (arch: Arch) => 
 
 const buildDownloadInfo = (platform: Platform, arch: Arch): DownloadInfo => {
   const meta = PLATFORM_META[platform];
-  return {
-    platform,
-    arch,
-    icon: meta.icon,
-    label: meta.label(arch),
-  };
+  return { platform, arch, icon: meta.icon, label: meta.label(arch) };
 };
 
 const DEFAULT_DOWNLOAD_INFO = buildDownloadInfo("Windows", "x64");
 
 async function detectPlatform(): Promise<DownloadInfo> {
-  // 优先使用 User-Agent Client Hints
   try {
     const uaData = (navigator as { userAgentData?: NavigatorUAData }).userAgentData;
     if (uaData) {
@@ -73,11 +51,10 @@ async function detectPlatform(): Promise<DownloadInfo> {
       if (uaData.platform === "macOS") return buildDownloadInfo("macOS", arch);
       if (uaData.platform === "Windows") return buildDownloadInfo("Windows", arch);
     }
-  } catch (error) {
-    logger.error("User-Agent Client Hints API 检测失败，降级到传统方法:", error as Error);
+  } catch {
+    // 降级到传统方法
   }
 
-  // 兜底：传统 UA 检测
   try {
     const userAgent = navigator.userAgent.toLowerCase();
     const platform = navigator.platform.toLowerCase();
@@ -85,11 +62,26 @@ async function detectPlatform(): Promise<DownloadInfo> {
 
     if (platform.includes("mac")) return buildDownloadInfo("macOS", isArm ? "arm64" : "x64");
     if (platform.includes("win")) return buildDownloadInfo("Windows", isArm ? "arm64" : "x64");
-  } catch (error) {
-    logger.warn(`平台检测失败: ${error instanceof Error ? error.message : String(error)}`);
+  } catch {
+    // ignore
   }
 
   return DEFAULT_DOWNLOAD_INFO;
+}
+
+async function getDownloadUrl(info: DownloadInfo): Promise<string> {
+  const ymlFile = info.platform === "Windows" ? "latest.yml" : "latest-mac.yml";
+  const res = await fetch(`${MINIO_BASE}/${ymlFile}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`获取 ${ymlFile} 失败`);
+
+  const yml = await res.text();
+  const versionMatch = yml.match(/^version:\s*(.+)$/m);
+  if (!versionMatch?.[1]) throw new Error("无法解析版本号");
+
+  const version = versionMatch[1].trim();
+  const ext = info.platform === "Windows" ? "setup.exe" : "dmg";
+
+  return `${MINIO_BASE}/vtft-${version}-${info.arch}-${ext}`;
 }
 
 function InstallTip({ platform }: { platform: Platform }) {
@@ -149,31 +141,14 @@ export const DownloadButton = () => {
     detectPlatform().then(setDownloadInfo);
   }, []);
 
-  const fetchLatest = async (): Promise<LatestJson> => {
-    const res = await fetch(LATEST_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error(`获取 latest.json 失败: ${res.status}`);
-    return res.json();
-  };
-
-  const resolveDownloadUrl = (latest: LatestJson): string | null => {
-    const platformKey = downloadInfo.platform === "Windows" ? "windows" : "macos";
-    const matched = latest.files?.[platformKey]?.[downloadInfo.arch];
-    return matched?.url ?? null;
-  };
-
   const handleDownload = async () => {
     setIsLoading(true);
     try {
-      const latest = await fetchLatest();
-      const downloadUrl = resolveDownloadUrl(latest);
-      if (downloadUrl) {
-        window.location.href = downloadUrl;
-      } else {
-        throw new Error("下载链接不存在");
-      }
+      const url = await getDownloadUrl(downloadInfo);
+      window.location.href = url;
     } catch (error) {
-      logger.error("获取 latest.json 失败", error as Error);
-      window.location.href = releasesUrl;
+      logger.error("获取下载链接失败", error as Error);
+      window.location.href = GITHUB_RELEASES;
     } finally {
       setIsLoading(false);
     }
@@ -183,10 +158,10 @@ export const DownloadButton = () => {
     <div className="flex flex-col items-center gap-4">
       <ShimmerButton onClick={handleDownload} className="flex items-center gap-3" disabled={isLoading}>
         {downloadInfo.icon}
-        <span>{isLoading ? "准备下载..." : "下载"}</span>
+        <span>下载</span>
       </ShimmerButton>
       <a
-        href={releasesUrl}
+        href={GITHUB_RELEASES}
         target="_blank"
         rel="noopener noreferrer"
         className="text-sm transition-colors text-slate-400 hover:text-slate-300"

@@ -26,6 +26,7 @@
     "build:win": "pnpm run prebuild && pnpm --filter electron run build:win",
     "build:linux": "pnpm run prebuild && pnpm --filter electron run build:linux",
     "build:mac": "pnpm run prebuild && pnpm --filter electron run build:mac",
+    "upload:release": "node scripts/upload-release.mjs",
     "build:packages": "node scripts/buildPackages.mjs",
     "build:server": "pnpm --filter server build",
     "publish:server": "node scripts/publishServer.mjs",
@@ -39,11 +40,13 @@
     "@antfu/eslint-config": "^6.2.0",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
-    "lint-staged": "^16.2.6",
     "config": "workspace:*",
     "eslint": "catalog:",
+    "eslint-plugin-format": "^1.1.0",
     "husky": "^9.1.7",
     "knip": "^5.67.1",
+    "lint-staged": "^16.2.6",
+    "minio": "^8.0.6",
     "typescript": "catalog:"
   },
   "lint-staged": {

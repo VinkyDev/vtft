@@ -10,25 +10,25 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.6",
-    "@hono/swagger-ui": "^0.5.2",
-    "@hono/zod-openapi": "^1.1.5",
+    "@hono/node-server": "catalog:",
+    "@hono/swagger-ui": "catalog:",
+    "@hono/zod-openapi": "catalog:",
     "db": "workspace:*",
-    "dotenv": "^17.2.3",
+    "dotenv": "catalog:",
     "hono": "catalog:",
     "logger": "workspace:*",
-    "lru-cache": "^11.2.2",
-    "node-cron": "^4.2.1",
-    "p-limit": "^7.2.0",
+    "lru-cache": "catalog:",
+    "node-cron": "catalog:",
+    "p-limit": "catalog:",
     "scraper": "workspace:*",
     "utils": "workspace:*"
   },
   "devDependencies": {
     "@rslib/core": "catalog:",
     "@types/node": "catalog:",
-    "@types/node-cron": "^3.0.11",
+    "@types/node-cron": "catalog:",
     "config": "workspace:*",
-    "tsx": "^4.20.6",
+    "tsx": "catalog:",
     "types": "workspace:*",
     "typescript": "catalog:"
   }

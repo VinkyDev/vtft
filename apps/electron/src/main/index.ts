@@ -3,9 +3,9 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow } from 'electron'
 import logger from 'logger'
 import { ipcInit } from './ipc/index'
-import { createWindow } from './mainWIndow'
+import { createWindow, onWindowReady } from './mainWIndow'
 import { createTray } from './tray'
-import { checkForUpdate } from './update'
+import { checkForUpdate, setupAutoUpdater } from './update'
 
 const aptabaseCode = import.meta.env.VITE_APTABASE_CODE || ''
 
@@ -16,17 +16,22 @@ if (aptabaseCode) {
     })
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   trackEvent('app_start')
   electronApp.setAppUserModelId('com.vtft.app')
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  ipcInit()
+  await ipcInit()
+  setupAutoUpdater()
+
+  onWindowReady(() => {
+    checkForUpdate()
+  })
+
   createWindow()
   createTray()
-  checkForUpdate()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0)

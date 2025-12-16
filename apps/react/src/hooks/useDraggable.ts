@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 
 interface UseDraggableOptions {
   /**
@@ -81,9 +81,10 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     lastDragTime: 0,
   })
 
-  // 使用 ref 存储最新的回调函数，避免频繁重新绑定事件监听器
   const callbacksRef = useRef({ onDrag, onDragStart, onDragEnd, threshold })
-  callbacksRef.current = { onDrag, onDragStart, onDragEnd, threshold }
+  useLayoutEffect(() => {
+    callbacksRef.current = { onDrag, onDragStart, onDragEnd, threshold }
+  })
 
   useEffect(() => {
     if (!enabled)

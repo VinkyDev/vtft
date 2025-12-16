@@ -1,75 +1,68 @@
-import { app, dialog, shell } from 'electron'
+import type { ProgressInfo, UpdateDownloadedEvent, UpdateInfo } from 'electron-updater'
+import { ipcMain } from 'electron'
+import electronUpdater from 'electron-updater'
 import logger from 'logger'
+import { IPC_EVENTS } from 'utils'
+import { getMainWindow } from './mainWIndow'
 
-type ArchKey = 'x64' | 'arm64'
-type PlatformKey = 'windows' | 'macos'
+const { autoUpdater } = electronUpdater
+autoUpdater.autoDownload = true
+autoUpdater.autoInstallOnAppQuit = true
+autoUpdater.forceDevUpdateConfig = true
 
-interface LatestFile {
-  url: string
-}
-
-interface LatestJson {
-  version: string
-  notes?: string
-  files?: Partial<Record<PlatformKey, Partial<Record<ArchKey, LatestFile>>>>
-}
-
-const LATEST_URL = 'https://static-host-ggr87o43-vtft.sealosgzg.site/latest.json'
-
-function parseVersion(version: string): number[] {
-  return version
-    .split('.')
-    .map(part => Number.parseInt(part, 10))
-    .filter(num => Number.isFinite(num))
-}
-
-function isRemoteNewer(remote: string, local: string): boolean {
-  const remoteParts = parseVersion(remote)
-  const localParts = parseVersion(local)
-  const maxLength = Math.max(remoteParts.length, localParts.length)
-  for (let i = 0; i < maxLength; i += 1) {
-    const r = remoteParts[i] ?? 0
-    const l = localParts[i] ?? 0
-    if (r > l)
-      return true
-    if (r < l)
-      return false
+function sendToRenderer(channel: string, data?: unknown) {
+  const mainWindow = getMainWindow()
+  if (mainWindow) {
+    mainWindow.webContents.send(channel, data)
   }
-  return false
+}
+
+export function setupAutoUpdater() {
+  autoUpdater.on('update-available', (info: UpdateInfo) => {
+    logger.info(`发现新版本: ${info.version}，开始自动下载...`)
+    sendToRenderer(IPC_EVENTS.UPDATE.AVAILABLE, { version: info.version })
+  })
+
+  autoUpdater.on('update-not-available', () => {
+    logger.info('当前已是最新版本')
+    sendToRenderer(IPC_EVENTS.UPDATE.NOT_AVAILABLE)
+  })
+
+  autoUpdater.on('download-progress', (progress: ProgressInfo) => {
+    sendToRenderer(IPC_EVENTS.UPDATE.PROGRESS, {
+      percent: progress.percent,
+      bytesPerSecond: progress.bytesPerSecond,
+      transferred: progress.transferred,
+      total: progress.total,
+    })
+  })
+
+  autoUpdater.on('update-downloaded', (_event: UpdateDownloadedEvent) => {
+    logger.info('更新下载完成')
+    sendToRenderer(IPC_EVENTS.UPDATE.DOWNLOADED)
+  })
+
+  autoUpdater.on('error', (error: Error) => {
+    logger.error('更新检查失败', error)
+    sendToRenderer(IPC_EVENTS.UPDATE.ERROR, { message: error.message })
+  })
+
+  ipcMain.on(IPC_EVENTS.UPDATE.INSTALL, () => {
+    setImmediate(() => autoUpdater.quitAndInstall(false, true))
+  })
+
+  ipcMain.on(IPC_EVENTS.UPDATE.CHECK, () => {
+    checkForUpdate()
+  })
 }
 
 export async function checkForUpdate() {
   try {
-    const res = await fetch(LATEST_URL, { cache: 'no-store' })
-    if (!res.ok)
-      throw new Error(`fetch latest failed: ${res.status}`)
-    const latest = (await res.json()) as LatestJson
-
-    const localVersion = app.getVersion()
-    if (!isRemoteNewer(latest.version, localVersion))
-      return
-
-    const targetUrl = 'https://tft.vinky.cn/'
-
-    const notes = latest.notes?.trim()
-    const detail = notes
-      ? `更新内容：\n${notes.split('\n').map(line => `  • ${line.trim()}`).join('\n')}`
-      : '前往官网下载并覆盖安装最新版本。'
-
-    const { response } = await dialog.showMessageBox({
-      type: 'info',
-      buttons: ['前往下载', '稍后提醒'],
-      defaultId: 0,
-      cancelId: 1,
-      title: '更新提示',
-      message: `发现新版本`,
-      detail: `当前版本：${localVersion}\n最新版本：${latest.version}\n\n${detail}`,
-      noLink: true,
+    logger.info('正在检查更新...')
+    await autoUpdater.checkForUpdatesAndNotify({
+      title: 'VTFT 更新就绪',
+      body: '新版本已下载完成，重启应用后生效',
     })
-
-    if (response === 0) {
-      shell.openExternal(targetUrl)
-    }
   }
   catch (error) {
     logger.warn(`检查更新失败: ${(error as Error).message}`)

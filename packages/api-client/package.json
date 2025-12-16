@@ -1,7 +1,7 @@
 {
   "name": "api-client",
   "type": "module",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",

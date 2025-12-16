@@ -2,7 +2,7 @@
   "name": "vtft",
   "description": "VTFT 是一个基于 Electron 的云顶之弈桌面端助手",
   "type": "module",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "scripts": {
     "postinstall": "node ./node_modules/electron/install.js",
     "preinstall": "npx only-allow pnpm ",

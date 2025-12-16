@@ -36,5 +36,6 @@ export const IPC_EVENTS = {
   },
   APP: {
     GET_VERSION: 'app-get-version',
+    EXIT: 'app-exit',
   },
 } as const

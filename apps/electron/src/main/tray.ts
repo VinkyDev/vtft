@@ -6,6 +6,15 @@ import { destroyMainWindow, getMainWindow } from './mainWIndow'
 
 let tray: Tray | null = null
 
+export function exitApp(): void {
+  destroyMainWindow()
+  if (tray) {
+    tray.destroy()
+    tray = null
+  }
+  app.exit(0)
+}
+
 function resolveResource(...p: string[]) {
   if (isDev) {
     return path.join(__dirname, '../../resources', ...p)
@@ -50,16 +59,7 @@ export function createTray(): void {
     { type: 'separator' },
     {
       label: '退出',
-      click: () => {
-        // 销毁窗口和托盘，然后强制退出应用
-        destroyMainWindow()
-        if (tray) {
-          tray.destroy()
-          tray = null
-        }
-        // 使用 exit 而不是 quit，确保进程立即退出
-        app.exit(0)
-      },
+      click: exitApp,
     },
   ])
 
